@@ -7,7 +7,7 @@ function Navbar() {
     return (
         <>
             <Flex as={"nav"} alignItems={"center"} bgGradient={"linear(to-br, #ff86d6, #ffa14a)"} rounded={"10px"} mb={"20px"} p={"10px"} overflow="hidden">
-                <Text fontSize={"2xl"} fontWeight={"bold"} color={"white"}>Recyclify</Text>
+                <Text fontSize={"2xl"} fontWeight={"bold"}>Recyclify</Text>
             </Flex>
         </>
     )
