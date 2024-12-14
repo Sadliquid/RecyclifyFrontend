@@ -1,16 +1,14 @@
-import { Button } from "./ui/button"
-import { Flex, Text } from "@chakra-ui/react"
+import { Box, Text } from "@chakra-ui/react"
 import React from "react"
 
 
 function Navbar() {
     return (
-        <>
-            <Flex as={"nav"} alignItems={"center"} bgGradient={"linear(to-br, #ff86d6, #ffa14a)"} rounded={"10px"} mb={"20px"} p={"10px"} overflow="hidden">
-                <Text fontSize={"2xl"} fontWeight={"bold"}>Recyclify</Text>
-            </Flex>
-        </>
-    )
+        <Box as="nav" bg="#4DCBA4" w="90%" maxW="1200px" m="20px auto 20px auto" p="10px" color="white" position="fixed" top="0" left="0" right="0" rounded="10px"
+            zIndex={1} >
+            <Text>RECYCLIFY</Text>
+        </Box>
+    );
 }
 
 export default Navbar
