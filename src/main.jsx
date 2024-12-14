@@ -1,9 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Provider } from "./components/ui/provider"
+import Layout from './Layout'
 import ReactDOM from 'react-dom/client'
 import React from 'react'
 import './index.css'
-import Layout from './Layout'
+
+// Page routes go here.
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -11,7 +13,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />} />
+          <Route path="/" element={<Layout />} >
+
+          </Route>
         </Routes>
       </BrowserRouter>
     </Provider>
