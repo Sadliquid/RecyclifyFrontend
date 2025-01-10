@@ -1,7 +1,6 @@
-import { Flex, Heading, IconButton } from "@chakra-ui/react";
+import { Flex, Heading} from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Avatar } from "@/components/ui/avatar";
-import { ColorModeButton } from "./ui/color-mode";
 
 function Navbar() {
     return (
