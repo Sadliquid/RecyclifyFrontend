@@ -1,6 +1,7 @@
 import React from 'react'
-import { Box, Card, Image, For, Stack, VStack, Text} from '@chakra-ui/react'
+import { Box, Card, Image, For, Stack, VStack, Text } from '@chakra-ui/react'
 import { LuBox } from "react-icons/lu"
+import { motion } from 'framer-motion'
 
 function Landing() {
 
@@ -22,15 +23,22 @@ function Landing() {
                     </VStack>}
             >
                 {(classItem, index) => (
-                    <Box key={index} >
-                        <Card.Root minW="lg" overflow="hidden" bg={classItem.bgColor} borderRadius="3xl">
-                            <Card.Body >
-                                <Card.Title ><Text fontSize="2xl" fontWeight='bold'>{classItem.className}</Text></Card.Title>
-                                <Card.Description><Text color="black">{classItem.year}</Text></Card.Description>
-                            </Card.Body>
-                            <Image src={classItem.image} alt={classItem.year} fit="cover" maxW="lg" maxH="200px"/>
-                        </Card.Root>
-                    </Box>
+                    <motion.div
+                        key={index}
+                        initial={{ y: 0, opacity: 1 }}
+                        whileHover={{ y: -5, opacity: 0.9 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <Box key={index} >
+                            <Card.Root minW="lg" overflow="hidden" bg={classItem.bgColor} borderRadius="3xl">
+                                <Card.Body >
+                                    <Card.Title fontWeight="bold" fontSize="3xl" mb={6}>{classItem.className}</Card.Title>
+                                    <Card.Description color="black">{classItem.year}</Card.Description>
+                                </Card.Body>
+                                <Image src={classItem.image} alt={classItem.year} fit="cover" maxW="lg" maxH="200px" />
+                            </Card.Root>
+                        </Box>
+                    </motion.div>
                 )}
             </For>
         </Stack>
