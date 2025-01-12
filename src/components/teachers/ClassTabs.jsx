@@ -18,8 +18,8 @@ function ClassTabs() {
                             border: "2px solid #000",
                             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                             fontSize: "1.2rem", 
-                            padding: "0.8rem 1.2rem",
-                            transition: "all 0.5s ease-in-out"
+                            padding: "0.8rem 1.0rem",
+                            transition: "all 0.5s ease-in"
                         }}>
                         <SiGoogleclassroom />Class Dashboard
                     </Tabs.Trigger>
@@ -30,8 +30,8 @@ function ClassTabs() {
                             border: "2px solid #000",
                             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                             fontSize: "1.2rem", 
-                            padding: "0.8rem 1.2rem", 
-                            transition: "all 0.5s ease-in-out"
+                            padding: "0.8rem 1.0rem", 
+                            transition: "all 0.5s ease-in"
                         }}>
                         <PiStudentFill />Students Dashboard
                     </Tabs.Trigger>
