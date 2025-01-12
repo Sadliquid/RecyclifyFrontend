@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Card, Image, For, Stack, VStack, Text, Button, Flex, useBreakpointValue } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { LuBox } from "react-icons/lu"
-import { IoIosAddCircle } from "react-icons/io";
+import { IoAddOutline } from "react-icons/io5";
 import { MdOutlineContentCopy, MdEdit, MdDelete, MdOutlineMoreVert, MdAddCircle } from "react-icons/md";
 import { useNavigate } from 'react-router-dom'
 import {
@@ -22,11 +22,17 @@ function Landing() {
         { id: 3, className: '401', year: 'Year 4 Class 1', image: '../../../src/assets/class3.jpg', bgColor: '#D9D9D9' },
     ];
 
-    // Card size based on screen size
-    const cardSize = useBreakpointValue({
-        base: '2xs',
-        md: 'md',
-        lg: 'lg',
+    // Card height and width based on screen size
+    const cardWidth = useBreakpointValue({
+        base: '300px', 
+        md: '380px',
+        lg: '500px',
+    });
+
+    const cardHeight = useBreakpointValue({
+        base: '200px',
+        md: '260px', 
+        lg: '300px',   
     });
 
     return (
@@ -48,7 +54,7 @@ function Landing() {
                             transition={{ duration: 0.2 }}
                         >
                             <Box key={index} >
-                                <Card.Root minW={cardSize} overflow="hidden" bg={classItem.bgColor} borderRadius="3xl" onClick={() => navigate(`/teachers/class/${classItem.id}`)}>
+                                <Card.Root w={cardWidth} h={cardHeight} overflow="hidden" bg={classItem.bgColor} borderRadius="3xl" onClick={() => navigate(`/teachers/class/${classItem.id}`)}>
                                     <Card.Body >
                                         <Flex justify={'space-between'} align={'center'} mb={4} wrap={'wrap'} >
                                             <Card.Title fontWeight="bold" fontSize="3xl">{classItem.className}</Card.Title>
@@ -71,7 +77,7 @@ function Landing() {
                                         </Flex>
                                         <Card.Description color="black">{classItem.year}</Card.Description>
                                     </Card.Body>
-                                    <Image src={classItem.image} alt={classItem.year} fit="cover" maxW="100%" maxH="200px" />
+                                    <Image src={classItem.image} alt={classItem.year} fit="cover" w="100%" h="200px" />
                                 </Card.Root>
                             </Box>
                         </motion.div>
@@ -80,13 +86,15 @@ function Landing() {
             </Stack>
 
             {/* Add new class button */}
-            <IoIosAddCircle position="fixed" size={50} color="#92BFFF" aria-label="Add Class" cursor="pointer"
-                style={{
+            <Box p={1} bg="#92BFFF"  position="fixed" aria-label="Add Class" cursor="pointer" borderRadius={40} style={{
                     position: 'fixed',
                     bottom: '40px',
                     right: '40px',
                     zIndex: 1000,
-                }} />
+                }}>
+                <IoAddOutline size={50} color="black"/>
+            </Box>
+            
         </>
     )
 }
