@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table,Tabs, Box, Flex } from '@chakra-ui/react';
+import { Table, Tabs, Box, Flex } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineContentCopy, MdOutlineMoreVert } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
 import {
@@ -81,7 +81,31 @@ function ClassTable() {
                                                     <MdEdit /> Edit
                                                 </MenuItem>
                                                 <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl">
-                                                    <MdDelete /> Delete
+                                                    <DialogRoot role="alertdialog">
+                                                        <DialogTrigger asChild>
+                                                            <>
+                                                                <MdDelete /> Delete
+                                                            </>
+                                                        </DialogTrigger>
+                                                        <DialogContent>
+                                                            <DialogHeader>
+                                                                <DialogTitle>Are you sure?</DialogTitle>
+                                                            </DialogHeader>
+                                                            <DialogBody>
+                                                                <p>
+                                                                    This action cannot be undone. This will permanently delete your
+                                                                    account and remove your data from our systems.
+                                                                </p>
+                                                            </DialogBody>
+                                                            <DialogFooter>
+                                                                <DialogActionTrigger asChild>
+                                                                    <Button variant="outline">Cancel</Button>
+                                                                </DialogActionTrigger>
+                                                                <Button colorPalette="red">Delete</Button>
+                                                            </DialogFooter>
+                                                            <DialogCloseTrigger />
+                                                        </DialogContent>
+                                                    </DialogRoot>
                                                 </MenuItem>
                                             </MenuContent>
                                         </MenuRoot>
