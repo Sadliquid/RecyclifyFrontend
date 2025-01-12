@@ -1,9 +1,17 @@
-import { Box, Flex, Tabs, Text, Heading } from '@chakra-ui/react';
+import { Box, Flex, Tabs, Text, Heading, Table } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoArrowBackCircle } from "react-icons/io5";
 import { SiGoogleclassroom } from "react-icons/si";
 import { PiStudentFill } from "react-icons/pi";
+import { LuDiamond } from "react-icons/lu";
+import { MdOutlineMoreVert, MdOutlineContentCopy, MdEdit, MdDelete } from "react-icons/md";
+import {
+    MenuContent,
+    MenuItem,
+    MenuRoot,
+    MenuTrigger,
+} from '@/components/ui/menu';
 
 function Class() {
     const { id } = useParams(); // Get the class ID from the URL
@@ -15,6 +23,19 @@ function Class() {
         { id: 2, className: '301', year: 'Year 3 Class 1', image: '../../../src/assets/class2.jpg', bgColor: '#AEC7ED' },
         { id: 3, className: '401', year: 'Year 4 Class 1', image: '../../../src/assets/class3.jpg', bgColor: '#D9D9D9' },
     ];
+
+    //Dummy student data
+    const students = [
+        { id: 1, name: 'John Doe', currentleafs: 100, totalleafs: 200, redemptions: 2, studentEmail: "joonjunhan@gmail.com", parentEmail: "joonjunhan@gmail.com", flagStatus: false },
+        { id: 2, name: 'Jane Smith', currentleafs: 150, totalleafs: 300, redemptions: 3, studentEmail: "janesmith@gmail.com", parentEmail: "parentsmith@gmail.com", flagStatus: false },
+        { id: 3, name: 'Alice Johnson', currentleafs: 120, totalleafs: 250, redemptions: 1, studentEmail: "alicejohnson@gmail.com", parentEmail: "parentjohnson@gmail.com", flagStatus: true },
+        { id: 4, name: 'Bob Brown', currentleafs: 90, totalleafs: 180, redemptions: 2, studentEmail: "bobbrown@gmail.com", parentEmail: "parentbrown@gmail.com", flagStatus: false },
+        { id: 5, name: 'Charlie Davis', currentleafs: 200, totalleafs: 400, redemptions: 4, studentEmail: "charliedavis@gmail.com", parentEmail: "parentdavis@gmail.com", flagStatus: false },
+        { id: 6, name: 'Diana Evans', currentleafs: 110, totalleafs: 220, redemptions: 2, studentEmail: "dianaevans@gmail.com", parentEmail: "parentevans@gmail.com", flagStatus: true },
+    ];
+
+    // Table cell color list
+    const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
     // Get the class ID from the URL
     const classId = classes.findIndex((classItem) => classItem.id === parseInt(id));
@@ -60,7 +81,7 @@ function Class() {
                                             <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
                                                 Total Class Covers
                                             </Box >
-                                            <Box  w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
+                                            <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
                                                 Weekly Class Covers
                                             </Box>
                                         </Flex>
@@ -77,7 +98,72 @@ function Class() {
                     </Box>
                 </Tabs.Content>
                 <Tabs.Content value='Students'>
-                    <Text>Students Dashboard</Text>
+                    <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
+                        <Table.ScrollArea rounded="md" height="160px" w="100%" h="100%" overflow="hidden">
+                            <Table.Root size="sm" stickyHeader>
+                                <Table.Header>
+                                    <Table.Row bg="bg.subtle">
+                                        <Table.ColumnHeader>Studnet Name</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Current Points</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Total Points</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Redemptions</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Student Email</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Parent Email</Table.ColumnHeader>
+                                        <Table.ColumnHeader >Flag Status</Table.ColumnHeader>
+                                        <Table.ColumnHeader textAlign="end"></Table.ColumnHeader>
+                                    </Table.Row>
+                                </Table.Header>
+
+                                <Table.Body>
+                                    {students.map((student, index) => (
+                                        <Table.Row key={student.id} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
+                                            <Table.Cell color="black"><Flex gap={2} align="center"><LuDiamond/>{student.name}</Flex></Table.Cell>
+                                            <Table.Cell color="black">{student.currentleafs}</Table.Cell>
+                                            <Table.Cell color="black">{student.totalleafs}</Table.Cell>
+                                            <Table.Cell color="black">{student.redemptions}</Table.Cell>
+                                            <Table.Cell color="black">{student.studentEmail}</Table.Cell>
+                                            <Table.Cell color="black">{student.parentEmail}</Table.Cell>
+                                            <Table.Cell color="black">{student.flagStatus ? "Flagged" : "Not Flagged"}</Table.Cell>
+                                            <Table.Cell>
+                                                <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
+                                                    <MenuTrigger asChild>
+                                                        <Box
+                                                            bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}
+                                                            p="2"
+                                                            borderRadius="full"
+                                                            cursor="pointer"
+                                                        >
+                                                            <MdOutlineMoreVert size={24} color="black" />
+                                                        </Box>
+                                                    </MenuTrigger>
+                                                    <MenuContent
+                                                        borderRadius="xl"
+                                                        transition="box-shadow 0.3s ease, border-color 0.3s ease"
+                                                        transitionDelay="0.1s"
+                                                        _hover={{
+                                                            boxShadow: 'lg',
+                                                            border: '1px solid',
+                                                            borderColor: 'gray.200',
+                                                        }}
+                                                    >
+                                                        <MenuItem value="copy-uuid" borderRadius="xl">
+                                                            <MdOutlineContentCopy /> Copy UUID
+                                                        </MenuItem>
+                                                        <MenuItem value="edit-class" borderRadius="xl">
+                                                            <MdEdit /> Edit
+                                                        </MenuItem>
+                                                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl">
+                                                            <MdDelete /> Delete
+                                                        </MenuItem>
+                                                    </MenuContent>
+                                                </MenuRoot>
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ))}
+                                </Table.Body>
+                            </Table.Root>
+                        </Table.ScrollArea>
+                    </Box>
                 </Tabs.Content>
             </Tabs.Root>
         </>
