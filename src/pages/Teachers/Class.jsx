@@ -59,7 +59,7 @@ function Class() {
             </Box>
             <Tabs.Root defaultValue="Class" key="plain" variant="plain" align="center" mt={4}>
                 <Tabs.List gap={4} align="center" >
-                    <Tabs.Trigger value='Class' bg="#AEC7ED" color="black"
+                    <Tabs.Trigger value='Class' bg="#AEC7ED" color="black" align="center"
                         _selected={{
                             bg: "#B9D4FF",
                             color: "black",
@@ -71,7 +71,7 @@ function Class() {
                         }}>
                         <SiGoogleclassroom />Class Dashboard
                     </Tabs.Trigger>
-                    <Tabs.Trigger value='Students' bg="#94E9B8" color="black"
+                    <Tabs.Trigger value='Students' bg="#94E9B8" color="black" align="center"
                         _selected={{
                             bg: "#96E2D6",
                             color: "black",
