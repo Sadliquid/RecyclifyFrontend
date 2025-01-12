@@ -22,7 +22,7 @@ function Login() {
                     w="full"
                 >
                     <Heading
-                        as={"h1"}
+                        fontSize='30px'
                         mb={10} 
                         textAlign="center"
                     >
@@ -79,10 +79,12 @@ function Login() {
                     {/* Login Button */}
                     <Button
                         variant="solid"
+                        background="#2D65FF"
                         color={"white"}
                         width="50%"
                         mb={5}
                         type="submit"
+                        borderRadius={30}
                     >
                         Login
                     </Button>
