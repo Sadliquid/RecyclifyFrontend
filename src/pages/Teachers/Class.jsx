@@ -1,4 +1,4 @@
-import { Box, Flex, Tabs, Text, Heading, Table } from '@chakra-ui/react';
+import { Box, Flex, Tabs, Text, Heading, Table, Spacer } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoArrowBackCircle } from "react-icons/io5";
@@ -56,9 +56,9 @@ function Class() {
                 </Flex>
             </Box>
             <Tabs.Root defaultValue="Class" key="plain" variant="plain" align="center" mt={4}>
-                <Tabs.List>
-                    <Tabs.Trigger value='Class'><SiGoogleclassroom />Class Dashboard</Tabs.Trigger>
-                    <Tabs.Trigger value='Students'><PiStudentFill />Students Dashboard</Tabs.Trigger>
+                <Tabs.List gap={4} align="center">
+                    <Tabs.Trigger value='Class' bg="#AEC7ED" color="black"><SiGoogleclassroom />Class Dashboard</Tabs.Trigger>
+                    <Tabs.Trigger value='Students'bg="#94E9B8" color="black"><PiStudentFill />Students Dashboard</Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content value='Class'>
                     <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
