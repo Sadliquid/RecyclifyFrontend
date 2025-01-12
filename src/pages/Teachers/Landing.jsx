@@ -1,16 +1,9 @@
 import React from 'react'
-import { Box, Card, Image, For, Stack, VStack, Text, Button, Flex, useBreakpointValue } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { Stack, VStack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { LuBox } from "react-icons/lu"
-import { IoAddOutline } from "react-icons/io5";
-import { MdOutlineContentCopy, MdEdit, MdDelete, MdOutlineMoreVert, MdAddCircle } from "react-icons/md";
 import { useNavigate } from 'react-router-dom'
-import {
-    MenuContent,
-    MenuItem,
-    MenuRoot,
-    MenuTrigger,
-} from "@/components/ui/menu"
+import AddClassButton from "@/components/teachers/AddClassButton"
+import ClassCard from "@/components/teachers/ClassCard"
 
 function Landing() {
     const navigate = useNavigate();
@@ -37,68 +30,27 @@ function Landing() {
 
     return (
         <>
-            <Stack gap="8" direction="row" wrap="wrap" justify="center" mt={8} >
-                <For
-                    each={classes}
-                    fallback={
-                        <VStack textAlign="center" fontWeight="medium">
-                            <LuBox />
-                            <Text>No class data available</Text>
-                        </VStack>}
-                >
-                    {(classItem, index) => (
-                        <motion.div key={index} initial={{ y: 0, opacity: 1 }} whileHover={{ y: -5, opacity: 0.9 }} transition={{ duration: 0.2 }} >
-                            <Box key={index} position="relative" overflow="hidden" >
-                                {/* Card */}
-                                <Card.Root w={cardWidth} h={cardHeight} bg={classItem.bgColor} borderRadius="3xl" overflow="hidden" onClick={() => navigate(`/teachers/class/${classItem.id}`)}>
-                                    <Card.Body>
-                                        <Card.Title fontWeight="bold" fontSize="3xl" mb={6}>
-                                            {classItem.className}
-                                        </Card.Title>
-                                        <Card.Description color="black">
-                                            {classItem.year}
-                                        </Card.Description>
-                                    </Card.Body>
-                                    <Image src={classItem.image} alt={classItem.year} fit="cover" w="100%" h="200px" />
-                                </Card.Root>
-
-                                {/* Card Menu */}
-                                <MenuRoot positioning={{ placement: "bottom-end" }} cursor="pointer">
-                                    <MenuTrigger asChild>
-                                        <Box position="absolute" top="19px" right="10px" bg={classItem.bgColor} p="2"
-                                            borderRadius="full" cursor="pointer"
-                                        >
-                                            <MdOutlineMoreVert size={24} color="black" />
-                                        </Box>
-                                    </MenuTrigger>
-                                    <MenuContent borderRadius="xl">
-                                        <MenuItem value="copy-uuid" borderRadius="xl">
-                                            <MdOutlineContentCopy /> Copy UUID
-                                        </MenuItem>
-                                        <MenuItem value="edit-class" borderRadius="xl">
-                                            <MdEdit /> Edit
-                                        </MenuItem>
-                                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl">
-                                            <MdDelete /> Delete
-                                        </MenuItem>
-                                    </MenuContent>
-                                </MenuRoot>
-                            </Box>
-                        </motion.div>
-                    )}
-                </For>
+            <Stack gap="8" direction="row" wrap="wrap" justify="center" mt={8}>
+                {classes.length ? (
+                    classes.map((classItem, index) => (
+                        <ClassCard
+                            key={index}
+                            classItem={classItem}
+                            cardWidth={cardWidth}
+                            cardHeight={cardHeight}
+                            onCardClick={() => navigate(`/teachers/class/${classItem.id}`)}
+                        />
+                    ))
+                ) : (
+                    <VStack textAlign="center" fontWeight="medium">
+                        <LuBox />
+                        <Text>No class data available</Text>
+                    </VStack>
+                )}
             </Stack>
 
             {/* Add new class button */}
-            <Box p={1} bg="#92BFFF" position="fixed" aria-label="Add Class" cursor="pointer" borderRadius="full" style={{
-                position: 'fixed',
-                bottom: '40px',
-                right: '40px',
-                zIndex: 1000,
-            }}>
-                <IoAddOutline size={34} color="black" />
-            </Box>
-
+            <AddClassButton/>
         </>
     )
 }
