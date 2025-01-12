@@ -24,15 +24,15 @@ function Landing() {
 
     // Card height and width based on screen size
     const cardWidth = useBreakpointValue({
-        base: '300px', 
+        base: '300px',
         md: '380px',
         lg: '500px',
     });
 
     const cardHeight = useBreakpointValue({
         base: '200px',
-        md: '260px', 
-        lg: '300px',   
+        md: '260px',
+        lg: '300px',
     });
 
     return (
@@ -47,38 +47,42 @@ function Landing() {
                         </VStack>}
                 >
                     {(classItem, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ y: 0, opacity: 1 }}
-                            whileHover={{ y: -5, opacity: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <Box key={index} >
-                                <Card.Root w={cardWidth} h={cardHeight} overflow="hidden" bg={classItem.bgColor} borderRadius="3xl" onClick={() => navigate(`/teachers/class/${classItem.id}`)}>
-                                    <Card.Body >
-                                        <Flex justify={'space-between'} align={'center'} mb={4} wrap={'wrap'} >
-                                            <Card.Title fontWeight="bold" fontSize="3xl">{classItem.className}</Card.Title>
-                                            <MenuRoot positioning={{ placement: "bottom-end" }}>
-                                                <MenuTrigger asChild>
-                                                    <MdOutlineMoreVert size={24} color="black" />
-                                                </MenuTrigger>
-                                                <MenuContent borderRadius="xl">
-                                                    <MenuItem value="copy-uuid" borderRadius="xl">
-                                                        <MdOutlineContentCopy /> Copy UUID
-                                                    </MenuItem>
-                                                    <MenuItem value="edit-class" borderRadius="xl">
-                                                        <MdEdit /> Edit
-                                                    </MenuItem>
-                                                    <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl">
-                                                        <MdDelete /> Delete
-                                                    </MenuItem>
-                                                </MenuContent>
-                                            </MenuRoot>
-                                        </Flex>
-                                        <Card.Description color="black">{classItem.year}</Card.Description>
+                        <motion.div key={index} initial={{ y: 0, opacity: 1 }} whileHover={{ y: -5, opacity: 0.9 }} transition={{ duration: 0.2 }} >
+                            <Box key={index} position="relative" overflow="hidden" >
+                                {/* Card */}
+                                <Card.Root w={cardWidth} h={cardHeight} bg={classItem.bgColor} borderRadius="3xl" overflow="hidden" onClick={() => navigate(`/teachers/class/${classItem.id}`)}>
+                                    <Card.Body>
+                                        <Card.Title fontWeight="bold" fontSize="3xl" mb={6}>
+                                            {classItem.className}
+                                        </Card.Title>
+                                        <Card.Description color="black">
+                                            {classItem.year}
+                                        </Card.Description>
                                     </Card.Body>
                                     <Image src={classItem.image} alt={classItem.year} fit="cover" w="100%" h="200px" />
                                 </Card.Root>
+
+                                {/* Card Menu */}
+                                <MenuRoot positioning={{ placement: "bottom-end" }} cursor="pointer">
+                                    <MenuTrigger asChild>
+                                        <Box position="absolute" top="19px" right="10px" bg={classItem.bgColor} p="2"
+                                            borderRadius="full" cursor="pointer"
+                                        >
+                                            <MdOutlineMoreVert size={24} color="black" />
+                                        </Box>
+                                    </MenuTrigger>
+                                    <MenuContent borderRadius="xl">
+                                        <MenuItem value="copy-uuid" borderRadius="xl">
+                                            <MdOutlineContentCopy /> Copy UUID
+                                        </MenuItem>
+                                        <MenuItem value="edit-class" borderRadius="xl">
+                                            <MdEdit /> Edit
+                                        </MenuItem>
+                                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl">
+                                            <MdDelete /> Delete
+                                        </MenuItem>
+                                    </MenuContent>
+                                </MenuRoot>
                             </Box>
                         </motion.div>
                     )}
@@ -86,15 +90,15 @@ function Landing() {
             </Stack>
 
             {/* Add new class button */}
-            <Box p={1} bg="#92BFFF"  position="fixed" aria-label="Add Class" cursor="pointer" borderRadius={40} style={{
-                    position: 'fixed',
-                    bottom: '40px',
-                    right: '40px',
-                    zIndex: 1000,
-                }}>
-                <IoAddOutline size={34} color="black"/>
+            <Box p={1} bg="#92BFFF" position="fixed" aria-label="Add Class" cursor="pointer" borderRadius="full" style={{
+                position: 'fixed',
+                bottom: '40px',
+                right: '40px',
+                zIndex: 1000,
+            }}>
+                <IoAddOutline size={34} color="black" />
             </Box>
-            
+
         </>
     )
 }
