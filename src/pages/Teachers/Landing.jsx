@@ -92,7 +92,7 @@ function Landing() {
                     right: '40px',
                     zIndex: 1000,
                 }}>
-                <IoAddOutline size={50} color="black"/>
+                <IoAddOutline size={34} color="black"/>
             </Box>
             
         </>
