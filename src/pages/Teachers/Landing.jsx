@@ -1,9 +1,10 @@
 import React from 'react'
 import { Box, Card, Image, For, Stack, VStack, Text, Button, Flex, useBreakpointValue } from '@chakra-ui/react'
+import { motion } from 'framer-motion'
 import { LuBox } from "react-icons/lu"
 import { IoIosAddCircle } from "react-icons/io";
-import { motion } from 'framer-motion'
 import { MdOutlineContentCopy, MdEdit, MdDelete, MdOutlineMoreVert, MdAddCircle } from "react-icons/md";
+import { useNavigate } from 'react-router-dom'
 import {
     MenuContent,
     MenuItem,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/menu"
 
 function Landing() {
+    const navigate = useNavigate();
 
     // Dummy class data
     const classes = [
@@ -46,7 +48,7 @@ function Landing() {
                             transition={{ duration: 0.2 }}
                         >
                             <Box key={index} >
-                                <Card.Root minW={cardSize} overflow="hidden" bg={classItem.bgColor} borderRadius="3xl">
+                                <Card.Root minW={cardSize} overflow="hidden" bg={classItem.bgColor} borderRadius="3xl" onClick={() => navigate(`/teachers/class/${classItem.id}`)}>
                                     <Card.Body >
                                         <Flex justify={'space-between'} align={'center'} mb={4} wrap={'wrap'} >
                                             <Card.Title fontWeight="bold" fontSize="3xl">{classItem.className}</Card.Title>
@@ -78,13 +80,13 @@ function Landing() {
             </Stack>
 
             {/* Add new class button */}
-            <IoIosAddCircle position="fixed"  size={50} color="#92BFFF" aria-label="Add Class" cursor="pointer"
-            style={{
-                position: 'fixed',
-                bottom: '40px',
-                right: '40px',
-                zIndex: 1000,
-            }}/>
+            <IoIosAddCircle position="fixed" size={50} color="#92BFFF" aria-label="Add Class" cursor="pointer"
+                style={{
+                    position: 'fixed',
+                    bottom: '40px',
+                    right: '40px',
+                    zIndex: 1000,
+                }} />
         </>
     )
 }
