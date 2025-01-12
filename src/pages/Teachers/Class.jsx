@@ -1,7 +1,7 @@
 import { Box, Flex, Tabs, Text, Heading, Table, Spacer } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IoArrowBackCircle } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 import { SiGoogleclassroom } from "react-icons/si";
 import { PiStudentFill } from "react-icons/pi";
 import { LuDiamond } from "react-icons/lu";
@@ -44,7 +44,9 @@ function Class() {
         <>
             <Box>
                 <Flex direction="row" align="center" justify="flex-start" h="12vh">
-                    <IoArrowBackCircle size={70} color="#96E2D6" cursor="pointer" onClick={() => navigate(`/teachers`)} />
+                    <Box bg="#96E2D6" borderRadius="full" p={2}>
+                        <IoArrowBack size={50} color="black" cursor="pointer" onClick={() => navigate(`/teachers`)} />
+                    </Box>
                     <Box mt={4} fontSize="2xl" align="left" ml={4}>
                         <Heading fontSize={40} fontWeight="bold" mt={8} mb={4} textAlign="left">
                             {classes[classId].className}
@@ -56,11 +58,33 @@ function Class() {
                 </Flex>
             </Box>
             <Tabs.Root defaultValue="Class" key="plain" variant="plain" align="center" mt={4}>
-                <Tabs.List gap={4} align="center">
-                    <Tabs.Trigger value='Class' bg="#AEC7ED" color="black"><SiGoogleclassroom />Class Dashboard</Tabs.Trigger>
-                    <Tabs.Trigger value='Students'bg="#94E9B8" color="black"><PiStudentFill />Students Dashboard</Tabs.Trigger>
+                <Tabs.List gap={4} align="center" >
+                    <Tabs.Trigger value='Class' bg="#AEC7ED" color="black"
+                        _selected={{
+                            bg: "#B9D4FF",
+                            color: "black",
+                            border: "2px solid #000",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            fontSize: "1.2rem", 
+                            padding: "0.8rem 1.2rem",
+                            transition: "all 0.5s ease-in-out"
+                        }}>
+                        <SiGoogleclassroom />Class Dashboard
+                    </Tabs.Trigger>
+                    <Tabs.Trigger value='Students' bg="#94E9B8" color="black"
+                        _selected={{
+                            bg: "#96E2D6",
+                            color: "black",
+                            border: "2px solid #000",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            fontSize: "1.2rem", 
+                            padding: "0.8rem 1.2rem", 
+                            transition: "all 0.5s ease-in-out"
+                        }}>
+                        <PiStudentFill />Students Dashboard
+                    </Tabs.Trigger>
                 </Tabs.List>
-                <Tabs.Content value='Class'>
+                <Tabs.Content value='Class' >
                     <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
                         <Flex gap={4} w="100%" h="100%" padding={4} align="center">
                             <Flex w="80%" h="100%" direction="column" gap={4}>
@@ -117,7 +141,7 @@ function Class() {
                                 <Table.Body>
                                     {students.map((student, index) => (
                                         <Table.Row key={student.id} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
-                                            <Table.Cell color="black"><Flex gap={2} align="center"><LuDiamond/>{student.name}</Flex></Table.Cell>
+                                            <Table.Cell color="black"><Flex gap={2} align="center"><LuDiamond />{student.name}</Flex></Table.Cell>
                                             <Table.Cell color="black">{student.currentleafs}</Table.Cell>
                                             <Table.Cell color="black">{student.totalleafs}</Table.Cell>
                                             <Table.Cell color="black">{student.redemptions}</Table.Cell>
