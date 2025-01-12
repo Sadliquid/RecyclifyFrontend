@@ -8,6 +8,7 @@ import './index.css'
 // Page routes go here.
 import Login from './pages/Identity/Login'
 import CreateAccount from './pages/Identity/CreateAccount'
+import AccountRecovery from './pages/Identity/AccountRecovery'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 					<Route path="/" element={<Layout />} >
 						<Route path={"login"} element={<Login />} />
 						<Route path={"createAccount"} element={<CreateAccount />} />
+						<Route path={"accountRecovery"} element={<AccountRecovery />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>
