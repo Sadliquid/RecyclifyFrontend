@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Flex, Tabs } from '@chakra-ui/react';
 
 function ClassInfo() {

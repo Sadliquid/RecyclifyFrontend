@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Card, Image, Button, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { MdOutlineMoreVert, MdOutlineContentCopy, MdEdit, MdDelete } from 'react-icons/md';

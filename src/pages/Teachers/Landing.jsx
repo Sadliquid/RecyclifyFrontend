@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { Stack, VStack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { LuBox } from "react-icons/lu"
 import { useNavigate } from 'react-router-dom'

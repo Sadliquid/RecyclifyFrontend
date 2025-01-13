@@ -1,5 +1,5 @@
-import React from 'react';
-import { Table, Tabs, Box, Flex, Button } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Table, Tabs, Box, Flex, Button, Text } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineContentCopy, MdOutlineMoreVert } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
@@ -7,18 +7,23 @@ import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, Dia
 
 function ClassTable() {
 
-    // Dummy student data
-    const students = [
+    // Initialize dummy students data state
+    const [students, setStudents] = useState([
         { id: 1, name: 'John Doe', currentleafs: 100, totalleafs: 200, redemptions: 2, studentEmail: "joonjunhan@gmail.com", parentEmail: "joonjunhan@gmail.com", flagStatus: false },
         { id: 2, name: 'Jane Smith', currentleafs: 150, totalleafs: 300, redemptions: 3, studentEmail: "janesmith@gmail.com", parentEmail: "parentsmith@gmail.com", flagStatus: false },
         { id: 3, name: 'Alice Johnson', currentleafs: 120, totalleafs: 250, redemptions: 1, studentEmail: "alicejohnson@gmail.com", parentEmail: "parentjohnson@gmail.com", flagStatus: true },
         { id: 4, name: 'Bob Brown', currentleafs: 90, totalleafs: 180, redemptions: 2, studentEmail: "bobbrown@gmail.com", parentEmail: "parentbrown@gmail.com", flagStatus: false },
         { id: 5, name: 'Charlie Davis', currentleafs: 200, totalleafs: 400, redemptions: 4, studentEmail: "charliedavis@gmail.com", parentEmail: "parentdavis@gmail.com", flagStatus: false },
         { id: 6, name: 'Diana Evans', currentleafs: 110, totalleafs: 220, redemptions: 2, studentEmail: "dianaevans@gmail.com", parentEmail: "parentevans@gmail.com", flagStatus: true },
-    ];
+    ]);
 
     // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
+
+    // Function to delete a student by ID
+    const handleDeleteStudent = (studentId) => {
+        setStudents((prevStudents) => prevStudents.filter((student) => student.id !== studentId));
+    };
 
     return (
         <Tabs.Content value='Students'>
@@ -76,33 +81,31 @@ function ClassTable() {
                                                 <MenuItem value="edit-class" borderRadius="xl">
                                                     <MdEdit /> Edit
                                                 </MenuItem>
-                                                <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl">
-                                                    <DialogRoot role="alertdialog">
-                                                        <DialogTrigger asChild>
-                                                            <>
-                                                                <MdDelete /> Delete
-                                                            </>
-                                                        </DialogTrigger>
-                                                        <DialogContent>
-                                                            <DialogHeader>
-                                                                <DialogTitle>Are you sure?</DialogTitle>
-                                                            </DialogHeader>
-                                                            <DialogBody>
-                                                                <Text>
-                                                                    This action cannot be undone. This will permanently delete your
-                                                                    account and remove your data from our systems.
-                                                                </Text>
-                                                            </DialogBody>
-                                                            <DialogFooter>
-                                                                <DialogActionTrigger asChild>
-                                                                    <Button variant="outline">Cancel</Button>
-                                                                </DialogActionTrigger>
-                                                                <Button colorPalette="red">Delete</Button>
-                                                            </DialogFooter>
-                                                            <DialogCloseTrigger />
-                                                        </DialogContent>
-                                                    </DialogRoot>
-                                                </MenuItem>
+                                                <DialogRoot> {/* DialogRoot should be within MenuContent */}
+                                                    <DialogTrigger asChild>
+                                                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false}>
+                                                            <MdDelete /> Delete
+                                                        </MenuItem>
+                                                    </DialogTrigger>
+                                                    <DialogContent>
+                                                        <DialogHeader>
+                                                            <DialogTitle color="black" textAlign="center">Are you sure you want to remove this student from this class?</DialogTitle>
+                                                        </DialogHeader>
+                                                        <DialogBody color="#FF0000" textAlign="center">
+                                                            <Text>
+                                                                The student can enroll back to this class again using the class UUID
+                                                            </Text>
+                                                        </DialogBody>
+                                                        <DialogFooter display="flex" gap={10} justifyContent="center">
+                                                            <DialogActionTrigger asChild>
+                                                                <Button variant="outline" bg="#2D65FF" color="white">Cancel</Button>
+                                                            </DialogActionTrigger>
+                                                            <Button bg="#FF8080" color="white" onClick={() => handleDeleteStudent(student.id)}> 
+                                                                Delete
+                                                            </Button>
+                                                        </DialogFooter>
+                                                    </DialogContent>
+                                                </DialogRoot>
                                             </MenuContent>
                                         </MenuRoot>
                                     </Table.Cell>
