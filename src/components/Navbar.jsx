@@ -1,13 +1,12 @@
-import { Image, Box, Button, Text, Flex, Heading } from "@chakra-ui/react";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { Avatar } from "@/components/ui/avatar";
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTrigger } from "@/components/ui/drawer"
+import { Flex, Heading, Button, Image, Text, Box } from "@chakra-ui/react";
+import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineRedeem } from "react-icons/md";
+import { RxHamburgerMenu } from "react-icons/rx"; 
 import { FaRegClipboard, FaTasks } from "react-icons/fa";
-import { MdOutlineLeaderboard } from "react-icons/md";
-import { BiHome, BiLeaf, BiMessage } from "react-icons/bi";
 import { BsCalendar, BsQuestionCircle } from "react-icons/bs";
+import { BiHome, BiLeaf, BiMessage } from "react-icons/bi";
+import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 
 function Navbar() {
     const navigate = useNavigate();
@@ -22,7 +21,7 @@ function Navbar() {
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
-                        <Image src="../../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
+                        <Image src="../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
@@ -92,7 +91,7 @@ function Navbar() {
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
-                        <Image src="../../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
+                        <Image src="../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
