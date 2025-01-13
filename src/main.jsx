@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 import React from 'react'
 import './index.css'
 import Dashboard from './pages/admin/landing'
+import UserManagement from './pages/admin/user'
 
 // Page routes go here.
 
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path="/" element={<Layout />} >
             <Route path="/admin" element={<Dashboard />} ></Route>
+            <Route path="/admin/user_management" element={<UserManagement />} > /</Route>
           </Route>
         </Routes>
       </BrowserRouter>

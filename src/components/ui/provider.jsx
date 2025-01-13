@@ -1,22 +1,11 @@
-import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react'
-import { ColorModeProvider } from './color-mode'
-import "@fontsource/sora";
-import "@fontsource/lilita-one";
+'use client'
 
-const system = createSystem(defaultConfig, {
-  theme: {
-    tokens: {
-      fonts: {
-        heading: { value: `'Lilita One', sans-serif` },
-        body: { value: `'Sora', sans-serif` },
-      },
-    },
-  },
-})
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
+import { ColorModeProvider } from './color-mode'
 
 export function Provider(props) {
   return (
-    <ChakraProvider value={system}>
+    <ChakraProvider value={defaultSystem}>
       <ColorModeProvider {...props} />
     </ChakraProvider>
   )
