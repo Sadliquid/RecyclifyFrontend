@@ -88,10 +88,10 @@ function ClassTable() {
                                                                 <DialogTitle>Are you sure?</DialogTitle>
                                                             </DialogHeader>
                                                             <DialogBody>
-                                                                <p>
+                                                                <Text>
                                                                     This action cannot be undone. This will permanently delete your
                                                                     account and remove your data from our systems.
-                                                                </p>
+                                                                </Text>
                                                             </DialogBody>
                                                             <DialogFooter>
                                                                 <DialogActionTrigger asChild>

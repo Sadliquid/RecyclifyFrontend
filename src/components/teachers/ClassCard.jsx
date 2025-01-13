@@ -75,9 +75,9 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) 
                                     <DialogTitle color="black" textAlign="center">Are you sure you want to delete this class?</DialogTitle>
                                 </DialogHeader>
                                 <DialogBody color="#FF0000" textAlign="center">
-                                    <p>
+                                    <Text>
                                         Class cannot be restored once it is deleted.
-                                    </p>
+                                    </Text>
                                 </DialogBody>
                                 <DialogFooter display="flex" gap={10} justifyContent="center">
                                     <DialogActionTrigger asChild>
