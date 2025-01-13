@@ -13,11 +13,11 @@ function StudentsHomepage() {
                         </Box>
 
                         <Box display={"flex"} justifyContent={"space-between"} margin="auto" width="95%" height={"50%"}>
-                            <Box width="49%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} margin="auto">
+                            <Box width="48%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
                                 <Text fontSize={20} fontWeight={"bold"}>Calendar</Text>
                             </Box>
 
-                            <Box width="49%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} margin="auto">
+                            <Box width="48%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
                                 <Text fontSize={20} fontWeight={"bold"}>Stuff</Text>
                             </Box>
                         </Box>
