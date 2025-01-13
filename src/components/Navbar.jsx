@@ -30,34 +30,34 @@ function Navbar() {
                                 <Text ml={2}>Dashboard</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <BsCalendar ml={1}/>
                                 <Text ml={3}>Milestones</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Box ml={0.5}>
                                     <FaRegClipboard fontSize={"20px"}/>
                                 </Box>
                                 <Text ml={2.5}>Leaderboards</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/redemption")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <BiLeaf ml={1}/>
                                 <Text ml={2}>Redeem my leafs</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <BiMessage ml={1}/>
                                 <Text ml={3}>Scan my item</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/inbox")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
                                 <Text ml={3}>Inbox</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/my-class")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
                                 <Text ml={3}>My class</Text>
                             </Button>
