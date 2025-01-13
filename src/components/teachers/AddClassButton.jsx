@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { IoAddOutline } from 'react-icons/io5';
 
