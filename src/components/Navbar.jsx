@@ -2,11 +2,11 @@ import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFo
 import { Flex, Heading, Button, Image, Text, Box } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { FaRegClipboard } from "react-icons/fa";
+import { RxHamburgerMenu } from "react-icons/rx"; 
+import { FaRegClipboard, FaTasks } from "react-icons/fa";
 import { BsCalendar, BsQuestionCircle } from "react-icons/bs";
 import { BiHome, BiLeaf, BiMessage } from "react-icons/bi";
-
+import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 
 function Navbar() {
     const navigate = useNavigate();
@@ -82,6 +82,49 @@ function Navbar() {
     }
 
     // Teacher Sidebar
+    function TeachersSidebar() {
+        return (
+            <DrawerRoot placement={"start"}>
+                <DrawerBackdrop />
+                <DrawerTrigger asChild>
+                    <RxHamburgerMenu size="24px" color="white" cursor="pointer" />
+                </DrawerTrigger>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <Image src="../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
+                    </DrawerHeader>
+                    <DrawerBody display={"flex"} flexDirection={"column"}>
+                        <Box display="flex" flexDirection="column" height="100%">
+                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <MdOutlineRedeem ml={1} />
+                                <Text ml={2}>Student Redemption</Text>
+                            </Button>
+
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <FaTasks ml={1} />
+                                <Text ml={3}>Task Verification</Text>
+                            </Button>
+
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <Box ml={0.5}>
+                                    <MdOutlineLeaderboard fontSize={"20px"} />
+                                </Box>
+                                <Text ml={2.5}>Leaderboards</Text>
+                            </Button>
+                        </Box>
+
+                        <Box textAlign="center" >
+                            <Text color={"#515F7C"}>©2025 Recyclify</Text>
+                        </Box>
+                    </DrawerBody>
+                    <DrawerFooter>
+
+                    </DrawerFooter>
+                    <DrawerCloseTrigger />
+                </DrawerContent>
+            </DrawerRoot>
+        )
+    }
 
     // Admin Sidebar
 
