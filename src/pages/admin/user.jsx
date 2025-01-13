@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   Stack,
   Table,
-  Text,
+  Heading,
   Input,
   HStack,
   Button,
@@ -26,7 +26,7 @@ const UserManagement = () => {
   return (
     <Stack gap="10">
       <Box textAlign="center">
-        <Text textStyle="xl">User Management</Text>
+        <Heading fontSize={"30px"} m={10}>Inventory Management</Heading>
         <HStack justifyContent="center" mb="4">
           <Input
             placeholder="Search for user..."
