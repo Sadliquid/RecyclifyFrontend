@@ -5,8 +5,6 @@ import { PiStudentFill } from 'react-icons/pi';
 import { SiGoogleclassroom } from 'react-icons/si';
 
 function ClassTabs() {
-    // Table cell color list
-    const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
     return (
         <Tabs.Root defaultValue="Class" key="plain" variant="plain" align="center" mt={4}>
