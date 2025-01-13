@@ -4,8 +4,10 @@ import { Avatar } from "@/components/ui/avatar";
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTrigger } from "@/components/ui/drawer"
 import { useNavigate } from "react-router-dom";
 import { MdOutlineRedeem } from "react-icons/md";
-import { FaTasks } from "react-icons/fa";
+import { FaRegClipboard, FaTasks } from "react-icons/fa";
 import { MdOutlineLeaderboard } from "react-icons/md";
+import { BiHome, BiLeaf, BiMessage } from "react-icons/bi";
+import { BsCalendar, BsQuestionCircle } from "react-icons/bs";
 
 function Navbar() {
     const navigate = useNavigate();
@@ -20,7 +22,7 @@ function Navbar() {
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
-                        <Image src="../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
+                        <Image src="../../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
