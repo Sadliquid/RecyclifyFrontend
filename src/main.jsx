@@ -16,6 +16,10 @@ import ImageRecognition from './pages/Students/ImageRecognition'
 import Login from './pages/Identity/Login'
 import CreateAccount from './pages/Identity/CreateAccount'
 import AccountRecovery from './pages/Identity/AccountRecovery'
+import Dashboard from './pages/admin/landing'
+import UserManagement from './pages/admin/user'
+import InventoryManagement from './pages/admin/inventory'
+import ContactForm from './pages/contact/contact'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -40,6 +44,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"createAccount"} element={<CreateAccount />} />
                             <Route path={"accountRecovery"} element={<AccountRecovery />} />
                         </Route>
+
+                        <Route path={"admin"} >
+                            <Route path={"dashboard"} element={<Dashboard />} />
+                            <Route path={"userManagement"} element={<UserManagement />} />
+                            <Route path={"inventoryManagement"} element={<InventoryManagement />} />
+                        </Route>
+
+                        <Route path={"contact"} element={<ContactForm />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
