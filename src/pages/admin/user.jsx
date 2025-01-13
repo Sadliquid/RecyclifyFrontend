@@ -1,11 +1,19 @@
-import { useState } from 'react';
-import { Stack, Table, Text, Input, HStack, Button, Box } from "@chakra-ui/react";
+import { useState } from "react";
+import {
+  Stack,
+  Table,
+  Text,
+  Input,
+  HStack,
+  Button,
+  Box,
+} from "@chakra-ui/react";
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filter items based on the search term
-  const filteredItems = items.filter(item =>
+  const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -17,16 +25,20 @@ const UserManagement = () => {
 
   return (
     <Stack gap="10">
-      <Text textStyle="xl" textAlign={"left"}>User Management</Text>
-      <HStack justifyContent="space-between" mb="4">
-        <Input
-          placeholder="Search for user..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          width="400px"
-          background={"white"}
-        />
-      </HStack>
+      <Box textAlign="center">
+        <Text textStyle="xl">User Management</Text>
+        <HStack justifyContent="center" mb="4">
+          <Input
+            placeholder="Search for user..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            width="400px"
+            background={"white"}
+            align={"center"}
+            color={"black"}
+          />
+        </HStack>
+      </Box>
       <Table.Root size="sm" showColumnBorder>
         <Table.Header>
           <Table.Row>
@@ -40,7 +52,7 @@ const UserManagement = () => {
         <Table.Body>
           {filteredItems.map((item) => (
             <Table.Row key={item.id}>
-              <Table.Cell color={'black'}>
+              <Table.Cell color={"black"}>
                 <Box display="flex" alignItems="center">
                   <Box
                     borderRadius="full"
@@ -57,13 +69,13 @@ const UserManagement = () => {
                   {item.name}
                 </Box>
               </Table.Cell>
-              <Table.Cell color={'black'}>{item.email}</Table.Cell>
-              <Table.Cell color={'black'}>{item.phone}</Table.Cell>
-              <Table.Cell color={'black'}>{item.role}</Table.Cell>
+              <Table.Cell color={"black"}>{item.email}</Table.Cell>
+              <Table.Cell color={"black"}>{item.phone}</Table.Cell>
+              <Table.Cell color={"black"}>{item.role}</Table.Cell>
               <Table.Cell>
                 <Button
                   bg="green.500" // Set background to green
-                  color="white"   // Set text color to white
+                  color="white" // Set text color to white
                   _hover={{ bg: "green.600" }} // Darken background on hover
                   onClick={() => handleEdit(item.id)}
                 >
@@ -79,11 +91,41 @@ const UserManagement = () => {
 };
 
 const items = [
-  { id: 1, name: "Susie Jones", email: "susiejones@gmail.com", phone: "12345678", role: "Student" },
-  { id: 2, name: "Mary Tan", email: "marytan@gmail.com", phone: "12345678", role: "Teacher" },
-  { id: 3, name: "Susie Jones", email: "susiejones@gmail.com", phone: "12345678", role: "Parent" },
-  { id: 4, name: "John Doe", email: "johndoe@gmail.com", phone: "12345678", role: "Parent" },
-  { id: 5, name: "Anna Smith", email: "annasmith@gmail.com", phone: "12345678", role: "Student" },
+  {
+    id: 1,
+    name: "Susie Jones",
+    email: "susiejones@gmail.com",
+    phone: "12345678",
+    role: "Student",
+  },
+  {
+    id: 2,
+    name: "Mary Tan",
+    email: "marytan@gmail.com",
+    phone: "12345678",
+    role: "Teacher",
+  },
+  {
+    id: 3,
+    name: "Susie Jones",
+    email: "susiejones@gmail.com",
+    phone: "12345678",
+    role: "Parent",
+  },
+  {
+    id: 4,
+    name: "John Doe",
+    email: "johndoe@gmail.com",
+    phone: "12345678",
+    role: "Parent",
+  },
+  {
+    id: 5,
+    name: "Anna Smith",
+    email: "annasmith@gmail.com",
+    phone: "12345678",
+    role: "Student",
+  },
 ];
 
 export default UserManagement;

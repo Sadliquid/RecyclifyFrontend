@@ -19,16 +19,20 @@ const InventoryManagement = () => {
 
   return (
     <Stack gap="10">
-      <Text textStyle="xl" textAlign={"left"}>Inventory Management</Text>
-      <HStack justifyContent="space-between" mb="4">
-        <Input
-          placeholder="Search for user..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          width="400px"
-          background={"white"}
-        />
-      </HStack>
+      <Box textAlign="center">
+        <Text textStyle="xl">Inventory Management</Text>
+        <HStack justifyContent="center" mb="4">
+          <Input
+            placeholder="Search for inventory..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            width="400px"
+            background={"white"}
+            align={"center"}
+            color={"black"}
+          />
+        </HStack>
+      </Box>
       <Table.Root size="sm" showColumnBorder>
         <Table.Header>
           <Table.Row>
