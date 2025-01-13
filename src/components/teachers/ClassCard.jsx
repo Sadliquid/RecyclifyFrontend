@@ -63,7 +63,7 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) 
                         <MenuItem value="edit-class" borderRadius="xl" cursor="pointer">
                             <MdEdit /> Edit
                         </MenuItem>
-                        <DialogRoot> {/* DialogRoot should be within MenuContent */}
+                        <DialogRoot size="lg">
                             <DialogTrigger asChild>
                                 <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false}>
                                     <MdDelete /> Delete
