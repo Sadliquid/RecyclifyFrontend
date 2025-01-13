@@ -26,7 +26,7 @@ const UserManagement = () => {
   return (
     <Stack gap="10">
       <Box textAlign="center">
-        <Heading fontSize={"30px"} m={10}>Inventory Management</Heading>
+        <Heading fontSize={"30px"} m={10}>User Management</Heading>
         <HStack justifyContent="center" mb="4">
           <Input
             placeholder="Search for user..."
