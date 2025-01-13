@@ -1,7 +1,7 @@
-import React from "react";
-import { VStack, Box, Button, Input, Text, Link, Flex } from "@chakra-ui/react";
+import React from "react"
+import { VStack, Box, Button, Input, Text, Link, Flex } from "@chakra-ui/react"
 import { InputGroup } from "@/components/ui/input-group"
-import { LuUser, LuLock, LuIdCard, LuPhone, LuMessageCircle, LuMail } from "react-icons/lu";
+import { LuUser, LuLock, LuIdCard, LuPhone, LuMessageCircle, LuMail } from "react-icons/lu"
 
 function ParentRegistrationForm({ goBack }) {
     return (

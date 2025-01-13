@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import { Box, VStack, Heading, Link, Text, HStack, Image
-} from '@chakra-ui/react'
-import { StepsItem, StepsList, StepsRoot,
-} from "@/components/ui/steps"
+import { Box, VStack, Heading, Link, Text, HStack, Image } from '@chakra-ui/react'
+import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 import ParentRegistrationForm from '../../components/identity/ParentRegisterForm'
 import StudentRegistrationForm from '../../components/identity/StudentRegisterForm'
 
@@ -22,10 +20,10 @@ function CreateAccount() {
 
     return (
             <Box
-            bgPosition="center"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
+                bgPosition="center"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
             >
                 <Box
                     p={8}
@@ -68,9 +66,9 @@ function CreateAccount() {
                                     cursor={"pointer"}
                                     onClick={() => setSelectedAccountType('Parent')}
                                 >
-                                <Image src="https://placehold.co/130x130" size="2xl" mt={30} ml={110} borderRadius={100} />
-                                <Heading mt={5} mb={1}>Parent</Heading>
-                                <Text w={"80%"} ml={35}>Receive the latest updates and keep track of your child's recycling progress in school.</Text>
+                                    <Image src="https://placehold.co/130x130" size="2xl" mt={30} ml={110} borderRadius={100} />
+                                    <Heading mt={5} mb={1}>Parent</Heading>
+                                    <Text w={"80%"} ml={35}>Receive the latest updates and keep track of your child's recycling progress in school.</Text>
                                 </Box>
 
                                 <Box

@@ -1,6 +1,5 @@
 import React from 'react'
-import { Box, VStack, Heading, Button, Link, Text, Input, 
-} from '@chakra-ui/react'
+import { Box, VStack, Heading, Button, Link, Text, Input, } from '@chakra-ui/react'
 import { InputGroup } from "@/components/ui/input-group"
 import { Field } from "@/components/ui/field"
 import { LuUser, LuLock } from "react-icons/lu"
@@ -8,10 +7,10 @@ import { LuUser, LuLock } from "react-icons/lu"
 function Login() {
     return (
         <Box
-        bgPosition="center"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+            bgPosition="center"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
         >
             <Box
                 p={8}
