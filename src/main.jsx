@@ -20,8 +20,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/" element={<Layout />} >
             <Route path ={"admin"} >
                 <Route path ={"dashboard"} element={<Dashboard />} />
-                <Route path ={"userManagament"} element={<UserManagement />} />
-                <Route path ={"inventoryManagament"} element={<InventoryManagement />} />
+                <Route path ={"userManagement"} element={<UserManagement />} />
+                <Route path ={"inventoryManagement"} element={<InventoryManagement />} />
             </Route>
             <Route path="/contact" element={<ContactForm />} />
           </Route>
