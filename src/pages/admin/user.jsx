@@ -1,9 +1,25 @@
-import React from 'react';
-import { Stack, Table } from "@chakra-ui/react";
+import React, { useState } from 'react';
+import { Stack, Table, Text, Input, HStack } from "@chakra-ui/react";
 
 const UserManagement = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter items based on the search term
+  const filteredItems = items.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Stack gap="10">
+      <HStack justifyContent="space-between">
+        <Text textStyle="xl" textAlign={"left"}>User Management</Text>
+        <Input
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          width="200px" // Adjust width as needed
+        />
+      </HStack>
       <Table.Root size="sm" variant="outline">
         <Table.Header>
           <Table.Row>
@@ -13,7 +29,7 @@ const UserManagement = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <Table.Row key={item.id}>
               <Table.Cell>{item.name}</Table.Cell>
               <Table.Cell>{item.category}</Table.Cell>
