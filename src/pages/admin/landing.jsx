@@ -73,24 +73,24 @@ function Dashboard() {
       </Box>
       
       <SimpleGrid columns={[1, null, 2]} spacing={4} mt={8}>
-        <Box borderWidth={1} borderRadius="lg" p={4}>
+        <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
           <Heading size="md">User Management</Heading>
           <Text mt={2}>View all users on the Recyclifly system and be able to carry out functions to manage users</Text>
           <Button mt={4} colorScheme="teal" background={"white"}>User Management Screen</Button>
         </Box>
-        <Box borderWidth={1} borderRadius="lg" p={4}>
+        <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
           <Heading size="md">Inventory Management</Heading>
           <Text mt={2}>View all rewards offered in the Recyclifly program.</Text>
           <Button mt={4} colorScheme="teal" background={"white"}>Inventory Management Screen</Button>
         </Box>
         
-        <Box borderWidth={1} borderRadius="lg" p={4}>
+        <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
           <Heading size="md">System Services</Heading>
           <Text mt={2}>View all services Recyclifly uses and toggle on and off the service.</Text>
           <Button mt={4} colorScheme="teal" background={"white"}>System Services Screen</Button>
         </Box>
         
-        <Box borderWidth={1} borderRadius="lg" p={4}>
+        <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
           <Heading size="md">View Logs</Heading>
           <Text mt={2}>View the logs of Recyclifly's system</Text>
           <Button mt={4} colorScheme="teal" background={"white"}>View Logs</Button>
