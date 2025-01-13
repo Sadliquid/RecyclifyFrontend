@@ -23,10 +23,10 @@ const ContactForm = () => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit}>
+    <Box as="form" onSubmit={handleSubmit} mt={10}>
       <VStack spacing={4} align="stretch">
         <Box>
-          <Box as="label" htmlFor="name" mb={2} display="block">
+          <Box as="label" htmlFor="name" mb={2} display="block" textAlign={"left"}>
             Name:
           </Box>
           <Input
@@ -41,7 +41,7 @@ const ContactForm = () => {
           />
         </Box>
         <Box>
-          <Box as="label" htmlFor="email" mb={2} display="block">
+          <Box as="label" htmlFor="email" mb={2} display="block" textAlign={"left"}>
             Email:
           </Box>
           <Input
@@ -56,10 +56,10 @@ const ContactForm = () => {
           />
         </Box>
         <Box>
-          <Box as="label" htmlFor="message" mb={2} display="block">
+          <Box as="label" htmlFor="message" mb={2} display="block" textAlign={"left"}>
             Message:
           </Box>
-          <Textarea
+          <Input
             id="message"
             name="message"
             value={formData.message}
@@ -69,7 +69,7 @@ const ContactForm = () => {
             color={"black"} // Set text color to black
           />
         </Box>
-        <Button type="submit" background={'teal'}>Send</Button>
+        <Button type="submit" background={'teal'} mt={3}>Send</Button>
       </VStack>
     </Box>
   );
