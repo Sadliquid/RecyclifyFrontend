@@ -13,6 +13,9 @@ import StudentInbox from './pages/Students/StudentInbox'
 import Redemption from './pages/Students/Redemption'
 import MyClass from './pages/Students/MyClass'
 import ImageRecognition from './pages/Students/ImageRecognition'
+import Login from './pages/Identity/Login'
+import CreateAccount from './pages/Identity/CreateAccount'
+import AccountRecovery from './pages/Identity/AccountRecovery'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -30,6 +33,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"scanItem"} element={<ImageRecognition />} />
                             <Route path={"inbox"} element={<StudentInbox />} />
                             <Route path={"home"} element={<StudentsHomepage />} />
+                        </Route>
+
+                        <Route path={"auth"}>
+                            <Route path={"login"} element={<Login />} />
+                            <Route path={"createAccount"} element={<CreateAccount />} />
+                            <Route path={"accountRecovery"} element={<AccountRecovery />} />
                         </Route>
                     </Route>
                 </Routes>
