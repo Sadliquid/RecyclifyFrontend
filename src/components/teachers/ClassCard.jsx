@@ -2,23 +2,8 @@ import React from 'react';
 import { Box, Card, Image, Button, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { MdOutlineMoreVert, MdOutlineContentCopy, MdEdit, MdDelete } from 'react-icons/md';
-import {
-    MenuContent,
-    MenuItem,
-    MenuRoot,
-    MenuTrigger,
-} from '@/components/ui/menu';
-import {
-    DialogActionTrigger,
-    DialogBody,
-    DialogCloseTrigger,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogRoot,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
+import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) {
     return (
