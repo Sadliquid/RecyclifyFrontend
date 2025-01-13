@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Stack, Table, Text, Input, HStack, Button, Box } from "@chakra-ui/react";
 
 const UserManagement = () => {
@@ -24,9 +24,10 @@ const UserManagement = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           width="400px"
+          background={"white"}
         />
       </HStack>
-      <Table.Root size="sm" variant="simple">
+      <Table.Root size="sm" showColumnBorder>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>Name</Table.ColumnHeader>
@@ -39,7 +40,7 @@ const UserManagement = () => {
         <Table.Body>
           {filteredItems.map((item) => (
             <Table.Row key={item.id}>
-              <Table.Cell>
+              <Table.Cell color={'black'}>
                 <Box display="flex" alignItems="center">
                   <Box
                     borderRadius="full"
@@ -56,9 +57,9 @@ const UserManagement = () => {
                   {item.name}
                 </Box>
               </Table.Cell>
-              <Table.Cell>{item.email}</Table.Cell>
-              <Table.Cell>{item.phone}</Table.Cell>
-              <Table.Cell>{item.role}</Table.Cell>
+              <Table.Cell color={'black'}>{item.email}</Table.Cell>
+              <Table.Cell color={'black'}>{item.phone}</Table.Cell>
+              <Table.Cell color={'black'}>{item.role}</Table.Cell>
               <Table.Cell>
                 <Button
                   bg="green.500" // Set background to green

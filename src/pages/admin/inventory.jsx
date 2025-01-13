@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import { Stack, Table, Text, Input, HStack, Button, Box } from "@chakra-ui/react";
 // Import specific icons from react-icons
 import { MdEdit } from 'react-icons/md';
@@ -19,16 +19,17 @@ const InventoryManagement = () => {
 
   return (
     <Stack gap="10">
+      <Text textStyle="xl" textAlign={"left"}>Inventory Management</Text>
       <HStack justifyContent="space-between" mb="4">
-        <Text textStyle="xl" textAlign={"left"}>Inventory Management</Text>
         <Input
-          placeholder="Search for item..."
+          placeholder="Search for user..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           width="400px"
+          background={"white"}
         />
       </HStack>
-      <Table.Root size="sm" variant="simple">
+      <Table.Root size="sm" showColumnBorder>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>Name</Table.ColumnHeader>
@@ -40,7 +41,7 @@ const InventoryManagement = () => {
         <Table.Body>
           {filteredItems.map((item) => (
             <Table.Row key={item.id}>
-              <Table.Cell>
+              <Table.Cell color={'black'}>
                 <Box display="flex" alignItems="center">
                   <Box
                     borderRadius="full"
@@ -57,8 +58,8 @@ const InventoryManagement = () => {
                   {item.name}
                 </Box>
               </Table.Cell>
-              <Table.Cell>{item.quantity}</Table.Cell>
-              <Table.Cell>{item.points}</Table.Cell>
+              <Table.Cell color={'black'}>{item.quantity}</Table.Cell>
+              <Table.Cell color={'black'}>{item.points}</Table.Cell>
               <Table.Cell>
                 <Button
                   variant="link" // Use link button style

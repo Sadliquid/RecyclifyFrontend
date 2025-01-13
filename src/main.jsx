@@ -7,6 +7,7 @@ import './index.css'
 import Dashboard from './pages/admin/landing'
 import UserManagement from './pages/admin/user'
 import InventoryManagement from './pages/admin/inventory'
+import ContactForm from './pages/contact/contact'
 
 // Page routes go here.
 
@@ -17,9 +18,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />} >
-            <Route path="/admin" element={<Dashboard />} ></Route>
-            <Route path="/admin/user_management" element={<UserManagement />} > /</Route>
-            <Route path="/admin/inventory_management" element={<InventoryManagement />} > /</Route>
+            <Route path ={"admin"} >
+                <Route path ={"dashboard"} element={<Dashboard />} />
+                <Route path ={"userManagament"} element={<UserManagement />} />
+                <Route path ={"inventoryManagament"} element={<InventoryManagement />} />
+            </Route>
+            <Route path="/contact" element={<ContactForm />} />
           </Route>
         </Routes>
       </BrowserRouter>
