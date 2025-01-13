@@ -4,7 +4,7 @@ import { IoArrowBack } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import ClassTabs from '../../components/teachers/ClassTabs';
 
-function ClassPage() {
+function Class() {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -36,4 +36,4 @@ function ClassPage() {
     );
 }
 
-export default ClassPage;
+export default Class;
