@@ -73,39 +73,35 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick }) {
                             borderColor: 'gray.200',
                         }}
                     >
-                        <MenuItem value="copy-uuid" borderRadius="xl">
+                        <MenuItem value="copy-uuid" borderRadius="xl" cursor="pointer">
                             <MdOutlineContentCopy /> Copy UUID
                         </MenuItem>
-                        <MenuItem value="edit-class" borderRadius="xl">
+                        <MenuItem value="edit-class" borderRadius="xl" cursor="pointer">
                             <MdEdit /> Edit
                         </MenuItem>
-                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl">
-                            <DialogRoot role="alertdialog">
-                                <DialogTrigger asChild>
-                                    <>
-                                        <MdDelete /> Delete
-                                    </>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>Are you sure?</DialogTitle>
-                                    </DialogHeader>
-                                    <DialogBody>
-                                        <p>
-                                            This action cannot be undone. This will permanently delete your
-                                            account and remove your data from our systems.
-                                        </p>
-                                    </DialogBody>
-                                    <DialogFooter>
-                                        <DialogActionTrigger asChild>
-                                            <Button variant="outline">Cancel</Button>
-                                        </DialogActionTrigger>
-                                        <Button colorPalette="red">Delete</Button>
-                                    </DialogFooter>
-                                    <DialogCloseTrigger />
-                                </DialogContent>
-                            </DialogRoot>
-                        </MenuItem>
+                        <DialogRoot> {/* DialogRoot should be within MenuContent */}
+                            <DialogTrigger asChild>
+                                <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false}>
+                                    <MdDelete /> Delete
+                                </MenuItem>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle color="black" textAlign="center">Are you sure you want to delete this class?</DialogTitle>
+                                </DialogHeader>
+                                <DialogBody color="#FF0000" textAlign="center">
+                                    <p>
+                                        Class cannot be restored once it is deleted.
+                                    </p>
+                                </DialogBody>
+                                <DialogFooter display="flex" gap={10} justifyContent="center">
+                                    <DialogActionTrigger asChild>
+                                        <Button variant="outline" bg="#2D65FF" color="white">Cancel</Button>
+                                    </DialogActionTrigger>
+                                    <Button bg="#FF8080" color="white">Delete</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </DialogRoot>
                     </MenuContent>
                 </MenuRoot>
             </Box>
