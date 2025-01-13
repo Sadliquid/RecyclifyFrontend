@@ -20,7 +20,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 
-function ClassCard({ classItem, cardWidth, cardHeight, onCardClick }) {
+function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) {
     return (
         <motion.div
             initial={{ y: 0, opacity: 1 }}
@@ -98,7 +98,9 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick }) {
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#2D65FF" color="white">Cancel</Button>
                                     </DialogActionTrigger>
-                                    <Button bg="#FF8080" color="white">Delete</Button>
+                                    <Button bg="#FF8080" color="white" onClick={onDelete}>
+                                        Delete
+                                    </Button>
                                 </DialogFooter>
                             </DialogContent>
                         </DialogRoot>
