@@ -12,6 +12,7 @@ import Milestones from './pages/Students/Milestones'
 import StudentInbox from './pages/Students/StudentInbox'
 import Redemption from './pages/Students/Redemption'
 import MyClass from './pages/Students/MyClass'
+import ImageRecognition from './pages/Students/ImageRecognition'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"milestones"} element={<Milestones />} />
                             <Route path={"my-class"} element={<MyClass />} />
                             <Route path={"redemption"} element={<Redemption />} />
+                            <Route path={"scan-item"} element={<ImageRecognition />} />
                             <Route path={"inbox"} element={<StudentInbox />} />
                             <Route path={"home"} element={<StudentsHomepage />} />
                         </Route>

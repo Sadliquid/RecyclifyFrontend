@@ -47,7 +47,7 @@ function Navbar() {
                                 <Text ml={2}>Redeem my leafs</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scan-item")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <BiMessage ml={1}/>
                                 <Text ml={3}>Scan my item</Text>
                             </Button>
