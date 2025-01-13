@@ -22,12 +22,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                     <Route path={"/"} element={<Layout />} >
                         <Route index element={<Homepage />} />
                         <Route path={"student"}>
-                            <Route path={"enrol-class"} element={<ClassEnrolment />} />
+                            <Route path={"enrolClass"} element={<ClassEnrolment />} />
                             <Route path={"leaderboards"} element={<Leaderboards />} />
                             <Route path={"milestones"} element={<Milestones />} />
-                            <Route path={"my-class"} element={<MyClass />} />
+                            <Route path={"myClass"} element={<MyClass />} />
                             <Route path={"redemption"} element={<Redemption />} />
-                            <Route path={"scan-item"} element={<ImageRecognition />} />
+                            <Route path={"scanItem"} element={<ImageRecognition />} />
                             <Route path={"inbox"} element={<StudentInbox />} />
                             <Route path={"home"} element={<StudentsHomepage />} />
                         </Route>

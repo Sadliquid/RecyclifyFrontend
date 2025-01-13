@@ -47,7 +47,7 @@ function Navbar() {
                                 <Text ml={2}>Redeem my leafs</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scan-item")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scanItem")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <BiMessage ml={1}/>
                                 <Text ml={3}>Scan my item</Text>
                             </Button>
@@ -57,12 +57,12 @@ function Navbar() {
                                 <Text ml={3}>Inbox</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/my-class")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
                                 <Text ml={3}>My class</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/enrol-class")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/enrolClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
                                 <Text ml={3}>Enrol into class</Text>
                             </Button>

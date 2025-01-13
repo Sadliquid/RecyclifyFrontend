@@ -41,7 +41,7 @@ function Homepage() {
                         cursor="pointer"
                         _hover={{ backgroundColor: "#3DAF8B" }}
                         transition={"all 0.2s"}
-                        onClick={() => navigate('/login')}
+                        onClick={() => navigate('/auth/login')}
                     >
                         <Text color="white">Get started</Text>
                     </Box>
