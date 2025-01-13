@@ -96,11 +96,11 @@ function CreateAccount() {
                             textAlign="center" 
                             fontSize="12px" 
                             mb={5}
-                            mt={10}
+                            mt={5}
                         >
                             Already have have an account?{' '}
                             <Link 
-                                href="/login" 
+                                href="/auth/login" 
                                 color="teal.500"
                             >
                             Sign In

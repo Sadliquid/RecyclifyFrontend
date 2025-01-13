@@ -97,7 +97,7 @@ function Login() {
                     >
                         Don't have an account?{' '}
                         <Link 
-                            href="/createAccount" 
+                            href="/auth/createAccount" 
                             color="teal.500"
                         >
                         Sign Up
