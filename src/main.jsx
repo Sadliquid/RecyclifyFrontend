@@ -6,6 +6,7 @@ import React from 'react'
 import './index.css'
 import StudentsHomepage from './pages/Students/StudentsHomepage'
 import Homepage from './pages/main/Homepage'
+import ClassEnrolment from './pages/Students/ClassEnrolment'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Route index element={<Homepage />} />
                         <Route path={"student"}>
                             <Route path={"home"} element={<StudentsHomepage />} />
+                            <Route path={"enrol-class"} element={<ClassEnrolment />} />
                         </Route>
                     </Route>
                 </Routes>

@@ -1,11 +1,11 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, Heading } from '@chakra-ui/react';
 
 function StudentsHomepage() {
     return (
         <Box display="flex" justifyContent={"space-between"} width="100%" height={"77vh"} mt={10}>
             <Box display="flex" width="69%" height={"100%"} backgroundColor={"#E5ECFF"} borderRadius={20}>
                 <Box display={"flex"} flexDir={"column"} justifyContent={"space-between"} width="100%">
-                    <Text fontSize={24} fontWeight={"bold"} mt={3}>Dashboard</Text>
+                    <Heading fontSize="30px" mt={3}>Dashboard</Heading>
 
                     <Box display={"flex"} flexDir={"column"} justifyContent={"center"} mt={2} mb={2} width="100%" height="100%">
                         <Box backgroundColor={"white"} borderRadius={20} width={"95%"} height={"50%"} mt={5} display={"flex"} justifyContent={"center"} alignItems={"center"} margin="auto">

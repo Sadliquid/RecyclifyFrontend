@@ -25,7 +25,7 @@ function Navbar() {
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <BiHome ml={1}/>
                                 <Text ml={2}>Dashboard</Text>
                             </Button>
@@ -60,6 +60,11 @@ function Navbar() {
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
                                 <Text ml={3}>My class</Text>
+                            </Button>
+
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/enrol-class")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                                <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
+                                <Text ml={3}>Enrol into class</Text>
                             </Button>
                         </Box>
                         
