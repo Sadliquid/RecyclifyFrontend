@@ -19,10 +19,13 @@ import AccountRecovery from './pages/Identity/AccountRecovery'
 import Dashboard from './pages/admin/landing'
 import UserManagement from './pages/admin/user'
 import InventoryManagement from './pages/admin/inventory'
+import ContactFormManagement from './pages/admin/contact'
 import ContactForm from './pages/contact/contact'
 import TeachersLanding from './pages/Teachers/Landing'
 import Class from './pages/Teachers/Class'
-
+import StudentRedemption from './pages/Teachers/StudentRedemption'
+import TaskVerification from './pages/Teachers/TaskVerification'
+import ClassLeaderboards from './pages/Teachers/ClassLeaderboards'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   	<React.StrictMode>
@@ -53,6 +56,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={"dashboard"} element={<Dashboard />} />
                                 <Route path={"userManagement"} element={<UserManagement />} />
                                 <Route path={"inventoryManagement"} element={<InventoryManagement />} />
+                                <Route path={"contactManagement"} element={<ContactFormManagement />} />
                             </Route>
 
                             <Route path={"contact"} element={<ContactForm />} />
@@ -60,6 +64,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"teachers"}>
                                 <Route index element={<TeachersLanding />} />
                                 <Route path={"class/:id"} element={<Class />} />
+                                <Route path={"redemption"} element={<StudentRedemption />} />
+                                {/* Add task id afterward */}
+                                <Route path={"tasks"} element={<TaskVerification />} /> 
+                                {/* Add class id afterward */}
+                                <Route path={"leaderboards"} element={<ClassLeaderboards />} />
                             </Route>
                         </Route>
                     </Routes>
