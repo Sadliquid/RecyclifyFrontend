@@ -174,17 +174,17 @@ function Navbar() {
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/redemption")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                 <MdOutlineRedeem ml={1} />
                                 <Text ml={2}>Student Redemption</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/tasks")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                 <FaTasks ml={1} />
                                 <Text ml={3}>Task Verification</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                 <Box ml={0.5}>
                                     <MdOutlineLeaderboard fontSize={"20px"} />
                                 </Box>
