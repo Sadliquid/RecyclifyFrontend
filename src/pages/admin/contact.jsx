@@ -2,16 +2,7 @@ import { useState, useRef } from "react";
 import { Stack, Table, Heading, Input, HStack, Box, Textarea } from "@chakra-ui/react";
 import { MdReply } from 'react-icons/md';
 import { Button } from "@/components/ui/button"
-import {
-    DialogActionTrigger,
-    DialogBody,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogRoot,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Field } from "@/components/ui/field"
 
 const ContactFormManagement = () => {
@@ -22,8 +13,7 @@ const ContactFormManagement = () => {
 
     // Filter messages based on the search term
     const filteredMessages = messages.filter(message =>
-        message.senderName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        message.email.toLowerCase().includes(searchTerm.toLowerCase())
+        message.senderName.toLowerCase().includes(searchTerm.toLowerCase()) || message.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Handle reply button click
