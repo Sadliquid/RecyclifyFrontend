@@ -3,6 +3,8 @@ import MiniCalendar from '../../components/Students/MiniCalendar';
 import StudentCharts from '../../components/Students/StudentCharts';
 import StudentProfileCard from '../../components/Students/StudentProfileCard';
 import StudentTaskCard from '../../components/Students/StudentTaskCard';
+import StreakCard from '../../components/Students/StreakCard';
+import StreakRewardCard from '../../components/Students/StreakRewardCard';
 
 function StudentsHomepage() {
     return (
@@ -21,8 +23,14 @@ function StudentsHomepage() {
                                 <MiniCalendar />
                             </Box>
 
-                            <Box width="48%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
-                                <Text fontSize={20} fontWeight={"bold"}>Stuff</Text>
+                            <Box width="48%" borderRadius={20} display="flex" flexDirection="column" height="30vh" justifyContent="space-between" alignItems="center" mt="auto" mb="auto">
+                                <Box width="100%" height="45%" backgroundColor="white" display="flex" justifyContent="center" alignItems="center" borderRadius={20}>
+                                    <StreakCard />
+                                </Box>
+
+                                <Box width="100%" height="45%" backgroundColor="white" display="flex" justifyContent="center" alignItems="center" borderRadius={20}>
+                                    <StreakRewardCard />
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
