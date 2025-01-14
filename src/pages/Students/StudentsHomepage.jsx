@@ -1,4 +1,10 @@
 import { Box, Text, Heading } from '@chakra-ui/react';
+import MiniCalendar from '../../components/Students/MiniCalendar';
+import StudentCharts from '../../components/Students/StudentCharts';
+import StudentProfileCard from '../../components/Students/StudentProfileCard';
+import StudentTaskCard from '../../components/Students/StudentTaskCard';
+import StreakCard from '../../components/Students/StreakCard';
+import StreakRewardCard from '../../components/Students/StreakRewardCard';
 
 function StudentsHomepage() {
     return (
@@ -9,16 +15,22 @@ function StudentsHomepage() {
 
                     <Box display={"flex"} flexDir={"column"} justifyContent={"center"} mt={2} mb={2} width="100%" height="100%">
                         <Box backgroundColor={"white"} borderRadius={20} width={"95%"} height={"50%"} mt={5} display={"flex"} justifyContent={"center"} alignItems={"center"} margin="auto">
-                            <Text fontSize={20} fontWeight={"bold"}>Charts</Text>
+                            <StudentCharts />
                         </Box>
 
                         <Box display={"flex"} justifyContent={"space-between"} margin="auto" width="95%" height={"50%"}>
-                            <Box width="48%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
-                                <Text fontSize={20} fontWeight={"bold"}>Calendar</Text>
+                            <Box width="49%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
+                                <MiniCalendar />
                             </Box>
 
-                            <Box width="48%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
-                                <Text fontSize={20} fontWeight={"bold"}>Stuff</Text>
+                            <Box width="49%" borderRadius={20} display="flex" flexDirection="column" height="30vh" justifyContent="space-between" alignItems="center" mt="auto" mb="auto">
+                                <Box width="100%" height="45%" backgroundColor="white" display="flex" justifyContent="center" alignItems="center" borderRadius={20}>
+                                    <StreakCard />
+                                </Box>
+
+                                <Box width="100%" height="45%" backgroundColor="white" display="flex" justifyContent="center" alignItems="center" borderRadius={20}>
+                                    <StreakRewardCard />
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
@@ -27,24 +39,18 @@ function StudentsHomepage() {
 
             <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="29%" height={"100%"} borderRadius={20}>
                 <Box height="29%" border={"3px solid #4DCBA4"} borderRadius={20} alignItems={"center"} display={"flex"} justifyContent={"center"} backgroundColor={"white"}>
-                    <Text fontSize={24} fontWeight={"bold"}>Profile card</Text>
+                    <StudentProfileCard />
                 </Box>
 
                 <Box display="flex" flexDir={"column"} justifyContent={"center"} height="69%" backgroundColor={"#E5ECFF"} borderRadius={20}>
                     <Text fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Text>
 
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="80%" width="90%">
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} width="90%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
-                            <Text fontSize={20} fontWeight={"bold"}>Task 1</Text>
-                        </Box>
-
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} width="90%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
-                            <Text fontSize={20} fontWeight={"bold"}>Task 2</Text>
-                        </Box>
-
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} width="90%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
-                            <Text fontSize={20} fontWeight={"bold"}>Task 3</Text>
-                        </Box>
+                        {[...Array(3)].map((_, index) => (
+                            <Box key={index} display="flex" justifyContent={"center"} alignItems={"center"} width="100%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
+                                <StudentTaskCard />
+                            </Box>
+                        ))}
                     </Box>
                 </Box>
             </Box>
