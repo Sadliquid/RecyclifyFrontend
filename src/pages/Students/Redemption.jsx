@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Heading, Span, Text } from '@chakra-ui/react';
 import RewardRedemptionCard from '../../components/Students/RewardRedemptionCard';
 import { useState } from 'react';
 
@@ -31,8 +31,10 @@ function Redemption() {
         <Box display="flex" justifyContent={"center"} flexDir="column" mt={10}>
             <Heading fontSize="30px" mb={10}>Redeem my leafs</Heading>
 
-            <Box display="flex" justifyContent={"center"} backgroundColor={"#E5ECFF"} borderRadius={15} width="12%" margin="auto" p={2}>
-                <Text>Redeemable leafs: {redeemablePoints}</Text>
+            <Box display="flex" justifyContent={"center"} backgroundColor={"#E5ECFF"} borderRadius={15} width="10%" margin="auto" p={2}>
+                <Box display="flex">
+                <Text>You have <Span fontFamily={"Lilita One"}>{redeemablePoints}</Span> leafs</Text>
+                </Box>
             </Box>
 
             <Box display="flex" justifyContent={"center"} flexWrap={"wrap"} mt={10}>
