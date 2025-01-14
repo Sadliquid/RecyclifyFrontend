@@ -19,6 +19,7 @@ import AccountRecovery from './pages/Identity/AccountRecovery'
 import Dashboard from './pages/admin/landing'
 import UserManagement from './pages/admin/user'
 import InventoryManagement from './pages/admin/inventory'
+import ContactFormManagement from './pages/admin/contact'
 import ContactForm from './pages/contact/contact'
 import TeachersLanding from './pages/Teachers/Landing'
 import Class from './pages/Teachers/Class'
@@ -53,6 +54,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={"dashboard"} element={<Dashboard />} />
                                 <Route path={"userManagement"} element={<UserManagement />} />
                                 <Route path={"inventoryManagement"} element={<InventoryManagement />} />
+                                <Route path={"contactManagement"} element={<ContactFormManagement />} />
                             </Route>
 
                             <Route path={"contact"} element={<ContactForm />} />
