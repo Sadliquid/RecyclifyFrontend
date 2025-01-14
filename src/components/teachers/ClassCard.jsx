@@ -82,9 +82,9 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) 
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#2D65FF" color="white">Cancel</Button>
                                     </DialogActionTrigger>
-                                    <Button bg="#FF8080" color="white" onClick={onDelete}>
-                                        Delete
-                                    </Button>
+                                    <DialogActionTrigger asChild>
+                                        <Button bg="#FF8080" color="white" onClick={onDelete}>Delete</Button>
+                                    </DialogActionTrigger>
                                 </DialogFooter>
                             </DialogContent>
                         </DialogRoot>
