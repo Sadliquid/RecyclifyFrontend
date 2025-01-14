@@ -3,15 +3,13 @@ import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/reac
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
-import { FaTasks } from "react-icons/fa";
 import { BsMailbox, BsPeople } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
 import { GrAddCircle } from "react-icons/gr";
 import { FcStatistics } from "react-icons/fc";
-import { FaRegClipboard, FaTasks } from "react-icons/fa";
-import { BsCalendar, BsQuestionCircle } from "react-icons/bs";
-import { BiHome, BiLeaf, BiLogIn, BiMessage, BiMedal } from "react-icons/bi";
+import { FaTasks } from "react-icons/fa";
+import { BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
