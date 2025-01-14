@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, defineStyle } from '@chakra-ui/react';
+import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, defineStyle, Badge } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
@@ -120,7 +120,7 @@ function ClassTable(onEdit) {
                                     <Table.Cell color="black">{student.redemptions}</Table.Cell>
                                     <Table.Cell color="black">{student.studentEmail}</Table.Cell>
                                     <Table.Cell color="black">{student.parentEmail}</Table.Cell>
-                                    <Table.Cell color="black">{student.flagStatus ? "Flagged" : "Not Flagged"}</Table.Cell>
+                                    <Table.Cell color="black">{student.flagStatus ? <Badge colorPalette="red">Flagged</Badge> : ""}</Table.Cell>
                                     <Table.Cell>
                                         <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
                                             <MenuTrigger asChild>
