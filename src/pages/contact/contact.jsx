@@ -1,61 +1,41 @@
 import { useState } from 'react';
 import { Box, VStack, Input, Button } from '@chakra-ui/react';
+import Server from '../../../networking';
+import { Toaster } from "@/components/ui/toaster"
+import  ShowToast  from '../../Extensions/ShowToast';
 
 const ContactForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: '',
-    });
-
-    const [statusMessage, setStatusMessage] = useState('');
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setStatusMessage(''); // Clear previous messages
-    
+
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/ContactForm`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Id: 1,
-                    senderName: formData.name,
-                    senderEmail: formData.email,
-                    message: formData.message,
-                }),
+            const response = await Server.post(`${import.meta.env.VITE_BACKEND_URL}/api/ContactForm`, {
+                Id: 1, // Static ID for the form
+                senderName: name,
+                senderEmail: email,
+                message,
             });
-    
-            if (response.ok) {
-                setStatusMessage('Form submitted successfully!');
-                setFormData({ name: '', email: '', message: '' });
+
+            if (response.status === 200) {
+                ShowToast('success', 'Success', 'Form submitted successfully!');
+                setName('');
+                setEmail('');
+                setMessage('');
             } else {
-                const errorDetail = await response.text();
-                setStatusMessage(`Error: ${errorDetail}`);
+                ShowToast('error', 'Error', 'Failed to submit form');
             }
         } catch (error) {
-            setStatusMessage(`Error: ${error.message}`);
+            ShowToast('error', 'Error', `Error: ${error.message}`);
         }
     };
 
     return (
         <Box as="form" onSubmit={handleSubmit} mt={10}>
             <VStack spacing={4} align="stretch">
-                {statusMessage && (
-                    <Box color="red.500" mb={4}>
-                        {statusMessage}
-                    </Box>
-                )}
                 <Box>
                     <Box as="label" htmlFor="name" mb={2} display="block" textAlign={"left"}>
                         Name:
@@ -64,11 +44,11 @@ const ContactForm = () => {
                         type="text"
                         id="name"
                         name="name"
-                        value={formData.name}
-                        onChange={handleChange}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
                         background={"white"}
-                        color={"black"} // Set text color to black
+                        color={"black"}
                     />
                 </Box>
                 <Box>
@@ -79,11 +59,11 @@ const ContactForm = () => {
                         type="email"
                         id="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                         background={"white"}
-                        color={"black"} // Set text color to black
+                        color={"black"}
                     />
                 </Box>
                 <Box>
@@ -93,16 +73,18 @@ const ContactForm = () => {
                     <Input
                         id="message"
                         name="message"
-                        value={formData.message}
-                        onChange={handleChange}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         required
                         background={"white"}
-                        color={"black"} // Set text color to black
+                        color={"black"}
                     />
                 </Box>
                 <Button type="submit" background={'teal'} mt={3}>Send</Button>
             </VStack>
+            <Toaster />
         </Box>
+        
     );
 };
 
