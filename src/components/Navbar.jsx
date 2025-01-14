@@ -34,7 +34,7 @@ function Navbar() {
                                     mb={2}
                                     justifyContent={"left"}
                                     colorScheme="white"
-                                    onClick={() => navigate("/")}
+                                    onClick={() => navigate("/auth/login")}
                                     _hover={{ bg: "#E4EBF8" }}
                                     borderRadius={"30px"}
                                     width="100%" 
@@ -48,7 +48,7 @@ function Navbar() {
                                     mb={2}
                                     justifyContent={"left"}
                                     colorScheme="white"
-                                    onClick={() => navigate("/about")}
+                                    onClick={() => navigate("/auth/createAccount")}
                                     _hover={{ bg: "#E4EBF8" }}
                                     borderRadius={"30px"}
                                     width="100%" 
