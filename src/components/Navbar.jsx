@@ -3,10 +3,13 @@ import { Flex, Heading, Button, Image, Text, Box } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
-import { FaRegClipboard, FaTasks } from "react-icons/fa";
-import { BsCalendar, BsQuestionCircle } from "react-icons/bs";
-import { BiHome, BiLeaf, BiMessage } from "react-icons/bi";
+import { FaTasks } from "react-icons/fa";
+import { BsMailbox, BsPeople } from "react-icons/bs";
+import { BiLeaf, BiMedal } from "react-icons/bi";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
+import { IoSparklesOutline } from "react-icons/io5";
+import { GrAddCircle } from "react-icons/gr";
+import { FcStatistics } from "react-icons/fc";
 
 function Navbar() {
     const navigate = useNavigate();
@@ -26,20 +29,20 @@ function Navbar() {
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
                             <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <BiHome ml={1}/>
+                                <FcStatistics ml={1}/>
                                 <Text ml={2}>Dashboard</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <BsCalendar ml={1}/>
-                                <Text ml={3}>Milestones</Text>
+                                <BiMedal/>
+                                <Text ml={2}>Milestones</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Box ml={0.5}>
-                                    <FaRegClipboard fontSize={"20px"}/>
+                                <Box>
+                                    <MdOutlineLeaderboard fontSize={"20px"}/>
                                 </Box>
-                                <Text ml={2.5}>Leaderboards</Text>
+                                <Text ml={2}>Leaderboards</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/redemption")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
@@ -48,23 +51,23 @@ function Navbar() {
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scanItem")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <BiMessage ml={1}/>
-                                <Text ml={3}>Scan my item</Text>
+                                <IoSparklesOutline ml={4}/>
+                                <Text ml={2}>Scan my item</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/inbox")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
-                                <Text ml={3}>Inbox</Text>
+                                <Text as={BsMailbox} fontSize="20px" color="#515F7C" />
+                                <Text ml={2}>Inbox</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
-                                <Text ml={3}>My class</Text>
+                                <Text as={BsPeople} fontSize="20px" color="#515F7C" />
+                                <Text ml={2}>My class</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/enrolClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={BsQuestionCircle} fontSize="20px" color="#515F7C" ml={0.5} />
-                                <Text ml={3}>Enrol into class</Text>
+                                <Text as={GrAddCircle} fontSize="20px" color="#515F7C" />
+                                <Text ml={2}>Enrol into class</Text>
                             </Button>
                         </Box>
                         
