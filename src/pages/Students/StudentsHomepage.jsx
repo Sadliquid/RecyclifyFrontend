@@ -19,11 +19,11 @@ function StudentsHomepage() {
                         </Box>
 
                         <Box display={"flex"} justifyContent={"space-between"} margin="auto" width="95%" height={"50%"}>
-                            <Box width="48%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
+                            <Box width="49%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
                                 <MiniCalendar />
                             </Box>
 
-                            <Box width="48%" borderRadius={20} display="flex" flexDirection="column" height="30vh" justifyContent="space-between" alignItems="center" mt="auto" mb="auto">
+                            <Box width="49%" borderRadius={20} display="flex" flexDirection="column" height="30vh" justifyContent="space-between" alignItems="center" mt="auto" mb="auto">
                                 <Box width="100%" height="45%" backgroundColor="white" display="flex" justifyContent="center" alignItems="center" borderRadius={20}>
                                     <StreakCard />
                                 </Box>
