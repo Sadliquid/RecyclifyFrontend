@@ -1,10 +1,59 @@
-import { Box, Card, Image, Button, Text } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Box, Card, Image, Button, Text, Stack, Field, Input, defineStyle, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { MdOutlineMoreVert, MdOutlineContentCopy, MdEdit, MdDelete } from 'react-icons/md';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { ClipboardIconButton, ClipboardRoot } from "@/components/ui/clipboard"
 
-function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) {
+
+function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedClass, setEditedClass] = useState({
+        className: classItem.className,
+        description: classItem.description,
+        image: classItem.image,
+        bgColor: classItem.bgColor,
+    });
+
+    const handleChange = (field, value) => {
+        setEditedClass((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    const handleSaveEdit = () => {
+        onEdit(editedClass); 
+        setIsEditing(false); 
+    };
+
+    const resetEditedClass = () => {
+        setEditedClass({ ...classItem });
+    };
+
+    const floatingStyles = defineStyle({
+        pos: "absolute",
+        bg: "bg",
+        px: "0.5",
+        top: "-3",
+        insetStart: "2",
+        fontWeight: "normal",
+        pointerEvents: "none",
+        transition: "position",
+        _peerPlaceholderShown: {
+            color: "fg.muted",
+            top: "2.5",
+            insetStart: "3",
+        },
+        _peerFocusVisible: {
+            color: "fg",
+            top: "-3",
+            insetStart: "2",
+        },
+    })
+
     return (
         <motion.div
             initial={{ y: 0, opacity: 1 }}
@@ -26,10 +75,10 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) 
                             {classItem.className}
                         </Card.Title>
                         <Card.Description color="black">
-                            {classItem.year}
+                            {classItem.description}
                         </Card.Description>
                     </Card.Body>
-                    <Image src={classItem.image} alt={classItem.year} fit="cover" w="100%" h="200px" />
+                    <Image src={classItem.image} alt={classItem.description} fit="cover" w="100%" h="200px" />
                 </Card.Root>
 
                 {/* Card Menu */}
@@ -60,9 +109,64 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) 
                         <MenuItem value="copy-uuid" borderRadius="xl" cursor="pointer">
                             <MdOutlineContentCopy /> Copy UUID
                         </MenuItem>
-                        <MenuItem value="edit-class" borderRadius="xl" cursor="pointer">
-                            <MdEdit /> Edit
-                        </MenuItem>
+                        <DialogRoot size="lg">
+                            <DialogTrigger asChild>
+                                <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false}>
+                                    <MdEdit /> Edit
+                                </MenuItem>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle color="black" fontWeight="bold" textAlign="left">Edit Class</DialogTitle>
+                                </DialogHeader>
+                                <DialogBody>
+                                    <Stack direction="column" gap={8}>
+                                    <Field.Root>
+                                            <Box pos="relative" w="full">
+                                                <Input
+                                                    className="class-name"
+                                                    value={editedClass.className}
+                                                    onChange={(e) => handleChange("className", e.target.value)}
+                                                />
+                                                <Field.Label css={floatingStyles}>Class Name</Field.Label>
+                                            </Box>
+                                        </Field.Root>
+                                        <Field.Root>
+                                            <Box pos="relative" w="full">
+                                                <Input
+                                                    className="class-description"
+                                                    value={editedClass.description}
+                                                    onChange={(e) => handleChange("description", e.target.value)}
+                                                />
+                                                <Field.Label css={floatingStyles}>Class Description</Field.Label>
+                                            </Box>
+                                        </Field.Root>
+                                        <Field.Root >
+                                            <Flex direction="row" align="center" gap={4}>
+                                                <Box pos="relative" w="50%">
+                                                    <Input className="class-uuid" value={classItem.uuid} disabled/>
+                                                    <Field.Label css={floatingStyles}>Class UUID</Field.Label>
+                                                </Box>
+                                                <ClipboardRoot value={classItem.uuid}>
+                                                    <ClipboardIconButton />
+                                                </ClipboardRoot>
+                                            </Flex>
+                                        </Field.Root>
+
+                                    </Stack>
+                                </DialogBody>
+                                <DialogFooter display="flex" gap={10} justifyContent="center">
+                                    <DialogActionTrigger asChild>
+                                        <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
+                                    </DialogActionTrigger>
+                                    <DialogActionTrigger asChild>
+                                        <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
+                                            Save
+                                        </Button>
+                                    </DialogActionTrigger>
+                                </DialogFooter>
+                            </DialogContent>
+                        </DialogRoot>
                         <DialogRoot size="lg">
                             <DialogTrigger asChild>
                                 <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false}>
@@ -71,7 +175,7 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete }) 
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
-                                    <DialogTitle color="black" textAlign="center">Are you sure you want to delete this class?</DialogTitle>
+                                    <DialogTitle color="black" fontWeight="bold" textAlign="center">Are you sure you want to delete this class?</DialogTitle>
                                 </DialogHeader>
                                 <DialogBody color="#FF0000" textAlign="center">
                                     <Text>

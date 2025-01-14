@@ -8,9 +8,9 @@ function Class() {
     const navigate = useNavigate();
 
     const classes = [
-        { id: 1, className: '201', year: 'Year 2 Class 1', image: '../../../src/assets/class1.jpg', bgColor: '#96E2D6' },
-        { id: 2, className: '301', year: 'Year 3 Class 1', image: '../../../src/assets/class2.jpg', bgColor: '#AEC7ED' },
-        { id: 3, className: '401', year: 'Year 4 Class 1', image: '../../../src/assets/class3.jpg', bgColor: '#D9D9D9' },
+        { id: 1, className: '201', description: 'Year 2 Class 1', image: '../../../src/assets/class1.jpg', bgColor: '#96E2D6', uuid: "12345678" },
+        { id: 2, className: '301', description: 'Year 3 Class 1', image: '../../../src/assets/class2.jpg', bgColor: '#AEC7ED', uuid: "23456789"},
+        { id: 3, className: '401', description: 'Year 4 Class 1', image: '../../../src/assets/class3.jpg', bgColor: '#D9D9D9', uuid: "34567890"},
     ];
 
     const classId = classes.findIndex((classItem) => classItem.id === parseInt(id));
@@ -26,7 +26,7 @@ function Class() {
                         {classes[classId].className}
                     </Heading>
                     <Text textAlign="left" fontSize="xl" fontWeight="medium">
-                        {classes[classId].year}
+                        {classes[classId].description}
                     </Text>
                 </Box>
             </Flex>

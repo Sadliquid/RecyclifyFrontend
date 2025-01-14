@@ -10,9 +10,9 @@ function Landing() {
 
     // Dummy class data (stateful)
     const [classes, setClasses] = useState([
-        { id: 1, className: '201', year: 'Year 2 Class 1', image: '../../../src/assets/class1.jpg', bgColor: '#96E2D6' },
-        { id: 2, className: '301', year: 'Year 3 Class 1', image: '../../../src/assets/class2.jpg', bgColor: '#AEC7ED' },
-        { id: 3, className: '401', year: 'Year 4 Class 1', image: '../../../src/assets/class3.jpg', bgColor: '#D9D9D9' },
+        { id: 1, className: '201', description: 'Year 2 Class 1', image: '../../../src/assets/class1.jpg', bgColor: '#96E2D6', uuid: "12345678" },
+        { id: 2, className: '301', description: 'Year 3 Class 1', image: '../../../src/assets/class2.jpg', bgColor: '#AEC7ED', uuid: "23456789"},
+        { id: 3, className: '401', description: 'Year 4 Class 1', image: '../../../src/assets/class3.jpg', bgColor: '#D9D9D9', uuid: "34567890"},
     ]);
 
 
@@ -34,6 +34,15 @@ function Landing() {
         setClasses((prevClasses) => prevClasses.filter((classItem) => classItem.id !== classId));
     };
 
+    // Function to edit a class by ID
+    const handleEditClass = (classId, updatedClass) => {
+        setClasses((prevClasses) =>
+            prevClasses.map((classItem) =>
+                classItem.id === classId ? { ...classItem, ...updatedClass } : classItem
+            )
+        );
+    };
+
     return (
         <>
             <Stack gap="8" direction="row" wrap="wrap" justify="center" mt={8}>
@@ -45,7 +54,8 @@ function Landing() {
                             cardWidth={cardWidth}
                             cardHeight={cardHeight}
                             onCardClick={() => navigate(`/teachers/class/${classItem.id}`)}
-                            onDelete={() => handleDeleteClass(classItem.id)} // Pass delete handler
+                            onDelete={() => handleDeleteClass(classItem.id)} 
+                            onEdit={(updatedClass) => handleEditClass(classItem.id, updatedClass)} 
                         />
                     ))
                 ) : (
