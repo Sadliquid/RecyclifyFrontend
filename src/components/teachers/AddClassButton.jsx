@@ -63,13 +63,13 @@ function AddClassButton({ onCreate }) {
 
         // Set the random background color before saving the class
         const randomBgColor = getRandomColor();
-        setNewClass((prev) => ({
-            ...prev,
-            bgColor: randomBgColor,
-        }));
+        const updatedClass = {
+            ...newClass,
+            bgColor: randomBgColor, // Set the random background color
+        };
 
         // Proceed with saving the class
-        onCreate(newClass);
+        onCreate(updatedClass);
 
         // Reset form and close the dialog after successful save
         setNewClass({
