@@ -135,7 +135,7 @@ function Navbar() {
         <>
             <Flex as="nav" bg="#4DCBA4" w="100%" p="8px 24px 8px 24px" rounded="10px" justify="space-between" align="center" alignItems="center">
 
-                <StudentsSidebar />
+                <TeachersSidebar />
 
                 <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
                 <Avatar name="Joshua Long" src="https://replace.with.your.image.url" size="sm" cursor="pointer" />
