@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { MdOutlineMoreVert, MdOutlineContentCopy, MdEdit, MdDelete } from 'react-icons/md';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/clipboard"
+import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/uuid-clipboard"
 
 
 function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
