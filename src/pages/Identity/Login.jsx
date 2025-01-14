@@ -5,7 +5,6 @@ import { Field } from "@/components/ui/field";
 import { LuUser, LuLock } from "react-icons/lu";
 import server from "../../../networking"
 
-
 function Login() {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
