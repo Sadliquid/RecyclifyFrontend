@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
 import { FaRegClipboard, FaTasks } from "react-icons/fa";
 import { BsCalendar, BsQuestionCircle } from "react-icons/bs";
-import { BiHome, BiLeaf, BiLogIn, BiMessage, BiNotepad,  } from "react-icons/bi";
+import { BiHome, BiLeaf, BiLogIn, BiMessage,  } from "react-icons/bi";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
+import { LuNotebookPen } from "react-icons/lu";
 
 function Navbar() {
     const navigate = useNavigate();
@@ -53,7 +54,7 @@ function Navbar() {
                                     borderRadius={"30px"}
                                     width="100%" 
                                 >
-                                    <BiNotepad ml={1} />
+                                    <LuNotebookPen ml={1} />
                                     <Text ml={2}>Sign Up</Text>
                                 </Button>
                             </Box>
@@ -193,7 +194,7 @@ function Navbar() {
         <>
             <Flex as="nav" bg="#4DCBA4" w="100%" p="8px 24px 8px 24px" rounded="10px" justify="space-between" align="center" alignItems="center">
 
-                <LoginSidebar />
+                <StudentsSidebar />
 
                 <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
                 <Avatar name="Joshua Long" src="https://replace.with.your.image.url" size="sm" cursor="pointer" />
