@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { Stack, Table, Heading, Input, HStack, Box, Textarea } from "@chakra-ui/react";
+import { useState, useRef, useEffect } from "react";
+import { Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner } from "@chakra-ui/react";
 import { MdReply } from 'react-icons/md';
 import { Button } from "@/components/ui/button"
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -8,8 +8,29 @@ import { Field } from "@/components/ui/field"
 const ContactFormManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedMessage, setSelectedMessage] = useState(null);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [messages, setMessages] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const subjectRef = useRef(null);
+
+    useEffect(() => {
+        fetchMessages();
+    }, []);
+
+    const fetchMessages = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/ContactManagement`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch messages');
+            }
+            const data = await response.json();
+            setMessages(data);
+            setIsLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setIsLoading(false);
+        }
+    };
 
     // Filter messages based on the search term
     const filteredMessages = messages.filter(message =>
@@ -28,8 +49,15 @@ const ContactFormManagement = () => {
         console.log(`Body: ${body}`);
         // Implement your email sending logic here
         setSelectedMessage(null);
-        setIsDialogOpen(false);
     };
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <Stack gap="10">
@@ -76,7 +104,7 @@ const ContactFormManagement = () => {
                                     {message.senderName}
                                 </Box>
                             </Table.Cell>
-                            <Table.Cell color={'black'}>{message.email}</Table.Cell>
+                            <Table.Cell color={'black'}>{message.senderEmail}</Table.Cell>
                             <Table.Cell color={'black'}>{message.message}</Table.Cell>
                             <Table.Cell>
                                 <DialogRoot initialFocusEl={() => subjectRef.current}>
@@ -127,13 +155,5 @@ const ContactFormManagement = () => {
         </Stack>
     );
 };
-
-const messages = [
-    { id: 1, senderName: "John Doe", email: "john@example.com", message: "Hello, I have a question about your services." },
-    { id: 2, senderName: "Jane Smith", email: "jane@example.com", message: "I'd like to schedule a consultation." },
-    { id: 3, senderName: "Bob Johnson", email: "bob@example.com", message: "Can you provide more information about your pricing?" },
-    { id: 4, senderName: "Alice Brown", email: "alice@example.com", message: "I'm interested in your product. How can I order?" },
-    { id: 5, senderName: "Charlie Wilson", email: "charlie@example.com", message: "Is there a way to track my order?" },
-];
 
 export default ContactFormManagement;
