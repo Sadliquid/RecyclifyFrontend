@@ -9,7 +9,7 @@ import {
   Textarea,
   Spinner,
 } from "@chakra-ui/react";
-import { MdReply } from "react-icons/md";
+import { MdReply, MdEdit } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   DialogActionTrigger,
@@ -29,7 +29,9 @@ const ContactFormManagement = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const subjectRef = useRef(null);
+  const editMessageRef = useRef(null);
 
   useEffect(() => {
     fetchMessages();
@@ -64,8 +66,14 @@ const ContactFormManagement = () => {
     setSelectedMessage(message);
   };
 
+  // Handle edit button click
+  const handleEdit = (message) => {
+    setSelectedMessage(message);
+    setIsEditing(true);
+  };
+
   const handleSendReply = async (subject, body) => {
-    console.log(`Replying to: ${selectedMessage.senderEmaiL}`);
+    console.log(`Replying to: ${selectedMessage.senderEmail}`);
     console.log(`Subject: ${subject}`);
     console.log(`Body: ${body}`);
 
@@ -93,6 +101,43 @@ const ContactFormManagement = () => {
       setSelectedMessage(null);
     } catch (error) {
       console.error("Error deleting the message:", error);
+    }
+  };
+
+  const handleSaveEdit = async (newMessage) => {
+    try {
+      const updateResponse = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/ContactManagement/${
+          selectedMessage.id
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...selectedMessage,
+            message: newMessage,
+          }),
+        }
+      );
+
+      if (!updateResponse.ok) {
+        throw new Error("Failed to update the message");
+      }
+
+      // Update the message in the local state
+      setMessages(
+        messages.map((message) =>
+          message.id === selectedMessage.id
+            ? { ...message, message: newMessage }
+            : message
+        )
+      );
+      setIsEditing(false);
+      setSelectedMessage(null);
+    } catch (error) {
+      console.error("Error updating the message:", error);
     }
   };
 
@@ -154,52 +199,94 @@ const ContactFormManagement = () => {
               <Table.Cell color={"black"}>{message.senderEmail}</Table.Cell>
               <Table.Cell color={"black"}>{message.message}</Table.Cell>
               <Table.Cell>
-                <DialogRoot initialFocusEl={() => subjectRef.current}>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="link"
-                      color="blue.500"
-                      onClick={() => handleReply(message)}
-                    >
-                      <MdReply size={20} /> Reply
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Reply to {message.senderName}</DialogTitle>
-                    </DialogHeader>
-                    <DialogBody pb="4">
-                      <Stack gap="4">
-                        <Field label="Subject">
-                          <Input
-                            ref={subjectRef}
-                            placeholder="Enter email subject"
-                          />
-                        </Field>
-                        <Field label="Message">
-                          <Textarea
-                            placeholder="Type your reply here"
-                            rows={5}
-                          />
-                        </Field>
-                      </Stack>
-                    </DialogBody>
-                    <DialogFooter>
-                      <DialogActionTrigger asChild>
-                        <Button
-                          onClick={() => {
-                            const subject = subjectRef.current.value;
-                            const body =
-                              document.querySelector("textarea").value;
-                            handleSendReply(subject, body);
-                          }}
-                        >
-                          Send Reply
-                        </Button>
-                      </DialogActionTrigger>
-                    </DialogFooter>
-                  </DialogContent>
-                </DialogRoot>
+                <HStack spacing="2">
+                  <DialogRoot initialFocusEl={() => subjectRef.current}>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="link"
+                        color="blue.500"
+                        onClick={() => handleReply(message)}
+                      >
+                        <MdReply size={20} /> Reply
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Reply to {message.senderName}</DialogTitle>
+                      </DialogHeader>
+                      <DialogBody pb="4">
+                        <Stack gap="4">
+                          <Field label="Subject">
+                            <Input
+                              ref={subjectRef}
+                              placeholder="Enter email subject"
+                            />
+                          </Field>
+                          <Field label="Message">
+                            <Textarea
+                              placeholder="Type your reply here"
+                              rows={5}
+                            />
+                          </Field>
+                        </Stack>
+                      </DialogBody>
+                      <DialogFooter>
+                        <DialogActionTrigger asChild>
+                          <Button
+                            onClick={() => {
+                              const subject = subjectRef.current.value;
+                              const body =
+                                document.querySelector("textarea").value;
+                              handleSendReply(subject, body);
+                            }}
+                          >
+                            Send Reply
+                          </Button>
+                        </DialogActionTrigger>
+                      </DialogFooter>
+                    </DialogContent>
+                  </DialogRoot>
+                  <DialogRoot initialFocusEl={() => editMessageRef.current}>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="link"
+                        color="green.500"
+                        onClick={() => handleEdit(message)}
+                      >
+                        <MdEdit size={20} /> Edit
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Edit Message</DialogTitle>
+                      </DialogHeader>
+                      <DialogBody pb="4">
+                        <Stack gap="4">
+                          <Field label="Message">
+                            <Textarea
+                              ref={editMessageRef}
+                              defaultValue={message.message}
+                              placeholder="Edit the message"
+                              rows={5}
+                            />
+                          </Field>
+                        </Stack>
+                      </DialogBody>
+                      <DialogFooter>
+                        <DialogActionTrigger asChild>
+                          <Button
+                            onClick={() => {
+                              const newMessage = editMessageRef.current.value;
+                              handleSaveEdit(newMessage);
+                            }}
+                          >
+                            Save Changes
+                          </Button>
+                        </DialogActionTrigger>
+                      </DialogFooter>
+                    </DialogContent>
+                  </DialogRoot>
+                </HStack>
               </Table.Cell>
             </Table.Row>
           ))}
