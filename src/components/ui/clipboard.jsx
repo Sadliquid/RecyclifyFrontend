@@ -19,7 +19,7 @@ const ClipboardCopyText = React.forwardRef(
   function ClipboardCopyText(props, ref) {
     return (
       <ChakraClipboard.Indicator copied='Copied' {...props} ref={ref}>
-        Copy
+        Copy UUID
       </ChakraClipboard.Indicator>
     )
   },

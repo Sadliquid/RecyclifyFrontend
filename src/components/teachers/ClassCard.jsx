@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { MdOutlineMoreVert, MdOutlineContentCopy, MdEdit, MdDelete } from 'react-icons/md';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ClipboardIconButton, ClipboardRoot } from "@/components/ui/clipboard"
+import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/clipboard"
 
 
 function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
@@ -25,8 +25,8 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
     };
 
     const handleSaveEdit = () => {
-        onEdit(editedClass); 
-        setIsEditing(false); 
+        onEdit(editedClass);
+        setIsEditing(false);
     };
 
     const resetEditedClass = () => {
@@ -106,12 +106,14 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
                             borderColor: 'gray.200',
                         }}
                     >
-                        <MenuItem value="copy-uuid" borderRadius="xl" cursor="pointer">
-                            <MdOutlineContentCopy /> Copy UUID
-                        </MenuItem>
+                        <Box align="center" justifyContent="center" display="flex" gap={4} p={2}>
+                        <ClipboardRoot value={classItem.uuid} >
+                            <ClipboardButton />
+                        </ClipboardRoot>
+                        </Box>
                         <DialogRoot size="lg">
                             <DialogTrigger asChild>
-                                <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false}>
+                                <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false} cursor="pointer">
                                     <MdEdit /> Edit
                                 </MenuItem>
                             </DialogTrigger>
@@ -121,7 +123,7 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
                                 </DialogHeader>
                                 <DialogBody>
                                     <Stack direction="column" gap={8}>
-                                    <Field.Root>
+                                        <Field.Root>
                                             <Box pos="relative" w="full">
                                                 <Input
                                                     className="class-name"
@@ -144,7 +146,7 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
                                         <Field.Root >
                                             <Flex direction="row" align="center" gap={4}>
                                                 <Box pos="relative" w="50%">
-                                                    <Input className="class-uuid" value={classItem.uuid} disabled/>
+                                                    <Input className="class-uuid" value={classItem.uuid} disabled />
                                                     <Field.Label css={floatingStyles}>Class UUID</Field.Label>
                                                 </Box>
                                                 <ClipboardRoot value={classItem.uuid}>
@@ -169,7 +171,7 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
                         </DialogRoot>
                         <DialogRoot size="lg">
                             <DialogTrigger asChild>
-                                <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false}>
+                                <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} cursor="pointer">
                                     <MdDelete /> Delete
                                 </MenuItem>
                             </DialogTrigger>
