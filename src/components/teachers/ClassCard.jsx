@@ -106,14 +106,14 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
                             borderColor: 'gray.200',
                         }}
                     >
-                        <Box align="center" justifyContent="center" display="flex" gap={4} p={2}>
+                        <Box align="center" justifyContent="center" display="flex" gap={4} >
                         <ClipboardRoot value={classItem.uuid} >
                             <ClipboardButton />
                         </ClipboardRoot>
                         </Box>
                         <DialogRoot size="lg">
                             <DialogTrigger asChild>
-                                <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false} cursor="pointer">
+                                <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false} cursor="pointer" mt={2}>
                                     <MdEdit /> Edit
                                 </MenuItem>
                             </DialogTrigger>
@@ -171,7 +171,7 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
                         </DialogRoot>
                         <DialogRoot size="lg">
                             <DialogTrigger asChild>
-                                <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} cursor="pointer">
+                                <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} cursor="pointer" mt={2}>
                                     <MdDelete /> Delete
                                 </MenuItem>
                             </DialogTrigger>

@@ -75,15 +75,15 @@ function ClassTable() {
                                                     borderColor: 'gray.200',
                                                 }}
                                             >
-                                                <MenuItem value="edit-class" borderRadius="xl">
+                                                <MenuItem value="edit-class" borderRadius="xl" >
                                                     <MdEdit /> Edit
                                                 </MenuItem>
-                                                <MenuItem value="copy-uuid" borderRadius="xl">
+                                                <MenuItem value="copy-uuid" borderRadius="xl" mt={2}>
                                                     <MdOutlineEmail /> Send Email
                                                 </MenuItem>
                                                 <DialogRoot size="lg">
                                                     <DialogTrigger asChild>
-                                                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false}>
+                                                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2}>
                                                             <MdDelete /> Delete
                                                         </MenuItem>
                                                     </DialogTrigger>
