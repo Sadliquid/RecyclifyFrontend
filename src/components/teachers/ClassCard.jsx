@@ -9,7 +9,6 @@ import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/component
 
 function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
 
-    const [isEditing, setIsEditing] = useState(false);
     const [editedClass, setEditedClass] = useState({
         className: classItem.className,
         description: classItem.description,
@@ -26,7 +25,6 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
 
     const handleSaveEdit = () => {
         onEdit(editedClass);
-        setIsEditing(false);
     };
 
     const resetEditedClass = () => {
