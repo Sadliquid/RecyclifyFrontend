@@ -4,7 +4,6 @@ import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/uuid-clipboard"
 
 function ClassTable(onEdit) {
 
