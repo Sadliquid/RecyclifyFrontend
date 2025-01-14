@@ -5,26 +5,6 @@ import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 import { useState } from 'react';
 
 function EmailVerification() {
-    const [classJoinPin, setClassJoinPin] = useState(Array(6).fill(''));
-    const [pinValid, setPinValid] = useState(false);
-
-    const handlePinChange = (e) => {
-        const updatedPin = e.value.filter((val) => val.trim() !== "");
-    
-        setClassJoinPin(e.value);
-    
-        setPinValid(updatedPin.length === 6);
-    }
-
-
-    const handleJoinClass = () => {
-        const pin = classJoinPin.join('');
-        if (pin.length === 6) {
-            ShowToast("success", "Successfully joined class");
-        } else {
-            ShowToast("error", "Please enter a valid 6-digit join code");
-        }
-    };
 
     return (
             <Box
@@ -62,6 +42,31 @@ function EmailVerification() {
                                 <StepsItem index={2} title="Step 3" description="Verify Contact" />
                             </StepsList>
                         </StepsRoot>
+
+                        <Heading mt={14}>
+                            Check your inbox
+                        </Heading>
+
+                        <Text mt={2}>
+                            We've sent a verification code to your email inbox!
+                        </Text>
+                        
+                        <PinInput size="md" otp mt={10} p={10} />
+
+                        <Button
+                            display="flex"
+                            justifyContent="center"
+                            backgroundColor="#2D65FF"
+                            mb={2}
+                            colorScheme="white"
+                            _hover={{ bg: "#1752FD" }}
+                            borderRadius="30px"
+                            alignItems="center"
+                            mt={10}
+                            w={150}
+                        >
+                            <Text>Verify Email</Text>
+                        </Button>
                     </VStack>
                 </Box>
             </Box>
