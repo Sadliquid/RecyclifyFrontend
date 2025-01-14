@@ -23,7 +23,9 @@ import ContactFormManagement from './pages/admin/contact'
 import ContactForm from './pages/contact/contact'
 import TeachersLanding from './pages/Teachers/Landing'
 import Class from './pages/Teachers/Class'
-
+import StudentRedemption from './pages/Teachers/StudentRedemption'
+import TaskVerification from './pages/Teachers/TaskVerification'
+import ClassLeaderboards from './pages/Teachers/ClassLeaderboards'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   	<React.StrictMode>
@@ -62,6 +64,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"teachers"}>
                                 <Route index element={<TeachersLanding />} />
                                 <Route path={"class/:id"} element={<Class />} />
+                                <Route path={"redemption"} element={<StudentRedemption />} />
+                                {/* Add task id afterward */}
+                                <Route path={"tasks"} element={<TaskVerification />} /> 
+                                {/* Add class id afterward */}
+                                <Route path={"leaderboards"} element={<ClassLeaderboards />} />
                             </Route>
                         </Route>
                     </Routes>
