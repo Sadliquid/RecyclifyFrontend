@@ -92,9 +92,9 @@ function Dashboard() {
         </Box>
         
         <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
-          <Heading size="md">View Logs</Heading>
-          <Text mt={2}>View the logs of Recyclifly's system</Text>
-          <Button mt={4} colorScheme="teal" background={"white"}>View Logs</Button>
+          <Heading size="md">View Contact Questions</Heading>
+          <Text mt={2}>View the questions sent in via the contact form and reply to them</Text>
+          <Button mt={4} colorScheme="teal" background={"white"}>Answer Contact Queries</Button>
         </Box>
       </SimpleGrid>
     </Box>
