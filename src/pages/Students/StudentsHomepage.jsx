@@ -38,17 +38,11 @@ function StudentsHomepage() {
                     <Text fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Text>
 
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="80%" width="90%">
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} width="90%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
-                            <StudentTaskCard />
-                        </Box>
-
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} width="90%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
-                            <StudentTaskCard />
-                        </Box>
-
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} width="90%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
-                            <StudentTaskCard />
-                        </Box>
+                        {[...Array(3)].map((_, index) => (
+                            <Box key={index} display="flex" justifyContent={"center"} alignItems={"center"} width="90%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
+                                <StudentTaskCard />
+                            </Box>
+                        ))}
                     </Box>
                 </Box>
             </Box>
