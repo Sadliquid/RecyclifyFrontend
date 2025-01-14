@@ -11,9 +11,23 @@ import { LuNotebookPen } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
+import { useLocation } from "react-router-dom";
 
 function Navbar() {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    function conditionallyRenderSidebar() {
+        if (location.pathname.startsWith("/student")) {
+            return <StudentsSidebar />;
+        } else if (location.pathname.startsWith("/teachers")) {
+            return <TeachersSidebar />;
+        } else if (location.pathname.startsWith("/admin")) {
+            return <AdminSidebar />;
+        } else {
+            return <LoginSidebar />;
+        }
+    }
 
     // Login Sidebar
     function LoginSidebar() {
@@ -246,7 +260,7 @@ function Navbar() {
         <>
             <Flex as="nav" bg="#4DCBA4" w="100%" p="8px 24px 8px 24px" rounded="10px" justify="space-between" align="center" alignItems="center">
 
-                <StudentsSidebar />
+                {conditionallyRenderSidebar()}
 
                 <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
                 <Avatar name="Joshua Long" src="https://replace.with.your.image.url" size="sm" cursor="pointer" />
