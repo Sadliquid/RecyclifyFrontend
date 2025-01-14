@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Table, Tabs, Box, Flex, Button, Text } from '@chakra-ui/react';
-import { MdDelete, MdEdit, MdOutlineContentCopy, MdOutlineMoreVert } from 'react-icons/md';
+import { MdDelete, MdEdit, MdOutlineContentCopy, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -75,11 +75,11 @@ function ClassTable() {
                                                     borderColor: 'gray.200',
                                                 }}
                                             >
-                                                <MenuItem value="copy-uuid" borderRadius="xl">
-                                                    <MdOutlineContentCopy /> Copy UUID
-                                                </MenuItem>
                                                 <MenuItem value="edit-class" borderRadius="xl">
                                                     <MdEdit /> Edit
+                                                </MenuItem>
+                                                <MenuItem value="copy-uuid" borderRadius="xl">
+                                                    <MdOutlineEmail /> Send Email
                                                 </MenuItem>
                                                 <DialogRoot size="lg">
                                                     <DialogTrigger asChild>
