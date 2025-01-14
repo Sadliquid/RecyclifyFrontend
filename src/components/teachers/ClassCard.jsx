@@ -48,7 +48,7 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
             insetStart: "3",
         },
         _peerFocusVisible: {
-            color: "fg",
+            color: "black",
             top: "-3",
             insetStart: "2",
         },

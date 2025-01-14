@@ -2,27 +2,97 @@ import { useState } from 'react';
 import { Box, Button, Input, Field, Stack, defineStyle, parseColor, HStack } from '@chakra-ui/react';
 import { IoAddOutline } from 'react-icons/io5';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ColorPickerArea, ColorPickerContent, ColorPickerControl, ColorPickerEyeDropper, ColorPickerLabel, ColorPickerRoot, ColorPickerSliders, ColorPickerTrigger, ColorPickerValueSwatch, ColorPickerValueText, ColorPickerInlineContent } from "@/components/ui/color-picker"
 
-function AddClassButton() {
-    const [isOpen, setIsOpen] = useState(false);
+function AddClassButton({ onCreate }) {
+    const [open, setOpen] = useState(false)
     const [newClass, setNewClass] = useState({
         className: '',
         description: '',
-        image: '',
-        bgColor: '#92BFFF', // Default background color
+        image: '../../../src/assets/class1.jpg',
+        bgColor: '',
+        uuid: '00000000',
     });
+
+    const [errors, setErrors] = useState({
+        className: '',
+        description: '',
+    });
+
+    // Function to generate a random number between 1 and 3
+    const getRandomColor = () => {
+        const colors = ['#96E2D6', '#AEC7ED', '#D9D9D9'];
+        const randomIndex = Math.floor(Math.random() * colors.length); // Generate a random index
+        return colors[randomIndex]; // Return a random color from the array
+    };
 
     const handleChange = (field, value) => {
         setNewClass((prev) => ({
             ...prev,
             [field]: value,
         }));
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: '', // Clear error when user changes the input
+        }));
     };
 
     const handleSaveClass = () => {
-        // Logic to save class (e.g., calling an API or saving to state)
-        setIsOpen(false);
+        // Reset errors before validation
+        setErrors({
+            className: '',
+            description: '',
+        });
+
+        // Validate fields
+        let hasError = false;
+
+        if (!newClass.className) {
+            setErrors((prevErrors) => ({ ...prevErrors, className: 'Class name is required' }));
+            hasError = true;
+        }
+
+        if (!newClass.description) {
+            setErrors((prevErrors) => ({ ...prevErrors, description: 'Class description is required' }));
+            hasError = true;
+        }
+
+        if (hasError) {
+            setOpen(true); 
+            return; 
+        }
+
+        // Set the random background color before saving the class
+        const randomBgColor = getRandomColor();
+        setNewClass((prev) => ({
+            ...prev,
+            bgColor: randomBgColor,
+        }));
+
+        // Proceed with saving the class
+        onCreate(newClass);
+
+        // Reset form and close the dialog after successful save
+        setNewClass({
+            className: '',
+            description: '',
+            image: '',
+            bgColor: '',
+            uuid: '00000000',
+        });
+        setErrors({}); // Clear any previous errors
+        setOpen(false); // Close the dialog
+    };
+
+    const handleCloseDialog = () => {
+        setNewClass({
+            className: '',
+            description: '',
+            image: '',
+            bgColor: '',
+            uuid: '00000000',
+        });
+        setErrors({});
+        setOpen(false); // Close the dialog
     };
 
     const floatingStyles = defineStyle({
@@ -35,12 +105,12 @@ function AddClassButton() {
         pointerEvents: "none",
         transition: "position",
         _peerPlaceholderShown: {
-            color: "fg.muted",
+            color: "black",
             top: "2.5",
             insetStart: "3",
         },
         _peerFocusVisible: {
-            color: "fg",
+            color: "black",
             top: "-3",
             insetStart: "2",
         },
@@ -50,7 +120,7 @@ function AddClassButton() {
     return (
         <>
             {/* Create Class Dialog */}
-            <DialogRoot size={"lg"} placement={"center"}>
+            <DialogRoot size={"lg"} placement={"center"} open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
                 <DialogTrigger asChild>
                     <Box
                         p={1}
@@ -86,6 +156,9 @@ function AddClassButton() {
                                         onChange={(e) => handleChange("className", e.target.value)}
                                     />
                                     <Field.Label css={floatingStyles}>Class Name</Field.Label>
+                                    {errors.className && (
+                                        <Box color="red.500" mt={1}>{errors.className}</Box>
+                                    )}
                                 </Box>
                             </Field.Root>
                             <Field.Root>
@@ -97,67 +170,22 @@ function AddClassButton() {
                                         onChange={(e) => handleChange("description", e.target.value)}
                                     />
                                     <Field.Label css={floatingStyles}>Class Description</Field.Label>
-                                </Box>
-                            </Field.Root>
-                            {/* <Field.Root>
-                                <Box pos="relative" w="full">
-                                    <Input
-                                        className="class-image"
-                                        value={newClass.image}
-                                        onChange={(e) => handleChange("image", e.target.value)}
-                                    />
-                                    <Field.Label css={floatingStyles}>Class Image URL</Field.Label>
-                                </Box>
-                            </Field.Root> */}
-                            {/* for furture dev */}
-                            <Field.Root>
-                                <Box pos="relative" w="full">
-                                    <Input
-                                        className="class-bgColor"
-                                        value={newClass.bgColor}
-                                        onChange={(e) => handleChange("bgColor", e.target.value)}
-                                    />
-                                    <Field.Label css={floatingStyles}>Class Background Color</Field.Label>
-                                    <ColorPickerRoot defaultValue={parseColor("#eb5e41")} maxW="200px" >
-                                        <ColorPickerLabel>Color</ColorPickerLabel>
-                                        <ColorPickerControl>
-                                            <ColorPickerTrigger px="2">
-                                                <ColorPickerValueSwatch boxSize="6" />
-                                                <ColorPickerValueText minW="160px" />
-                                            </ColorPickerTrigger>
-                                        </ColorPickerControl>
-                                        <ColorPickerContent>
-                                            <ColorPickerArea />
-                                            <HStack>
-                                                <ColorPickerEyeDropper />
-                                                <ColorPickerSliders />
-                                                <ColorPickerValueSwatch />
-                                            </HStack>
-                                        </ColorPickerContent>
-                                        <ColorPickerInlineContent>
-                                            <ColorPickerArea />
-                                            <HStack>
-                                                <ColorPickerEyeDropper />
-                                                <ColorPickerSliders />
-                                                <ColorPickerValueSwatch />
-                                            </HStack>
-                                        </ColorPickerInlineContent>
-                                    </ColorPickerRoot>
+                                    {errors.description && (
+                                        <Box color="red.500" mt={1}>{errors.description}</Box>
+                                    )}
                                 </Box>
                             </Field.Root>
                         </Stack>
                     </DialogBody>
                     <DialogFooter display="flex" gap={10} justifyContent="center">
                         <DialogActionTrigger asChild>
-                            <Button variant="outline" bg="#FF8080" color="white" onClick={() => setIsOpen(false)}>
+                            <Button variant="outline" bg="#FF8080" color="white" onClick={handleCloseDialog}>
                                 Cancel
                             </Button>
                         </DialogActionTrigger>
-                        <DialogActionTrigger asChild>
-                            <Button bg="#2D65FF" color="white" onClick={handleSaveClass}>
-                                Save
+                            <Button bg="#2D65FF" color="white" onClick={handleSaveClass} >
+                                Create
                             </Button>
-                        </DialogActionTrigger>
                     </DialogFooter>
                 </DialogContent>
             </DialogRoot>
