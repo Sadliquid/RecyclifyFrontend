@@ -28,6 +28,7 @@ import TaskVerification from './pages/Teachers/TaskVerification'
 import ClassLeaderboards from './pages/Teachers/ClassLeaderboards'
 import EmailVerification from './pages/Identity/EmailVerification'
 import ContactVerification from './pages/Identity/ContactVerification'
+import MyAccount from './pages/Identity/MyAccount'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   	<React.StrictMode>
@@ -54,6 +55,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={"accountRecovery"} element={<AccountRecovery />} />
                                 <Route path={"emailVerification"} element={<EmailVerification />} />
                                 <Route path={"contactVerification"} element={<ContactVerification />} />
+                            </Route>
+
+                            <Route path={"identity"}>
+                                <Route path={"myAccount"} element={<MyAccount />} />
                             </Route>
 
                             <Route path={"admin"} >
