@@ -1,9 +1,6 @@
 import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { PinInput } from "@/components/ui/pin-input"
-import ShowToast from '../../Extensions/ShowToast';
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
-import { useState } from 'react';
-
 
 function ContactVerification() {
     return (
@@ -42,10 +39,35 @@ function ContactVerification() {
                             <StepsItem index={2} title="Step 3" description="Verify Contact" />
                         </StepsList>
                     </StepsRoot>
+
+                    <Heading mt={14}>
+                        Check your SMS
+                    </Heading>
+
+                    <Text mt={2}>
+                        We've sent a verification code to you via SMS!
+                    </Text>
+                    
+                    <PinInput size="md" otp mt={10} p={10} />
+
+                    <Button
+                        display="flex"
+                        justifyContent="center"
+                        backgroundColor="#2D65FF"
+                        mb={2}
+                        colorScheme="white"
+                        _hover={{ bg: "#1752FD" }}
+                        borderRadius="30px"
+                        alignItems="center"
+                        mt={10}
+                        w={150}
+                    >
+                        <Text>Verify Contact</Text>
+                    </Button>
                 </VStack>
             </Box>
         </Box>
-    )
+    );
 }
 
 export default ContactVerification

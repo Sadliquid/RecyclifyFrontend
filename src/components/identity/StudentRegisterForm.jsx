@@ -57,6 +57,9 @@ function ParentRegistrationForm({ goBack }) {
                         borderRadius={30}
                         mt={5}
                         alignSelf="center"
+                        onClick={() => {
+                            window.location.href = "/auth/emailVerification";
+                        }}
                     >
                         Get Started!
                     </Button>
