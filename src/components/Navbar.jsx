@@ -3,15 +3,13 @@ import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/reac
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
-import { FaTasks } from "react-icons/fa";
 import { BsMailbox, BsPeople } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
 import { GrAddCircle } from "react-icons/gr";
 import { FcStatistics } from "react-icons/fc";
-import { FaRegClipboard, FaTasks } from "react-icons/fa";
-import { BsCalendar, BsQuestionCircle } from "react-icons/bs";
-import { BiHome, BiLeaf, BiLogIn, BiMessage, BiMedal } from "react-icons/bi";
+import { FaTasks } from "react-icons/fa";
+import { BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
@@ -176,17 +174,17 @@ function Navbar() {
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/redemption")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                 <MdOutlineRedeem ml={1} />
                                 <Text ml={2}>Student Redemption</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/tasks")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                 <FaTasks ml={1} />
                                 <Text ml={3}>Task Verification</Text>
                             </Button>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                 <Box ml={0.5}>
                                     <MdOutlineLeaderboard fontSize={"20px"} />
                                 </Box>
