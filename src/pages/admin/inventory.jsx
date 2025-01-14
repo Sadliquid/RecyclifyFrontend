@@ -1,93 +1,282 @@
-import { useState } from "react";
-import { Stack, Table, Heading, Input, HStack, Button, Box } from "@chakra-ui/react";
-// Import specific icons from react-icons
-import { MdEdit } from 'react-icons/md';
+import { useState, useEffect } from "react";
+import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
+import { MdEdit, MdAdd, MdDelete } from 'react-icons/md';
 
 const InventoryManagement = () => {
-	const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [rewardItems, setRewardItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [editingItem, setEditingItem] = useState(null); // Track the item being edited
 
-	// Filter items based on the search term
-	const filteredItems = items.filter(item =>
-		item.name.toLowerCase().includes(searchTerm.toLowerCase())
-	);
+    // Fetch reward items from the backend
+    useEffect(() => {
+        const fetchRewardItems = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/RewardItem`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch reward items");
+                }
+                const data = await response.json();
+                setRewardItems(data);
+                setIsLoading(false);
+            } catch (error) {
+                setError(error.message);
+                setIsLoading(false);
+            }
+        };
 
-	// Handle edit button click
-	const handleEdit = (id) => {
-		console.log(`Editing item with id: ${id}`);
-		// Logic for editing item can be implemented here
-	};
+        fetchRewardItems();
+    }, []);
 
-	return (
-		<Stack gap="10">
-			<Box textAlign="center">
-				<Heading fontSize={"30px"} m={10}>Inventory Management</Heading>
-				<HStack justifyContent="center" mb="4">
-					<Input
-						placeholder="Search for inventory..."
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-						width="400px"
-						background={"white"}
-						align={"center"}
-						color={"black"}
-					/>
-				</HStack>
-			</Box>
-			<Table.Root size="sm" showColumnBorder>
-				<Table.Header>
-					<Table.Row>
-						<Table.ColumnHeader>Name</Table.ColumnHeader>
-						<Table.ColumnHeader>Quantity</Table.ColumnHeader>
-						<Table.ColumnHeader>Points</Table.ColumnHeader>
-						<Table.ColumnHeader>Action</Table.ColumnHeader>
-					</Table.Row>
-				</Table.Header>
-				<Table.Body>
-					{filteredItems.map((item) => (
-						<Table.Row key={item.id}>
-							<Table.Cell color={'black'}>
-								<Box display="flex" alignItems="center">
-									<Box
-										borderRadius="full"
-										width="40px"
-										height="40px"
-										bg="pink.200"
-										display="flex"
-										alignItems="center"
-										justifyContent="center"
-										mr="2"
-									>
-										{item.icon} {/* Replace this with relevant icons if needed */}
-									</Box>
-									{item.name}
-								</Box>
-							</Table.Cell>
-							<Table.Cell color={'black'}>{item.quantity}</Table.Cell>
-							<Table.Cell color={'black'}>{item.points}</Table.Cell>
-							<Table.Cell>
-								<Button
-									variant="link" // Use link button style
-									color="blue.500"
-									onClick={() => handleEdit(item.id)}
-								>
-									<MdEdit size={20} /> {/* React Icon for edit */}
-								</Button>
-							</Table.Cell>
-						</Table.Row>
-					))}
-				</Table.Body>
-			</Table.Root>
-		</Stack>
-	);
+    // Filter items based on the search term
+    const filteredItems = rewardItems.filter(item =>
+        item.rewardTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Handle edit button click
+    const handleEdit = (item) => {
+        setEditingItem(item); // Set the item to be edited
+    };
+
+    // Handle save button click (update item)
+    const handleSave = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${editingItem.rewardID}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(editingItem),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update reward item");
+            }
+
+            // Update the item in the local state
+            setRewardItems(rewardItems.map(item =>
+                item.rewardID === editingItem.rewardID ? editingItem : item
+            ));
+
+            setEditingItem(null); // Clear the editing state
+            toast({
+                title: "Item Updated",
+                description: "The reward item has been successfully updated.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: error.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
+    // Handle delete button click
+    const handleDelete = async (rewardID) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${rewardID}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete reward item");
+            }
+
+            // Remove the item from the local state
+            setRewardItems(rewardItems.filter(item => item.rewardID !== rewardID));
+
+            toast({
+                title: "Item Deleted",
+                description: "The reward item has been successfully deleted.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: error.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    return (
+        <Stack gap="10">
+            <Box textAlign="center">
+                <Heading fontSize={"30px"} m={10}>Reward Items Management</Heading>
+                <HStack justifyContent="center" mb="4">
+                    <Input
+                        placeholder="Search for reward items..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        width="400px"
+                        background={"white"}
+                        align={"center"}
+                        color={"black"}
+                    />
+                    <Button
+                        leftIcon={<MdAdd />} // Add icon
+                        colorScheme="teal"
+                        onClick={() => console.log("Add Item button clicked")}
+                    >
+                        Add Item
+                    </Button>
+                </HStack>
+            </Box>
+            {filteredItems.length === 0 ? (
+                <Box textAlign="center" py={10}>
+                    <Text fontSize="lg" color="gray.500">No reward items found.</Text>
+                    <Button
+                        mt={4}
+                        leftIcon={<MdAdd />}
+                        colorScheme="teal"
+                        onClick={() => console.log("Add Item button clicked")}
+                    >
+                        Add a New Item
+                    </Button>
+                </Box>
+            ) : (
+                <Table.Root size="sm" showColumnBorder>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeader>Title</Table.ColumnHeader>
+                            <Table.ColumnHeader>Description</Table.ColumnHeader>
+                            <Table.ColumnHeader>Required Points</Table.ColumnHeader>
+                            <Table.ColumnHeader>Quantity</Table.ColumnHeader>
+                            <Table.ColumnHeader>Action</Table.ColumnHeader>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {filteredItems.map((item) => (
+                            <Table.Row key={item.rewardID}>
+                                <Table.Cell color={'black'}>
+                                    <Box display="flex" alignItems="center">
+                                        <Box
+                                            borderRadius="full"
+                                            width="40px"
+                                            height="40px"
+                                            bg="pink.200"
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            mr="2"
+                                        >
+                                            {item.icon} {/* Replace this with relevant icons if needed */}
+                                        </Box>
+                                        {editingItem?.rewardID === item.rewardID ? (
+                                            <Input
+                                                value={editingItem.rewardTitle}
+                                                onChange={(e) =>
+                                                    setEditingItem({
+                                                        ...editingItem,
+                                                        rewardTitle: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        ) : (
+                                            item.rewardTitle
+                                        )}
+                                    </Box>
+                                </Table.Cell>
+                                <Table.Cell color={'black'}>
+                                    {editingItem?.rewardID === item.rewardID ? (
+                                        <Input
+                                            value={editingItem.rewardDescription}
+                                            onChange={(e) =>
+                                                setEditingItem({
+                                                    ...editingItem,
+                                                    rewardDescription: e.target.value,
+                                                })
+                                            }
+                                        />
+                                    ) : (
+                                        item.rewardDescription
+                                    )}
+                                </Table.Cell>
+                                <Table.Cell color={'black'}>
+                                    {editingItem?.rewardID === item.rewardID ? (
+                                        <Input
+                                            type="number"
+                                            value={editingItem.requiredPoints}
+                                            onChange={(e) =>
+                                                setEditingItem({
+                                                    ...editingItem,
+                                                    requiredPoints: parseInt(e.target.value),
+                                                })
+                                            }
+                                        />
+                                    ) : (
+                                        item.requiredPoints
+                                    )}
+                                </Table.Cell>
+                                <Table.Cell color={'black'}>
+                                    {editingItem?.rewardID === item.rewardID ? (
+                                        <Input
+                                            type="number"
+                                            value={editingItem.rewardQuantity}
+                                            onChange={(e) =>
+                                                setEditingItem({
+                                                    ...editingItem,
+                                                    rewardQuantity: parseInt(e.target.value),
+                                                })
+                                            }
+                                        />
+                                    ) : (
+                                        item.rewardQuantity
+                                    )}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {editingItem?.rewardID === item.rewardID ? (
+                                        <Button
+                                            colorScheme="teal"
+                                            onClick={handleSave}
+                                        >
+                                            Save
+                                        </Button>
+                                    ) : (
+                                        <HStack spacing={2}>
+                                            <Button
+                                                variant="link"
+                                                color="blue.500"
+                                                onClick={() => handleEdit(item)}
+                                            >
+                                                <MdEdit size={20} />
+                                            </Button>
+                                            <Button
+                                                variant="link"
+                                                color="red.500"
+                                                onClick={() => handleDelete(item.rewardID)}
+                                            >
+                                                <MdDelete size={20} />
+                                            </Button>
+                                        </HStack>
+                                    )}
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+            )}
+        </Stack>
+    );
 };
-
-const items = [
-	{ id: 1, name: "Post-it Notepad", quantity: 100, points: 100, icon: "📝" },
-	{ id: 2, name: "Recyclable Bag", quantity: 223, points: 250, icon: "🛍️" },
-	{ id: 3, name: "Water Bottle", quantity: 0, points: 500, icon: "💧" },
-	{ id: 4, name: "Pens (Pack of 5)", quantity: 54, points: 200, icon: "🖊️" },
-	{ id: 5, name: "Ruler", quantity: 136, points: 50, icon: "📏" },
-	{ id: 6, name: "Highlighter", quantity: 500, points: 200, icon: "🖍️" },
-];
 
 export default InventoryManagement;
