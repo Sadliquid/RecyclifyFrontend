@@ -10,9 +10,9 @@ function Landing() {
 
     // Dummy class data (stateful)
     const [classes, setClasses] = useState([
-        { id: 1, className: '201', description: 'Year 2 Class 1', image: '../../../src/assets/class1.jpg', bgColor: '#96E2D6', uuid: "12345678" },
-        { id: 2, className: '301', description: 'Year 3 Class 1', image: '../../../src/assets/class2.jpg', bgColor: '#AEC7ED', uuid: "23456789" },
-        { id: 3, className: '401', description: 'Year 4 Class 1', image: '../../../src/assets/class3.jpg', bgColor: '#D9D9D9', uuid: "34567890" },
+        { id: 1, className: '201', description: 'Year 2 Class 1', image: 'class1.jpg', bgColor: '#96E2D6', uuid: "12345678" },
+        { id: 2, className: '301', description: 'Year 3 Class 1', image: 'class2.jpg', bgColor: '#AEC7ED', uuid: "23456789" },
+        { id: 3, className: '401', description: 'Year 4 Class 1', image: 'class3.jpg', bgColor: '#D9D9D9', uuid: "34567890" },
     ]);
 
 

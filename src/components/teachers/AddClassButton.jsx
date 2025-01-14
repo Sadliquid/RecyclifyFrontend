@@ -8,7 +8,7 @@ function AddClassButton({ onCreate }) {
     const [newClass, setNewClass] = useState({
         className: '',
         description: '',
-        image: '../../../src/assets/class1.jpg',
+        image: 'class1.jpg',
         bgColor: '',
         uuid: '00000000',
     });
