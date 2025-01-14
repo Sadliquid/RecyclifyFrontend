@@ -57,8 +57,8 @@ function AddClassButton({ onCreate }) {
         }
 
         if (hasError) {
-            setOpen(true); 
-            return; 
+            setOpen(true);
+            return;
         }
 
         // Set the random background color before saving the class
@@ -183,9 +183,9 @@ function AddClassButton({ onCreate }) {
                                 Cancel
                             </Button>
                         </DialogActionTrigger>
-                            <Button bg="#2D65FF" color="white" onClick={handleSaveClass} >
-                                Create
-                            </Button>
+                        <Button bg="#2D65FF" color="white" onClick={handleSaveClass} >
+                            Create
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </DialogRoot>

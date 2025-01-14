@@ -105,9 +105,9 @@ function ClassCard({ classItem, cardWidth, cardHeight, onCardClick, onDelete, on
                         }}
                     >
                         <Box align="center" justifyContent="center" display="flex" gap={4} >
-                        <ClipboardRoot value={classItem.uuid} >
-                            <ClipboardButton />
-                        </ClipboardRoot>
+                            <ClipboardRoot value={classItem.uuid} >
+                                <ClipboardButton />
+                            </ClipboardRoot>
                         </Box>
                         <DialogRoot size="lg">
                             <DialogTrigger asChild>

@@ -72,7 +72,7 @@ function Landing() {
             </Stack>
 
             {/* Add new class button */}
-            <AddClassButton onCreate={handleAddClass}/>
+            <AddClassButton onCreate={handleAddClass} />
         </>
     )
 }
