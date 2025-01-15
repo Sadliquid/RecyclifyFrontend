@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, VStack, Input, Button } from '@chakra-ui/react';
 import Server from '../../../networking';
 import { Toaster } from "@/components/ui/toaster"
-import  ShowToast  from '../../Extensions/ShowToast';
+import ShowToast  from '../../Extensions/ShowToast';
 
 const ContactForm = () => {
     const [name, setName] = useState('');
