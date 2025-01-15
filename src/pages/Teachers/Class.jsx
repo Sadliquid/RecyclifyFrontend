@@ -9,20 +9,20 @@ function Class() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [classData, setClassData] = useState([]);
+    const [classData, setClassData] = useState({});
 
     const fetchClassData = async () => {
         try {
             const response = await server.get(`/api/Class/get-class/?classId=${id}`);
             if (response.status === 200) {
-                setClassData(response.data);
+                setClassData(response.data);  // Update the state with the fetched data
             } else {
                 console.error("Failed to fetch classes");
-                setClassData([]);
+                setClassData({});  // Reset to an empty object on failure
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
-            setClasses([]);
+            setClassData({});  // Reset to an empty object on error
         }
     };
 
@@ -45,7 +45,7 @@ function Class() {
                     </Text>
                 </Box>
             </Flex>
-            <ClassTabs />
+            <ClassTabs classData={classData} />
         </Box>
     );
 }
