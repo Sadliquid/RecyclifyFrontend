@@ -75,7 +75,7 @@ function AddClassButton({ onCreate }) {
         setNewClass({
             className: '',
             description: '',
-            image: '../../../src/assets/class1.jpg',
+            image: 'class1.jpg',
             bgColor: '',
             uuid: '00000000',
         });
@@ -87,7 +87,7 @@ function AddClassButton({ onCreate }) {
         setNewClass({
             className: '',
             description: '',
-            image: '../../../src/assets/class1.jpg',
+            image: 'class1.jpg',
             bgColor: '',
             uuid: '00000000',
         });

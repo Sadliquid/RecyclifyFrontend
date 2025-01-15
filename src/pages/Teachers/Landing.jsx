@@ -1,20 +1,40 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Stack, VStack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { LuBox } from "react-icons/lu"
 import { useNavigate } from 'react-router-dom'
 import AddClassButton from "@/components/teachers/AddClassButton"
 import ClassCard from "@/components/teachers/ClassCard"
+import server from "../../../networking"
 
 function Landing() {
     const navigate = useNavigate();
 
     // Dummy class data (stateful)
-    const [classes, setClasses] = useState([
-        { id: 1, className: '201', description: 'Year 2 Class 1', image: 'class1.jpg', bgColor: '#96E2D6', uuid: "12345678" },
-        { id: 2, className: '301', description: 'Year 3 Class 1', image: 'class2.jpg', bgColor: '#AEC7ED', uuid: "23456789" },
-        { id: 3, className: '401', description: 'Year 4 Class 1', image: 'class3.jpg', bgColor: '#D9D9D9', uuid: "34567890" },
-    ]);
+    const [classes, setClasses] = useState([]);
 
+    // Teacher ID
+    const teacherID = "142a79d7-d287-4670-ac5c-89d8601857cf";
+
+    // Reusable function to fetch classes
+    const fetchClasses = async () => {
+        try {
+            const response = await server.get(`/api/Class/get-classes/?teacherID=${teacherID}`);
+            if (response.status === 200) {
+                setClasses(Array.isArray(response.data) ? response.data : []);
+            } else {
+                console.error("Failed to fetch classes");
+                setClasses([]);
+            }
+        } catch (error) {
+            console.error("Error fetching classes:", error);
+            setClasses([]);
+        }
+    };
+
+    // Fetch classes on component mount
+    useEffect(() => {
+        fetchClasses();
+    }, []);
 
     // Card height and width based on screen size
     const cardWidth = useBreakpointValue({
@@ -29,38 +49,78 @@ function Landing() {
         lg: '300px',
     });
 
-    // Function to delete a class by ID
-    const handleDeleteClass = (classId) => {
-        setClasses((prevClasses) => prevClasses.filter((classItem) => classItem.id !== classId));
+    // Function to delete a class by ID using the backend API
+    const handleDeleteClass = async (classId) => {
+        try {
+            const response = await server.delete(`/api/Class/delete-class`, {
+                params: { classId },
+            });
+            if (response.status === 200) {
+                console.log("Class deleted successfully.");
+                fetchClasses();
+            } else {
+                console.error("Failed to delete class:", response.data);
+            }
+        } catch (error) {
+            console.error("Error deleting class:", error);
+        }
     };
 
-    // Function to edit a class by ID
-    const handleEditClass = (classId, updatedClass) => {
-        setClasses((prevClasses) =>
-            prevClasses.map((classItem) =>
-                classItem.id === classId ? { ...classItem, ...updatedClass } : classItem
-            )
-        );
+    // Function to edit a class by ID using the backend API, add in class image later
+    const handleEditClass = async (classId, updatedClass) => {
+        try {
+            const response = await server.put(`/api/Class/update-class`, null, {
+                params: {
+                    classId,
+                    className: updatedClass.className,
+                    classDescription: updatedClass.classDescription
+                },
+            });
+            if (response.status === 200) {
+                console.log("Class updated successfully.");
+                fetchClasses();
+            } else {
+                console.error("Failed to update class:", response.data);
+            }
+        } catch (error) {
+            console.error("Error updating class:", error);
+        }
     };
 
-    // Function to add a new class
-    const handleAddClass = (newClass) => {
-        setClasses((prevClasses) => [...prevClasses, { ...newClass, id: prevClasses.length + 1 }]);
+    // Add a new class, add class image later
+    const handleAddClass = async (newClass) => {
+        try {
+            const response = await server.post(`/api/Class/create-class`, {
+                className: newClass.className,
+                classDescription: newClass.classDescription,
+                teacherID: teacherID,
+            });
+            if (response.status === 200) {
+                // Reload the class list to include the newly created class
+                fetchClasses();
+                console.log("Class added successfully.");
+            } else {
+                console.error("Failed to add class");
+            }
+        } catch (error) {
+            console.error("Error adding class:", error);
+        }
     };
 
     return (
         <>
             <Stack gap="8" direction="row" wrap="wrap" justify="center" mt={8}>
                 {classes.length ? (
-                    classes.map((classItem, index) => (
+                    classes.map((classItem, classIndex) => (
                         <ClassCard
-                            key={index}
+                            key={classItem.classID}
+                            classIndex={classIndex}
                             classItem={classItem}
                             cardWidth={cardWidth}
                             cardHeight={cardHeight}
-                            onCardClick={() => navigate(`/teachers/class/${classItem.id}`)}
-                            onDelete={() => handleDeleteClass(classItem.id)}
-                            onEdit={(updatedClass) => handleEditClass(classItem.id, updatedClass)}
+                            onCardClick={() => navigate(`/teachers/class/${classItem.classID}`)}
+                            onDelete={() => handleDeleteClass(classItem.classID)}
+                            onEdit={(updatedClass) => handleEditClass(classItem.classID, updatedClass)}
                         />
                     ))
                 ) : (
