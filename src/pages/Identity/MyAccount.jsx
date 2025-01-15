@@ -105,6 +105,11 @@ function MyAccount() {
         setIsDeleting(false);  // Close the delete confirmation
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('jwt');
+        window.location.href = '/auth/login'; // Redirect to the login page
+    }
+
     if (error) {
         return <Text>{error}</Text>;
     }
@@ -207,6 +212,10 @@ function MyAccount() {
                             <DialogCloseTrigger />
                         </DialogContent>
                     </DialogRoot>
+
+                    <Button onClick={handleLogout} colorScheme="gray" mt={4}>
+                        Logout
+                    </Button>
                 </Flex>
             </Box>
         </Box>

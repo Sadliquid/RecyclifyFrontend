@@ -20,7 +20,8 @@ function Login() {
                 Password: password,
             });
             localStorage.setItem('jwt', response.data.token);
-            console.log(response)
+            console.log(response);
+            window.location.href = '/identity/myAccount'; 
 
         } catch (error) {
             setIsLoading(false);
