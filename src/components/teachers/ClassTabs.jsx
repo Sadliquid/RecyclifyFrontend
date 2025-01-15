@@ -5,18 +5,33 @@ import { PiStudentFill } from 'react-icons/pi';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Text, VStack } from '@chakra-ui/react';
 import { LuBox } from "react-icons/lu"
+import server from "../../../networking"
+import { useEffect, useState } from 'react';
 
-function ClassTabs() {
+function ClassTabs({ classData }) {
 
     // Initialize dummy students data state
-    const students = [
-        { id: 1, name: 'John Doe', currentleafs: 100, totalleafs: 200, redemptions: 2, studentEmail: "joonjunhan@gmail.com", parentEmail: "joonjunhan@gmail.com", flagStatus: false },
-        { id: 2, name: 'Jane Smith', currentleafs: 150, totalleafs: 300, redemptions: 3, studentEmail: "janesmith@gmail.com", parentEmail: "parentsmith@gmail.com", flagStatus: false },
-        { id: 3, name: 'Alice Johnson', currentleafs: 120, totalleafs: 250, redemptions: 1, studentEmail: "alicejohnson@gmail.com", parentEmail: "parentjohnson@gmail.com", flagStatus: true },
-        { id: 4, name: 'Bob Brown', currentleafs: 90, totalleafs: 180, redemptions: 2, studentEmail: "bobbrown@gmail.com", parentEmail: "parentbrown@gmail.com", flagStatus: false },
-        { id: 5, name: 'Charlie Davis', currentleafs: 200, totalleafs: 400, redemptions: 4, studentEmail: "charliedavis@gmail.com", parentEmail: "parentdavis@gmail.com", flagStatus: false },
-        { id: 6, name: 'Diana Evans', currentleafs: 110, totalleafs: 220, redemptions: 2, studentEmail: "dianaevans@gmail.com", parentEmail: "parentevans@gmail.com", flagStatus: true },
-    ];
+    const [students, setStudents] = useState([]);
+
+    // Fetch students data from the backend
+    const fetchStudents = async () => {
+        try {
+            const response = await server.get(`/api/Student/get-students/?classId=${classData.classID}`);
+            if (response.status === 200) {
+                setStudents(response.data);
+            } else {
+                console.error("Failed to fetch students");
+                setStudents([]);
+            }
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            setStudents([]);
+        }
+    };
+
+    useEffect(() => {
+        fetchStudents();
+    }, [classData.classId]);
 
     return (
         <>
@@ -55,7 +70,7 @@ function ClassTabs() {
                         </Tabs.Trigger>
                     </Tabs.List>
                     <ClassDashboard />
-                    <StudentDashboard />
+                    <StudentDashboard classData={classData}/>
                 </Tabs.Root>
             )}
         </>
