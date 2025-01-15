@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom'
 import React from "react"
 import { VStack, Box, Button, Input, Text, Link, Flex, Group, InputAddon, } from "@chakra-ui/react"
 import { InputGroup } from "@/components/ui/input-group"
 import { LuUser, LuMail, LuLock, LuPhone } from "react-icons/lu"
 
 function ParentRegistrationForm({ goBack }) {
+    const navigate = useNavigate();
+    
     return (
         <Flex direction="column" align="center" width="100%" p={4} mt={5}>
             <Flex width="100%" justify="flex-start" mb={4}>
@@ -58,7 +61,7 @@ function ParentRegistrationForm({ goBack }) {
                         mt={5}
                         alignSelf="center"
                         onClick={() => {
-                            window.location.href = "/auth/emailVerification";
+                            navigate("/auth/emailVerification");
                         }}
                     >
                         Get Started!

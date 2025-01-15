@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { PinInput } from "@/components/ui/pin-input"
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 
 function EmailVerification() {
+    const navigate = useNavigate();
 
     return (
         <Box
@@ -63,7 +65,7 @@ function EmailVerification() {
                         mt={10}
                         w={150}
                         onClick={() => {
-                            window.location.href = "/auth/contactVerification";
+                            navigate("/auth/contactVerification");
                         }}
                     >
                         <Text>Verify Email</Text>

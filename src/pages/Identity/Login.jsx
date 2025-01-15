@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
 import { InputGroup } from "@/components/ui/input-group";
@@ -9,6 +10,7 @@ function Login() {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,8 +23,7 @@ function Login() {
             });
             localStorage.setItem('jwt', response.data.token);
             console.log(response);
-            window.location.href = '/identity/myAccount'; 
-
+            navigate("/identity/myAccount");
         } catch (error) {
             setIsLoading(false);
             console.log(error)

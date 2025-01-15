@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Text, Box, Heading, Input, Button, Flex, Alert } from '@chakra-ui/react';
 import server from "../../../networking";
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
@@ -10,6 +11,7 @@ function MyAccount() {
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);  // To handle delete confirmation state
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch the user details when the component mounts
@@ -95,7 +97,7 @@ function MyAccount() {
 
             // After deletion, redirect user to the home page or login page
             localStorage.removeItem('jwt');  // Clear the token
-            window.location.href = '/';  // Redirect to home or login page
+            navigate("/")
         } catch (err) {
             setError('Failed to delete account.');
         }
@@ -107,7 +109,7 @@ function MyAccount() {
 
     const handleLogout = () => {
         localStorage.removeItem('jwt');
-        window.location.href = '/auth/login'; // Redirect to the login page
+        navigate("/auth/login")
     }
 
     if (error) {
