@@ -1,11 +1,11 @@
 import { Box, Heading } from '@chakra-ui/react';
 
-function Leaderboards() {
+function SubmittedTasks() {
     return (
         <Box display="flex" justifyContent={"center"} flexDir="column" mt={10}>
-            <Heading fontSize="30px">Leaderboards</Heading>
+            <Heading fontSize="30px">My submitted tasks</Heading>
         </Box>
     )
 }
 
-export default Leaderboards
+export default SubmittedTasks
