@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Input, Field, Stack, defineStyle, parseColor, HStack } from '@chakra-ui/react';
+import { Box, Button, Input, Field, Stack, defineStyle } from '@chakra-ui/react';
 import { IoAddOutline } from 'react-icons/io5';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
@@ -7,23 +7,13 @@ function AddClassButton({ onCreate }) {
     const [open, setOpen] = useState(false)
     const [newClass, setNewClass] = useState({
         className: '',
-        description: '',
-        image: 'class1.jpg',
-        bgColor: '',
-        uuid: '00000000',
+        classDescription: ''
     });
 
     const [errors, setErrors] = useState({
         className: '',
-        description: '',
+        classDescription: '',
     });
-
-    // Function to generate a random number between 1 and 3
-    const getRandomColor = () => {
-        const colors = ['#96E2D6', '#AEC7ED', '#D9D9D9'];
-        const randomIndex = Math.floor(Math.random() * colors.length); // Generate a random index
-        return colors[randomIndex]; // Return a random color from the array
-    };
 
     const handleChange = (field, value) => {
         setNewClass((prev) => ({
@@ -40,7 +30,7 @@ function AddClassButton({ onCreate }) {
         // Reset errors before validation
         setErrors({
             className: '',
-            description: '',
+            classDescription: '',
         });
 
         // Validate fields
@@ -51,8 +41,8 @@ function AddClassButton({ onCreate }) {
             hasError = true;
         }
 
-        if (!newClass.description) {
-            setErrors((prevErrors) => ({ ...prevErrors, description: 'Class description is required' }));
+        if (!newClass.classDescription) {
+            setErrors((prevErrors) => ({ ...prevErrors, classDescription: 'Class classDescription is required' }));
             hasError = true;
         }
 
@@ -61,23 +51,13 @@ function AddClassButton({ onCreate }) {
             return;
         }
 
-        // Set the random background color before saving the class
-        const randomBgColor = getRandomColor();
-        const updatedClass = {
-            ...newClass,
-            bgColor: randomBgColor, // Set the random background color
-        };
-
         // Proceed with saving the class
-        onCreate(updatedClass);
+        onCreate(newClass);
 
         // Reset form and close the dialog after successful save
         setNewClass({
             className: '',
-            description: '',
-            image: 'class1.jpg',
-            bgColor: '',
-            uuid: '00000000',
+            classDescription: ''
         });
         setErrors({}); // Clear any previous errors
         setOpen(false); // Close the dialog
@@ -86,10 +66,7 @@ function AddClassButton({ onCreate }) {
     const handleCloseDialog = () => {
         setNewClass({
             className: '',
-            description: '',
-            image: 'class1.jpg',
-            bgColor: '',
-            uuid: '00000000',
+            classDescription: ''
         });
         setErrors({});
         setOpen(false); // Close the dialog
@@ -166,12 +143,12 @@ function AddClassButton({ onCreate }) {
                                     <Input
                                         className="class-description"
                                         placeholder="E.g. Year 2 Class 1"
-                                        value={newClass.description}
-                                        onChange={(e) => handleChange("description", e.target.value)}
+                                        value={newClass.classDescription}
+                                        onChange={(e) => handleChange("classDescription", e.target.value)}
                                     />
                                     <Field.Label css={floatingStyles}>Class Description</Field.Label>
-                                    {errors.description && (
-                                        <Box color="red.500" mt={1}>{errors.description}</Box>
+                                    {errors.classDescription && (
+                                        <Box color="red.500" mt={1}>{errors.classDescription}</Box>
                                     )}
                                 </Box>
                             </Field.Root>
