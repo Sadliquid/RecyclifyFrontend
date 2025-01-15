@@ -22,7 +22,7 @@ function MyAccount() {
                     return;
                 }
 
-                const response = await server.get(`${import.meta.env.VITE_BACKEND_URL}/Identity/getUserDetails`, {
+                const response = await server.get(`/api/Identity/getUserDetails`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -61,7 +61,7 @@ function MyAccount() {
             }
     
             // Send updated user details to the backend
-            await server.put(`${import.meta.env.VITE_BACKEND_URL}/Identity/editDetails`, detailsToUpdate, {
+            await server.put(`/api/Identity/editDetails`, detailsToUpdate, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -87,7 +87,7 @@ function MyAccount() {
                 return;
             }
 
-            await server.delete(`${import.meta.env.VITE_BACKEND_URL}/Identity/deleteAccount`, {
+            await server.delete(`/api/Identity/deleteAccount`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

@@ -15,7 +15,7 @@ function Login() {
         setIsLoading(true);
 
         try {
-            const response = await server.post(`${import.meta.env.VITE_BACKEND_URL}/Identity/login`, {
+            const response = await server.post(`/api/Identity/login`, {
                 Identifier: identifier,
                 Password: password,
             });
