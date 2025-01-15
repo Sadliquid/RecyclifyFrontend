@@ -2,18 +2,33 @@ import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { IoArrowBack } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import ClassTabs from '../../components/teachers/ClassTabs';
+import server from "../../../networking"
+import { useEffect, useState } from 'react';
 
 function Class() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const classes = [
-        { id: 1, className: '201', description: 'Year 2 Class 1', image: 'class1.jpg', bgColor: '#96E2D6', uuid: "12345678" },
-        { id: 2, className: '301', description: 'Year 3 Class 1', image: 'class2.jpg', bgColor: '#AEC7ED', uuid: "23456789" },
-        { id: 3, className: '401', description: 'Year 4 Class 1', image: 'class3.jpg', bgColor: '#D9D9D9', uuid: "34567890" },
-    ];
+    const [classData, setClassData] = useState([]);
 
-    const classId = classes.findIndex((classItem) => classItem.id === parseInt(id));
+    const fetchClassData = async () => {
+        try {
+            const response = await server.get(`/api/Class/get-class/?classId=${id}`);
+            if (response.status === 200) {
+                setClassData(Array.isArray(response.data) ? response.data : []);
+            } else {
+                console.error("Failed to fetch classes");
+                setClassData([]);
+            }
+        } catch (error) {
+            console.error("Error fetching classes:", error);
+            setClasses([]);
+        }
+    };
+
+    useEffect(() => {
+        fetchClassData();
+    })
 
     return (
         <Box>
@@ -23,10 +38,10 @@ function Class() {
                 </Box>
                 <Box mt={4} fontSize="2xl" align="left" ml={4}>
                     <Heading fontSize={40} fontWeight="bold" mt={8} mb={4} textAlign="left">
-                        {classes[classId].className}
+                        {classData.className}
                     </Heading>
                     <Text textAlign="left" fontSize="xl" fontWeight="medium">
-                        {classes[classId].description}
+                        {classData.ClassDescription}
                     </Text>
                 </Box>
             </Flex>
