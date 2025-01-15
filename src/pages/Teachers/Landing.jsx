@@ -13,7 +13,7 @@ function Landing() {
     const [classes, setClasses] = useState([]);
 
     // Teacher ID
-    const teacherID = "142a79d7-d287-4670-ac5c-89d8601857cf";
+    const teacherID = "c1f76fc4-c99b-4517-9eac-c5ae54bb8808";
 
     // Reusable function to fetch classes
     const fetchClasses = async () => {
@@ -90,6 +90,11 @@ function Landing() {
     // Add a new class, add class image later
     const handleAddClass = async (newClass) => {
         try {
+            console.log("Adding class:", newClass);
+            console.log("Teacher ID:", teacherID);
+            console.log("Class Name:", newClass.className);
+            console.log("Class Description:", newClass.classDescription);
+
             const response = await server.post(`/api/Class/create-class`, {
                 className: newClass.className,
                 classDescription: newClass.classDescription,

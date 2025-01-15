@@ -15,7 +15,7 @@ function Class() {
         try {
             const response = await server.get(`/api/Class/get-class/?classId=${id}`);
             if (response.status === 200) {
-                setClassData(Array.isArray(response.data) ? response.data : []);
+                setClassData(response.data);
             } else {
                 console.error("Failed to fetch classes");
                 setClassData([]);
@@ -28,7 +28,7 @@ function Class() {
 
     useEffect(() => {
         fetchClassData();
-    })
+    }, [id]);
 
     return (
         <Box>
@@ -41,7 +41,7 @@ function Class() {
                         {classData.className}
                     </Heading>
                     <Text textAlign="left" fontSize="xl" fontWeight="medium">
-                        {classData.ClassDescription}
+                        {classData.classDescription}
                     </Text>
                 </Box>
             </Flex>
