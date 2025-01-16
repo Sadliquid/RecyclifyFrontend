@@ -32,6 +32,7 @@ function MyAccount() {
 
                 setUserDetails(response.data);
                 setEditableDetails(response.data); // Initial state for editable fields
+                console.log(response.data);
             } catch (err) {
                 setError('Failed to fetch user details.');
             }
