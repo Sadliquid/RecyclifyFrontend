@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heading, Box, Button, Text } from '@chakra-ui/react';
+import { Heading, Box, Button, Text, Group, Input, InputAddon } from '@chakra-ui/react';
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { CloseButton } from "@/components/ui/close-button";
 import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
@@ -119,12 +119,14 @@ function ImageRecognition() {
                         <DialogTitle>Results</DialogTitle>
                     </DialogHeader>
                     <DialogBody>
-                        <Text>Detected items: {itemCategory}</Text>
-                        <Text>Your item is {itemRecyclable ? "recyclable" : "not recyclable"}</Text>
+                        <Box display="flex" justifyContent={"center"} alignItems={"center"} flexDir={"column"}>
+                            <Heading mb={3}>Detected item: {itemCategory}</Heading>
+                            <Text mb={5} fontSize={15}>Recyclable: {itemRecyclable ? "Yes" : "No"}</Text>
+                        </Box>
                     </DialogBody>
                     <DialogFooter>
                         <DialogActionTrigger asChild>
-                            <Button variant="solid" backgroundColor="#2D65FF" _hover={{ bg: "#1752FD" }}>Done</Button>
+                            <Button variant="solid" backgroundColor="#2D65FF" _hover={{ bg: "#1752FD" }}>Thanks!</Button>
                         </DialogActionTrigger>
                     </DialogFooter>
                     <DialogCloseTrigger />
