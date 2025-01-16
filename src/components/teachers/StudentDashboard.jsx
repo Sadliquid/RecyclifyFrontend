@@ -6,7 +6,7 @@ import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/me
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import server from "../../../networking"
 
-function StudemtDashboard({ classData }) {
+function StudentDashboard({ classData }) {
     const [students, setStudents] = useState([]);
 
     const fetchStudents = async () => {
@@ -41,7 +41,7 @@ function StudemtDashboard({ classData }) {
             } else if (response.status === 404) {
                 console.error("Student not found.", response.data);
             } else {
-                console.error("Failed to delete student." , response.data);
+                console.error("Failed to delete student.", response.data);
             }
         } catch (error) {
             console.error("Error deleting student.", error.message);
@@ -50,8 +50,7 @@ function StudemtDashboard({ classData }) {
 
     const [editedStudent, setEditedStudent] = useState({
         name: '',
-        studentEmail: '',
-        parentEmail: ''
+        studentEmail: ''
     })
 
     const floatingStyles = defineStyle({
@@ -77,7 +76,11 @@ function StudemtDashboard({ classData }) {
 
     // Function to open the edit dialog with the selected student's details
     const handleEditStudent = (student) => {
-        setEditedStudent({ ...student }); // Populate the dialog with the selected student's details
+        setEditedStudent({
+            studentID: student.studentID,
+            name: student.user.name,
+            studentEmail: student.user.email,
+        });
     };
 
     // Function to reset the edited student state
@@ -85,7 +88,6 @@ function StudemtDashboard({ classData }) {
         setEditedStudent({
             name: '',
             studentEmail: '',
-            parentEmail: ''
         });
     };
 
@@ -99,10 +101,10 @@ function StudemtDashboard({ classData }) {
                     studentEmail: editedStudent.studentEmail,
                 },
             });
-
+    
             if (response.status === 200) {
-                console.log("Student with successfully updated.");
-                await fetchStudents();
+                console.log("Student successfully updated.");
+                await fetchStudents(); // Refresh the students list
             } else {
                 console.error("Failed to update student");
             }
@@ -231,6 +233,7 @@ function StudemtDashboard({ classData }) {
                                                                     </Field.Root>
                                                                 </Stack>
                                                             </DialogBody>
+
                                                             <DialogFooter display="flex" gap={10} justifyContent="center">
                                                                 <DialogActionTrigger asChild>
                                                                     <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedStudent}>
