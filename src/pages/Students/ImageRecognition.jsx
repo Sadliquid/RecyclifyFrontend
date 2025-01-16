@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heading, Box, Button, Text, Group, Input, InputAddon } from '@chakra-ui/react';
+import { Heading, Box, Button, Text } from '@chakra-ui/react';
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { CloseButton } from "@/components/ui/close-button";
 import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
