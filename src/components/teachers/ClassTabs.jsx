@@ -12,12 +12,11 @@ function ClassTabs({ classData }) {
 
     // Initialize dummy students data state
     const [students, setStudents] = useState([]);
-    const classId = classData.classID;
 
     // Fetch students data from the backend
     const fetchStudents = async () => {
         try {
-            const response = await server.get(`/api/Teacher/get-students/?classId=${classId}`);
+            const response = await server.get(`/api/Teacher/get-students/?classId=${classData.classID}`);
             if (response.status === 200) {
                 setStudents(response.data);
             } else {
