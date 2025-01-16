@@ -22,7 +22,7 @@ function Landing() {
             if (response.status === 200) {
                 setClasses(Array.isArray(response.data) ? response.data : []);
             } else {
-                console.error("Failed to fetch classes");
+                console.error("Failed to fetch classes.");
                 setClasses([]);
             }
         } catch (error) {
@@ -58,6 +58,8 @@ function Landing() {
             if (response.status === 200) {
                 console.log("Class deleted successfully.");
                 fetchClasses();
+            } else if (response.status === 404) {
+                console.error("Class not found:", response.data);
             } else {
                 console.error("Failed to delete class:", response.data);
             }
@@ -79,6 +81,8 @@ function Landing() {
             if (response.status === 200) {
                 console.log("Class updated successfully.");
                 fetchClasses();
+            } else if (response.status === 404) {
+                console.error("Class not found:", response.data);
             } else {
                 console.error("Failed to update class:", response.data);
             }
@@ -90,24 +94,21 @@ function Landing() {
     // Add a new class, add class image later
     const handleAddClass = async (newClass) => {
         try {
-            console.log("Adding class:", newClass);
-            console.log("Teacher ID:", teacherID);
-            console.log("Class Name:", newClass.className);
-            console.log("Class Description:", newClass.classDescription);
-
             const response = await server.post(`/api/Teacher/create-class`, null, {
                 params: {
-                className: newClass.className,
-                classDescription: newClass.classDescription,
-                teacherID: teacherID,
+                    className: newClass.className,
+                    classDescription: newClass.classDescription,
+                    teacherID: teacherID,
                 }
             });
             if (response.status === 200) {
                 // Reload the class list to include the newly created class
                 fetchClasses();
                 console.log("Class added successfully.");
+            } else if (response.status === 404) {
+                console.error("Class not found:", response.data);
             } else {
-                console.error("Failed to add class");
+                console.error("Failed to add class:", response.data);
             }
         } catch (error) {
             console.error("Error adding class:", error);
