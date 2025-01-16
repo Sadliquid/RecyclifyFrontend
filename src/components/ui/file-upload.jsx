@@ -18,7 +18,7 @@ import {
   useRecipe,
 } from '@chakra-ui/react'
 import * as React from 'react'
-import { LuFile, LuUpload, LuX } from 'react-icons/lu'
+import { LuFile, LuX } from 'react-icons/lu'
 
 export const FileUploadRoot = React.forwardRef(
   function FileUploadRoot(props, ref) {
@@ -36,12 +36,7 @@ export const FileUploadDropzone = React.forwardRef(
   function FileUploadDropzone(props, ref) {
     const { children, label, description, ...rest } = props
     return (
-      <ChakraFileUpload.Dropzone ref={ref} {...rest}>
-        <div ref={ref}>
-          <Icon fontSize='xl' color='fg.muted'>
-            <LuUpload />
-          </Icon>
-        </div>
+      <ChakraFileUpload.Dropzone {...rest}>
         <ChakraFileUpload.DropzoneContent>
           <div>{label}</div>
           {description && <Text color='fg.muted'>{description}</Text>}

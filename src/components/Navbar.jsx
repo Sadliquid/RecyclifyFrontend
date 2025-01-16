@@ -271,7 +271,7 @@ function Navbar() {
                 {conditionallyRenderSidebar()}
 
                 <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
-                <Avatar name="Joshua Long" src="https://replace.with.your.image.url" size="sm" cursor="pointer" />
+                <Avatar name="Joshua Long" src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
             </Flex>
         </>
     );

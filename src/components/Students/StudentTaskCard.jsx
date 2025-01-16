@@ -1,66 +1,94 @@
 /* eslint-disable react/prop-types */
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { FileUploadDropzone, FileUploadList, FileUploadRoot } from "@/components/ui/file-upload"
+import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
+import { CloseButton } from "@/components/ui/close-button";
 import { Box, Text, Button } from '@chakra-ui/react';
 import { FaCamera } from 'react-icons/fa';
 import { useState } from 'react';
-import { Toaster } from "@/components/ui/toaster";
-import ShowToast from "../../Extensions/ShowToast";
+import { Toaster, toaster } from "@/components/ui/toaster";
+import { motion } from "framer-motion";
 import server from "../../../networking";
 
-function StudentTaskCard({ TaskID, TaskTitle, TaskDescription, TaskPoints }) {
+function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
     const [selectedFile, setSelectedFile] = useState(null);
+    const [submissionReady, setSubmissionReady] = useState(false);
 
     const handleFileChange = (details) => {
-        setSelectedFile(details.acceptedFiles[0]);
+        const file = details.acceptedFiles[0];
+        setSelectedFile(file);
+        setSubmissionReady(!!file);
     }
+
+    const clearFile = () => {
+        setSelectedFile(null);
+        setSubmissionReady(false);
+    };
 
     const handleSubmitTask = async () => {
         if (!selectedFile) {
-            ShowToast("error", "Error", "No file selected for upload");
+            toaster.promise(Promise.reject(), {
+                error: {
+                    title: "Error",
+                    description: "No file selected for upload",
+                }
+            });
             return;
         } else {
-            try {
+            const promise = new Promise((resolve, reject) => {
                 const formData = new FormData();
                 formData.append("file", selectedFile);
                 formData.append("taskID", TaskID);
-                formData.append("taskTitle", TaskTitle);
-                formData.append("taskDescription", TaskDescription);
-                formData.append("taskPoints", TaskPoints);
-
-                const response = await server.post("/api/Student/submit-task", formData, {
+                formData.append("studentID", "3f9056b0-06e1-487a-8901-586bafd1e492");
+        
+                server.post("/api/Student/submit-task", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
                     transformRequest: formData => formData
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        resolve();
+                    } else {
+                        reject("Upload failed");
+                    }
+                })
+                .catch(error => {
+                    reject(error.response?.data || error.message);
                 });
-
-                if (response.status !== 200) {
-                    ShowToast("error", "Error", "Upload failed");
-                    console.error("Upload failed: " + response);
-                    return;
-                } else {
-                    ShowToast("success", "Success", "Task submitted successfully!");
-                }
-            } catch (error) {
-                ShowToast("error", "Error", "Upload failed");
-                console.error("Upload failed:", error.response?.data || error.message);
-            }
+            });
+        
+            toaster.promise(promise, {
+                loading: { title: "Uploading...", description: "Please wait" },
+                success: {
+                    title: "Success",
+                    description: "Task submitted successfully!",
+                },
+                error: {
+                    title: "Error",
+                    description: "Upload failed",
+                },
+            });
         }
     }
 
     return (
         <>
-            <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                width="100%"
-                height="29%"
-                borderRadius={20}
-                padding={5}
-                border="3px solid #4DCBA4"
-                backgroundColor="#F1F6FF"
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ 
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "29%",
+                    borderRadius: 20,
+                    padding: 5,
+                    border: "3px solid #4DCBA4",
+                    backgroundColor: "#F1F6FF"
+                }}
             >
                 <Box
                     display="flex"
@@ -100,10 +128,12 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskDescription, TaskPoints }) {
                             <Text as={FaCamera} color="white" boxSize={6} />
                         </Box>
                     </DialogTrigger>
+
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Submit task for verification</DialogTitle>
                         </DialogHeader>
+
                         <DialogBody>
                             <Box display="flex" justifyContent="center" alignItems="center" flexDir="column">
                                 <FileUploadRoot maxW="xl" alignItems="stretch" maxFiles={1} onFileChange={handleFileChange}>
@@ -111,20 +141,34 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskDescription, TaskPoints }) {
                                         label="Drag and drop here to upload"
                                         description=".png, .jpg up to 5MB"
                                     />
-                                    <FileUploadList />
+
+                                    {selectedFile && (
+                                        <Box display="flex" alignItems="center" justifyContent="space-between" mt="4">
+                                            <Text>{selectedFile.name}</Text>
+                                            <CloseButton
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={clearFile}
+                                            />
+                                        </Box>
+                                    )}
                                 </FileUploadRoot>
                             </Box>
                         </DialogBody>
+
                         <DialogFooter>
-                            <DialogActionTrigger asChild>
+                        <DialogActionTrigger asChild>
+                            <Box display="flex" gap="10px">
                                 <Button variant="outline">Cancel</Button>
-                            </DialogActionTrigger>
-                            <Button onClick={() => handleSubmitTask()}>Save</Button>
+                                <Button backgroundColor={"black"} onClick={handleSubmitTask} disabled={!submissionReady}>Save</Button>
+                            </Box>
+                        </DialogActionTrigger>
                         </DialogFooter>
+
                         <DialogCloseTrigger />
                     </DialogContent>
                 </DialogRoot>
-            </Box>
+            </motion.div>
 
             <Toaster />
         </>
