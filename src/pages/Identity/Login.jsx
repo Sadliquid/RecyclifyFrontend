@@ -1,10 +1,35 @@
-import React from 'react'
-import { Box, VStack, Heading, Button, Link, Text, Input, } from '@chakra-ui/react'
-import { InputGroup } from "@/components/ui/input-group"
-import { Field } from "@/components/ui/field"
-import { LuUser, LuLock } from "react-icons/lu"
+import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
+import { InputGroup } from "@/components/ui/input-group";
+import { Field } from "@/components/ui/field";
+import { LuUser, LuLock } from "react-icons/lu";
+import server from "../../../networking"
 
 function Login() {
+    const [identifier, setIdentifier] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        try {
+            const response = await server.post(`/api/Identity/login`, {
+                Identifier: identifier,
+                Password: password,
+            });
+            localStorage.setItem('jwt', response.data.token);
+            console.log(response);
+            navigate("/identity/myAccount");
+        } catch (error) {
+            setIsLoading(false);
+            console.log(error)
+        }
+    };
+
     return (
         <Box
             bgPosition="center"
@@ -39,7 +64,11 @@ function Login() {
                             startElement={<LuUser />} 
                             width="400px"
                         >
-                            <Input />
+                            <Input 
+                                value={identifier}
+                                onChange={(e) => setIdentifier(e.target.value)} 
+                                placeholder="Enter username or email"
+                            />
                         </InputGroup>
                     </Field>
 
@@ -54,7 +83,12 @@ function Login() {
                             startElement={<LuLock />} 
                             width="400px"
                         >
-                            <Input type='password'/>
+                            <Input 
+                                type='password' 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)} 
+                                placeholder="Enter your password"
+                            />
                         </InputGroup>
                     </Field>
 
@@ -84,6 +118,8 @@ function Login() {
                         mb={5}
                         type="submit"
                         borderRadius={30}
+                        isLoading={isLoading}
+                        onClick={handleSubmit}
                     >
                         Login
                     </Button>
@@ -105,7 +141,7 @@ function Login() {
                 </VStack>
             </Box>
         </Box>
-    )
+    );
 }
 
-export default Login
+export default Login;

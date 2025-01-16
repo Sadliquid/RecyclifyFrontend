@@ -9,6 +9,7 @@ import Homepage from './pages/main/Homepage'
 import ClassEnrolment from './pages/Students/ClassEnrolment'
 import Leaderboards from './pages/Students/Leaderboards'
 import Milestones from './pages/Students/Milestones'
+import SubmittedTasks from './pages/Students/SubmittedTasks'
 import StudentInbox from './pages/Students/StudentInbox'
 import Redemption from './pages/Students/Redemption'
 import MyClass from './pages/Students/MyClass'
@@ -26,6 +27,9 @@ import Class from './pages/Teachers/Class'
 import StudentRedemption from './pages/Teachers/StudentRedemption'
 import TaskVerification from './pages/Teachers/TaskVerification'
 import ClassLeaderboards from './pages/Teachers/ClassLeaderboards'
+import EmailVerification from './pages/Identity/EmailVerification'
+import ContactVerification from './pages/Identity/ContactVerification'
+import MyAccount from './pages/Identity/MyAccount'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   	<React.StrictMode>
@@ -42,6 +46,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={"myClass"} element={<MyClass />} />
                                 <Route path={"redemption"} element={<Redemption />} />
                                 <Route path={"scanItem"} element={<ImageRecognition />} />
+                                <Route path={"submittedTasks"} element={<SubmittedTasks />} />
                                 <Route path={"inbox"} element={<StudentInbox />} />
                                 <Route path={"home"} element={<StudentsHomepage />} />
                             </Route>
@@ -50,6 +55,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={"login"} element={<Login />} />
                                 <Route path={"createAccount"} element={<CreateAccount />} />
                                 <Route path={"accountRecovery"} element={<AccountRecovery />} />
+                                <Route path={"emailVerification"} element={<EmailVerification />} />
+                                <Route path={"contactVerification"} element={<ContactVerification />} />
+                            </Route>
+
+                            <Route path={"identity"}>
+                                <Route path={"myAccount"} element={<MyAccount />} />
                             </Route>
 
                             <Route path={"admin"} >

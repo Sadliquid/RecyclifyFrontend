@@ -1,38 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, defineStyle, Badge } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import server from "../../../networking"
 
-function ClassTable(onEdit) {
+function ClassTable({ classData }) {
+    const [students, setStudents] = useState([]);
 
-    // Initialize dummy students data state
-    const [students, setStudents] = useState([
-        { id: 1, name: 'John Doe', currentleafs: 100, totalleafs: 200, redemptions: 2, studentEmail: "joonjunhan@gmail.com", parentEmail: "joonjunhan@gmail.com", flagStatus: false },
-        { id: 2, name: 'Jane Smith', currentleafs: 150, totalleafs: 300, redemptions: 3, studentEmail: "janesmith@gmail.com", parentEmail: "parentsmith@gmail.com", flagStatus: false },
-        { id: 3, name: 'Alice Johnson', currentleafs: 120, totalleafs: 250, redemptions: 1, studentEmail: "alicejohnson@gmail.com", parentEmail: "parentjohnson@gmail.com", flagStatus: true },
-        { id: 4, name: 'Bob Brown', currentleafs: 90, totalleafs: 180, redemptions: 2, studentEmail: "bobbrown@gmail.com", parentEmail: "parentbrown@gmail.com", flagStatus: false },
-        { id: 5, name: 'Charlie Davis', currentleafs: 200, totalleafs: 400, redemptions: 4, studentEmail: "charliedavis@gmail.com", parentEmail: "parentdavis@gmail.com", flagStatus: false },
-        { id: 6, name: 'Diana Evans', currentleafs: 110, totalleafs: 220, redemptions: 2, studentEmail: "dianaevans@gmail.com", parentEmail: "parentevans@gmail.com", flagStatus: true },
-    ]);
+    useEffect(() => {
+        async function fetchStudents() {
+            try {
+                const response = await server.get(`/api/Student/get-students/?classID=${classData.classID}`);
+                if (response.status === 200) {
+                    setStudents(Array.isArray(response.data) ? response.data : []);
+                } else {
+                    console.error("Failed to fetch students");
+                    setStudents([]);
+                }
+            } catch (error) {
+                console.error("Error fetching students:", error);
+                setStudents([]);
+            }
+        }
+        
+        fetchStudents();
+    }, [classData]);
 
     // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
-    // Function to delete a student by ID
-    const handleDeleteStudent = (studentId) => {
-        setStudents((prevStudents) => prevStudents.filter((student) => student.id !== studentId));
+    // Function to delete a student using API
+    const handleDeleteStudent = async (studentId) => {
+        try {
+            const response = await server.delete(`/api/Student/delete-student/?studentID=${studentId}`);
+
+            if (response.status === 200) {
+                setStudents((prevStudents) => prevStudents.filter((student) => student.id !== studentId));
+            } else {
+                console.error('Failed to delete student:', response.data);
+            }
+        } catch (error) {
+            console.error('Error deleting student:', error.message);
+        }
     };
 
     const [editedStudent, setEditedStudent] = useState({
         name: '',
-        currentleafs: 0,
-        totalleafs: 0,
-        redemptions: 0,
         studentEmail: '',
-        parentEmail: '',
-        flagStatus: false,
+        parentEmail: ''
     })
 
     const floatingStyles = defineStyle({
@@ -65,12 +82,8 @@ function ClassTable(onEdit) {
     const resetEditedStudent = () => {
         setEditedStudent({
             name: '',
-            currentleafs: 0,
-            totalleafs: 0,
-            redemptions: 0,
             studentEmail: '',
-            parentEmail: '',
-            flagStatus: false,
+            parentEmail: ''
         });
     };
 
@@ -113,11 +126,11 @@ function ClassTable(onEdit) {
                         <Table.Body>
                             {students.map((student, index) => (
                                 <Table.Row key={student.id} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
-                                    <Table.Cell color="black"><Flex gap={2} align="center"><LuDiamond />{student.name}</Flex></Table.Cell>
-                                    <Table.Cell color="black">{student.currentleafs}</Table.Cell>
-                                    <Table.Cell color="black">{student.totalleafs}</Table.Cell>
+                                    <Table.Cell color="black"><Flex gap={2} align="center"><LuDiamond />{student.user.name}</Flex></Table.Cell>
+                                    <Table.Cell color="black">{student.currentPoints}</Table.Cell>
+                                    <Table.Cell color="black">{student.totalPoints}</Table.Cell>
                                     <Table.Cell color="black">{student.redemptions}</Table.Cell>
-                                    <Table.Cell color="black">{student.studentEmail}</Table.Cell>
+                                    <Table.Cell color="black">{student.user.email}</Table.Cell>
                                     <Table.Cell color="black">{student.parentEmail}</Table.Cell>
                                     <Table.Cell color="black">{student.flagStatus ? <Badge colorPalette="red">Flagged</Badge> : ""}</Table.Cell>
                                     <Table.Cell>
