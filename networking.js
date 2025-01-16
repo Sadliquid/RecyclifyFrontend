@@ -9,7 +9,6 @@ instance.interceptors.request.use((config) => {
     if (localStorage.getItem('jwt')) {
         config.headers["Authorization"] = `Bearer ${localStorage.getItem('jwt')}`
     }
-    config.headers["mmapikey"] = import.meta.env.VITE_BACKEND_API_KEY
 
     return config;
 }, (err) => {
