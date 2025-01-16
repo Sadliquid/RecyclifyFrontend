@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Text, Box, Heading, Input, Button, Flex, Alert } from '@chakra-ui/react';
 import server from "../../../networking";
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
@@ -12,34 +13,49 @@ function MyAccount() {
     const [isDeleting, setIsDeleting] = useState(false);  // To handle delete confirmation state
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const navigate = useNavigate();
+    const { user, loaded, authToken } = useSelector((state) => state.auth);
+    const [accountInfo,  setAccountInfo] = useState(null);
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        // Fetch the user details when the component mounts
-        const fetchUserDetails = async () => {
-            try {
-                const token = localStorage.getItem('jwt'); // Assuming token is stored in localStorage
+        console.log(user)
+        if (loaded == true) {
+            const fetchAccountInfo = async () => {
+                try {
+                    const token = localStorage.getItem('jwt'); 
 
-                if (!token) {
-                    setError('Authorization token is missing.');
-                    return;
+                    if (!token) {
+                        setError('Authorization token is missing.');
+                        return;
+                    }
+                    // const userID = user.userID;
+                    const response = await server.get(`/api/Identity/getUserDetails`);
+                    console.log(response.data)
+                    // dispatch(reloadAuthToken(authToken))
+                    setEditableDetails(response.data); 
+                    setAccountInfo(response.data);
+                    // setOriginalAccountInfo(response.data);
+                    // setAccountLoaded(true);
+                    // setProfilePicture(`${import.meta.env.VITE_BACKEND_URL}/cdn/getProfilePicture?userID=${userID}`);
+                } catch (err) {
+                    console.log("Error fetching account info:", err);
+                    if (err && err.response && err.response.status && err.response.status == 404) {
+                        dispatch(logout());
+                        localStorage.removeItem('jwt');
+                    }
+                    // showToast("Unable to retrieve account information", "Please try again", 3000, true, "error");
+                    // navigate('/');
                 }
+            };
 
-                const response = await server.get(`/api/Identity/getUserDetails`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                setUserDetails(response.data);
-                setEditableDetails(response.data); // Initial state for editable fields
-                console.log(response.data);
-            } catch (err) {
-                setError('Failed to fetch user details.');
+            if (user && user.id) {
+                fetchAccountInfo();
             }
         };
 
-        fetchUserDetails();
-    }, []);
+        console.log(accountInfo)
+
+    }, [loaded, user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -57,23 +73,14 @@ function MyAccount() {
                 return;
             }
     
-            // Only send the contactNumber if it's different from the original
             const detailsToUpdate = { ...editableDetails };
-            if (editableDetails.contactNumber === userDetails.contactNumber) {
-                delete detailsToUpdate.contactNumber; // Don't send it if it hasn't changed
-            }
     
-            // Send updated user details to the backend
-            await server.put(`/api/Identity/editDetails`, detailsToUpdate, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            await server.put(`/api/Identity/editDetails`, detailsToUpdate);
     
             setUserDetails(editableDetails); // Save the updated details
             setIsEditing(false); // Exit editing mode
         } catch (err) {
-            setError('Failed to save changes.');
+            setError('Failed to save changes.' + err);
         }
     };
 
@@ -90,11 +97,7 @@ function MyAccount() {
                 return;
             }
 
-            await server.delete(`/api/Identity/deleteAccount`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            await server.delete(`/api/Identity/deleteAccount`);
 
             // After deletion, redirect user to the home page or login page
             localStorage.removeItem('jwt');  // Clear the token
@@ -114,10 +117,11 @@ function MyAccount() {
     }
 
     if (error) {
+        console.log(error)
         return <Text>{error}</Text>;
     }
 
-    if (!userDetails) {
+    if (!accountInfo) {
         return <Text>Loading...</Text>;
     }
 
@@ -136,7 +140,7 @@ function MyAccount() {
                                 placeholder="Enter name"
                             />
                         ) : (
-                            <Text flex="2">{userDetails.name}</Text>
+                            <Text flex="2">{user.name}</Text>
                         )}
                     </Flex>
 
@@ -150,7 +154,7 @@ function MyAccount() {
                                 placeholder="Enter email"
                             />
                         ) : (
-                            <Text flex="2">{userDetails.email}</Text>
+                            <Text flex="2">{user.email}</Text>
                         )}
                     </Flex>
 
@@ -164,21 +168,7 @@ function MyAccount() {
                                 placeholder="Enter contact number"
                             />
                         ) : (
-                            <Text flex="2">{userDetails.contactNumber}</Text>
-                        )}
-                    </Flex>
-
-                    <Flex>
-                        <Text flex="1"><strong>Role:</strong></Text>
-                        {isEditing ? (
-                            <Input
-                                name="userRole"
-                                value={editableDetails.userRole}
-                                onChange={handleChange}
-                                placeholder="Enter role"
-                            />
-                        ) : (
-                            <Text flex="2">{userDetails.userRole}</Text>
+                            <Text flex="2">{user.contactNumber}</Text>
                         )}
                     </Flex>
 

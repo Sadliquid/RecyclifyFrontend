@@ -1,52 +1,39 @@
 import './App.css'
 import { Outlet, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, setLoading } from './slices/AuthState';
-import { createContext, useContext } from 'react';
+import { Toaster, toaster } from "@/components/ui/toaster"
 import Navbar from './components/Navbar'
 
 function App() {
-	// const dispatch = useDispatch();
-    const navigate = useNavigate();
-    // const { user, loaded, error } = useSelector(state => state.auth)
+	const dispatch = useDispatch();
+    const { user, loaded, error } = useSelector(state => state.auth)
 
-    // useEffect(() => {
-    //     if (localStorage.getItem('jwt')) {
-    //         dispatch(fetchUser());
-    //     } else {
-    //         dispatch(setLoading(true))
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (localStorage.getItem('jwt')) {
+            dispatch(fetchUser());
+        } else {
+            dispatch(setLoading(true))
+        }
+    }, []);
 
-    // useEffect(() => {
-    //     if (loaded == true) {
-    //         const urlPath = location.pathname;
-    //         if (user) {
-    //             if (user.userType == "Admin" && !urlPath.startsWith("/admin") && !urlPath.startsWith("/reviews") && !urlPath.startsWith("/guestInfo")) {
-    //                 navigate("/admin");
-    //             } else if (user.userType != "Admin" && urlPath.startsWith("/admin")) {
-    //                 navigate("/");
-    //             }
-    //         } else {
-    //             if (urlPath.startsWith("/admin")) {
-    //                 navigate("/");
-    //             }
-    //         }
-    //     }
-    // }, [loaded, user, window.location.pathname])
-
-    // useEffect(() => {
-    //     if (error) {
-    //         console.log("Auth failed to load; error: " + error)
-    //         // sToast("Something went wrong", "We failed to load information for you. Please try again.", 3000, true, "error")
-    //     }
-    // }, [error])
-
+    useEffect(() => {
+        if (error) {
+            console.log("Auth failed to load; error: " + error)
+            toaster.create({
+                title: "Something went wrong",
+                description: "We failed to load information for you. Please try again.",
+                type: "error",
+            })
+        }
+    }, [error])
 
 	return (
 		<div className='defaultLayout'>
 			<Navbar />
 			<Outlet />
+            <Toaster />
 		</div>
 	)
 }
