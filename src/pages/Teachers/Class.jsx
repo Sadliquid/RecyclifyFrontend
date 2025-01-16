@@ -30,7 +30,7 @@ function Class() {
     };
 
     useEffect(() => {
-        fetchClassData();
+        if (id) fetchClassData();
     }, [id]);
 
     return (
