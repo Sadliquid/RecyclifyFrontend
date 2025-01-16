@@ -13,7 +13,7 @@ function Class() {
 
     const fetchClassData = async () => {
         try {
-            const response = await server.get(`/api/Class/get-class/?classId=${id}`);
+            const response = await server.get(`/api/Teacher/get-class/?classId=${id}`);
             if (response.status === 200) {
                 setClassData(response.data);  // Update the state with the fetched data
             } else {

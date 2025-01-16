@@ -17,7 +17,7 @@ function ClassTabs({ classData }) {
     // Fetch students data from the backend
     const fetchStudents = async () => {
         try {
-            const response = await server.get(`/api/Student/get-students/?classId=${classId}`);
+            const response = await server.get(`/api/Teacher/get-students/?classId=${classId}`);
             if (response.status === 200) {
                 setStudents(response.data);
             } else {

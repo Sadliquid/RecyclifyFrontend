@@ -11,7 +11,7 @@ function ClassTable({ classData }) {
 
     const fetchStudents = async () => {
         try {
-            const response = await server.get(`/api/Student/get-students/?classID=${classData.classID}`);
+            const response = await server.get(`/api/Teacher/get-students/?classID=${classData.classID}`);
             if (response.status === 200) {
                 setStudents(Array.isArray(response.data) ? response.data : []);
             } else {
@@ -33,7 +33,7 @@ function ClassTable({ classData }) {
 
     const handleDeleteStudent = async (studentId) => {
         try {
-            const response = await server.delete(`/api/Student/delete-student/?studentID=${studentId}`);
+            const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
 
             if (response.status === 200) {
                 console.log(`Student with ID ${studentId} successfully deleted.`);
