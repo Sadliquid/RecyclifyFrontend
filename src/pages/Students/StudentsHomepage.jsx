@@ -1,4 +1,4 @@
-import { Box, Text, Heading } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import MiniCalendar from '../../components/Students/MiniCalendar';
 import StudentCharts from '../../components/Students/StudentCharts';
 import StudentProfileCard from '../../components/Students/StudentProfileCard';
@@ -7,6 +7,14 @@ import StreakCard from '../../components/Students/StreakCard';
 import StreakRewardCard from '../../components/Students/StreakRewardCard';
 
 function StudentsHomepage() {
+    const tasks = [
+        { TaskID: "1", TaskTitle: "Recycle 1 plastic bottle", TaskDescription: "Collect and sort plastic bottles for recycling.", TaskPoints: 10 },
+        { TaskID: "2", TaskTitle: "Bring reusable food containers", TaskDescription: "Bring your own reusable containers to reduce waste while dining.", TaskPoints: 20 },
+        { TaskID: "3", TaskTitle: "Recycle a set of newspapers", TaskDescription: "Collect and recycle old newspapers to reduce paper waste.", TaskPoints: 30 },
+        { TaskID: "4", TaskTitle: "Plant a Tree", TaskDescription: "Plant a tree in your community or garden to help the environment.", TaskPoints: 40 },
+        { TaskID: "5", TaskTitle: "Bring reusable utensils", TaskDescription: "Bring your own reusable utensils to avoid single-use plastic.", TaskPoints: 50 },
+    ];    
+
     return (
         <Box display="flex" justifyContent={"space-between"} width="100%" height={"77vh"} mt={10}>
             <Box display="flex" width="69%" height={"100%"} backgroundColor={"#E5ECFF"} borderRadius={20}>
@@ -43,13 +51,17 @@ function StudentsHomepage() {
                 </Box>
 
                 <Box display="flex" flexDir={"column"} justifyContent={"center"} height="69%" backgroundColor={"#E5ECFF"} borderRadius={20}>
-                    <Text fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Text>
+                    <Heading fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Heading>
 
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="80%" width="90%">
-                        {[...Array(3)].map((_, index) => (
-                            <Box key={index} display="flex" justifyContent={"center"} alignItems={"center"} width="100%" height="29%" borderRadius={20} margin="auto" border={"3px solid #4DCBA4"} backgroundColor={"white"}>
-                                <StudentTaskCard />
-                            </Box>
+                        {tasks.sort(() => 0.5 - Math.random()).slice(0, 3).map((task, index) => (
+                            <StudentTaskCard
+                                key={index}
+                                TaskID={task.TaskID}
+                                TaskTitle={task.TaskTitle}
+                                TaskDescription={task.TaskDescription}
+                                TaskPoints={task.TaskPoints}
+                            />
                         ))}
                     </Box>
                 </Box>
@@ -57,4 +69,5 @@ function StudentsHomepage() {
         </Box>
     )
 }
+
 export default StudentsHomepage;
