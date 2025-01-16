@@ -9,40 +9,40 @@ import server from "../../../networking"
 function ClassTable({ classData }) {
     const [students, setStudents] = useState([]);
 
-    useEffect(() => {
-        async function fetchStudents() {
-            try {
-                const response = await server.get(`/api/Student/get-students/?classID=${classData.classID}`);
-                if (response.status === 200) {
-                    setStudents(Array.isArray(response.data) ? response.data : []);
-                } else {
-                    console.error("Failed to fetch students");
-                    setStudents([]);
-                }
-            } catch (error) {
-                console.error("Error fetching students:", error);
+    const fetchStudents = async () => {
+        try {
+            const response = await server.get(`/api/Student/get-students/?classID=${classData.classID}`);
+            if (response.status === 200) {
+                setStudents(Array.isArray(response.data) ? response.data : []);
+            } else {
+                console.error("Failed to fetch students");
                 setStudents([]);
             }
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            setStudents([]);
         }
-        
+    };
+
+    useEffect(() => {
         fetchStudents();
     }, [classData]);
 
     // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
-    // Function to delete a student using API
     const handleDeleteStudent = async (studentId) => {
         try {
             const response = await server.delete(`/api/Student/delete-student/?studentID=${studentId}`);
 
             if (response.status === 200) {
-                setStudents((prevStudents) => prevStudents.filter((student) => student.id !== studentId));
+                console.log(`Student with ID ${studentId} successfully deleted.`);
+                await fetchStudents();
             } else {
-                console.error('Failed to delete student:', response.data);
+                console.error(`Failed to delete student with ID ${studentId}. Response:`, response.data);
             }
         } catch (error) {
-            console.error('Error deleting student:', error.message);
+            console.error(`Error deleting student with ID ${studentId}:`, error.message);
         }
     };
 
@@ -125,7 +125,7 @@ function ClassTable({ classData }) {
 
                         <Table.Body>
                             {students.map((student, index) => (
-                                <Table.Row key={student.id} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
+                                <Table.Row key={student.studentID} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]} >
                                     <Table.Cell color="black"><Flex gap={2} align="center"><LuDiamond />{student.user.name}</Flex></Table.Cell>
                                     <Table.Cell color="black">{student.currentPoints}</Table.Cell>
                                     <Table.Cell color="black">{student.totalPoints}</Table.Cell>
@@ -244,9 +244,11 @@ function ClassTable({ classData }) {
                                                             <DialogActionTrigger asChild>
                                                                 <Button variant="outline" bg="#2D65FF" color="white">Cancel</Button>
                                                             </DialogActionTrigger>
-                                                            <Button bg="#FF8080" color="white" onClick={() => handleDeleteStudent(student.id)}>
-                                                                Delete
-                                                            </Button>
+                                                            <DialogActionTrigger asChild>
+                                                                <Button bg="#FF8080" color="white" onClick={() => handleDeleteStudent(student.studentID)}>
+                                                                    Delete
+                                                                </Button>
+                                                            </DialogActionTrigger>
                                                         </DialogFooter>
                                                     </DialogContent>
                                                 </DialogRoot>

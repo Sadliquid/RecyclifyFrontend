@@ -12,11 +12,12 @@ function ClassTabs({ classData }) {
 
     // Initialize dummy students data state
     const [students, setStudents] = useState([]);
+    const classId = classData.classID;
 
     // Fetch students data from the backend
     const fetchStudents = async () => {
         try {
-            const response = await server.get(`/api/Student/get-students/?classId=${classData.classID}`);
+            const response = await server.get(`/api/Student/get-students/?classId=${classId}`);
             if (response.status === 200) {
                 setStudents(response.data);
             } else {
@@ -31,13 +32,17 @@ function ClassTabs({ classData }) {
 
     useEffect(() => {
         fetchStudents();
-    }, [classData.classId]);
+    }, [classId]);
+
+    console.log("Class Data:", classData);
+    console.log("Class ID:", classData.classID);
+    console.log("Students:", students);
 
     return (
         <>
             {/* Conditionally render tabs based on student count */}
             {students.length === 0 ? (
-                <VStack textAlign="center" fontWeight="medium">
+                <VStack textAlign="center" fontWeight="medium" mt={4}>
                     <LuBox />
                     <Text>No students found in this class.</Text>
                 </VStack>
