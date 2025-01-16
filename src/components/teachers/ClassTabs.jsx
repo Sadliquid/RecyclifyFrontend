@@ -34,10 +34,6 @@ function ClassTabs({ classData }) {
         fetchStudents();
     }, [classId]);
 
-    console.log("Class Data:", classData);
-    console.log("Class ID:", classData.classID);
-    console.log("Students:", students);
-
     return (
         <>
             {/* Conditionally render tabs based on student count */}
