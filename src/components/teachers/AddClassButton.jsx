@@ -33,7 +33,7 @@ function AddClassButton({ onCreate }) {
 
     const handleChange = (field, value) => {
         if (field === "className") {
-            value = value.replace(/\D/g, "");
+            validateField("className", value);
         }
     
         setNewClass((prev) => ({

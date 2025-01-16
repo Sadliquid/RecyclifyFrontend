@@ -8,7 +8,6 @@ import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/component
 
 
 function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
-
     const [editedClass, setEditedClass] = useState({
         className: classItem.className,
         classDescription: classItem.classDescription
@@ -36,12 +35,12 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     };
 
     const handleChange = (field, value) => {
-        if (field === 'className' && !validateClassName(value)) {
-          return;
+        if (field === 'className') {
+            validateClassName(value);
         }
         setEditedClass((prev) => ({
-          ...prev,
-          [field]: value,
+            ...prev,
+            [field]: value,
         }));
     };
 
