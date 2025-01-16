@@ -15,6 +15,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     });
 
     const [error, setError] = useState('');
+    const [open, setOpen] = useState(false);
     const [randomImage, setRandomImage] = useState("");
 
     useEffect(() => {
@@ -47,6 +48,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     const handleSaveEdit = () => {
         if (error) return; // Prevent saving if there are errors
         onEdit(editedClass);
+        setOpen(false);
     };
 
     const resetEditedClass = () => {
@@ -140,7 +142,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                 <ClipboardButton />
                             </ClipboardRoot>
                         </Box>
-                        <DialogRoot size="lg">
+                        <DialogRoot size="lg" open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
                             <DialogTrigger asChild>
                                 <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false} cursor="pointer" mt={2}>
                                     <MdEdit /> Edit
@@ -191,11 +193,9 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
                                     </DialogActionTrigger>
-                                    <DialogActionTrigger asChild>
                                         <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
                                             Save
                                         </Button>
-                                    </DialogActionTrigger>
                                 </DialogFooter>
                             </DialogContent>
                         </DialogRoot>
