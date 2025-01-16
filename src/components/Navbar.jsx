@@ -3,15 +3,15 @@ import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/reac
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
-import { BsMailbox, BsPeople } from "react-icons/bs";
+import { BsClipboard, BsClipboard2Check, BsClipboard2CheckFill, BsMailbox, BsPeople } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
-import { GrAddCircle } from "react-icons/gr";
-import { FcStatistics } from "react-icons/fc";
+import { GrAddCircle, GrDocumentNotes } from "react-icons/gr";
+import { FcDocument, FcSerialTasks, FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
-import { BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
+import { BiClipboard, BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
-import { CgUserList } from "react-icons/cg";
+import { CgGoogleTasks, CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
@@ -129,6 +129,11 @@ function Navbar() {
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scanItem")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <IoSparklesOutline ml={4}/>
                                 <Text ml={2}>Scan my item</Text>
+                            </Button>
+
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/submittedTasks")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                                <Text as={BsClipboard2Check} fontSize="20px" color="#515F7C" />
+                                <Text ml={2}>Submitted tasks</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/inbox")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>

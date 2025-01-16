@@ -1,8 +1,10 @@
-import { Text } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 
 function Milestones() {
     return (
-        <Text>Milestones</Text>
+        <Box display="flex" justifyContent={"center"} flexDir="column" mt={10}>
+            <Heading fontSize="30px">Milestones</Heading>
+        </Box>
     )
 }
 

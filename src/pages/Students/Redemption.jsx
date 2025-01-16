@@ -1,20 +1,45 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Heading, Span, Text } from '@chakra-ui/react';
+import RewardRedemptionCard from '../../components/Students/RewardRedemptionCard';
+import { useState } from 'react';
 
 function Redemption() {
+    const [redeemablePoints, setRedeemablePoints] = useState(100);
+    const rewards = [
+        {
+            name: "Eco-friendly notebook",
+            points: 50
+        },
+        {
+            name: "Sticky notes",
+            points: 30
+        },
+        {
+            name: "Eco-friendly water bottle",
+            points: 20
+        },
+        {
+            name: "Set of pens",
+            points: 20
+        }
+    ]
+
+    const handleUpdateRedeemablePoints = (points) => {
+        setRedeemablePoints(redeemablePoints - points);
+    }
+
     return (
         <Box display="flex" justifyContent={"center"} flexDir="column" mt={10}>
             <Heading fontSize="30px" mb={10}>Redeem my leafs</Heading>
 
-            <Box display="flex" justifyContent={"center"} backgroundColor={"#E5ECFF"} borderRadius={15} width="20%" margin="auto" p={2}>
-                <Text>Redeemable leafs: 100</Text>
+            <Box display="flex" justifyContent={"center"} backgroundColor={"#E5ECFF"} borderRadius={15} width="10%" margin="auto" p={2}>
+                <Box display="flex">
+                <Text>You have <Span fontFamily={"Lilita One"}>{redeemablePoints}</Span> leafs</Text>
+                </Box>
             </Box>
 
             <Box display="flex" justifyContent={"center"} flexWrap={"wrap"} mt={10}>
-                {[...Array(4)].map((_, index) => (
-                    <Box key={index} backgroundColor={"#E5ECFF"} borderRadius={15} width="40%" margin="auto" p={5} m={5}>
-                        <Heading fontSize="20px">Reward {index + 1}</Heading>
-                        <Text>Free notebook</Text>
-                    </Box>
+                {rewards.map((reward, index) => (
+                    <RewardRedemptionCard key={index} index={index} reward={reward.name} points={reward.points} redeemablePoints={redeemablePoints} handleUpdateRedeemablePoints={handleUpdateRedeemablePoints} />
                 ))}
             </Box>
         </Box>
