@@ -95,10 +95,12 @@ function Landing() {
             console.log("Class Name:", newClass.className);
             console.log("Class Description:", newClass.classDescription);
 
-            const response = await server.post(`/api/Class/create-class`, {
+            const response = await server.post(`/api/Class/create-class`, null, {
+                params: {
                 className: newClass.className,
                 classDescription: newClass.classDescription,
                 teacherID: teacherID,
+                }
             });
             if (response.status === 200) {
                 // Reload the class list to include the newly created class
