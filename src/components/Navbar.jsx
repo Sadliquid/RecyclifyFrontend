@@ -3,15 +3,15 @@ import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/reac
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
-import { BsClipboard, BsClipboard2Check, BsClipboard2CheckFill, BsMailbox, BsPeople } from "react-icons/bs";
+import { BsClipboard2Check, BsMailbox, BsPeople } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
-import { GrAddCircle, GrDocumentNotes } from "react-icons/gr";
-import { FcDocument, FcSerialTasks, FcStatistics } from "react-icons/fc";
+import { GrAddCircle } from "react-icons/gr";
+import { FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
-import { BiClipboard, BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
+import { BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
-import { CgGoogleTasks, CgUserList } from "react-icons/cg";
+import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
@@ -271,7 +271,7 @@ function Navbar() {
                 {conditionallyRenderSidebar()}
 
                 <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
-                <Avatar name="Joshua Long" src="https://replace.with.your.image.url" size="sm" cursor="pointer" />
+                <Avatar name="Joshua Long" src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
             </Flex>
         </>
     );
