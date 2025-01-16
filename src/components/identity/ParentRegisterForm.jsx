@@ -2,8 +2,11 @@ import React from "react"
 import { VStack, Box, Button, Input, Text, Link, Flex } from "@chakra-ui/react"
 import { InputGroup } from "@/components/ui/input-group"
 import { LuUser, LuLock, LuIdCard, LuPhone, LuMessageCircle, LuMail } from "react-icons/lu"
+import { useNavigate } from "react-router-dom";
 
 function ParentRegistrationForm({ goBack }) {
+    const navigate = useNavigate();
+
     return (
         <Flex direction="column" align="center" width="100%" p={4} mt={5}>
             <Flex width="100%" justify="flex-start" mb={4}>
@@ -65,6 +68,9 @@ function ParentRegistrationForm({ goBack }) {
                         borderRadius={30}
                         mt={5}
                         alignSelf="center"
+                        onClick={() => {
+                            navigate("/auth/emailVerification");
+                        }}
                     >
                         Get Started!
                     </Button>
