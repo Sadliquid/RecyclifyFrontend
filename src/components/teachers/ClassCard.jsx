@@ -45,7 +45,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     };
 
     const handleSaveEdit = () => {
-        if (error) return; // Prevent saving if there are errors
+        if (error) return; 
         onEdit(editedClass);
         setOpen(false);
     };
