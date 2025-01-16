@@ -31,8 +31,10 @@ function ClassTabs({ classData }) {
     };
 
     useEffect(() => {
-        fetchStudents();
-    }, [classId]);
+        if (classData.classID) {
+            fetchStudents();
+        }
+    }, [classData.classID]);
 
     return (
         <>
