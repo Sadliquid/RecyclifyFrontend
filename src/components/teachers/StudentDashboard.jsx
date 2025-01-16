@@ -6,7 +6,7 @@ import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/me
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import server from "../../../networking"
 
-function ClassTable({ classData }) {
+function StudemtDashboard({ classData }) {
     const [students, setStudents] = useState([]);
 
     const fetchStudents = async () => {
@@ -293,4 +293,4 @@ function ClassTable({ classData }) {
     );
 }
 
-export default ClassTable;
+export default StudentDashboard;
