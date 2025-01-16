@@ -22,12 +22,11 @@ function AddClassButton({ onCreate }) {
         }));
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [field]: '', // Clear error when user changes the input
+            [field]: '', // Clear error
         }));
     };
 
     const handleSaveClass = () => {
-        // Reset errors before validation
         setErrors({
             className: '',
             classDescription: '',
@@ -51,16 +50,15 @@ function AddClassButton({ onCreate }) {
             return;
         }
 
-        // Proceed with saving the class
         onCreate(newClass);
 
-        // Reset form and close the dialog after successful save
+        // Reset form
         setNewClass({
             className: '',
             classDescription: ''
         });
-        setErrors({}); // Clear any previous errors
-        setOpen(false); // Close the dialog
+        setErrors({});
+        setOpen(false); 
     };
 
     const handleCloseDialog = () => {
@@ -69,7 +67,7 @@ function AddClassButton({ onCreate }) {
             classDescription: ''
         });
         setErrors({});
-        setOpen(false); // Close the dialog
+        setOpen(false); 
     };
 
     const floatingStyles = defineStyle({

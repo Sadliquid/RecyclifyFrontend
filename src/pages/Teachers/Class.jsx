@@ -17,10 +17,10 @@ function Class() {
             if (response.status === 200) {
                 setClassData(response.data); 
             } else if (response.status === 404) {
-                console.error("Class or Teacher not found.");
+                console.error("Class or Teacher not found.", response.data);
                 setClassData({});
             } else {
-                console.error("Failed to fetch class data.");
+                console.error("Failed to fetch class data.", response.data);
                 setClassData({});
             }
         } catch (error) {

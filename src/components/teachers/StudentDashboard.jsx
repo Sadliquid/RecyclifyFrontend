@@ -15,7 +15,7 @@ function ClassTable({ classData }) {
             if (response.status === 200) {
                 setStudents(Array.isArray(response.data) ? response.data : []);
             } else {
-                console.error("Failed to fetch students");
+                console.error("Failed to fetch students", response.data);
                 setStudents([]);
             }
         } catch (error) {
@@ -36,13 +36,15 @@ function ClassTable({ classData }) {
             const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
 
             if (response.status === 200) {
-                console.log(`Student with ID ${studentId} successfully deleted.`);
+                console.log("Student successfully deleted.");
                 await fetchStudents();
+            } else if (response.status === 404) {
+                console.error("Student not found.", response.data);
             } else {
-                console.error(`Failed to delete student with ID ${studentId}. Response:`, response.data);
+                console.error("Failed to delete student." , response.data);
             }
         } catch (error) {
-            console.error(`Error deleting student with ID ${studentId}:`, error.message);
+            console.error("Error deleting student.", error.message);
         }
     };
 
@@ -99,13 +101,13 @@ function ClassTable({ classData }) {
             });
 
             if (response.status === 200) {
-                console.log(`Student with ID ${editedStudent.studentID} successfully updated.`);
+                console.log("Student with successfully updated.");
                 await fetchStudents();
             } else {
-                console.error(`Failed to update student with ID ${editedStudent.studentID}. Response:`, response.data);
+                console.error("Failed to update student");
             }
         } catch (error) {
-            console.error(`Error updating student with ID ${editedStudent.studentID}:`, error.message);
+            console.error("Error updating student.");
         } finally {
             resetEditedStudent();
         }

@@ -21,7 +21,7 @@ function ClassTabs({ classData }) {
             if (response.status === 200) {
                 setStudents(response.data);
             } else {
-                console.error("Failed to fetch students");
+                console.error("Failed to fetch students", response.data);
                 setStudents([]);
             }
         } catch (error) {

@@ -22,7 +22,7 @@ function Landing() {
             if (response.status === 200) {
                 setClasses(Array.isArray(response.data) ? response.data : []);
             } else {
-                console.error("Failed to fetch classes.");
+                console.error("Failed to fetch classes.", response.data);
                 setClasses([]);
             }
         } catch (error) {
