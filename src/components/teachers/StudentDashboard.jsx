@@ -8,6 +8,17 @@ import server from "../../../networking"
 
 function StudentDashboard({ classData }) {
     const [students, setStudents] = useState([]);
+    const [validationError, setValidationError] = useState({
+        name: '',
+    });
+
+    const validateName = (name) => {
+        const nameRegex = /^[a-zA-Z\s]+$/;
+        if (!nameRegex.test(name)) {
+            return 'Name can only contain letters and spaces.';
+        }
+        return '';
+    };
 
     const fetchStudents = async () => {
         try {
@@ -93,6 +104,12 @@ function StudentDashboard({ classData }) {
 
     // Function to save the edited student details
     const handleSaveEdit = async () => {
+        // Ensure no validation errors exist
+        if (validationError.name) {
+            console.error('Validation error:', validationError.name);
+            return;
+        }
+
         try {
             const response = await server.put(`/api/Teacher/update-student`, null, {
                 params: {
@@ -101,15 +118,15 @@ function StudentDashboard({ classData }) {
                     studentEmail: editedStudent.studentEmail,
                 },
             });
-    
+
             if (response.status === 200) {
-                console.log("Student successfully updated.");
+                console.log('Student successfully updated.');
                 await fetchStudents(); // Refresh the students list
             } else {
-                console.error("Failed to update student");
+                console.error('Failed to update student');
             }
         } catch (error) {
-            console.error("Error updating student.");
+            console.error('Error updating student.');
         } finally {
             resetEditedStudent();
         }
@@ -117,6 +134,14 @@ function StudentDashboard({ classData }) {
 
     // Function to handle changes in the edit dialog fields
     const handleChange = (field, value) => {
+        if (field === 'name') {
+            const error = validateName(value);
+            setValidationError((prev) => ({
+                ...prev,
+                [field]: error,
+            }));
+        }
+
         setEditedStudent((prev) => ({
             ...prev,
             [field]: value,
@@ -217,8 +242,14 @@ function StudentDashboard({ classData }) {
                                                                                 className="student-name"
                                                                                 value={editedStudent.name}
                                                                                 onChange={(e) => handleChange('name', e.target.value)}
+                                                                                borderColor={validationError.name ? 'red.500' : 'gray.300'}
                                                                             />
                                                                             <Field.Label css={floatingStyles}>Student Name</Field.Label>
+                                                                            {validationError.name && (
+                                                                                <Text color="red.500" fontSize="sm" mt={1}>
+                                                                                    * {validationError.name}
+                                                                                </Text>
+                                                                            )}
                                                                         </Box>
                                                                     </Field.Root>
                                                                     <Field.Root>
