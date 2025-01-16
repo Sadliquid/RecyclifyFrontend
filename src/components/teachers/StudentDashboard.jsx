@@ -88,13 +88,27 @@ function ClassTable({ classData }) {
     };
 
     // Function to save the edited student details
-    const handleSaveEdit = () => {
-        setStudents((prevStudents) =>
-            prevStudents.map((student) =>
-                student.id === editedStudent.id ? { ...editedStudent } : student
-            )
-        );
-        resetEditedStudent(); // Reset the edited student state
+    const handleSaveEdit = async () => {
+        try {
+            const response = await server.put(`/api/Teacher/update-student`, null, {
+                params: {
+                    studentID: editedStudent.studentID,
+                    studentName: editedStudent.name,
+                    studentEmail: editedStudent.studentEmail,
+                },
+            });
+    
+            if (response.status === 200) {
+                console.log(`Student with ID ${editedStudent.studentID} successfully updated.`);
+                await fetchStudents(); 
+            } else {
+                console.error(`Failed to update student with ID ${editedStudent.studentID}. Response:`, response.data);
+            }
+        } catch (error) {
+            console.error(`Error updating student with ID ${editedStudent.studentID}:`, error.message);
+        } finally {
+            resetEditedStudent(); 
+        }
     };
 
     // Function to handle changes in the edit dialog fields
@@ -194,16 +208,6 @@ function ClassTable({ classData }) {
                                                                             onChange={(e) => handleChange('studentEmail', e.target.value)}
                                                                         />
                                                                         <Field.Label css={floatingStyles}>Student Email</Field.Label>
-                                                                    </Box>
-                                                                </Field.Root>
-                                                                <Field.Root>
-                                                                    <Box pos="relative" w="full">
-                                                                        <Input
-                                                                            className="parent-email"
-                                                                            value={editedStudent.parentEmail}
-                                                                            onChange={(e) => handleChange('parentEmail', e.target.value)}
-                                                                        />
-                                                                        <Field.Label css={floatingStyles}>Parent Email</Field.Label>
                                                                     </Box>
                                                                 </Field.Root>
                                                             </Stack>
