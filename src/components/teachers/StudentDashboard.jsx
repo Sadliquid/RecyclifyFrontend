@@ -275,9 +275,9 @@ function StudentDashboard({ classData }) {
                                                                         Cancel
                                                                     </Button>
                                                                 </DialogActionTrigger>
-                                                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
-                                                                        Save
-                                                                    </Button>
+                                                                <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
+                                                                    Save
+                                                                </Button>
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </DialogRoot>

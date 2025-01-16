@@ -73,7 +73,7 @@ function ClassTabs({ classData }) {
                         </Tabs.Trigger>
                     </Tabs.List>
                     <ClassDashboard />
-                    <StudentDashboard classData={classData}/>
+                    <StudentDashboard classData={classData} />
                 </Tabs.Root>
             )}
         </>

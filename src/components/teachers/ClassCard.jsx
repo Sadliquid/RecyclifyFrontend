@@ -25,7 +25,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
 
     // Validate class name function to check if only contains integer with only 8 digits
     const validateClassName = (value) => {
-        const isValid = /^\d*$/.test(value); 
+        const isValid = /^\d*$/.test(value);
         if (!isValid) {
             setError('Class name must contain only numbers.');
         } else {
@@ -192,9 +192,9 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
                                     </DialogActionTrigger>
-                                        <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
-                                            Save
-                                        </Button>
+                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
+                                        Save
+                                    </Button>
                                 </DialogFooter>
                             </DialogContent>
                         </DialogRoot>

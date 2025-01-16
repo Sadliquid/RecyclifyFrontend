@@ -15,7 +15,7 @@ function Class() {
         try {
             const response = await server.get(`/api/Teacher/get-class/?classId=${id}`);
             if (response.status === 200) {
-                setClassData(response.data); 
+                setClassData(response.data);
             } else if (response.status === 404) {
                 console.error("Class or Teacher not found.", response.data);
                 setClassData({});
@@ -25,7 +25,7 @@ function Class() {
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
-            setClassData({}); 
+            setClassData({});
         }
     };
 

@@ -35,12 +35,12 @@ function AddClassButton({ onCreate }) {
         if (field === "className") {
             validateField("className", value);
         }
-    
+
         setNewClass((prev) => ({
             ...prev,
             [field]: value,
         }));
-    
+
         const error = validateField(field, value);
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -50,10 +50,7 @@ function AddClassButton({ onCreate }) {
 
     const handleSaveClass = () => {
         const classNameError = validateField("className", newClass.className);
-        const classDescriptionError = validateField(
-            "classDescription",
-            newClass.classDescription
-        );
+        const classDescriptionError = validateField("classDescription", newClass.classDescription);
 
         if (classNameError || classDescriptionError) {
             setErrors({
