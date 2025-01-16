@@ -50,11 +50,13 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                     if (response.status === 200) {
                         resolve();
                     } else {
-                        reject("Upload failed");
+                        reject("Unexpected response status: " + response.status);
                     }
                 })
                 .catch(error => {
-                    reject(error.response?.data || error.message);
+                    const errorMessage = error.response?.data?.error || "An unknown error occurred";
+                    reject(errorMessage);
+                    console.error("ERROR: ", error);
                 });
             });
         
@@ -66,7 +68,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                 },
                 error: {
                     title: "Error",
-                    description: "Upload failed",
+                    description: err => `Upload failed: ${err}`,
                 },
             });
         }
@@ -101,6 +103,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                     color="white"
                     fontWeight="bold"
                     fontSize="16px"
+                    ml={5}
                 >
                     +{TaskPoints}
                 </Box>
@@ -124,6 +127,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                             _hover={{ backgroundColor: "#3DAF8B" }}
                             cursor="pointer"
                             transition={"all 0.2s"}
+                            mr={5}
                         >
                             <Text as={FaCamera} color="white" boxSize={6} />
                         </Box>
