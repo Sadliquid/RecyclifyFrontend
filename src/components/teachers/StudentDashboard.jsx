@@ -11,6 +11,7 @@ function StudentDashboard({ classData }) {
     const [validationError, setValidationError] = useState({
         name: '',
     });
+    const [open, setOpen] = useState(false);
 
     const validateName = (name) => {
         const nameRegex = /^[a-zA-Z\s]+$/;
@@ -92,6 +93,7 @@ function StudentDashboard({ classData }) {
             name: student.user.name,
             studentEmail: student.user.email,
         });
+        setOpen(true);
     };
 
     // Function to reset the edited student state
@@ -100,6 +102,7 @@ function StudentDashboard({ classData }) {
             name: '',
             studentEmail: '',
         });
+        setOpen(false);
     };
 
     // Function to save the edited student details
@@ -122,13 +125,14 @@ function StudentDashboard({ classData }) {
             if (response.status === 200) {
                 console.log('Student successfully updated.');
                 await fetchStudents(); // Refresh the students list
+                setOpen(false);
             } else {
                 console.error('Failed to update student');
+                setOpen(true);
             }
         } catch (error) {
             console.error('Error updating student.');
-        } finally {
-            resetEditedStudent();
+            setOpen(true);
         }
     };
 
@@ -215,7 +219,7 @@ function StudentDashboard({ classData }) {
                                                         borderColor: 'gray.200',
                                                     }}
                                                 >
-                                                    <DialogRoot size="lg">
+                                                    <DialogRoot size="lg" open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
                                                         <DialogTrigger asChild>
                                                             <MenuItem
                                                                 value="edit-class"
@@ -271,11 +275,9 @@ function StudentDashboard({ classData }) {
                                                                         Cancel
                                                                     </Button>
                                                                 </DialogActionTrigger>
-                                                                <DialogActionTrigger asChild>
                                                                     <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
                                                                         Save
                                                                     </Button>
-                                                                </DialogActionTrigger>
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </DialogRoot>
