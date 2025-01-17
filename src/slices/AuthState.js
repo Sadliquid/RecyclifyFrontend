@@ -38,7 +38,7 @@ export const fetchUser = () => async (dispatch) => {
     console.log('Fetching user...');
     dispatch(setLoading(false));
     try {
-        const response = await server.get('/cdn/myAccount', {
+        const response = await server.get('/api/Identity/getUserDetails', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`
