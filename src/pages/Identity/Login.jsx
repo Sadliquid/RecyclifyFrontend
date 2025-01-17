@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
+import { Toaster, toaster } from "@/components/ui/toaster"
 import { InputGroup } from "@/components/ui/input-group";
 import { Field } from "@/components/ui/field";
 import { LuUser, LuLock } from "react-icons/lu";
@@ -11,10 +12,24 @@ function Login() {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const [invalidIdentifier, setInvalidIdentifier] = useState(false)
+    const [invalidPassword, setInvalidPassword] = useState(false)
 
     const handleSubmit = async (e) => {
+        setInvalidIdentifier(false)
+        setInvalidPassword(false)
         e.preventDefault();
         setIsLoading(true);
+        if (identifier === '') {
+            setInvalidIdentifier(true)
+            setIsLoading(false);
+            return;
+        }
+        if (password === '') {
+            setInvalidPassword(true)
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const response = await server.post(`/api/Identity/login`, {
@@ -22,10 +37,21 @@ function Login() {
                 Password: password,
             });
             localStorage.setItem('jwt', response.data.token);
-            console.log(response);
+            toaster.create({
+                title: "Welcome back!",
+                description: "Successfully logged in.",
+                type: "success",
+                duration: 3000
+            })
             navigate("/identity/myAccount");
         } catch (error) {
             setIsLoading(false);
+            toaster.create({
+                title: "Invalid Login Credentials",
+                description: "Please try again",
+                type: "error",
+                duration: 3000
+            })
             console.log(error)
         }
     };
@@ -56,6 +82,8 @@ function Login() {
                     {/* Email or Username Field */}
                     <Field 
                         label="Username or Email" 
+                        invalid={invalidIdentifier}
+                        errorText="This field is required"
                         width="400px" 
                         mb={2}
                     >
@@ -75,6 +103,8 @@ function Login() {
                     {/* Password Field */}
                     <Field 
                         label="Password"
+                        invalid={invalidPassword}
+                        errorText="This field is required"
                         width="400px" 
                         mb={2}
                     >
