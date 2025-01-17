@@ -64,7 +64,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                 loading: { title: "Uploading...", description: "Please wait" },
                 success: {
                     title: "Success",
-                    description: "Task submitted successfully!",
+                    description: "Verification request sent successfully!",
                 },
                 error: {
                     title: "Error",
