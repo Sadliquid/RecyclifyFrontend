@@ -18,11 +18,11 @@ function Landing() {
     // Reusable function to fetch classes
     const fetchClasses = async () => {
         try {
-            const response = await server.get(`/api/Class/get-classes/?teacherID=${teacherID}`);
+            const response = await server.get(`/api/Teacher/get-classes/?teacherID=${teacherID}`);
             if (response.status === 200) {
                 setClasses(Array.isArray(response.data) ? response.data : []);
             } else {
-                console.error("Failed to fetch classes");
+                console.error("Failed to fetch classes.", response.data);
                 setClasses([]);
             }
         } catch (error) {
@@ -52,12 +52,14 @@ function Landing() {
     // Function to delete a class by ID using the backend API
     const handleDeleteClass = async (classId) => {
         try {
-            const response = await server.delete(`/api/Class/delete-class`, {
+            const response = await server.delete(`/api/Teacher/delete-class`, {
                 params: { classId },
             });
             if (response.status === 200) {
                 console.log("Class deleted successfully.");
                 fetchClasses();
+            } else if (response.status === 404) {
+                console.error("Class not found:", response.data);
             } else {
                 console.error("Failed to delete class:", response.data);
             }
@@ -69,7 +71,7 @@ function Landing() {
     // Function to edit a class by ID using the backend API, add in class image later
     const handleEditClass = async (classId, updatedClass) => {
         try {
-            const response = await server.put(`/api/Class/update-class`, null, {
+            const response = await server.put(`/api/Teacher/update-class`, null, {
                 params: {
                     classId,
                     className: updatedClass.className,
@@ -79,6 +81,8 @@ function Landing() {
             if (response.status === 200) {
                 console.log("Class updated successfully.");
                 fetchClasses();
+            } else if (response.status === 404) {
+                console.error("Class not found:", response.data);
             } else {
                 console.error("Failed to update class:", response.data);
             }
@@ -90,22 +94,21 @@ function Landing() {
     // Add a new class, add class image later
     const handleAddClass = async (newClass) => {
         try {
-            console.log("Adding class:", newClass);
-            console.log("Teacher ID:", teacherID);
-            console.log("Class Name:", newClass.className);
-            console.log("Class Description:", newClass.classDescription);
-
-            const response = await server.post(`/api/Class/create-class`, {
-                className: newClass.className,
-                classDescription: newClass.classDescription,
-                teacherID: teacherID,
+            const response = await server.post(`/api/Teacher/create-class`, null, {
+                params: {
+                    className: newClass.className,
+                    classDescription: newClass.classDescription,
+                    teacherID: teacherID,
+                }
             });
             if (response.status === 200) {
                 // Reload the class list to include the newly created class
                 fetchClasses();
                 console.log("Class added successfully.");
+            } else if (response.status === 404) {
+                console.error("Class not found:", response.data);
             } else {
-                console.error("Failed to add class");
+                console.error("Failed to add class:", response.data);
             }
         } catch (error) {
             console.error("Error adding class:", error);
