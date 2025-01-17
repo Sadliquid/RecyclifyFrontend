@@ -30,7 +30,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskDescription, TaskPoints }) {
                 formData.append("taskDescription", TaskDescription);
                 formData.append("taskPoints", TaskPoints);           
 
-                const response = await server.post("/api/Teacher/submit-task", formData, {
+                const response = await server.post("/api/student/submit-task", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
