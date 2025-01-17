@@ -3,6 +3,7 @@ import { VStack, Box, Button, Input, Text, Link, Flex } from "@chakra-ui/react"
 import { InputGroup } from "@/components/ui/input-group"
 import { LuUser, LuLock, LuIdCard, LuPhone, LuMessageCircle, LuMail } from "react-icons/lu"
 import { useNavigate } from "react-router-dom";
+import { PasswordInput } from "@/components/ui/password-input"
 
 function ParentRegistrationForm({ goBack }) {
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ function ParentRegistrationForm({ goBack }) {
                         startElement={<LuLock />} 
                         width="400px"
                     >
-                        <Input placeholder="Password" type="password" />
+                        <PasswordInput placeholder="Password" type="password" />
                     </InputGroup>
                     <InputGroup 
                         flex="1" 
