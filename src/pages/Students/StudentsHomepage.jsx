@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Heading, Spinner } from '@chakra-ui/react';
+import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import StreakRewardCard from '../../components/Students/StreakRewardCard';
 import server from "../../../networking";
 import ShowToast from '../../Extensions/ShowToast';
 import { Toaster } from "@/components/ui/toaster";
+import { motion } from "framer-motion";
 
 function StudentsHomepage() {
     const [studentTasks, setStudentTasks] = useState([]);
@@ -100,9 +101,24 @@ function StudentsHomepage() {
                         <Heading fontSize="30px" mt={3}>Dashboard</Heading>
 
                         <Box display={"flex"} flexDir={"column"} justifyContent={"center"} mt={2} mb={2} width="100%" height="100%">
-                            <Box backgroundColor={"white"} borderRadius={20} width={"95%"} height={"50%"} mt={5} display={"flex"} justifyContent={"center"} alignItems={"center"} margin="auto">
-                                <StudentCharts />
-                            </Box>
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
+                                style={{
+                                    display: "flex",
+                                    backgroundColor: "white",
+                                    borderRadius: 20,
+                                    width: "95%",
+                                    height: "50%",
+                                    marginTop: 5,
+                                    margin: "auto"
+                                }}
+                            >
+                                <Box width='100%' height='100%' padding={3}>
+                                    <StudentCharts studentID={user.id} />
+                                </Box>
+                            </motion.div>
 
                             <Box display={"flex"} justifyContent={"space-between"} margin="auto" width="95%" height={"50%"}>
                                 <Box width="49%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
@@ -143,9 +159,26 @@ function StudentsHomepage() {
                                     />
                                 ))
                             ) : (
-                                <Box display="flex" justifyContent="center" alignItems="center" width="100%" height="100%">
-                                    <Spinner />
-                                </Box>
+                                <>
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.5 }}
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            width: "100%",
+                                            height: "100%"
+                                        }}
+                                    >
+                                        <Box>
+                                            <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
+                                            <Text>Getting your tasks...</Text>
+                                        </Box>
+                                    </motion.div>
+                                </>
                             )}
                         </Box>
                     </Box>
