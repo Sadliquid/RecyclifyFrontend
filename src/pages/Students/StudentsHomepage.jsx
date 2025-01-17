@@ -31,9 +31,9 @@ function StudentsHomepage() {
             });
 
             if (response.status == 200) {
-                setStudentTasks(response.data);
+                setStudentTasks(response.data.data);
             } else {
-                console.error("Failed to fetch tasks:", response.data);
+                console.error("Failed to fetch tasks:", response.data.error);
             }
         } catch (error) {
             console.error("Failed to fetch tasks:", error);
@@ -49,7 +49,7 @@ function StudentsHomepage() {
             });
 
             if (response.status == 200) {
-                setStudentProfile(response.data);
+                setStudentProfile(response.data.data);
             }
         } catch (error) {
             console.error("Failed to fetch student data:", error);
@@ -79,6 +79,10 @@ function StudentsHomepage() {
             fetchStudentProfile(user.id);
         }
     }, [loaded]);
+
+    useEffect(() => {
+        console.log("Student tasks:", studentTasks);
+    }, [studentTasks]);
 
     if (!loaded) {
         return (
@@ -120,11 +124,11 @@ function StudentsHomepage() {
                 </Box>
 
                 <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="29%" height={"100%"} borderRadius={20}>
-                    <Box height="29%" border={"3px solid #4DCBA4"} borderRadius={20} display={"flex"} backgroundColor={"white"}>
+                    <Box height="22%" border={"3px solid #4DCBA4"} borderRadius={20} display={"flex"} backgroundColor={"white"}>
                         <StudentProfileCard user={user} studentProfile={studentProfile} />
                     </Box>
 
-                    <Box display="flex" flexDir={"column"} justifyContent={"center"} height="69%" backgroundColor={"#E5ECFF"} borderRadius={20}>
+                    <Box display="flex" flexDir={"column"} justifyContent={"center"} height="75%" backgroundColor={"#E5ECFF"} borderRadius={20}>
                         <Heading fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Heading>
 
                         <Box display="flex" flexDir={"column"} justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="80%" width="90%">

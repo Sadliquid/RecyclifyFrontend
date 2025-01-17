@@ -1,18 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { Box, Text, Flex } from '@chakra-ui/react';
-import { FaLeaf, FaMedal } from 'react-icons/fa';
+import { Box, Text, Flex, Image } from '@chakra-ui/react';
+import { FaLeaf } from 'react-icons/fa';
 import { Avatar } from "@/components/ui/avatar";
-import { useEffect } from 'react';
 
 function StudentProfileCard({ user, studentProfile }) {
     var validProp = studentProfile && Object.keys(studentProfile).length > 0;
-    
-    useEffect(() => {
-        if (validProp) {
-            console.log(studentProfile);
-        }
-    }, [studentProfile]);
 
     if (validProp) return (
         <Box
@@ -35,7 +27,7 @@ function StudentProfileCard({ user, studentProfile }) {
                 />
                 <Box>
                     <Text fontWeight="bold" fontSize="md">{user.name}</Text>
-                    <Text color="gray.500" fontSize="sm" textAlign={"left"}>{user.userRole}</Text>
+                    <Text color="gray.500" fontSize="sm" textAlign={"left"}>{user.userRole == "student" ? "Student" : "Recyclify User"}</Text>
                 </Box>
             </Flex>
 
@@ -43,16 +35,16 @@ function StudentProfileCard({ user, studentProfile }) {
             <Flex align="center" justify="space-around">
                 {/* League Info */}
                 <Flex align="center" gap={2}>
-                    <FaMedal size={30} color="gray.400" />
+                    <Image src="/silver-medal.png" boxSize={8}/>
                     <Box>
-                        <Text fontSize="sm" fontWeight="medium">league</Text>
-                        <Text textAlign={"left"} fontSize="xs" color="gray.500">4th place</Text>
+                        <Text fontSize="sm" fontWeight="medium">{studentProfile.league || ""} League</Text>
+                        <Text textAlign={"left"} fontSize="xs" color="gray.500">{studentProfile.leagueRank == 1 ? "1st" : studentProfile.leagueRank == 2 ? "2nd" : studentProfile.leagueRank == 3 ? "3rd" : studentProfile.leagueRank + "th"} place</Text>
                     </Box>
                 </Flex>
 
                 {/* Leafs Count */}
                 <Flex align="center" gap={2}>
-                    <FaLeaf size={30} color="teal.500" />
+                    <FaLeaf size={30} color="#2CD776" />
                     <Text fontSize="sm" fontWeight="medium">{studentProfile.currentPoints} leafs</Text>
                 </Flex>
             </Flex>
