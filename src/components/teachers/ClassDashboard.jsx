@@ -1,6 +1,6 @@
 import { Box, Flex, Tabs } from '@chakra-ui/react';
 
-function ClassInfo() {
+function ClassDashboard() {
     return (
         <Tabs.Content value='Class' >
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
@@ -42,4 +42,4 @@ function ClassInfo() {
     );
 }
 
-export default ClassInfo;
+export default ClassDashboard;

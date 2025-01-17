@@ -13,21 +13,24 @@ function Class() {
 
     const fetchClassData = async () => {
         try {
-            const response = await server.get(`/api/Class/get-class/?classId=${id}`);
+            const response = await server.get(`/api/Teacher/get-class/?classId=${id}`);
             if (response.status === 200) {
-                setClassData(response.data);  // Update the state with the fetched data
+                setClassData(response.data);
+            } else if (response.status === 404) {
+                console.error("Class or Teacher not found.", response.data);
+                setClassData({});
             } else {
-                console.error("Failed to fetch classes");
-                setClassData({});  // Reset to an empty object on failure
+                console.error("Failed to fetch class data.", response.data);
+                setClassData({});
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
-            setClassData({});  // Reset to an empty object on error
+            setClassData({});
         }
     };
 
     useEffect(() => {
-        fetchClassData();
+        if (id) fetchClassData();
     }, [id]);
 
     return (
