@@ -6,50 +6,63 @@ import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/me
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import server from "../../../networking"
 
-function ClassTable({ classData }) {
+function StudentDashboard({ classData }) {
     const [students, setStudents] = useState([]);
+    const [validationError, setValidationError] = useState({
+        name: '',
+    });
+    const [open, setOpen] = useState(false);
 
-    useEffect(() => {
-        async function fetchStudents() {
-            try {
-                const response = await server.get(`/api/Student/get-students/?classID=${classData.classID}`);
-                if (response.status === 200) {
-                    setStudents(Array.isArray(response.data) ? response.data : []);
-                } else {
-                    console.error("Failed to fetch students");
-                    setStudents([]);
-                }
-            } catch (error) {
-                console.error("Error fetching students:", error);
+    const validateName = (name) => {
+        const nameRegex = /^[a-zA-Z\s]+$/;
+        if (!nameRegex.test(name)) {
+            return 'Name can only contain letters and spaces.';
+        }
+        return '';
+    };
+
+    const fetchStudents = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-students/?classID=${classData.classID}`);
+            if (response.status === 200) {
+                setStudents(Array.isArray(response.data) ? response.data : []);
+            } else {
+                console.error("Failed to fetch students", response.data);
                 setStudents([]);
             }
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            setStudents([]);
         }
-        
+    };
+
+    useEffect(() => {
         fetchStudents();
     }, [classData]);
 
     // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
-    // Function to delete a student using API
     const handleDeleteStudent = async (studentId) => {
         try {
-            const response = await server.delete(`/api/Student/delete-student/?studentID=${studentId}`);
+            const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
 
             if (response.status === 200) {
-                setStudents((prevStudents) => prevStudents.filter((student) => student.id !== studentId));
+                console.log("Student successfully deleted.");
+                await fetchStudents();
+            } else if (response.status === 404) {
+                console.error("Student not found.", response.data);
             } else {
-                console.error('Failed to delete student:', response.data);
+                console.error("Failed to delete student.", response.data);
             }
         } catch (error) {
-            console.error('Error deleting student:', error.message);
+            console.error("Error deleting student.", error.message);
         }
     };
 
     const [editedStudent, setEditedStudent] = useState({
         name: '',
-        studentEmail: '',
-        parentEmail: ''
+        studentEmail: ''
     })
 
     const floatingStyles = defineStyle({
@@ -75,7 +88,12 @@ function ClassTable({ classData }) {
 
     // Function to open the edit dialog with the selected student's details
     const handleEditStudent = (student) => {
-        setEditedStudent({ ...student }); // Populate the dialog with the selected student's details
+        setEditedStudent({
+            studentID: student.studentID,
+            name: student.user.name,
+            studentEmail: student.user.email,
+        });
+        setOpen(true);
     };
 
     // Function to reset the edited student state
@@ -83,22 +101,51 @@ function ClassTable({ classData }) {
         setEditedStudent({
             name: '',
             studentEmail: '',
-            parentEmail: ''
         });
+        setOpen(false);
     };
 
     // Function to save the edited student details
-    const handleSaveEdit = () => {
-        setStudents((prevStudents) =>
-            prevStudents.map((student) =>
-                student.id === editedStudent.id ? { ...editedStudent } : student
-            )
-        );
-        resetEditedStudent(); // Reset the edited student state
+    const handleSaveEdit = async () => {
+        // Ensure no validation errors exist
+        if (validationError.name) {
+            console.error('Validation error:', validationError.name);
+            return;
+        }
+
+        try {
+            const response = await server.put(`/api/Teacher/update-student`, null, {
+                params: {
+                    studentID: editedStudent.studentID,
+                    studentName: editedStudent.name,
+                    studentEmail: editedStudent.studentEmail,
+                },
+            });
+
+            if (response.status === 200) {
+                console.log('Student successfully updated.');
+                await fetchStudents(); // Refresh the students list
+                setOpen(false);
+            } else {
+                console.error('Failed to update student');
+                setOpen(true);
+            }
+        } catch (error) {
+            console.error('Error updating student.');
+            setOpen(true);
+        }
     };
 
     // Function to handle changes in the edit dialog fields
     const handleChange = (field, value) => {
+        if (field === 'name') {
+            const error = validateName(value);
+            setValidationError((prev) => ({
+                ...prev,
+                [field]: error,
+            }));
+        }
+
         setEditedStudent((prev) => ({
             ...prev,
             [field]: value,
@@ -124,137 +171,156 @@ function ClassTable({ classData }) {
                         </Table.Header>
 
                         <Table.Body>
-                            {students.map((student, index) => (
-                                <Table.Row key={student.id} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
-                                    <Table.Cell color="black"><Flex gap={2} align="center"><LuDiamond />{student.user.name}</Flex></Table.Cell>
-                                    <Table.Cell color="black">{student.currentPoints}</Table.Cell>
-                                    <Table.Cell color="black">{student.totalPoints}</Table.Cell>
-                                    <Table.Cell color="black">{student.redemptions}</Table.Cell>
-                                    <Table.Cell color="black">{student.user.email}</Table.Cell>
-                                    <Table.Cell color="black">{student.parentEmail}</Table.Cell>
-                                    <Table.Cell color="black">{student.flagStatus ? <Badge colorPalette="red">Flagged</Badge> : ""}</Table.Cell>
-                                    <Table.Cell>
-                                        <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
-                                            <MenuTrigger asChild>
-                                                <Box
-                                                    bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}
-                                                    p="2"
-                                                    borderRadius="full"
-                                                    cursor="pointer"
+                            {/* check students list, if there are no students just go to fallback, or else just render the students details in the dashboard */}
+                            {students.length === 0 ? (
+                                <Table.Row>
+                                    <Table.Cell colSpan={8}>
+                                        <Text textAlign="center" color="gray.500">
+                                            No students enrolled in this class.
+                                        </Text>
+                                    </Table.Cell>
+                                </Table.Row>
+                            ) : (
+                                students.map((student, index) => (
+                                    <Table.Row key={student.studentID} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
+                                        <Table.Cell color="black">
+                                            <Flex gap={2} align="center">
+                                                <LuDiamond />
+                                                {student.user.name}
+                                            </Flex>
+                                        </Table.Cell>
+                                        <Table.Cell color="black">{student.currentPoints}</Table.Cell>
+                                        <Table.Cell color="black">{student.totalPoints}</Table.Cell>
+                                        <Table.Cell color="black">{student.redemptions}</Table.Cell>
+                                        <Table.Cell color="black">{student.user.email}</Table.Cell>
+                                        <Table.Cell color="black">{student.parentEmail}</Table.Cell>
+                                        <Table.Cell color="black">
+                                            {student.flagStatus ? <Badge colorPalette="red">Flagged</Badge> : ""}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
+                                                <MenuTrigger asChild>
+                                                    <Box
+                                                        bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}
+                                                        p="2"
+                                                        borderRadius="full"
+                                                        cursor="pointer"
+                                                    >
+                                                        <MdOutlineMoreVert size={24} color="black" />
+                                                    </Box>
+                                                </MenuTrigger>
+                                                <MenuContent
+                                                    borderRadius="xl"
+                                                    transition="box-shadow 0.3s ease, border-color 0.3s ease"
+                                                    transitionDelay="0.1s"
+                                                    _hover={{
+                                                        boxShadow: 'lg',
+                                                        border: '1px solid',
+                                                        borderColor: 'gray.200',
+                                                    }}
                                                 >
-                                                    <MdOutlineMoreVert size={24} color="black" />
-                                                </Box>
-                                            </MenuTrigger>
-                                            <MenuContent
-                                                borderRadius="xl"
-                                                transition="box-shadow 0.3s ease, border-color 0.3s ease"
-                                                transitionDelay="0.1s"
-                                                _hover={{
-                                                    boxShadow: 'lg',
-                                                    border: '1px solid',
-                                                    borderColor: 'gray.200',
-                                                }}
-                                            >
-                                                <DialogRoot size="lg">
-                                                    <DialogTrigger asChild>
-                                                        <MenuItem
-                                                            value="edit-class"
-                                                            borderRadius="xl"
-                                                            closeOnSelect={false}
-                                                            cursor="pointer"
-                                                            mt={2}
-                                                            onClick={() => handleEditStudent(student)} // Pass the selected student's details
-                                                        >
-                                                            <MdEdit /> Edit
-                                                        </MenuItem>
-                                                    </DialogTrigger>
-                                                    <DialogContent>
-                                                        <DialogHeader>
-                                                            <DialogTitle color="black" fontWeight="bold" textAlign="left">
-                                                                Edit Student Details
-                                                            </DialogTitle>
-                                                        </DialogHeader>
-                                                        <DialogBody>
-                                                            <Stack direction="column" gap={8}>
-                                                                <Field.Root>
-                                                                    <Box pos="relative" w="full">
-                                                                        <Input
-                                                                            className="student-name"
-                                                                            value={editedStudent.name}
-                                                                            onChange={(e) => handleChange('name', e.target.value)}
-                                                                        />
-                                                                        <Field.Label css={floatingStyles}>Student Name</Field.Label>
-                                                                    </Box>
-                                                                </Field.Root>
-                                                                <Field.Root>
-                                                                    <Box pos="relative" w="full">
-                                                                        <Input
-                                                                            className="student-email"
-                                                                            value={editedStudent.studentEmail}
-                                                                            onChange={(e) => handleChange('studentEmail', e.target.value)}
-                                                                        />
-                                                                        <Field.Label css={floatingStyles}>Student Email</Field.Label>
-                                                                    </Box>
-                                                                </Field.Root>
-                                                                <Field.Root>
-                                                                    <Box pos="relative" w="full">
-                                                                        <Input
-                                                                            className="parent-email"
-                                                                            value={editedStudent.parentEmail}
-                                                                            onChange={(e) => handleChange('parentEmail', e.target.value)}
-                                                                        />
-                                                                        <Field.Label css={floatingStyles}>Parent Email</Field.Label>
-                                                                    </Box>
-                                                                </Field.Root>
-                                                            </Stack>
-                                                        </DialogBody>
-                                                        <DialogFooter display="flex" gap={10} justifyContent="center">
-                                                            <DialogActionTrigger asChild>
-                                                                <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedStudent}>
-                                                                    Cancel
-                                                                </Button>
-                                                            </DialogActionTrigger>
-                                                            <DialogActionTrigger asChild>
+                                                    <DialogRoot size="lg" open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
+                                                        <DialogTrigger asChild>
+                                                            <MenuItem
+                                                                value="edit-class"
+                                                                borderRadius="xl"
+                                                                closeOnSelect={false}
+                                                                cursor="pointer"
+                                                                mt={2}
+                                                                onClick={() => handleEditStudent(student)} // Pass the selected student's details
+                                                            >
+                                                                <MdEdit /> Edit
+                                                            </MenuItem>
+                                                        </DialogTrigger>
+                                                        <DialogContent>
+                                                            <DialogHeader>
+                                                                <DialogTitle color="black" fontWeight="bold" textAlign="left">
+                                                                    Edit Student Details
+                                                                </DialogTitle>
+                                                            </DialogHeader>
+                                                            <DialogBody>
+                                                                <Stack direction="column" gap={8}>
+                                                                    <Field.Root>
+                                                                        <Box pos="relative" w="full">
+                                                                            <Input
+                                                                                className="student-name"
+                                                                                value={editedStudent.name}
+                                                                                onChange={(e) => handleChange('name', e.target.value)}
+                                                                                borderColor={validationError.name ? 'red.500' : 'gray.300'}
+                                                                            />
+                                                                            <Field.Label css={floatingStyles}>Student Name</Field.Label>
+                                                                            {validationError.name && (
+                                                                                <Text color="red.500" fontSize="sm" mt={1}>
+                                                                                    * {validationError.name}
+                                                                                </Text>
+                                                                            )}
+                                                                        </Box>
+                                                                    </Field.Root>
+                                                                    <Field.Root>
+                                                                        <Box pos="relative" w="full">
+                                                                            <Input
+                                                                                className="student-email"
+                                                                                value={editedStudent.studentEmail}
+                                                                                onChange={(e) => handleChange('studentEmail', e.target.value)}
+                                                                            />
+                                                                            <Field.Label css={floatingStyles}>Student Email</Field.Label>
+                                                                        </Box>
+                                                                    </Field.Root>
+                                                                </Stack>
+                                                            </DialogBody>
+
+                                                            <DialogFooter display="flex" gap={10} justifyContent="center">
+                                                                <DialogActionTrigger asChild>
+                                                                    <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedStudent}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                </DialogActionTrigger>
                                                                 <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
                                                                     Save
                                                                 </Button>
-                                                            </DialogActionTrigger>
-                                                        </DialogFooter>
-                                                    </DialogContent>
-                                                </DialogRoot>
-                                                <MenuItem value="copy-uuid" borderRadius="xl" mt={2}>
-                                                    <MdOutlineEmail /> Send Email
-                                                </MenuItem>
-                                                <DialogRoot size="lg">
-                                                    <DialogTrigger asChild>
-                                                        <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2}>
-                                                            <MdDelete /> Delete
-                                                        </MenuItem>
-                                                    </DialogTrigger>
-                                                    <DialogContent>
-                                                        <DialogHeader>
-                                                            <DialogTitle color="black" textAlign="center">Are you sure you want to remove this student from this class?</DialogTitle>
-                                                        </DialogHeader>
-                                                        <DialogBody color="#FF0000" textAlign="center">
-                                                            <Text>
-                                                                The student can enroll back to this class again using the class UUID
-                                                            </Text>
-                                                        </DialogBody>
-                                                        <DialogFooter display="flex" gap={10} justifyContent="center">
-                                                            <DialogActionTrigger asChild>
-                                                                <Button variant="outline" bg="#2D65FF" color="white">Cancel</Button>
-                                                            </DialogActionTrigger>
-                                                            <Button bg="#FF8080" color="white" onClick={() => handleDeleteStudent(student.id)}>
-                                                                Delete
-                                                            </Button>
-                                                        </DialogFooter>
-                                                    </DialogContent>
-                                                </DialogRoot>
-                                            </MenuContent>
-                                        </MenuRoot>
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
+                                                            </DialogFooter>
+                                                        </DialogContent>
+                                                    </DialogRoot>
+                                                    <MenuItem value="copy-uuid" borderRadius="xl" mt={2}>
+                                                        <MdOutlineEmail /> Send Email
+                                                    </MenuItem>
+                                                    <DialogRoot size="lg">
+                                                        <DialogTrigger asChild>
+                                                            <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2}>
+                                                                <MdDelete /> Delete
+                                                            </MenuItem>
+                                                        </DialogTrigger>
+                                                        <DialogContent>
+                                                            <DialogHeader>
+                                                                <DialogTitle color="black" textAlign="center">
+                                                                    Are you sure you want to remove this student from this class?
+                                                                </DialogTitle>
+                                                            </DialogHeader>
+                                                            <DialogBody color="#FF0000" textAlign="center">
+                                                                <Text>
+                                                                    The student can enroll back to this class again using the class UUID
+                                                                </Text>
+                                                            </DialogBody>
+                                                            <DialogFooter display="flex" gap={10} justifyContent="center">
+                                                                <DialogActionTrigger asChild>
+                                                                    <Button variant="outline" bg="#2D65FF" color="white">
+                                                                        Cancel
+                                                                    </Button>
+                                                                </DialogActionTrigger>
+                                                                <DialogActionTrigger asChild>
+                                                                    <Button bg="#FF8080" color="white" onClick={() => handleDeleteStudent(student.studentID)}>
+                                                                        Delete
+                                                                    </Button>
+                                                                </DialogActionTrigger>
+                                                            </DialogFooter>
+                                                        </DialogContent>
+                                                    </DialogRoot>
+                                                </MenuContent>
+                                            </MenuRoot>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))
+                            )}
                         </Table.Body>
                     </Table.Root>
                 </Table.ScrollArea>
@@ -263,4 +329,4 @@ function ClassTable({ classData }) {
     );
 }
 
-export default ClassTable;
+export default StudentDashboard;

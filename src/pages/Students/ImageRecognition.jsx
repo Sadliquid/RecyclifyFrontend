@@ -51,6 +51,7 @@ function ImageRecognition() {
                     if (response.status === 200) {
                         setItemCategory(response.data.category);
                         setItemRecyclable(response.data.result === "Yes");
+                        clearFile();
                         setOpen(true);
                     } else {
                         throw new Error(`Unexpected response status: ${response.status}`);

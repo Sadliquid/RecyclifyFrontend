@@ -40,7 +40,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                 formData.append("taskID", TaskID);
                 formData.append("studentID", "3f9056b0-06e1-487a-8901-586bafd1e492");
         
-                server.post("/api/Student/submit-task", formData, {
+                server.post("/api/student/submit-task", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -64,7 +64,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                 loading: { title: "Uploading...", description: "Please wait" },
                 success: {
                     title: "Success",
-                    description: "Task submitted successfully!",
+                    description: "Verification request sent successfully!",
                 },
                 error: {
                     title: "Error",

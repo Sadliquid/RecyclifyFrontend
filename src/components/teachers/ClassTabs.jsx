@@ -16,11 +16,11 @@ function ClassTabs({ classData }) {
     // Fetch students data from the backend
     const fetchStudents = async () => {
         try {
-            const response = await server.get(`/api/Student/get-students/?classId=${classData.classID}`);
+            const response = await server.get(`/api/Teacher/get-students/?classId=${classData.classID}`);
             if (response.status === 200) {
                 setStudents(response.data);
             } else {
-                console.error("Failed to fetch students");
+                console.error("Failed to fetch students", response.data);
                 setStudents([]);
             }
         } catch (error) {
@@ -30,14 +30,16 @@ function ClassTabs({ classData }) {
     };
 
     useEffect(() => {
-        fetchStudents();
-    }, [classData.classId]);
+        if (classData.classID) {
+            fetchStudents();
+        }
+    }, [classData.classID]);
 
     return (
         <>
             {/* Conditionally render tabs based on student count */}
             {students.length === 0 ? (
-                <VStack textAlign="center" fontWeight="medium">
+                <VStack textAlign="center" fontWeight="medium" mt={4}>
                     <LuBox />
                     <Text>No students found in this class.</Text>
                 </VStack>
@@ -70,7 +72,7 @@ function ClassTabs({ classData }) {
                         </Tabs.Trigger>
                     </Tabs.List>
                     <ClassDashboard />
-                    <StudentDashboard classData={classData}/>
+                    <StudentDashboard classData={classData} />
                 </Tabs.Root>
             )}
         </>
