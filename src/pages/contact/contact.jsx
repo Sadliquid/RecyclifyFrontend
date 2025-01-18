@@ -18,6 +18,7 @@ const ContactForm = () => {
                 senderName: name,
                 senderEmail: email,
                 message,
+                hasReplied: false,
             });
 
             if (response.status === 200) {
@@ -26,6 +27,7 @@ const ContactForm = () => {
                 setEmail('');
                 setMessage('');
             } else {
+                console.log(response)
                 ShowToast('error', 'Error', 'Failed to submit form');
             }
         } catch (error) {

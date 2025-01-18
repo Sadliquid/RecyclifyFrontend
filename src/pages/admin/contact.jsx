@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import {Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner} from "@chakra-ui/react";
+import { useSelector } from 'react-redux';
 import { MdReply, MdEdit } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -11,14 +12,42 @@ const ContactFormManagement = () => {
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const subjectRef = useRef(null);
     const editMessageRef = useRef(null);
+    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchMessages();
-    }, []);
+        useEffect(() => {
+            if (!error) {
+                if (loaded) {
+                    if (!user) {
+                        navigate("/auth/login");
+                        ShowToast("error", "You are not logged in", "Please log in first");
+                    } else if (user.userRole != "admin") {
+                        navigate("/auth/login");
+                        ShowToast("error", "Access denied", "Please log in as a admin");
+                    }
+                }
+            } else {
+                ShowToast("error", "Error", "An error occured while fetching user state");
+            }
+        }, [loaded]);
+    
+        useEffect(() => {
+            if (!error && loaded && user && user.userRole == "admin") {
+                fetchMessages();
+            }
+        }, [loaded]);
+    
+        if (!loaded) {
+            return (
+                <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
+                    <Spinner />
+                </Box>
+            )
+        }
 
     const fetchMessages = async () => {
         try {
@@ -33,7 +62,7 @@ const ContactFormManagement = () => {
                 throw new Error(`Failed to fetch messages: ${response.statusText}`);
             }
         } catch (error) {
-            setError(error.message);
+            setErrorMessage(error.message);
             setIsLoading(false);
         }
     };
@@ -119,8 +148,8 @@ const ContactFormManagement = () => {
         return <Spinner />;
     }
 
-    if (error) {
-        return <div>Error: {error}</div>;
+    if (errorMessage) {
+        return <div>Error: {errorMessage}</div>;
     }
 
     return (

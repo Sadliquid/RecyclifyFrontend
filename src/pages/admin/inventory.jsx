@@ -1,5 +1,17 @@
 import { useState, useEffect } from "react";
-import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import {
+  Stack,
+  Table,
+  Heading,
+  Input,
+  HStack,
+  Button,
+  Box,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { MdEdit, MdAdd, MdDelete } from "react-icons/md";
 import Server from "../../../networking";
 
@@ -7,14 +19,34 @@ const InventoryManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rewardItems, setRewardItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [editingItem, setEditingItem] = useState(null); // Track the item being edited
+  const { user, loaded, error, authToken } = useSelector((state) => state.auth);
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!error) {
+      if (loaded) {
+        if (!user) {
+          navigate("/auth/login");
+          ShowToast("error", "You are not logged in", "Please log in first");
+        } else if (user.userRole != "admin") {
+          navigate("/auth/login");
+          ShowToast("error", "Access denied", "Please log in as a admin");
+        }
+      }
+    } else {
+      ShowToast("error", "Error", "An error occured while fetching user state");
+    }
+  }, [loaded]);
   // Fetch reward items from the backend
   useEffect(() => {
     const fetchRewardItems = async () => {
       try {
-        const response = await Server.get(`${import.meta.env.VITE_BACKEND_URL}/api/RewardItem`);
+        const response = await Server.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem`
+        );
         console.log("Response:", response);
 
         // Check if the request was successful (status code 2xx)
@@ -23,16 +55,33 @@ const InventoryManagement = () => {
           setRewardItems(data);
           setIsLoading(false);
         } else {
-          throw new Error(`Failed to fetch reward items: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch reward items: ${response.statusText}`
+          );
         }
       } catch (error) {
-        setError(error.message);
+        setErrorMessage(error.message);
         setIsLoading(false);
       }
     };
 
     fetchRewardItems();
-  }, []);
+  }, [loaded]);
+
+  if (!loaded) {
+    return (
+      <Box
+        display="flex"
+        flexDir={"column"}
+        justifyContent="center"
+        alignItems="center"
+        width="100%"
+        height="100%"
+      >
+        <Spinner />
+      </Box>
+    );
+  }
 
   // Filter items based on the search term
   const filteredItems = rewardItems.filter((item) =>
@@ -48,7 +97,9 @@ const InventoryManagement = () => {
   const handleSave = async () => {
     try {
       const response = await Server.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${editingItem.rewardID}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${
+          editingItem.rewardID
+        }`,
         editingItem, // Pass the data as the second argument
         {
           headers: {
@@ -71,14 +122,16 @@ const InventoryManagement = () => {
         throw new Error("Failed to update reward item");
       }
     } catch (error) {
-        console.log("Error:", error);
+      console.log("Error:", error);
     }
   };
 
   // Handle delete button click
   const handleDelete = async (rewardID) => {
     // Show a confirmation dialog
-    const isConfirmed = window.confirm("Are you sure you want to delete this reward item? This action cannot be undone.");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this reward item? This action cannot be undone."
+    );
 
     if (!isConfirmed) {
       return; // Exit if the user cancels
@@ -92,7 +145,9 @@ const InventoryManagement = () => {
       // Check if the request was successful
       if (response.status >= 200 && response.status < 300) {
         // Remove the item from the local state
-        setRewardItems(rewardItems.filter((item) => item.rewardID !== rewardID));
+        setRewardItems(
+          rewardItems.filter((item) => item.rewardID !== rewardID)
+        );
       } else {
         throw new Error("Failed to delete reward item");
       }
@@ -105,8 +160,8 @@ const InventoryManagement = () => {
     return <Spinner />;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (errorMessage) {
+    return <div>Error: {errorMessage}</div>;
   }
 
   return (
@@ -174,7 +229,8 @@ const InventoryManagement = () => {
                       justifyContent="center"
                       mr="2"
                     >
-                      {item.icon} {/* Replace this with relevant icons if needed */}
+                      {item.icon}{" "}
+                      {/* Replace this with relevant icons if needed */}
                     </Box>
                     {editingItem?.rewardID === item.rewardID ? (
                       <Input
