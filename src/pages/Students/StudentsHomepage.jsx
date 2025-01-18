@@ -4,7 +4,6 @@ import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import MiniCalendar from '../../components/Students/MiniCalendar';
 import StudentCharts from '../../components/Students/StudentCharts';
 import StudentProfileCard from '../../components/Students/StudentProfileCard';
 import StudentTaskCard from '../../components/Students/StudentTaskCard';
@@ -22,6 +21,13 @@ function StudentsHomepage() {
     const { user, loaded, error, authToken } = useSelector((state) => state.auth);
 
     const navigate = useNavigate();
+
+    const updateStudentPoints = (newPoints) => {
+        setStudentProfile((prevProfile) => ({
+            ...prevProfile,
+            currentPoints: prevProfile.currentPoints + newPoints,
+        }));
+    };
 
     const fetchStudentTasks = async (studentID) => {
         try {
@@ -125,7 +131,7 @@ function StudentsHomepage() {
                                 </Box>
 
                                 <Box width="49%" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto" boxSizing={"border-box"}>
-                                    <StreakRewardCard studentID={user.id} streak={studentProfile.streak} lastClaimedStreak={studentProfile.lastClaimedStreak} />
+                                    <StreakRewardCard studentID={user.id} streak={studentProfile.streak} lastClaimedStreak={studentProfile.lastClaimedStreak} updateStudentPoints={updateStudentPoints} />
                                 </Box>
                             </Box>
                         </Box>

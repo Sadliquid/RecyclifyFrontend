@@ -6,7 +6,7 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import { useState } from "react";
 import server from "../../../networking";
 
-function StreakRewardCard({ studentID, streak, lastClaimedStreak }) {
+function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentPoints }) {
     const [giftClaimed, setGiftClaimed] = useState(false);
 
     if (!studentID) return null;
@@ -34,6 +34,7 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak }) {
                 if (response.status === 200) {
                     const pointsAwarded = response.data.data.pointsAwarded;
                     setGiftClaimed(true);
+                    updateStudentPoints(pointsAwarded);
                     resolve(pointsAwarded);
                 } else {
                     reject("Unexpected response status: " + response.status);
@@ -80,7 +81,7 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak }) {
             >
                 <Box display="flex" justifyContent={"center"} flexDir={"column"} alignItems="center">
                     <Box display="flex" justifyContent={"center"} alignItems="center">
-                        {(!isClaimable || giftClaimed) && remainingStreaks === 0 && (
+                        {(isClaimable && !giftClaimed) && remainingStreaks === 0 && (
                             <Box ml={2} mr={2}>
                                 <Text
                                     as={BsGift}
