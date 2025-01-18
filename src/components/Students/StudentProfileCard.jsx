@@ -18,7 +18,7 @@ function StudentProfileCard({ user, studentProfile }) {
                     flexDirection: "column",
                     justifyContent: "space-between",
                     borderRadius: "lg",
-                    padding: 12,
+                    padding: 8,
                     width: "100%",
                     border: "1px",
                     borderColor: "gray.200"
