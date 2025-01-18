@@ -51,7 +51,6 @@ function StudentCharts({ studentID }) {
             .then(response => {
                 if (response.status === 200) {
                     setAccumulatedLeafs(response.data.data);
-                    console.log("Data: ", response.data.data);
                     resolve();
                 } else {
                     reject("Unexpected response status: " + response.status);

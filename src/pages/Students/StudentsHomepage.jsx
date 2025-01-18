@@ -81,10 +81,6 @@ function StudentsHomepage() {
         }
     }, [loaded]);
 
-    useEffect(() => {
-        console.log("Student tasks:", studentTasks);
-    }, [studentTasks]);
-
     if (!loaded) {
         return (
             <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
@@ -93,14 +89,14 @@ function StudentsHomepage() {
         )
     }
 
-    return (
+    if (loaded && studentProfile !== null) return (
         <>
-            <Box display="flex" justifyContent={"space-between"} width="100%" height={"77vh"} mt={10}>
-                <Box display="flex" width="69%" height={"100%"} backgroundColor={"#E5ECFF"} borderRadius={20}>
-                    <Box display={"flex"} flexDir={"column"} justifyContent={"space-between"} width="100%">
+            <Box display="flex" justifyContent={"space-between"} width="100%" height={"77vh"} mt={10} boxSizing={"border-box"}>
+                <Box display="flex" width="69%" height={"100%"} backgroundColor={"#E5ECFF"} borderRadius={20} boxSizing={"border-box"}>
+                    <Box display={"flex"} flexDir={"column"} justifyContent={"space-between"} width="100%" boxSizing={"border-box"}>
                         <Heading fontSize="30px" mt={3}>Dashboard</Heading>
 
-                        <Box display={"flex"} flexDir={"column"} justifyContent={"center"} mt={2} mb={2} width="100%" height="100%">
+                        <Box display={"flex"} flexDir={"column"} justifyContent={"center"} mt={2} mb={2} width="100%" height="100%" boxSizing={"border-box"}>
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -113,35 +109,36 @@ function StudentsHomepage() {
                                     height: "65%",
                                     marginTop: 5,
                                     margin: "auto",
+                                    boxSizing: "border-box",
                                 }}
                             >
-                                <Box width='100%' height='100%' padding={5}>
+                                <Box width='100%' height='100%' padding={5} boxSizing={"border-box"}>
                                     <StudentCharts studentID={user.id} />
                                 </Box>
                             </motion.div>
 
-                            <Box display="flex" justifyContent="space-between" margin="auto" width="95%" height="25%">
-                                <Box width="49%" backgroundColor="white" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto">
-                                    <StreakCard />
+                            <Box display="flex" justifyContent="space-between" margin="auto" width="95%" height="25%" boxSizing={"border-box"}>
+                                <Box width="49%" backgroundColor="white" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto" boxSizing={"border-box"}>
+                                    <StreakCard streak={studentProfile.streak} />
                                 </Box>
 
-                                <Box width="49%" backgroundColor="white" borderRadius={20} display="flex" height="100%" justifyContent="center" alignItems="center" mt="auto" mb="auto">
-                                    <StreakRewardCard />
+                                <Box width="49%" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto" boxSizing={"border-box"}>
+                                    <StreakRewardCard studentID={user.id} streak={studentProfile.streak} lastClaimedStreak={studentProfile.lastClaimedStreak} />
                                 </Box>
                             </Box>
                         </Box>
                     </Box>
                 </Box>
 
-                <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="29%" height={"100%"} borderRadius={20}>
-                    <Box height="22%" border={"3px solid #4DCBA4"} borderRadius={20} display={"flex"} backgroundColor={"white"}>
+                <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="29%" height={"100%"} borderRadius={20} boxSizing={"border-box"}>
+                    <Box height="22%" border={"3px solid #4DCBA4"} borderRadius={20} display={"flex"} backgroundColor={"white"} boxSizing={"border-box"}>
                         <StudentProfileCard user={user} studentProfile={studentProfile} />
                     </Box>
 
-                    <Box display="flex" flexDir="column" justifyContent="center" height="75%" backgroundColor={"#E5ECFF"} borderRadius={20}>
+                    <Box display="flex" flexDir="column" justifyContent="center" height="75%" backgroundColor={"#E5ECFF"} borderRadius={20} boxSizing={"border-box"}>
                         <Heading fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Heading>
 
-                        <Box display="flex" flexDir="column" justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="85%" width="90%">
+                        <Box display="flex" flexDir="column" justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="85%" width="90%" boxSizing={"border-box"}>
                             {studentTasks.length != 0 ? (
                                 studentTasks.map((task, index) => (
                                     <StudentTaskCard
@@ -164,9 +161,10 @@ function StudentsHomepage() {
                                         alignItems: "center",
                                         width: "100%",
                                         height: "100%",
+                                        boxSizing: "border-box",
                                     }}
                                 >
-                                    <Box>
+                                    <Box boxSizing={"border-box"}>
                                         <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
                                         <Text>Getting your tasks...</Text>
                                     </Box>
