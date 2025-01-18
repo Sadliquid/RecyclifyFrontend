@@ -67,6 +67,8 @@ function StudentsHomepage() {
                 } else if (user.userRole != "student") {
                     navigate("/auth/login");
                     ShowToast("error", "Access denied", "Please log in as a student");
+                } else {
+                    console.log("User:", user);
                 }
             }
         } else {
@@ -143,6 +145,7 @@ function StudentsHomepage() {
                                 studentTasks.map((task, index) => (
                                     <StudentTaskCard
                                         key={index}
+                                        studentID={user.id}
                                         TaskID={task.taskID}
                                         TaskTitle={task.taskTitle}
                                         TaskDescription={task.taskDescription}

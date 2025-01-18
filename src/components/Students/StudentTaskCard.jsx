@@ -9,7 +9,7 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
 import server from "../../../networking";
 
-function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
+function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskPoints }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [submissionReady, setSubmissionReady] = useState(false);
 
@@ -38,7 +38,7 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                 const formData = new FormData();
                 formData.append("file", selectedFile);
                 formData.append("taskID", TaskID);
-                formData.append("studentID", "3f9056b0-06e1-487a-8901-586bafd1e492");
+                formData.append("studentID", studentID);
         
                 server.post("/api/student/submit-task", formData, {
                     headers: {
