@@ -19,7 +19,7 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak }) {
         lastClaimedStreakDate = new Date(lastClaimedStreak).toISOString().split('T')[0];
     }
 
-    const remainingStreaks = Math.abs(7 - streak);
+    const remainingStreaks = streak % 7;
     const isClaimable = (remainingStreaks === 0) && (lastClaimedStreakDate !== today);
 
     const handleAwardGift = () => {
@@ -79,50 +79,48 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak }) {
                 }}
             >
                 <Box display="flex" justifyContent={"center"} flexDir={"column"} alignItems="center">
-                    <Box display="flex" justifyContent={"center"} alignItems="center" mb={6}>
-                        <Box>
-                            <Text
-                                as={BsGift}
-                                fontSize="48px"
-                                color="white"
-                            />
-                        </Box>
-                        <Box>
-                            <Text
-                                ml={4}
-                                color="white"
-                                fontSize="lg"
-                                fontWeight="semibold"
-                            >
-                                {(isClaimable && !giftClaimed) ? (
-                                    <Text>Claim your gift!</Text>
+                    <Box display="flex" justifyContent={"center"} alignItems="center">
+                        {(!isClaimable || giftClaimed) && remainingStreaks === 0 && (
+                            <Box ml={2} mr={2}>
+                                <Text
+                                    as={BsGift}
+                                    fontSize="48px"
+                                    color="white"
+                                />
+                            </Box>
+                        )}
+
+                        <Box
+                            color="white"
+                            fontSize="lg"
+                            fontWeight="semibold"
+                        >
+                            {(isClaimable && !giftClaimed) ? (
+                                <Button
+                                    color="#4DCBA4"
+                                    border={"2px solid white"}
+                                    backgroundColor={"white"}
+                                    _hover={{ backgroundColor: "#4DCBA4", color: "white" }}
+                                    px={8}
+                                    py={4}
+                                    borderRadius={24}
+                                    fontWeight="bold"
+                                    fontSize="md"
+                                    transition={"ease-in-out 0.2s"}
+                                    disabled={!isClaimable || giftClaimed}
+                                    onClick={handleAwardGift}
+                                >
+                                    Claim my Daily Streak Gift
+                                </Button>
+                            ) : (
+                                remainingStreaks === 0 ? (
+                                    <Text>Successfully claimed Gift!</Text>
                                 ) : (
-                                    remainingStreaks === 0 ? (
-                                        <Text>Gift already claimed!</Text>
-                                    ) : (
-                                        <Text>You are {remainingStreaks} streaks away from unlocking your mystery gift!</Text>
-                                    )
-                                )}
-                            </Text>
+                                    <Text>You are {remainingStreaks} streaks away from unlocking your mystery gift!</Text>
+                                )
+                            )}
                         </Box>
                     </Box>
-
-                    <Button
-                        color="#4DCBA4"
-                        border={"2px solid white"}
-                        backgroundColor={"white"}
-                        _hover={{ backgroundColor: "#4DCBA4", color: "white" }}
-                        px={8}
-                        py={4}
-                        borderRadius={24}
-                        fontWeight="bold"
-                        fontSize="md"
-                        transition={"ease-in-out 0.2s"}
-                        disabled={!isClaimable || giftClaimed}
-                        onClick={handleAwardGift}
-                    >
-                        Claim
-                    </Button>
                 </Box>
             </motion.div>
 
