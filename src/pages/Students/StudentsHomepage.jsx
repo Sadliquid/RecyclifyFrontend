@@ -110,29 +110,23 @@ function StudentsHomepage() {
                                     backgroundColor: "white",
                                     borderRadius: 20,
                                     width: "95%",
-                                    height: "50%",
+                                    height: "65%",
                                     marginTop: 5,
-                                    margin: "auto"
+                                    margin: "auto",
                                 }}
                             >
-                                <Box width='100%' height='100%' padding={3}>
+                                <Box width='100%' height='100%' padding={5}>
                                     <StudentCharts studentID={user.id} />
                                 </Box>
                             </motion.div>
 
-                            <Box display={"flex"} justifyContent={"space-between"} margin="auto" width="95%" height={"50%"}>
-                                <Box width="49%" backgroundColor={"white"} borderRadius={20} display={"flex"} height={"30vh"} justifyContent={"center"} alignItems={"center"} mt="auto" mb="auto">
-                                    <MiniCalendar />
+                            <Box display="flex" justifyContent="space-between" margin="auto" width="95%" height="25%">
+                                <Box width="49%" backgroundColor="white" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto">
+                                    <StreakCard />
                                 </Box>
 
-                                <Box width="49%" borderRadius={20} display="flex" flexDirection="column" height="30vh" justifyContent="space-between" alignItems="center" mt="auto" mb="auto">
-                                    <Box width="100%" height="45%" backgroundColor="white" display="flex" justifyContent="center" alignItems="center" borderRadius={20}>
-                                        <StreakCard />
-                                    </Box>
-
-                                    <Box width="100%" height="45%" backgroundColor="white" display="flex" justifyContent="center" alignItems="center" borderRadius={20}>
-                                        <StreakRewardCard />
-                                    </Box>
+                                <Box width="49%" backgroundColor="white" borderRadius={20} display="flex" height="100%" justifyContent="center" alignItems="center" mt="auto" mb="auto">
+                                    <StreakRewardCard />
                                 </Box>
                             </Box>
                         </Box>
@@ -144,10 +138,10 @@ function StudentsHomepage() {
                         <StudentProfileCard user={user} studentProfile={studentProfile} />
                     </Box>
 
-                    <Box display="flex" flexDir={"column"} justifyContent={"center"} height="75%" backgroundColor={"#E5ECFF"} borderRadius={20}>
+                    <Box display="flex" flexDir="column" justifyContent="center" height="75%" backgroundColor={"#E5ECFF"} borderRadius={20}>
                         <Heading fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Heading>
 
-                        <Box display="flex" flexDir={"column"} justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="80%" width="90%">
+                        <Box display="flex" flexDir="column" justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="85%" width="90%">
                             {studentTasks.length != 0 ? (
                                 studentTasks.map((task, index) => (
                                     <StudentTaskCard
@@ -159,26 +153,24 @@ function StudentsHomepage() {
                                     />
                                 ))
                             ) : (
-                                <>
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.5 }}
-                                        style={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            width: "100%",
-                                            height: "100%"
-                                        }}
-                                    >
-                                        <Box>
-                                            <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
-                                            <Text>Getting your tasks...</Text>
-                                        </Box>
-                                    </motion.div>
-                                </>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        width: "100%",
+                                        height: "100%",
+                                    }}
+                                >
+                                    <Box>
+                                        <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
+                                        <Text>Getting your tasks...</Text>
+                                    </Box>
+                                </motion.div>
                             )}
                         </Box>
                     </Box>
@@ -187,7 +179,7 @@ function StudentsHomepage() {
 
             <Toaster />
         </>
-    )
+    );
 }
 
 export default StudentsHomepage;
