@@ -45,7 +45,7 @@ function StreakCard({ streak }) {
 
                                 <DialogBody>
                                     <Box display="flex" justifyContent="center" alignItems="center" flexDir="column">
-                                        <MiniCalendar />
+                                        <MiniCalendar streak={streak} />
                                     </Box>
                                 </DialogBody>
 
