@@ -19,7 +19,7 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
         lastClaimedStreakDate = new Date(lastClaimedStreak).toISOString().split('T')[0];
     }
 
-    const remainingStreaks = streak % 7;
+    const remainingStreaks = streak >= 7 ? streak % 7 : 7 - streak;
     const isClaimable = (remainingStreaks === 0) && (lastClaimedStreakDate !== today);
 
     const handleAwardGift = () => {
