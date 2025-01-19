@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import dayjs from 'dayjs';
 import isBetweenPlugin from 'dayjs/plugin/isBetween';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -37,11 +38,11 @@ const CustomPickersDay = styled(PickersDay, {
     return day.isSame(dayjs(), 'week');
   }
   
-  function MiniCalendar() {
+  function MiniCalendar({ streak }) {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DateCalendar']}>
-          <DemoItem>
+          <DemoItem label={`Your current streak: ${streak}`}>
             <DateCalendar
               slots={{
                 day: (dayProps) => (
