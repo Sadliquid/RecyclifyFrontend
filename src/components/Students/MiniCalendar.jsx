@@ -14,24 +14,23 @@ const CustomPickersDay = styled(PickersDay, {
     shouldForwardProp: (prop) => prop !== 'isSelected',
   })(({ isSelected, isToday, isDisabled }) => ({
     ...(isSelected && {
-      backgroundColor: isToday ? '#CCAC00' : '#E5D200', // Lighter shade for non-today selected days
-      color: '#ffffff',                             // White text for contrast
+      backgroundColor: isToday ? '#CCAC00' : '#E5D200',
+      color: '#ffffff',
       '&:hover, &:focus': {
-        backgroundColor: isToday ? '#b89700' : '#D4C400', // Slightly darker shade for non-today hover/focus
+        backgroundColor: isToday ? '#b89700' : '#D4C400',
       },
     }),
     '&.Mui-selected': {
-      outline: 'none', // Remove the outline from the selected day
+      outline: 'none',
     },
     '&:focus': {
-      outline: 'none', // Remove the outline from the focused day
+      outline: 'none',
     },
     '&.MuiPickersDay-today': {
-      border: '2px solid #3DA287', // Remove the circle outline for the current day
+      border: '2px solid #3DA287',
     },
-    pointerEvents: isDisabled ? 'none' : 'auto', // Disable pointer events (clicks) if isDisabled is true
-    // Avoid using opacity, and visually indicate disabled days with a text color change
-    color: isSelected ? 'white' : '#B0B0B0', // Lighter color for disabled days
+    pointerEvents: isDisabled ? 'none' : 'auto',
+    color: isSelected ? 'white' : '#B0B0B0',
 }));
   
   function isInSameWeek(day) {
@@ -49,7 +48,7 @@ const CustomPickersDay = styled(PickersDay, {
                   <CustomPickersDay
                     {...dayProps}
                     isSelected={isInSameWeek(dayProps.day)}
-                    isDisabled={true} // Adjust this based on which dates you want to disable
+                    isDisabled={true}
                   />
                 ),
               }}
