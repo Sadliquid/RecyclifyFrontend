@@ -17,19 +17,21 @@ import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useState } from "react";
 
 function Navbar() {
     const navigate = useNavigate();
 
     const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+    const [sidebar, setSidebar] = useState(null);
 
     function conditionallyRenderSidebar() {
         if (user.userRole === "student") {
-            return <StudentsSidebar />;
+            setSidebar(<StudentsSidebar />);
         } else if (user.userRole === "teacher") {
-            return <TeachersSidebar />;
+            setSidebar(<TeachersSidebar />);
         } else if (user.userRole === "admin") {
-            return <AdminSidebar />;
+            setSidebar(<AdminSidebar />);
         }
     }
 
@@ -37,7 +39,7 @@ function Navbar() {
         if (!error) {
             if (loaded) {
                 if (!user) {
-                    return <LoginSidebar />;
+                    setSidebar(<LoginSidebar />);
                 } else {
                     conditionallyRenderSidebar();
                 }
@@ -283,7 +285,7 @@ function Navbar() {
         <>
             <Flex as="nav" bg="#4DCBA4" w="100%" p="8px 24px 8px 24px" rounded="10px" justify="space-between" align="center" alignItems="center">
 
-                {conditionallyRenderSidebar()}
+                {sidebar}
 
                 <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
                 <Avatar name="Joshua Long" src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
