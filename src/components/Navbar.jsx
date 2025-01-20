@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTrigger } from "@/components/ui/drawer"
 import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
@@ -14,23 +15,37 @@ import { LuNotebookPen } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function Navbar() {
     const navigate = useNavigate();
-    const location = useLocation();
+
+    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
 
     function conditionallyRenderSidebar() {
-        if (location.pathname.startsWith("/student")) {
+        if (user.userRole === "student") {
             return <StudentsSidebar />;
-        } else if (location.pathname.startsWith("/teachers")) {
+        } else if (user.userRole === "teacher") {
             return <TeachersSidebar />;
-        } else if (location.pathname.startsWith("/admin")) {
+        } else if (user.userRole === "admin") {
             return <AdminSidebar />;
-        } else {
-            return <LoginSidebar />;
         }
     }
+
+    useEffect(() => {
+        if (!error) {
+            if (loaded) {
+                if (!user) {
+                    return <LoginSidebar />;
+                } else {
+                    conditionallyRenderSidebar();
+                }
+            }
+        } else {
+            console.log("Error", "An error occured while fetching user state");
+        }
+    }, [loaded]);
 
     // Login Sidebar
     function LoginSidebar() {
