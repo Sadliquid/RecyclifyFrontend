@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { HoverCardArrow, HoverCardContent, HoverCardRoot, HoverCardTrigger } from "@/components/ui/hover-card"
 import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
 import { CloseButton } from "@/components/ui/close-button";
-import { Box, Text, Button } from '@chakra-ui/react';
-import { FaCamera } from 'react-icons/fa';
+import { Box, Text, Button, Badge, Stack } from '@chakra-ui/react';
+import { FaCamera, FaExclamationTriangle } from 'react-icons/fa';
 import { useState } from 'react';
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
 import server from "../../../networking";
 
-function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
+function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPoints }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [submissionReady, setSubmissionReady] = useState(false);
 
@@ -38,28 +39,28 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                 const formData = new FormData();
                 formData.append("file", selectedFile);
                 formData.append("taskID", TaskID);
-                formData.append("studentID", "3f9056b0-06e1-487a-8901-586bafd1e492");
-        
+                formData.append("studentID", studentID);
+
                 server.post("/api/student/submit-task", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
                     transformRequest: formData => formData
                 })
-                .then(response => {
-                    if (response.status === 200) {
-                        resolve();
-                    } else {
-                        reject("Unexpected response status: " + response.status);
-                    }
-                })
-                .catch(error => {
-                    const errorMessage = error.response?.data?.error || "An unknown error occurred";
-                    reject(errorMessage);
-                    console.error("ERROR: ", error);
-                });
+                    .then(response => {
+                        if (response.status === 200) {
+                            resolve();
+                        } else {
+                            reject("Unexpected response status: " + response.status);
+                        }
+                    })
+                    .catch(error => {
+                        const errorMessage = error.response?.data?.error || "An unknown error occurred";
+                        reject(errorMessage);
+                        console.error("ERROR: ", error);
+                    });
             });
-        
+
             toaster.promise(promise, {
                 loading: { title: "Uploading...", description: "Please wait" },
                 success: {
@@ -80,62 +81,71 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                style={{ 
+                style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    position: "relative", // For positioning elements inside
                     width: "100%",
                     height: "29%",
                     borderRadius: 20,
-                    padding: 5,
+                    padding: 3,
                     border: "3px solid #4DCBA4",
                     backgroundColor: "#F1F6FF"
                 }}
             >
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    minWidth="50px"
-                    height="50px"
-                    borderRadius="full"
-                    backgroundColor="#4DCBA4"
-                    color="white"
-                    fontWeight="bold"
-                    fontSize="16px"
-                    ml={5}
-                >
-                    +{TaskPoints}
-                </Box>
-
-                <Box flex="1" textAlign="left" mx="10px">
+                <Box flex="1" textAlign="left" mx="10px" maxWidth="100%">
                     <Text fontSize="18px" fontWeight="bold" color="black">
                         {TaskTitle}
                     </Text>
+
+                    <Text
+                        fontSize="14px"
+                        color="gray.600"
+                        ml={0.5}
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        maxWidth="90%"
+                        display="block"
+                        mb={1}
+                    >
+                        {TaskDescription}
+                    </Text>
+
+                    <Badge colorPalette="green" mt={3} ml={-1}>
+                        +{TaskPoints} leafs
+                    </Badge>
                 </Box>
 
                 <DialogRoot placement={"center"} motionPreset="slide-in-bottom">
                     <DialogTrigger asChild>
-                        <Box
+                        <Badge
+                            position="absolute"
+                            bottom="5px"
+                            right="5px"
                             display="flex"
                             justifyContent="center"
                             alignItems="center"
-                            width="50px"
-                            height="50px"
-                            borderRadius="full"
+                            cursor="pointer"
+                            color="white"
                             backgroundColor="#4DCBA4"
                             _hover={{ backgroundColor: "#3DAF8B" }}
-                            cursor="pointer"
-                            transition={"all 0.2s"}
-                            mr={5}
+                            fontSize="12px"
+                            fontWeight="bold"
+                            px={3}
+                            py={2}
+                            borderRadius="full"
                         >
-                            <Text as={FaCamera} color="white" boxSize={6} />
-                        </Box>
+                            <FaCamera style={{ marginRight: "5px" }} />
+                            Verify
+                        </Badge>
                     </DialogTrigger>
 
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Submit task for verification</DialogTitle>
+                            <DialogTitle>Verify task completion</DialogTitle>
+                            <Text mt={2} ml={0.5} fontStyle={"italic"}>{TaskDescription}</Text>
                         </DialogHeader>
 
                         <DialogBody>
@@ -161,12 +171,44 @@ function StudentTaskCard({ TaskID, TaskTitle, TaskPoints }) {
                         </DialogBody>
 
                         <DialogFooter>
-                        <DialogActionTrigger asChild>
-                            <Box display="flex" gap="10px">
-                                <Button variant="outline">Cancel</Button>
-                                <Button backgroundColor={"black"} onClick={handleSubmitTask} disabled={!submissionReady}>Save</Button>
-                            </Box>
-                        </DialogActionTrigger>
+                            <DialogActionTrigger asChild>
+                                <Box display="flex" gap="10px">
+                                    <Button variant="outline">Cancel</Button>
+                                    {submissionReady ? (
+                                        <Button backgroundColor={"black"} onClick={handleSubmitTask}>
+                                            Save
+                                        </Button>
+                                    ) : (
+                                        <HoverCardRoot size="sm">
+                                            <HoverCardTrigger asChild>
+                                            <Button backgroundColor={"black"} onClick={handleSubmitTask} disabled>
+                                                Save
+                                            </Button>
+                                            </HoverCardTrigger>
+                                            <HoverCardContent>
+                                                <HoverCardArrow />
+                                                <Stack gap="4" direction="row">
+                                                <Text
+                                                    as={FaExclamationTriangle}
+                                                    size="40px"
+                                                    color={"orange"}
+                                                />
+                                                <Stack gap="3">
+                                                    <Stack gap="1">
+                                                    <Text textStyle="sm" fontWeight="semibold">
+                                                        You are not ready to submit!
+                                                    </Text>
+                                                    <Text textStyle="sm" color="fg.muted" ml={0.5}>
+                                                        Please upload an image file first.
+                                                    </Text>
+                                                    </Stack>
+                                                </Stack>
+                                                </Stack>
+                                            </HoverCardContent>
+                                        </HoverCardRoot>
+                                    )}
+                                </Box>
+                            </DialogActionTrigger>
                         </DialogFooter>
 
                         <DialogCloseTrigger />
