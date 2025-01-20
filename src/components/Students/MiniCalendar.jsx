@@ -12,24 +12,21 @@ dayjs.extend(isBetweenPlugin);
 
 const CustomPickersDay = styled(PickersDay, {
 	shouldForwardProp: (prop) => prop !== 'isSelected',
-})(({ isSelected, isToday, isDisabled }) => ({
+})(({ isSelected, isToday }) => ({
 	...(isSelected && {
 		backgroundColor: isToday ? '#CCAC00' : '#E5D200',
 		color: '#ffffff',
-		'&:hover, &:focus': {
-			backgroundColor: isToday ? '#b89700' : '#D4C400',
-		},
 	}),
 	'&.Mui-selected': {
 		outline: 'none',
 	},
-	'&:focus': {
-		outline: 'none',
+	'&:focus, &:hover': {
+		backgroundColor: isSelected ? (isToday ? '#CCAC00' : '#E5D200') : 'transparent',
 	},
 	'&.MuiPickersDay-today': {
 		border: '2px solid #3DA287',
 	},
-	pointerEvents: isDisabled ? 'none' : 'auto',
+	pointerEvents: 'none',
 	color: isSelected ? 'white' : '#B0B0B0',
 }));
 
@@ -50,10 +47,11 @@ function MiniCalendar({ streak }) {
                                 <CustomPickersDay
                                     {...dayProps}
                                     isSelected={isHighlighted(dayProps.day, streak)}
-                                    isDisabled={false}
+                                    isDisabled={true}
                                 />
                             ),
                         }}
+						readOnly
                     />
                 </DemoItem>
             </DemoContainer>
