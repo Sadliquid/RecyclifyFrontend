@@ -25,10 +25,7 @@ function StudentDashboard({ classData }) {
         try {
             const response = await server.get(`/api/Teacher/get-students/?classID=${classData.classID}`);
             if (response.status === 200) {
-                setStudents(Array.isArray(response.data) ? response.data : []);
-            } else {
-                console.error("Failed to fetch students", response.data);
-                setStudents([]);
+                setStudents(Array.isArray(response.data.data) ? response.data.data : []);
             }
         } catch (error) {
             console.error("Error fetching students:", error);
@@ -50,10 +47,6 @@ function StudentDashboard({ classData }) {
             if (response.status === 200) {
                 console.log("Student successfully deleted.");
                 await fetchStudents();
-            } else if (response.status === 404) {
-                console.error("Student not found.", response.data);
-            } else {
-                console.error("Failed to delete student.", response.data);
             }
         } catch (error) {
             console.error("Error deleting student.", error.message);
@@ -126,9 +119,6 @@ function StudentDashboard({ classData }) {
                 console.log('Student successfully updated.');
                 await fetchStudents(); // Refresh the students list
                 setOpen(false);
-            } else {
-                console.error('Failed to update student');
-                setOpen(true);
             }
         } catch (error) {
             console.error('Error updating student.');

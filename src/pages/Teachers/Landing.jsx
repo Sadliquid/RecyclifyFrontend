@@ -20,11 +20,8 @@ function Landing() {
         try {
             const response = await server.get(`/api/Teacher/get-classes/?teacherID=${teacherID}`);
             if (response.status === 200) {
-                setClasses(Array.isArray(response.data) ? response.data : []);
-            } else {
-                console.error("Failed to fetch classes.", response.data);
-                setClasses([]);
-            }
+                setClasses(Array.isArray(response.data.data) ? response.data.data : []);
+            } 
         } catch (error) {
             console.error("Error fetching classes:", error);
             setClasses([]);
@@ -58,11 +55,7 @@ function Landing() {
             if (response.status === 200) {
                 console.log("Class deleted successfully.");
                 fetchClasses();
-            } else if (response.status === 404) {
-                console.error("Class not found:", response.data);
-            } else {
-                console.error("Failed to delete class:", response.data);
-            }
+            } 
         } catch (error) {
             console.error("Error deleting class:", error);
         }
@@ -81,10 +74,6 @@ function Landing() {
             if (response.status === 200) {
                 console.log("Class updated successfully.");
                 fetchClasses();
-            } else if (response.status === 404) {
-                console.error("Class not found:", response.data);
-            } else {
-                console.error("Failed to update class:", response.data);
             }
         } catch (error) {
             console.error("Error updating class:", error);
@@ -105,11 +94,7 @@ function Landing() {
                 // Reload the class list to include the newly created class
                 fetchClasses();
                 console.log("Class added successfully.");
-            } else if (response.status === 404) {
-                console.error("Class not found:", response.data);
-            } else {
-                console.error("Failed to add class:", response.data);
-            }
+            } 
         } catch (error) {
             console.error("Error adding class:", error);
         }

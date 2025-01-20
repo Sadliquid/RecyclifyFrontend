@@ -18,11 +18,8 @@ function ClassTabs({ classData }) {
         try {
             const response = await server.get(`/api/Teacher/get-students/?classId=${classData.classID}`);
             if (response.status === 200) {
-                setStudents(response.data);
-            } else {
-                console.error("Failed to fetch students", response.data);
-                setStudents([]);
-            }
+                setStudents(response.data.data);
+            } 
         } catch (error) {
             console.error("Error fetching students:", error);
             setStudents([]);
