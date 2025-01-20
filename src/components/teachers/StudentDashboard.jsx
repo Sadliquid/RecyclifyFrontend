@@ -149,7 +149,7 @@ function StudentDashboard({ classData }) {
                     <Table.Root size="sm" stickyHeader>
                         <Table.Header>
                             <Table.Row bg="bg.subtle">
-                                <Table.ColumnHeader>Studnet Name</Table.ColumnHeader>
+                                <Table.ColumnHeader>Student Name</Table.ColumnHeader>
                                 <Table.ColumnHeader>Current Points</Table.ColumnHeader>
                                 <Table.ColumnHeader>Total Points</Table.ColumnHeader>
                                 <Table.ColumnHeader>Redemptions</Table.ColumnHeader>
