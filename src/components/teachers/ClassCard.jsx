@@ -27,7 +27,9 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     const validateClassName = (value) => {
         const isValid = /^\d*$/.test(value);
         if (!isValid) {
-            setError('Class name must contain only numbers.');
+            setError(' Class name must contain only numbers.');
+        }  else if (value.length > 8) {
+            setError(" Class name cannot be more than 8 characters.");
         } else {
             setError('');
         }
