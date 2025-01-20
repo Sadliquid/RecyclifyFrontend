@@ -156,6 +156,8 @@ function StudentsHomepage() {
                                         TaskTitle={task.taskTitle}
                                         TaskDescription={task.taskDescription}
                                         TaskPoints={task.taskPoints}
+                                        VerificationPending={task.verificationPending}
+                                        TaskVerified={task.taskVerified}
                                     />
                                 ))
                             ) : (
