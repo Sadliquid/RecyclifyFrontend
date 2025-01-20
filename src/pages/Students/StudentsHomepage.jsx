@@ -130,7 +130,7 @@ function StudentsHomepage() {
                                     <StreakCard streak={studentProfile.streak} />
                                 </Box>
 
-                                <Box width="49%" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto" boxSizing={"border-box"}>
+                                <Box width="49%" backgroundColor="white" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto" boxSizing={"border-box"}>
                                     <StreakRewardCard studentID={user.id} streak={studentProfile.streak} lastClaimedStreak={studentProfile.lastClaimedStreak} updateStudentPoints={updateStudentPoints} />
                                 </Box>
                             </Box>

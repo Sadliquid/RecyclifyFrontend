@@ -1,11 +1,20 @@
 /* eslint-disable react/prop-types */
-import { Box, Text, Flex, Image } from '@chakra-ui/react';
+import { Box, Text, Flex, Image, Spinner } from '@chakra-ui/react';
 import { FaLeaf } from 'react-icons/fa';
 import { Avatar } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 
 function StudentProfileCard({ user, studentProfile }) {
     var validProp = studentProfile && Object.keys(studentProfile).length > 0;
+
+    if (!user || !studentProfile || !validProp) {
+        return (
+            <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
+                <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
+                <Text>Getting your info...</Text>
+            </Box>
+        )
+    }
 
     if (validProp) return (
         <>

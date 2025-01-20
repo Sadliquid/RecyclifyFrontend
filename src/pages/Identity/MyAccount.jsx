@@ -116,16 +116,20 @@ function MyAccount() {
         navigate("/auth/login")
     }
 
+    useEffect(() => {
+        if (loaded) {
+            if (!accountInfo) {
+                return <Text>Loading...</Text>;
+            }
+        }
+    }, [loaded]);
+
     if (error) {
         console.log(error)
         return <Text>{error}</Text>;
     }
 
-    if (!accountInfo) {
-        return <Text>Loading...</Text>;
-    }
-
-    return (
+    if (accountInfo) return (
         <Box>
             <Heading as="h2" size="lg">My Account</Heading>
             <Box mt={4}>
