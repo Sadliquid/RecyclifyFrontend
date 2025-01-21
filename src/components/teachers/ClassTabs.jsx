@@ -78,7 +78,7 @@ function ClassTabs({ classData }) {
                             <PiStudentFill />Students Dashboard
                         </Tabs.Trigger>
                     </Tabs.List>
-                    <ClassDashboard />
+                    <ClassDashboard classData={classData} />
                     <StudentDashboard classData={classData} />
                 </Tabs.Root>
             )}
