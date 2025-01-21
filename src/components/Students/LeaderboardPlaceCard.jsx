@@ -18,9 +18,9 @@ function LeaderboardPlaceCard({ rank, student }) {
                 <Text fontSize="lg" fontWeight="bold">{rank}</Text>
             </Box>
 
-            <Box display="flex" alignItems="center" justifyContent="center" width="30%">
+            <Box display="flex" alignItems="center" justifyContent="flex-start" width="30%">
                 <Avatar src={"https://bit.ly/dan-abramov"} boxSize="40px" mr={2} />
-                <Text fontSize="md" fontWeight="bold">
+                <Text fontSize="md" fontWeight="bold" textAlign="left">
                     {student.name}
                 </Text>
             </Box>

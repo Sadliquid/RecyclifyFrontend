@@ -69,7 +69,16 @@ function Leaderboards() {
                         </Box>
                     </Box>
 
-                    <Box display="flex" flexDir={"column"} alignItems={"center"} width="70%" backgroundColor="#E5ECFF" borderRadius={20}>
+                    <Box
+                        display="flex"
+                        flexDir={"column"}
+                        alignItems={"center"}
+                        width="70%"
+                        backgroundColor="#E5ECFF"
+                        borderRadius={20} 
+                        overflowY="auto"
+                        padding={4}
+                    >
                         <HStack
                             mt={2}
                             display="flex"
@@ -85,7 +94,7 @@ function Leaderboards() {
                                 <Text fontSize="md">Rank</Text>
                             </Box>
 
-                            <Box display="flex" alignItems="center" justifyContent="center" width="30%">
+                            <Box display="flex" alignItems="center" justifyContent="flex-start" width="30%">
                                 <Text fontSize="md">Name</Text>
                             </Box>
 
