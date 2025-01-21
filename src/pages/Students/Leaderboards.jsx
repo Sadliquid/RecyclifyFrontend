@@ -10,31 +10,60 @@ import { motion } from 'framer-motion';
 
 function Leaderboards() {
     const [allStudents, setAllStudents] = useState([]);
-    const { user, loaded, error } = useSelector((state) => state.auth);
     const [studentsFetched, setStudentsFetched] = useState(false)
+    const [sessionStudent, setSessionStudent] = useState(null);
+    const [timeLeft, setTimeLeft] = useState("");
+
+    const { user, loaded, error } = useSelector((state) => state.auth);
+
     const fetchAllStudents = async (studentID) => {
-            try {
-                const response = await server.get(`/api/student/get-all-students?studentID=${studentID}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-    
-                if (response.status == 200) {
-                    setAllStudents(response.data.data);
-                    setStudentsFetched(true)
-                }
-            } catch (error) {
-                console.error("Failed to fetch student data for leaderboards:", error);
+        try {
+            const response = await server.get(`/api/student/get-all-students?studentID=${studentID}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.status == 200) {
+                console.log(response.data.data)
+                setAllStudents(response.data.data);
+                setStudentsFetched(true)
+                setSessionStudent(response.data.data.find(student => student.studentID == user.id))
             }
+        } catch (error) {
+            console.error("Failed to fetch student data for leaderboards:", error);
         }
+    }
+
+    const calculateTimeLeft = () => {
+        const now = new Date();
+        const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (7 - now.getDay()), 23, 59, 59);
+        const difference = endOfWeek - now;
+    
+        if (difference > 0) {
+            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((difference / (1000 * 60)) % 60);
+            const seconds = Math.floor((difference / 1000) % 60);
+            setTimeLeft(`${hours} Hours, ${minutes} Minutes and ${seconds}s`);
+        } else {
+            setTimeLeft("0 Hours, 0 Minutes and 0s");
+        }
+    };
+
+    useEffect(() => {
+        calculateTimeLeft();
+        const timer = setInterval(calculateTimeLeft, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
     
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "student") {
             fetchAllStudents(user.id);
         }
     }, [loaded]);
-    if (studentsFetched) return (
+
+    if (studentsFetched && user != null && sessionStudent != null) return (
         <Box display="flex" justifyContent={"center"} flexDir="column" mt={10} width={"100%"}>
             <Heading fontSize="30px">Leaderboards</Heading>
 
@@ -47,25 +76,25 @@ function Leaderboards() {
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="28%">
                         <Box display="flex" flexDir={"column"} justifyContent={"space-around"} alignItems={"center"} backgroundColor="#E5ECFF" borderRadius={20} height="85%" padding={2}>
                             <Avatar boxSize="150px" src="https://bit.ly/dan-abramov" />
-                            <Heading fontSize={"30px"} mt={2}>Liew Jun Han</Heading>
-                            <Heading color="#2CD776">500 Leafs</Heading>
+                            <Heading fontSize={"30px"} mt={2}>{user.name}</Heading>
+                            <Heading color="#2CD776">{sessionStudent.totalPoints} Leafs</Heading>
                             <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} height="20%" mt={2} padding={5}>
                                 <Box mr={2}>
                                     <Image src="/silver-medal.png" boxSize={10} mt={2} />
                                 </Box>
 
                                 <Box display="flex" flexDir={"column"} ml={2} >
-                                    <Text textAlign={"left"} fontSize={"md"}>Silver League</Text>
-                                    <Text textAlign={"left"} fontSize={"sm"}>2nd Place</Text>
+                                    <Text textAlign={"left"} fontSize={"md"}>{sessionStudent.league} League</Text>
+                                    <Text textAlign={"left"} fontSize={"sm"}>{sessionStudent.leagueRank == 1 ? "1st" : sessionStudent.leagueRank == 2 ? "2nd" : sessionStudent.leagueRank == 3 ? "3rd" : sessionStudent.leagueRank + "th"} place</Text>
                                 </Box>
                             </Box>
 
-                            <Text fontFamily={"Lilita One"} color={"charcoal"}>Finish in the top 3 weekly to advance to the Gold League!</Text>
+                            <Text fontFamily={"Lilita One"} color={"#BFA428"}>Top 3 finalists {sessionStudent.league == "Bronze" ? "advance to the Silver" : sessionStudent.league == "Silver" ? "advance to the Gold" : "keep their places in the Gold"} league!</Text>
                         </Box>
 
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} backgroundColor="#4DCBA4" borderRadius={20} height="13%">
-                            <Text as={LuTimer} fontSize="40px" color={"white"} mr={2} />
-                            <Heading fontSize={"20px"} color="white" ml={2}>2 Days, 8 Hours Left</Heading>
+                        <Box display="flex" justifyContent={"center"} flexDir={"column"} alignItems={"center"} backgroundColor="#4DCBA4" borderRadius={20} height="13%">
+                            <Text fontFamily={"Lilita One"} color="white">League ends in</Text>
+                            <Heading fontSize={"18px"} color="white" ml={2}>{timeLeft}</Heading>
                         </Box>
                     </Box>
 
