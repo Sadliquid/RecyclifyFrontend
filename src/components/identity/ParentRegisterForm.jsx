@@ -45,8 +45,6 @@ function ParentRegistrationForm({ goBack }) {
     const handleSubmit = async (values) => {
         try {
             const response = await server.post("/api/Identity/createAccount", values);
-            console.log(response)
-            console.log(response.data.message)
             const rawResponseMessage = response.data.message;
             if (rawResponseMessage.startsWith("SUCCESS")) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
@@ -64,7 +62,6 @@ function ParentRegistrationForm({ goBack }) {
             const rawErrorMessage = err.response.data.error;
             if (rawErrorMessage.startsWith("UERROR")) {
                 const errorMessage = rawErrorMessage.substring("UERROR: ".length).trim()
-                console.log(errorMessage);
                 if (errorMessage === "Username must be unique.") {
                     formik.setFieldError('name', 'Username already exists');
                 } 
