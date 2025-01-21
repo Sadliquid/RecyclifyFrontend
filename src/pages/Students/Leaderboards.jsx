@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Heading, Text, Image, HStack } from '@chakra-ui/react';
 import { Avatar } from "@/components/ui/avatar";
-import { LuTimer } from 'react-icons/lu';
 import LeaderboardPlaceCard from '../../components/Students/LeaderboardPlaceCard';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -80,7 +79,7 @@ function Leaderboards() {
                             <Heading color="#2CD776">{sessionStudent.totalPoints} Leafs</Heading>
                             <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} height="20%" mt={2} padding={5}>
                                 <Box mr={2}>
-                                    <Image src="/silver-medal.png" boxSize={10} mt={2} />
+                                    <Image src={sessionStudent.league === "Bronze" ? "/bronze-medal.png" : sessionStudent.league === "Silver" ? "/silver-medal.png" : "/gold-medal.png"} boxSize={10} mt={2}/>
                                 </Box>
 
                                 <Box display="flex" flexDir={"column"} ml={2} >
