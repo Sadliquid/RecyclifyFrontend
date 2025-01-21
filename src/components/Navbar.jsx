@@ -22,8 +22,8 @@ import { useState } from "react";
 function Navbar() {
     const navigate = useNavigate();
 
-    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
-    const [sidebar, setSidebar] = useState(null);
+    const { user, loaded, error } = useSelector((state) => state.auth);
+    const [sidebar, setSidebar] = useState(<LoginSidebar />);
 
     function conditionallyRenderSidebar() {
         if (user.userRole === "student") {
@@ -38,9 +38,7 @@ function Navbar() {
     useEffect(() => {
         if (!error) {
             if (loaded) {
-                if (!user) {
-                    setSidebar(<LoginSidebar />);
-                } else {
+                if (user) {
                     conditionallyRenderSidebar();
                 }
             }
