@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
-import { Toaster, toaster } from "@/components/ui/toaster"
+import { toaster } from "@/components/ui/toaster"
 import { PasswordInput } from "@/components/ui/password-input"
 import { InputGroup } from "@/components/ui/input-group";
 import { Field } from "@/components/ui/field";
