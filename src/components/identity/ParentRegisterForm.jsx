@@ -1,6 +1,7 @@
 import { useState } from "react"
 import * as Yup from "yup"
 import { useFormik } from 'formik';
+import { toaster } from "@/components/ui/toaster"
 import { VStack, Box, Button, Input, Text, Flex } from "@chakra-ui/react"
 import { InputGroup } from "@/components/ui/input-group"
 import { LuUser, LuLock, LuIdCard, LuPhone, LuMessageCircle, LuMail } from "react-icons/lu"
@@ -42,30 +43,25 @@ function ParentRegistrationForm({ goBack }) {
     });
 
     const handleSubmit = async (values) => {
-        console.log(formik.values);
         try {
             const response = await server.post("/api/Identity/createAccount", values);
-            console.log(response);
-            console.log(response.data);
-    
-            if (response.data.message) {
-                // Success message
-                console.log(response.data.message);  // SUCCESS or other info
-            }
-            
-            if (response.data.token) {
-                // Do something with the token if necessary
-                console.log(response.data.token);
-            }
-    
-            if (response.data.user) {
-                // Handle the user data if necessary
-                console.log(response.data.user);
+            console.log(response)
+            console.log(response.data.message)
+            const rawResponseMessage = response.data.message;
+            if (rawResponseMessage.startsWith("SUCCESS")) {
+                const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
+                if (responseMessage === "Account created successfully.") {
+                    toaster.create({
+                        title: "Account Created!",
+                        description: "Please verify your email.",
+                        type: "success",
+                        duration: 3000
+                    })
+                    navigate("/auth/emailVerification")
+                }
             }
         } catch (err) {
             const rawErrorMessage = err.response.data.error;
-            console.log(rawErrorMessage);
-            console.log(rawErrorMessage.startsWith("UERROR"))
             if (rawErrorMessage.startsWith("UERROR")) {
                 const errorMessage = rawErrorMessage.substring("UERROR: ".length).trim()
                 console.log(errorMessage);
@@ -81,8 +77,20 @@ function ParentRegistrationForm({ goBack }) {
                 if (errorMessage === "Invalid student ID.") {
                     formik.setFieldError('studentID', 'Invalid StudentID');
                 }
+                toaster.create({
+                    title: "Invalid Input.",
+                    description: errorMessage,
+                    type: "error",
+                    duration: 3000
+                })
             } else {
                 console.log(err)
+                toaster.create({
+                    title: "Something went wrong.",
+                    description: "Please try again later.",
+                    type: "error",
+                    duration: 3000
+                })
             }
         }
     }
