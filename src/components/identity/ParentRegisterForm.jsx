@@ -1,10 +1,9 @@
-import { useState } from "react"
 import * as Yup from "yup"
 import { useFormik } from 'formik';
 import { toaster } from "@/components/ui/toaster"
 import { VStack, Box, Button, Input, Text, Flex } from "@chakra-ui/react"
 import { InputGroup } from "@/components/ui/input-group"
-import { LuUser, LuLock, LuIdCard, LuPhone, LuMessageCircle, LuMail } from "react-icons/lu"
+import { LuUser, LuLock, LuIdCard, LuPhone, LuMail } from "react-icons/lu"
 import { useNavigate } from "react-router-dom";
 import { PasswordInput } from "@/components/ui/password-input"
 import server from "../../../networking"

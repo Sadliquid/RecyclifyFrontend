@@ -1,12 +1,104 @@
 import { useNavigate } from 'react-router-dom'
-import React from "react"
-import { VStack, Box, Button, Input, Text, Link, Flex, Group, InputAddon, } from "@chakra-ui/react"
+import * as Yup from "yup"
+import { useFormik } from 'formik';
+import { toaster } from "@/components/ui/toaster"
+import { VStack, Box, Button, Input, Text, Flex, } from "@chakra-ui/react"
+import { LuUser, LuLock, LuIdCard, LuPhone, LuMail } from "react-icons/lu"
 import { InputGroup } from "@/components/ui/input-group"
-import { LuUser, LuMail, LuLock, LuPhone } from "react-icons/lu"
 import { PasswordInput } from "@/components/ui/password-input"
+import server from "../../../networking"
 
-function ParentRegistrationForm({ goBack }) {
+function StudentRegistrationForm({ goBack }) {
     const navigate = useNavigate();
+
+    // Validation schema using Yup
+    const validationSchema = Yup.object().shape({
+        fname: Yup.string()
+            .matches(/^[a-zA-Z\s]*$/, 'First Name cannot contain numbers')
+            .required('First Name is required'),
+        lname: Yup.string()
+            .matches(/^[a-zA-Z\s]*$/, 'Last Name cannot contain numbers')
+            .required('Last Name is required'),
+        name: Yup.string()
+            .matches(/^\S*$/, 'Username cannot contain spaces')
+            .required('Username is required'),
+        email: Yup.string()
+            .matches(/^\d{6}[A-Za-z]$/, "Email must be prefixed with student admin number")
+            .required("Email is required"),
+        contactNumber: Yup.string()
+            .matches(/^\d+$/, "Contact must be a valid number")
+            .required("Contact is required"),
+        password: Yup.string()
+            .min(8, "Password must be at least 8 characters")
+            .required("Password is required"),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref("password"), null], "Passwords must match")
+            .required("Confirm Password is required"),
+    });
+
+    // Form submission handler
+    const handleSubmit = async (values) => {
+        try {
+            const response = await server.post("/api/Identity/createAccount", values);
+            const rawResponseMessage = response.data.message;
+            if (rawResponseMessage.startsWith("SUCCESS")) {
+                const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
+                if (responseMessage === "Account created successfully.") {
+                    toaster.create({
+                        title: "Account Created!",
+                        description: "Please verify your email.",
+                        type: "success",
+                        duration: 3000
+                    })
+                    navigate("/auth/emailVerification")
+                }
+            }
+        } catch (err) {
+            const rawErrorMessage = err.response.data.error;
+            if (rawErrorMessage.startsWith("UERROR")) {
+                const errorMessage = rawErrorMessage.substring("UERROR: ".length).trim()
+                if (errorMessage === "Username must be unique.") {
+                    formik.setFieldError('name', 'Username already exists');
+                } 
+                if (errorMessage === "Email must be unique.") {
+                    formik.setFieldError('email', 'Email already exists');
+                } 
+                if (errorMessage === "Contact number must be unique.") {
+                    formik.setFieldError('contactNumber', 'Contact number already exists');
+                } 
+                toaster.create({
+                    title: "Invalid Input.",
+                    description: errorMessage,
+                    type: "error",
+                    duration: 3000
+                })
+            } else {
+                console.log(err)
+                toaster.create({
+                    title: "Something went wrong.",
+                    description: "Please try again later.",
+                    type: "error",
+                    duration: 3000
+                })
+            }
+        }
+    }
+    
+    const formik = useFormik({
+        initialValues: {
+            fname: '',
+            lname: '',
+            name: '',
+            email: '',
+            contactNumber: '',
+            password: '',
+            confirmPassword: '',
+            userRole: 'student',
+            avatar: ''
+        },
+        validationSchema,
+        onSubmit: handleSubmit,
+    });    
     
     return (
         <Flex direction="column" align="center" width="100%" p={4} mt={5}>
@@ -15,43 +107,151 @@ function ParentRegistrationForm({ goBack }) {
                     ← Back
                 </Button>
             </Flex>
-            <Box width="100%" maxWidth="400px">
+            <Box width="100%" as="form" onSubmit={formik.handleSubmit} maxWidth="400px">
                 <VStack gap={4} align="stretch">
-                    <InputGroup 
-                        flex="1" 
-                        startElement={<LuUser />} 
-                    >
-                        <Input placeholder="Name"/>
-                    </InputGroup>                    
-                    <InputGroup
-                        flex="1"
-                        startElement={<LuMail />}
-                        endElement={"@mymail.nyp.edu.sg"}
-                    >
-                        <Input placeholder="Email" type="email"/>
+                    <InputGroup flex="1" startElement={<LuUser />} width="400px">
+                        <Input
+                            placeholder="Username (Display Name)"
+                            name="name"
+                            value={formik.values.name}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
                     </InputGroup>
-                    <InputGroup 
-                        flex="1" 
-                        startElement={<LuPhone />} 
-                        width="400px"
+                    <Text
+                        fontSize={"12px"}
+                        color={"red"}
+                        display={formik.touched.name && formik.errors.name ? "block" : "none"}
+                        mt={"-10px"}
+                        textAlign={"left"}
+                        ml={2}
                     >
-                        <Input placeholder="Contact" type="tel"/>
-                    </InputGroup>
-                    <InputGroup 
-                        flex="1" 
-                        startElement={<LuLock />} 
-                        width="400px"
-                    >
-                        <PasswordInput placeholder="Password" type="password" />
-                    </InputGroup>
-                    <InputGroup 
-                        flex="1" 
-                        startElement={<LuLock />} 
-                        width="400px"
-                    >
-                        <Input placeholder="Confirm Password" type="password" />
-                    </InputGroup>
+                        {formik.errors.name}
+                    </Text>
 
+                    <InputGroup flex="1" startElement={<LuIdCard />} width="400px">
+                        <Input
+                            placeholder="First Name"
+                            name="fname"
+                            value={formik.values.fname}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                    </InputGroup>
+                    <Text
+                        fontSize={"12px"}
+                        color={"red"}
+                        display={formik.touched.fname && formik.errors.fname ? "block" : "none"}
+                        mt={"-10px"}
+                        textAlign={"left"}
+                        ml={2}
+                    >
+                        {formik.errors.fname}
+                    </Text>
+
+                    <InputGroup flex="1" startElement={<LuIdCard />} width="400px">
+                        <Input
+                            placeholder="Last Name"
+                            name="lname"
+                            value={formik.values.lname}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                    </InputGroup>
+                    <Text
+                        fontSize={"12px"}
+                        color={"red"}
+                        display={formik.touched.lname && formik.errors.lname ? "block" : "none"}
+                        mt={"-10px"}
+                        textAlign={"left"}
+                        ml={2}
+                    >
+                        {formik.errors.lname}
+                    </Text>
+
+                    <InputGroup flex="1" startElement={<LuMail />} width="400px" endElement={"@mymail.nyp.edu.sg"}>
+                        <Input
+                            placeholder="Email"
+                            name="email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                    </InputGroup>
+                    <Text
+                        fontSize={"12px"}
+                        color={"red"}
+                        display={formik.touched.email && formik.errors.email ? "block" : "none"}
+                        mt={"-10px"}
+                        textAlign={"left"}
+                        ml={2}
+                    >
+                        {formik.errors.email}
+                    </Text>
+
+                    <InputGroup flex="1" startElement={<LuPhone />} width="400px">
+                        <Input
+                            placeholder="Contact"
+                            type="tel"
+                            name="contactNumber"
+                            value={formik.values.contactNumber}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                    </InputGroup>
+                    <Text
+                        fontSize={"12px"}
+                        color={"red"}
+                        display={formik.touched.contactNumber && formik.errors.contactNumber ? "block" : "none"}
+                        mt={"-10px"}
+                        textAlign={"left"}
+                        ml={2}
+                    >
+                        {formik.errors.contactNumber}
+                    </Text>
+
+                    <InputGroup flex="1" startElement={<LuLock />} width="400px">
+                        <PasswordInput
+                            placeholder="Password"
+                            type="password"
+                            name="password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                    </InputGroup>
+                    <Text
+                        fontSize={"12px"}
+                        color={"red"}
+                        display={formik.touched.password && formik.errors.password ? "block" : "none"}
+                        mt={"-10px"}
+                        textAlign={"left"}
+                        ml={2}
+                    >
+                        {formik.errors.password}
+                    </Text>
+
+                    <InputGroup flex="1" startElement={<LuLock />} width="400px">
+                        <PasswordInput
+                            placeholder="Confirm Password"
+                            type="password"
+                            name="confirmPassword"
+                            value={formik.values.confirmPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                    </InputGroup>
+                    <Text
+                        fontSize={"12px"}
+                        color={"red"}
+                        display={formik.touched.confirmPassword && formik.errors.confirmPassword ? "block" : "none"}
+                        mt={"-10px"}
+                        textAlign={"left"}
+                        ml={2}
+                    >
+                        {formik.errors.confirmPassword}
+                    </Text>
+                
                     <Button
                         variant="solid"
                         background="#2D65FF"
@@ -61,9 +261,7 @@ function ParentRegistrationForm({ goBack }) {
                         borderRadius={30}
                         mt={5}
                         alignSelf="center"
-                        onClick={() => {
-                            navigate("/auth/emailVerification");
-                        }}
+                        isLoading={formik.isSubmitting}
                     >
                         Get Started!
                     </Button>
@@ -73,4 +271,4 @@ function ParentRegistrationForm({ goBack }) {
     );
 }
 
-export default ParentRegistrationForm
+export default StudentRegistrationForm;
