@@ -57,7 +57,7 @@ function Leaderboards() {
                         </Box>
 
                         <Box width="20%" textAlign="center">
-                            <Text fontSize="md">Status</Text>
+                            <Text fontSize="md">League</Text>
                         </Box>
 
                         <Box
@@ -66,7 +66,7 @@ function Leaderboards() {
                             justifyContent="center"
                             alignItems="center"
                         >
-                            <Text fontSize="md">Badge</Text>
+                            <Text fontSize="md">Streak</Text>
                         </Box>
                     </HStack>
 
@@ -97,7 +97,7 @@ function Leaderboards() {
                             </Box>
 
                             <Box width="20%" textAlign="center">
-                                <Text fontSize="md">Unregistered</Text>
+                                <Text fontSize="md">Bronze</Text>
                             </Box>
 
                             <Box
