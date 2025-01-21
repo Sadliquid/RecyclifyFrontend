@@ -7,11 +7,13 @@ import { Text, VStack } from '@chakra-ui/react';
 import { LuBox } from "react-icons/lu"
 import server from "../../../networking"
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 function ClassTabs({ classData }) {
 
     // Initialize dummy students data state
     const [students, setStudents] = useState([]);
+    const { user, loaded, error } = useSelector((state) => state.auth);
 
     // Fetch students data from the backend
     const fetchStudents = async () => {
@@ -27,10 +29,18 @@ function ClassTabs({ classData }) {
     };
 
     useEffect(() => {
-        if (classData.classID) {
-            fetchStudents();
+        if (!error) {
+            if (loaded) {
+                if (!user || user.userRole != "teacher") {
+                    navigate("/auth/login");
+                } else {
+                    fetchStudents();
+                }
+            }
+        } else {
+            console.log("Error", "An error occured while fetching user state");
         }
-    }, [classData.classID]);
+    }, [loaded && classData.classID]);
 
     return (
         <>
