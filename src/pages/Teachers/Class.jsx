@@ -25,10 +25,6 @@ function Class() {
         }
     };
 
-    useEffect(() => {
-        if (id) fetchClassData();
-    }, [id]);
-
     // Fetch class data on component mount
     useEffect(() => {
         if (!error) {
