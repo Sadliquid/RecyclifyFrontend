@@ -27,7 +27,10 @@ function ClassDashboard(classData) {
                                 <Flex w="30%" h="100%" gap={4} direction="column" >
                                     {/* Total Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
-                                        Total Class Clovers
+                                        <Flex direction="column" textAlign="left" gap={5} w="90%" h="90%" p={2} >
+                                        <Box w="100%" h="20%" fontWeight="bold">Total Class Clovers</Box>
+                                        <Box w="100%" h="70%" fontSize="3xl" fontWeight="bold">{classData.classData.classPoints}</Box>
+                                        </Flex>
                                     </Box >
                                     {/* Weekly Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
