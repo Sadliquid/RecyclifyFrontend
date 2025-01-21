@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import MiniCalendar from "./MiniCalendar";
 
 function StreakCard({ streak }) {
-    if (!streak) {
+    if (streak == null) {
         return (
             <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
                 <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
