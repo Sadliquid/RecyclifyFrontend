@@ -13,12 +13,12 @@ function Leaderboards() {
                         <Avatar boxSize="150px" src="https://bit.ly/dan-abramov" />
                         <Heading fontSize={"30px"} mt={2}>Liew Jun Han</Heading>
                         <Heading color="#2CD776">500 Leafs</Heading>
-                        <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} width="97%" height="20%" mt={2}>
+                        <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} height="20%" mt={2} padding={5}>
                             <Box mr={2}>
-                                <Image src="/silver-medal.png" boxSize={14} />
+                                <Image src="/silver-medal.png" boxSize={10} mt={2} />
                             </Box>
 
-                            <Box display="flex" flexDir={"column"} ml={2} mt={-2} >
+                            <Box display="flex" flexDir={"column"} ml={2} >
                                 <Text textAlign={"left"} fontSize={"md"}>Silver League</Text>
                                 <Text textAlign={"left"} fontSize={"sm"}>2nd Place</Text>
                             </Box>
@@ -34,29 +34,32 @@ function Leaderboards() {
                 </Box>
 
                 <Box display="flex" flexDir={"column"} alignItems={"center"} justifyContent={"space-around"} width="70%" backgroundColor="#E5ECFF" borderRadius={20}>
-                    {/* Header Row */}
                     <HStack
                         display="flex"
                         justifyContent={"space-between"}
                         alignItems="center"
                         width="98%"
                         padding="10px"
-                        backgroundColor="#D9E6FF"
+                        backgroundColor="#CBD8F7"
                         borderRadius={12}
                         fontWeight="bold"
                     >
                         <Box width="10%" textAlign="center">
                             <Text fontSize="md">Rank</Text>
                         </Box>
+
                         <Box display="flex" alignItems="center" justifyContent="center" width="30%">
                             <Text fontSize="md">Name</Text>
                         </Box>
+
                         <Box width="20%" textAlign="center">
                             <Text fontSize="md">Points</Text>
                         </Box>
+
                         <Box width="20%" textAlign="center">
                             <Text fontSize="md">Status</Text>
                         </Box>
+
                         <Box
                             width="10%"
                             display="flex"
@@ -67,7 +70,6 @@ function Leaderboards() {
                         </Box>
                     </HStack>
 
-                    {/* Leaderboard Rows */}
                     {Array.from({ length: 5 }).map((_, index) => (
                         <HStack
                             key={index}
@@ -79,12 +81,10 @@ function Leaderboards() {
                             backgroundColor={"#F4F7FF"}
                             borderRadius={12}
                         >
-                            {/* Rank */}
                             <Box width="10%" textAlign="center">
                                 <Text fontSize="lg" fontWeight="bold">{index + 1}</Text>
                             </Box>
 
-                            {/* Avatar and Name */}
                             <Box display="flex" alignItems="center" justifyContent="center" width="30%">
                                 <Avatar src={"https://bit.ly/dan-abramov"} boxSize="40px" mr={2} />
                                 <Text fontSize="md" fontWeight="bold">
@@ -92,17 +92,14 @@ function Leaderboards() {
                                 </Text>
                             </Box>
 
-                            {/* Points */}
                             <Box width="20%" textAlign="center">
                                 <Text fontSize="md" fontWeight="bold" color="#2CD776">10</Text>
                             </Box>
 
-                            {/* Status */}
                             <Box width="20%" textAlign="center">
                                 <Text fontSize="md">Unregistered</Text>
                             </Box>
 
-                            {/* Badge */}
                             <Box
                                 width="10%"
                                 display="flex"
