@@ -138,6 +138,8 @@ function StudentDashboard({ classData, students }) {
         }
     };
 
+    const isFormInvalid = !!validationError.name || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
+
     return (
         <Tabs.Content value='Students'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
@@ -261,7 +263,7 @@ function StudentDashboard({ classData, students }) {
                                                                         Cancel
                                                                     </Button>
                                                                 </DialogActionTrigger>
-                                                                <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
+                                                                <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={isFormInvalid}>
                                                                     Save
                                                                 </Button>
                                                             </DialogFooter>

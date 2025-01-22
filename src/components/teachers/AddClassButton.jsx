@@ -104,6 +104,8 @@ function AddClassButton({ onCreate }) {
         },
     })
 
+    // Check if form is invalid
+    const isFormInvalid = !newClass.className || !newClass.classDescription || errors.className || errors.classDescription;
 
     return (
         <>
@@ -191,7 +193,7 @@ function AddClassButton({ onCreate }) {
                                 Cancel
                             </Button>
                         </DialogActionTrigger>
-                        <Button bg="#2D65FF" color="white" onClick={handleSaveClass}>
+                        <Button bg="#2D65FF" color="white" onClick={handleSaveClass} disabled={isFormInvalid}>
                             Create
                         </Button>
                     </DialogFooter>

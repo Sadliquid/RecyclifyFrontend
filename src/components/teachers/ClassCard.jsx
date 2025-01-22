@@ -195,7 +195,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
                                     </DialogActionTrigger>
-                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
+                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={!!error || !editedClass.className || !editedClass.classDescription}>
                                         Save
                                     </Button>
                                 </DialogFooter>
