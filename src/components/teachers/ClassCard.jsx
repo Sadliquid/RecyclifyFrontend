@@ -55,6 +55,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     const resetEditedClass = () => {
         setEditedClass({ ...classItem });
         setError('');
+        setOpen(false);
     };
 
     const floatingStyles = defineStyle({
@@ -145,7 +146,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                         </Box>
                         <DialogRoot size="lg" open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
                             <DialogTrigger asChild>
-                                <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false} cursor="pointer" mt={2}>
+                                <MenuItem value="edit-class" borderRadius="xl" cursor="pointer" mt={2}>
                                     <MdEdit /> Edit
                                 </MenuItem>
                             </DialogTrigger>
