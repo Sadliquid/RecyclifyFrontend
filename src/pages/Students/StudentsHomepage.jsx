@@ -74,8 +74,6 @@ function StudentsHomepage() {
                 } else if (user.userRole != "student") {
                     navigate("/auth/login");
                     ShowToast("error", "Access denied", "Please log in as a student");
-                } else {
-                    console.log("User:", user);
                 }
             }
         } else {
