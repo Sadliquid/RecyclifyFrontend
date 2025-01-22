@@ -1,8 +1,12 @@
 import { Box, Flex, Tabs } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import server from "../../../networking";
 
-function ClassDashboard(classData) {
-    console.log(classData);
+function ClassDashboard({ classData, students }) {
+
+    const studentsList = students || [];
+    const classDashboardData = classData || {};
+
     return (
         <Tabs.Content value='Class' >
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
@@ -29,7 +33,7 @@ function ClassDashboard(classData) {
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
                                         <Flex direction="column" textAlign="left" gap={5} w="90%" h="90%" p={2} >
                                         <Box w="100%" h="20%" fontWeight="bold">Total Class Clovers</Box>
-                                        <Box w="100%" h="70%" fontSize="3xl" fontWeight="bold">{classData.classData.classPoints}</Box>
+                                        <Box w="100%" h="70%" fontSize="3xl" fontWeight="bold">{classData.classPoints}</Box>
                                         </Flex>
                                     </Box >
                                     {/* Weekly Class Clovers */}

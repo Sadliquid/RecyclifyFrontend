@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import { IoArrowBack } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import ClassTabs from '../../components/teachers/ClassTabs';
@@ -12,6 +12,7 @@ function Class() {
     const { user, loaded, error } = useSelector((state) => state.auth);
 
     const [classData, setClassData] = useState({});
+    const [students, setStudents] = useState([]);
 
     const fetchClassData = async () => {
         try {
@@ -25,6 +26,19 @@ function Class() {
         }
     };
 
+    // Fetch students data from the backend
+    const fetchStudents = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-students/?classId=${id}`);
+            if (response.status === 200) {
+                setStudents(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            setStudents([]);
+        }
+    };
+
     // Fetch class data on component mount
     useEffect(() => {
         if (!error) {
@@ -32,7 +46,10 @@ function Class() {
                 if (!user || user.userRole != "teacher") {
                     navigate("/auth/login");
                 } else {
-                    if (id) fetchClassData();
+                    if (id) {
+                        fetchClassData();
+                        fetchStudents();
+                    }
                     else {
                         navigate("/teachers");
                     }
@@ -41,7 +58,7 @@ function Class() {
         } else {
             console.log("Error", "An error occured while fetching user state");
         }
-    }, [loaded]);
+    }, [loaded && id]);
 
     if (!error && loaded && user) {
         return (
@@ -59,7 +76,8 @@ function Class() {
                         </Text>
                     </Box>
                 </Flex>
-                <ClassTabs classData={classData} />
+                {/* conditional rendering for class tabs */}
+                <ClassTabs classData={classData} students={students} />
             </Box>
         );
     }

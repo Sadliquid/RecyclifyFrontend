@@ -6,8 +6,12 @@ import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/me
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import server from "../../../networking"
 
-function StudentDashboard({ classData }) {
-    const [students, setStudents] = useState([]);
+function StudentDashboard({ classData, students }) {
+    const [studentsList, setStudentsList] = useState(students || []);
+    const [editedStudent, setEditedStudent] = useState({
+        name: '',
+        studentEmail: ''
+    })
     const [validationError, setValidationError] = useState({
         name: '',
     });
@@ -21,42 +25,8 @@ function StudentDashboard({ classData }) {
         return '';
     };
 
-    const fetchStudents = async () => {
-        try {
-            const response = await server.get(`/api/Teacher/get-students/?classID=${classData.classID}`);
-            if (response.status === 200) {
-                setStudents(Array.isArray(response.data.data) ? response.data.data : []);
-            }
-        } catch (error) {
-            console.error("Error fetching students:", error);
-            setStudents([]);
-        }
-    };
-
-    useEffect(() => {
-        fetchStudents();
-    }, [classData]);
-
     // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
-
-    const handleDeleteStudent = async (studentId) => {
-        try {
-            const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
-
-            if (response.status === 200) {
-                console.log("Student successfully deleted.");
-                await fetchStudents();
-            }
-        } catch (error) {
-            console.error("Error deleting student.", error.message);
-        }
-    };
-
-    const [editedStudent, setEditedStudent] = useState({
-        name: '',
-        studentEmail: ''
-    })
 
     const floatingStyles = defineStyle({
         pos: "absolute",
@@ -98,6 +68,35 @@ function StudentDashboard({ classData }) {
         setOpen(false);
     };
 
+    // Function to handle changes in the edit dialog fields
+    const handleChange = (field, value) => {
+        if (field === 'name') {
+            const error = validateName(value);
+            setValidationError((prev) => ({
+                ...prev,
+                [field]: error,
+            }));
+        }
+
+        setEditedStudent((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    // Fetch students data from the backend
+    const fetchStudents = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-students/?classId=${classData.classID}`);
+            if (response.status === 200) {
+                setStudentsList(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            setStudentsList([]);
+        }
+    };
+
     // Function to save the edited student details
     const handleSaveEdit = async () => {
         // Ensure no validation errors exist
@@ -126,20 +125,17 @@ function StudentDashboard({ classData }) {
         }
     };
 
-    // Function to handle changes in the edit dialog fields
-    const handleChange = (field, value) => {
-        if (field === 'name') {
-            const error = validateName(value);
-            setValidationError((prev) => ({
-                ...prev,
-                [field]: error,
-            }));
-        }
+    const handleDeleteStudent = async (studentId) => {
+        try {
+            const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
 
-        setEditedStudent((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
+            if (response.status === 200) {
+                console.log("Student successfully deleted.");
+                await fetchStudents();
+            }
+        } catch (error) {
+            console.error("Error deleting student.", error.message);
+        }
     };
 
     return (
@@ -162,7 +158,7 @@ function StudentDashboard({ classData }) {
 
                         <Table.Body>
                             {/* check students list, if there are no students just go to fallback, or else just render the students details in the dashboard */}
-                            {students.length === 0 ? (
+                            {studentsList.length === 0 ? (
                                 <Table.Row>
                                     <Table.Cell colSpan={8}>
                                         <Text textAlign="center" color="gray.500">
@@ -171,7 +167,7 @@ function StudentDashboard({ classData }) {
                                     </Table.Cell>
                                 </Table.Row>
                             ) : (
-                                students.map((student, index) => (
+                                studentsList.map((student, index) => (
                                     <Table.Row key={student.studentID} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
                                         <Table.Cell color="black">
                                             <Flex gap={2} align="center">
