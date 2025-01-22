@@ -25,6 +25,15 @@ function StudentDashboard({ classData, students }) {
         return '';
     };
 
+    // Function to validate email format
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(email)) {
+            return 'Please enter a valid email address.';
+        }
+        return '';
+    };
+
     // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
@@ -70,13 +79,17 @@ function StudentDashboard({ classData, students }) {
 
     // Function to handle changes in the edit dialog fields
     const handleChange = (field, value) => {
+        let error = '';
         if (field === 'name') {
-            const error = validateName(value);
-            setValidationError((prev) => ({
-                ...prev,
-                [field]: error,
-            }));
+            error = validateName(value);
+        } else if (field === 'studentEmail') {
+            error = validateEmail(value);
         }
+
+        setValidationError((prev) => ({
+            ...prev,
+            [field]: error,
+        }));
 
         setEditedStudent((prev) => ({
             ...prev,
@@ -138,7 +151,7 @@ function StudentDashboard({ classData, students }) {
         }
     };
 
-    const isFormInvalid = !!validationError.name || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
+    const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
     return (
         <Tabs.Content value='Students'>
@@ -252,6 +265,11 @@ function StudentDashboard({ classData, students }) {
                                                                                 onChange={(e) => handleChange('studentEmail', e.target.value)}
                                                                             />
                                                                             <Field.Label css={floatingStyles}>Student Email</Field.Label>
+                                                                            {validationError.studentEmail && (
+                                                                                <Text color="red.500" fontSize="sm" mt={1}>
+                                                                                    * {validationError.studentEmail}
+                                                                                </Text>
+                                                                            )}
                                                                         </Box>
                                                                     </Field.Root>
                                                                 </Stack>
