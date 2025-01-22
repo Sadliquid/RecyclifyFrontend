@@ -35,6 +35,20 @@ function Navbar() {
         }
     }
 
+    function handleNavbarTitleClick() {
+        if (!error && loaded && user) {
+            if (user.userRole === "student") {
+                navigate("/student/home");
+            } else if (user.userRole === "teacher") {
+                navigate("/teachers");
+            } else {
+                navigate("/admin/dashboard");
+            }
+        } else {
+            navigate("/");
+        }
+    }
+
     useEffect(() => {
         if (!error) {
             if (loaded) {
@@ -278,14 +292,13 @@ function Navbar() {
 
     // Parent Sidebar
 
-    // Use state to determine which sidebar to display through useEffect hook to fetch user role from the backend
     return (
         <>
             <Flex as="nav" bg="#4DCBA4" w="100%" p="8px 24px 8px 24px" rounded="10px" justify="space-between" align="center" alignItems="center">
 
                 {sidebar}
 
-                <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
+                <Heading color="white" cursor="pointer" onClick={() => handleNavbarTitleClick()}>RECYCLIFY</Heading>
                 <Avatar name="Joshua Long" src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
             </Flex>
         </>
