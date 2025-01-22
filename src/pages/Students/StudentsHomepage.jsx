@@ -147,7 +147,7 @@ function StudentsHomepage() {
                     <Box display="flex" flexDir="column" justifyContent="center" height="75%" backgroundColor={"#E5ECFF"} borderRadius={20} boxSizing={"border-box"}>
                         <Heading fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Heading>
 
-                        <Box display="flex" flexDir="column" justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="85%" width="90%" boxSizing={"border-box"}>
+                        <Box display="flex" flexDir="column" justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="85%" width="90%" boxSizing={"border-box"} paddingBottom={2}>
                             {studentTasks.length != 0 ? (
                                 studentTasks.map((task, index) => (
                                     <StudentTaskCard
