@@ -1,11 +1,28 @@
-import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { Box, VStack, Heading, Link, Text, HStack, Image } from '@chakra-ui/react'
+import { toaster } from "@/components/ui/toaster"
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 import ParentRegistrationForm from '../../components/identity/ParentRegisterForm'
 import StudentRegistrationForm from '../../components/identity/StudentRegisterForm'
 
 function CreateAccount() {
     const [selectedAccountType, setSelectedAccountType] = useState(null);
+    const authToken = useSelector((state) => state.auth.authToken);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authToken) {
+            toaster.create({
+                title: "Logged in!",
+                description: "You are already logged in!",
+                type: "success",
+                duration: 3000
+            })            
+            navigate('/');
+        }
+    }, [authToken]);
 
     const renderForm = () => {
         switch (selectedAccountType) {
