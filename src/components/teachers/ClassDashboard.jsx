@@ -1,11 +1,14 @@
-import { Box, Flex, Tabs } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import server from "../../../networking";
+import { Box, Flex, Tabs, Text } from '@chakra-ui/react';
+import { FaLeaf } from "react-icons/fa";
+
 
 function ClassDashboard({ classData, students }) {
 
     const studentsList = students || [];
     const classDashboardData = classData || {};
+
+    console.log("Class Dashboard Data: ", classDashboardData);
+    console.log("Students List: ", studentsList);
 
     return (
         <Tabs.Content value='Class' >
@@ -32,13 +35,30 @@ function ClassDashboard({ classData, students }) {
                                     {/* Total Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
                                         <Flex direction="column" textAlign="left" gap={5} w="90%" h="90%" p={2} >
-                                        <Box w="100%" h="20%" fontWeight="bold">Total Class Clovers</Box>
-                                        <Box w="100%" h="70%" fontSize="3xl" fontWeight="bold">{classData.classPoints}</Box>
+                                            <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Total Class Clovers</Box>
+                                            <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center">
+                                                <Box w="45%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
+                                                    {classData.classPoints}
+                                                </Box>
+                                                <Box w="55%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="left" alignItems="center">
+                                                    <FaLeaf />
+                                                </Box>
+                                            </Flex>
                                         </Flex>
                                     </Box >
                                     {/* Weekly Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
-                                        Weekly Class Clovers
+                                        <Flex direction="column" textAlign="left" gap={5} w="90%" h="90%" p={2} >
+                                            <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Weekly Class Clovers</Box>
+                                            <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center">
+                                                <Box w="45%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
+                                                    {classData.classPoints}
+                                                </Box>
+                                                <Box w="55%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="left" alignItems="center">
+                                                    <FaLeaf />
+                                                </Box>
+                                            </Flex>
+                                        </Flex>
                                     </Box>
                                 </Flex>
                             </Flex>
