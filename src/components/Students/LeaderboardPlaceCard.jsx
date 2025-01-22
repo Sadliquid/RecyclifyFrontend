@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types */
 import { Box, HStack, Text } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
+import { useSelector } from "react-redux";
 
 function LeaderboardPlaceCard({ rank, student }) {
+    const { user, loaded, error } = useSelector((state) => state.auth);
+
     if (rank != null && student != null) return (
         <HStack
             mt={3}
@@ -13,6 +16,7 @@ function LeaderboardPlaceCard({ rank, student }) {
             padding="10px"
             backgroundColor={"#F4F7FF"}
             borderRadius={12}
+            border={!error && loaded && student.studentID === user.id ? "2px solid #4DCBA4" : "none"}
         >
             <Box width="10%" textAlign="center">
                 <Text fontSize="lg" fontWeight="bold">{rank}</Text>
