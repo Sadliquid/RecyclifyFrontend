@@ -22,6 +22,8 @@ function AddClassButton({ onCreate }) {
                 error = "* Class name is required.";
             } else if (!/^\d+$/.test(value)) {
                 error = "* Class name must contain only numbers.";
+            } else if (value.length > 8) {
+                error = "* Class name cannot be more than 8 characters.";
             }
         } else if (field === "classDescription") {
             if (!value) {
@@ -102,6 +104,8 @@ function AddClassButton({ onCreate }) {
         },
     })
 
+    // Check if form is invalid
+    const isFormInvalid = !newClass.className || !newClass.classDescription || errors.className || errors.classDescription;
 
     return (
         <>
@@ -189,7 +193,7 @@ function AddClassButton({ onCreate }) {
                                 Cancel
                             </Button>
                         </DialogActionTrigger>
-                        <Button bg="#2D65FF" color="white" onClick={handleSaveClass}>
+                        <Button bg="#2D65FF" color="white" onClick={handleSaveClass} disabled={isFormInvalid}>
                             Create
                         </Button>
                     </DialogFooter>
