@@ -2,25 +2,41 @@ import { Box, Flex, Image, Tabs } from '@chakra-ui/react';
 import { FaLeaf } from "react-icons/fa";
 import { Avatar } from "@/components/ui/avatar";
 import ClassPieChart from './ClassPieChart'; // Import the pie chart component
+import { useEffect, useState } from 'react';
+import server from "../../../networking";
 
 function ClassDashboard({ classData, students }) {
 
     const studentsList = students || [];
     const classDashboardData = classData || {};
+    const [schoolClassesData, setSchoolClassesData] = useState([]);
+
 
     console.log("Class Dashboard Data: ", classDashboardData);
     console.log("Students List: ", studentsList);
 
     // Sort the students by totalPoints in descending order and get the top 3
-    const top3Students = studentsList
-        .sort((a, b) => b.totalPoints - a.totalPoints)
-        .slice(0, 3);
+    const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
 
     // Sort the students by TotalPoints in accending order and get the least contributed top 3
-    const lowest3Students = studentsList
-        .sort((a, b) => a.totalPoints - b.totalPoints)
-        .slice(0, 3);
+    const lowest3Students = studentsList.sort((a, b) => a.totalPoints - b.totalPoints).slice(0, 3);
 
+    const fetchSchoolClasses = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-overall-classes-data/`);
+            if (response.status === 200) {
+                setSchoolClassesData(Array.isArray(response.data.data) ? response.data.data : []);
+            }
+        } catch (error) {
+            console.error("Error fetching classes:", error);
+            setSchoolClassesData([]);
+        }
+    }
+
+    // Fetch school classes data on component mount
+    useEffect(() => {
+        fetchSchoolClasses();
+    }, [classData && students]);
 
     return (
         <Tabs.Content value='Class' >
