@@ -9,6 +9,7 @@ import './index.css'
 import StudentsHomepage from './pages/Students/StudentsHomepage'
 import Homepage from './pages/main/Homepage'
 import ClassEnrolment from './pages/Students/ClassEnrolment'
+import ClaimReward from './pages/Students/ClaimReward';
 import Leaderboards from './pages/Students/Leaderboards'
 import Milestones from './pages/Students/Milestones'
 import SubmittedTasks from './pages/Students/SubmittedTasks'
@@ -63,6 +64,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
                         <Route path={"student"}>
                             <Route path={"enrolClass"} element={<ClassEnrolment />} />
+                            <Route path={"claimReward"} element={<ClaimReward />} />
                             <Route path={"leaderboards"} element={<Leaderboards />} />
                             <Route path={"milestones"} element={<Milestones />} />
                             <Route path={"myClass"} element={<MyClass />} />
