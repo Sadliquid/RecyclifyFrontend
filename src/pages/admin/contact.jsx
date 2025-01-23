@@ -74,7 +74,7 @@ const ContactFormManagement = () => {
                 `/api/ContactManagement/${selectedMessage.id}/mark-replied`
             );
 
-            if (markRepliedResponse.status >= 200 && markRepliedResponse.status < 300) {
+            if (markRepliedResponse.status == 200) {
                 setMessages((prevMessages) =>
                     prevMessages.map((message) =>
                         message.id === selectedMessage.id

@@ -117,16 +117,16 @@ const InventoryManagement = () => {
 
     const handleToggleAvailability = async (rewardID) => {
         try {
-            const response = await Server.patch(
-                `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${rewardID}/toggle-availability`
+            const response = await Server.put( // Use PUT instead of PATCH
+                `/api/RewardItem/${rewardID}/toggle-availability`
             );
-
-            if (response.status >= 200 && response.status < 300) {
+    
+            if (response.status == 200) {
                 // Update the local state to reflect the change
                 setRewardItems(prevItems =>
                     prevItems.map(item =>
                         item.rewardID === rewardID
-                            ? { ...item, isAvailable: !item.isAvailable }
+                            ? { ...item, isAvailable: response.data.data.isAvailable }
                             : item
                     )
                 );
