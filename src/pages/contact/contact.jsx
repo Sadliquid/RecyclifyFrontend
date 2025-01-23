@@ -13,12 +13,10 @@ const ContactForm = () => {
         e.preventDefault();
 
         try {
-            const response = await Server.post(`${import.meta.env.VITE_BACKEND_URL}/api/ContactForm`, {
-                Id: 1, // Static ID for the form
+            const response = await Server.post(`/api/ContactForm`, {
                 senderName: name,
                 senderEmail: email,
                 message,
-                hasReplied: false,
             });
 
             if (response.status === 200) {
