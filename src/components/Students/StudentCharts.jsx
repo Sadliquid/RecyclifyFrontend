@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box } from '@chakra-ui/react';
+import { Box, Text, Spinner } from '@chakra-ui/react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useEffect, useState } from 'react';
@@ -64,13 +64,22 @@ function StudentCharts({ studentID }) {
         });
     }, [studentID]);
 
-    return (
-        <>
-            <Box width='100%' height='100%'>
-                <Line data={data} options={options} />
+    if (!studentID || Object.keys(accumulatedLeafs) <= 0) {
+        return (
+            <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
+                <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
+                <Text>Getting your info...</Text>
             </Box>
-        </>
-    );
+        );
+    } else {
+        return (
+            <>
+                <Box width='100%' height='100%'>
+                    <Line data={data} options={options} />
+                </Box>
+            </>
+        );
+    }
 }
 
 export default StudentCharts;

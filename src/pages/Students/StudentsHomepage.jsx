@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 function StudentsHomepage() {
     const [studentTasks, setStudentTasks] = useState([]);
     const [studentProfile, setStudentProfile] = useState({});
+    const [allStudents, setAllStudents] = useState([]);
 
     const { user, loaded, error, authToken } = useSelector((state) => state.auth);
 
@@ -73,8 +74,6 @@ function StudentsHomepage() {
                 } else if (user.userRole != "student") {
                     navigate("/auth/login");
                     ShowToast("error", "Access denied", "Please log in as a student");
-                } else {
-                    console.log("User:", user);
                 }
             }
         } else {
@@ -130,7 +129,7 @@ function StudentsHomepage() {
                                     <StreakCard streak={studentProfile.streak} />
                                 </Box>
 
-                                <Box width="49%" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto" boxSizing={"border-box"}>
+                                <Box width="49%" backgroundColor="white" borderRadius={20} display="flex" height="100%" mt="auto" mb="auto" boxSizing={"border-box"}>
                                     <StreakRewardCard studentID={user.id} streak={studentProfile.streak} lastClaimedStreak={studentProfile.lastClaimedStreak} updateStudentPoints={updateStudentPoints} />
                                 </Box>
                             </Box>
@@ -146,7 +145,7 @@ function StudentsHomepage() {
                     <Box display="flex" flexDir="column" justifyContent="center" height="75%" backgroundColor={"#E5ECFF"} borderRadius={20} boxSizing={"border-box"}>
                         <Heading fontSize={24} fontWeight={"bold"} mt={3}>Daily tasks</Heading>
 
-                        <Box display="flex" flexDir="column" justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="85%" width="90%" boxSizing={"border-box"}>
+                        <Box display="flex" flexDir="column" justifyContent={"space-between"} mt={2} mb={2} borderRadius={20} margin="auto" height="85%" width="90%" boxSizing={"border-box"} paddingBottom={2}>
                             {studentTasks.length != 0 ? (
                                 studentTasks.map((task, index) => (
                                     <StudentTaskCard
@@ -156,6 +155,8 @@ function StudentsHomepage() {
                                         TaskTitle={task.taskTitle}
                                         TaskDescription={task.taskDescription}
                                         TaskPoints={task.taskPoints}
+                                        VerificationPending={task.verificationPending}
+                                        TaskVerified={task.taskVerified}
                                     />
                                 ))
                             ) : (

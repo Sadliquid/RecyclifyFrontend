@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box, Text, Button } from '@chakra-ui/react';
+import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 import { BsGift } from 'react-icons/bs';
 import { motion } from "framer-motion";
 import { Toaster, toaster } from "@/components/ui/toaster";
@@ -9,9 +9,6 @@ import server from "../../../networking";
 function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentPoints }) {
     const [giftClaimed, setGiftClaimed] = useState(false);
 
-    if (!studentID) return null;
-    if (streak === null || streak === undefined) return null;
-
     const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Singapore' });;
 
     var lastClaimedStreakDate = null;
@@ -19,7 +16,7 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
         lastClaimedStreakDate = new Date(lastClaimedStreak).toISOString().split('T')[0];
     }
 
-    const remainingStreaks = streak >= 7 ? streak % 7 : 7 - streak;
+    const remainingStreaks = (7 - (streak % 7)) % 7;
     const isClaimable = (remainingStreaks === 0) && (lastClaimedStreakDate !== today);
 
     const handleAwardGift = () => {
@@ -58,7 +55,16 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
                 description: err => `Failed to award gift: ${err}`,
             },
         });
-    };    
+    };
+    
+    if (!studentID || streak == null) {
+        return (
+            <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
+                <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
+                <Text>Getting your info...</Text>
+            </Box>
+        )
+    }
 
     if ((remainingStreaks >= 0) && (isClaimable == true || isClaimable == false)) return (
         <>
@@ -76,7 +82,7 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
                     padding: 6,
                     boxSizing: "border-box",
                     backgroundColor: "#4DCBA4",
-                    borderRadius: 24
+                    borderRadius: 20
                 }}
             >
                 <Box display="flex" justifyContent={"center"} flexDir={"column"} alignItems="center">

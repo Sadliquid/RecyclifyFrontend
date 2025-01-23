@@ -10,8 +10,9 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
 import server from "../../../networking";
 
-function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPoints }) {
+function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPoints, VerificationPending, TaskVerified }) {
     const [selectedFile, setSelectedFile] = useState(null);
+    const [isVerificationPending, setIsVerificationPending] = useState(VerificationPending);
     const [submissionReady, setSubmissionReady] = useState(false);
 
     const handleFileChange = (details) => {
@@ -49,6 +50,7 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                 })
                     .then(response => {
                         if (response.status === 200) {
+                            setIsVerificationPending(true);
                             resolve();
                         } else {
                             reject("Unexpected response status: " + response.status);
@@ -94,7 +96,7 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                     backgroundColor: "#F1F6FF"
                 }}
             >
-                <Box flex="1" textAlign="left" mx="10px" maxWidth="100%">
+                <Box flex="1" textAlign="left" mx="10px" maxWidth="100%" mb={1}>
                     <Text fontSize="18px" fontWeight="bold" color="black">
                         {TaskTitle}
                     </Text>
@@ -119,28 +121,64 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                 </Box>
 
                 <DialogRoot placement={"center"} motionPreset="slide-in-bottom">
-                    <DialogTrigger asChild>
-                        <Badge
+                    {TaskVerified ? (
+                        <Text
                             position="absolute"
                             bottom="5px"
                             right="5px"
                             display="flex"
                             justifyContent="center"
                             alignItems="center"
-                            cursor="pointer"
-                            color="white"
-                            backgroundColor="#4DCBA4"
-                            _hover={{ backgroundColor: "#3DAF8B" }}
+                            color="#4DCBA4"
                             fontSize="12px"
+                            fontStyle={"italic"}
                             fontWeight="bold"
                             px={3}
-                            py={2}
-                            borderRadius="full"
                         >
-                            <FaCamera style={{ marginRight: "5px" }} />
-                            Verify
-                        </Badge>
-                    </DialogTrigger>
+                            Verified
+                        </Text>
+                    ) : (
+                        !isVerificationPending ? (
+                            <DialogTrigger asChild>
+                                <Badge
+                                    position="absolute"
+                                    bottom="5px"
+                                    right="5px"
+                                    display="flex"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    cursor="pointer"
+                                    color="white"
+                                    backgroundColor="#4DCBA4"
+                                    _hover={{ backgroundColor: "#3DAF8B" }}
+                                    fontSize="12px"
+                                    fontWeight="bold"
+                                    px={3}
+                                    py={2}
+                                    borderRadius="full"
+                                >
+                                    <FaCamera style={{ marginRight: "5px" }} />
+                                    Verify
+                                </Badge>
+                            </DialogTrigger>
+                        ) : (
+                            <Text
+                                position="absolute"
+                                bottom="5px"
+                                right="5px"
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                color="#4DCBA4"
+                                fontSize="12px"
+                                fontStyle={"italic"}
+                                fontWeight="bold"
+                                px={3}
+                            >
+                                Verification Pending...
+                            </Text>
+                        )
+                    )}
 
                     <DialogContent>
                         <DialogHeader>
