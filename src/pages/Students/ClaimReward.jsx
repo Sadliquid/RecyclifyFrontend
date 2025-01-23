@@ -19,7 +19,9 @@ function ClaimReward() {
     useEffect(() => {
         const redeemReward = async () => {
             try {
-                if (!studentID || !redemptionID) {
+                console.log("studentID: ", studentID);
+                console.log("redemptionID: ", redemptionID);
+                if (studentID == null || redemptionID ==  null) {
                     ShowToast('error', 'Error', 'Required parameters were missing.');
                 }
 
@@ -48,6 +50,9 @@ function ClaimReward() {
 
         if (studentID && redemptionID) {
             redeemReward();
+        } else {
+            setIsLoading(false);
+            setError('Required parameters were missing.');
         }
     }, [studentID, redemptionID]);
 
