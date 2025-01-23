@@ -36,12 +36,12 @@ const InventoryManagement = () => {
         const fetchRewardItems = async () => {
             try {
                 const response = await Server.get(
-                    `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem`
+                    `/api/RewardItem`
                 );
                 console.log("Response:", response);
 
                 // Check if the request was successful (status code 2xx)
-                if (response.status >= 200 && response.status < 300) {
+                if (response.status == 200) {
                     const data = response.data; // Access the data property
                     setRewardItems(data); // Set all items (both available and unavailable)
                     setIsLoading(false);
