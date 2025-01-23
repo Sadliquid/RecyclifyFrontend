@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, defineStyle, Badge } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, Image, defineStyle } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import server from "../../../networking"
 
-function StudentDashboard({ classData }) {
-    const [students, setStudents] = useState([]);
+function StudentDashboard({ classData, students }) {
+    const [studentsList, setStudentsList] = useState(students || []);
+    const [editedStudent, setEditedStudent] = useState({
+        name: '',
+        studentEmail: ''
+    })
     const [validationError, setValidationError] = useState({
         name: '',
     });
@@ -21,49 +25,17 @@ function StudentDashboard({ classData }) {
         return '';
     };
 
-    const fetchStudents = async () => {
-        try {
-            const response = await server.get(`/api/Teacher/get-students/?classID=${classData.classID}`);
-            if (response.status === 200) {
-                setStudents(Array.isArray(response.data) ? response.data : []);
-            } else {
-                console.error("Failed to fetch students", response.data);
-                setStudents([]);
-            }
-        } catch (error) {
-            console.error("Error fetching students:", error);
-            setStudents([]);
+    // Function to validate email format
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(email)) {
+            return 'Please enter a valid email address.';
         }
+        return '';
     };
-
-    useEffect(() => {
-        fetchStudents();
-    }, [classData]);
 
     // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
-
-    const handleDeleteStudent = async (studentId) => {
-        try {
-            const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
-
-            if (response.status === 200) {
-                console.log("Student successfully deleted.");
-                await fetchStudents();
-            } else if (response.status === 404) {
-                console.error("Student not found.", response.data);
-            } else {
-                console.error("Failed to delete student.", response.data);
-            }
-        } catch (error) {
-            console.error("Error deleting student.", error.message);
-        }
-    };
-
-    const [editedStudent, setEditedStudent] = useState({
-        name: '',
-        studentEmail: ''
-    })
 
     const floatingStyles = defineStyle({
         pos: "absolute",
@@ -105,6 +77,39 @@ function StudentDashboard({ classData }) {
         setOpen(false);
     };
 
+    // Function to handle changes in the edit dialog fields
+    const handleChange = (field, value) => {
+        let error = '';
+        if (field === 'name') {
+            error = validateName(value);
+        } else if (field === 'studentEmail') {
+            error = validateEmail(value);
+        }
+
+        setValidationError((prev) => ({
+            ...prev,
+            [field]: error,
+        }));
+
+        setEditedStudent((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    // Fetch students data from the backend
+    const fetchStudents = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-students/?classId=${classData.classID}`);
+            if (response.status === 200) {
+                setStudentsList(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            setStudentsList([]);
+        }
+    };
+
     // Function to save the edited student details
     const handleSaveEdit = async () => {
         // Ensure no validation errors exist
@@ -126,9 +131,6 @@ function StudentDashboard({ classData }) {
                 console.log('Student successfully updated.');
                 await fetchStudents(); // Refresh the students list
                 setOpen(false);
-            } else {
-                console.error('Failed to update student');
-                setOpen(true);
             }
         } catch (error) {
             console.error('Error updating student.');
@@ -136,43 +138,42 @@ function StudentDashboard({ classData }) {
         }
     };
 
-    // Function to handle changes in the edit dialog fields
-    const handleChange = (field, value) => {
-        if (field === 'name') {
-            const error = validateName(value);
-            setValidationError((prev) => ({
-                ...prev,
-                [field]: error,
-            }));
-        }
+    const handleDeleteStudent = async (studentId) => {
+        try {
+            const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
 
-        setEditedStudent((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
+            if (response.status === 200) {
+                console.log("Student successfully deleted.");
+                await fetchStudents();
+            }
+        } catch (error) {
+            console.error("Error deleting student.", error.message);
+        }
     };
+
+    const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
     return (
         <Tabs.Content value='Students'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
-                <Table.ScrollArea rounded="md" height="160px" w="100%" h="100%" overflow="hidden">
+                <Table.ScrollArea  rounded="md" w="100%" h="100%" overflowY="auto">
                     <Table.Root size="sm" stickyHeader>
                         <Table.Header>
                             <Table.Row bg="bg.subtle">
-                                <Table.ColumnHeader>Studnet Name</Table.ColumnHeader>
+                                <Table.ColumnHeader>Student Name</Table.ColumnHeader>
+                                <Table.ColumnHeader>League</Table.ColumnHeader>
                                 <Table.ColumnHeader>Current Points</Table.ColumnHeader>
                                 <Table.ColumnHeader>Total Points</Table.ColumnHeader>
                                 <Table.ColumnHeader>Redemptions</Table.ColumnHeader>
                                 <Table.ColumnHeader>Student Email</Table.ColumnHeader>
                                 <Table.ColumnHeader>Parent Email</Table.ColumnHeader>
-                                <Table.ColumnHeader >Flag Status</Table.ColumnHeader>
                                 <Table.ColumnHeader textAlign="end"></Table.ColumnHeader>
                             </Table.Row>
                         </Table.Header>
 
                         <Table.Body>
                             {/* check students list, if there are no students just go to fallback, or else just render the students details in the dashboard */}
-                            {students.length === 0 ? (
+                            {studentsList.length === 0 ? (
                                 <Table.Row>
                                     <Table.Cell colSpan={8}>
                                         <Text textAlign="center" color="gray.500">
@@ -181,7 +182,7 @@ function StudentDashboard({ classData }) {
                                     </Table.Cell>
                                 </Table.Row>
                             ) : (
-                                students.map((student, index) => (
+                                studentsList.map((student, index) => (
                                     <Table.Row key={student.studentID} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
                                         <Table.Cell color="black">
                                             <Flex gap={2} align="center">
@@ -189,14 +190,14 @@ function StudentDashboard({ classData }) {
                                                 {student.user.name}
                                             </Flex>
                                         </Table.Cell>
+                                        <Table.Cell color="black">
+                                            <Image src={student.league === "Gold" ? "/gold-medal.png" : student.league === "Silver" ? "/silver-medal.png" : "/bronze-medal.png"} alt={student.league} w="30px" h="30px" />
+                                        </Table.Cell>
                                         <Table.Cell color="black">{student.currentPoints}</Table.Cell>
                                         <Table.Cell color="black">{student.totalPoints}</Table.Cell>
-                                        <Table.Cell color="black">{student.redemptions}</Table.Cell>
-                                        <Table.Cell color="black">{student.user.email}</Table.Cell>
-                                        <Table.Cell color="black">{student.parentEmail}</Table.Cell>
-                                        <Table.Cell color="black">
-                                            {student.flagStatus ? <Badge colorPalette="red">Flagged</Badge> : ""}
-                                        </Table.Cell>
+                                        <Table.Cell color="black">{student.redemptions ? student.redemptions : 0}</Table.Cell>
+                                        <Table.Cell color="black">{student.user.email ? student.user.email : "N/A"}</Table.Cell>
+                                        <Table.Cell color="black">{student.parentEmail ? student.parentEmail : "N/A"}</Table.Cell>
                                         <Table.Cell>
                                             <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
                                                 <MenuTrigger asChild>
@@ -226,7 +227,6 @@ function StudentDashboard({ classData }) {
                                                                 borderRadius="xl"
                                                                 closeOnSelect={false}
                                                                 cursor="pointer"
-                                                                mt={2}
                                                                 onClick={() => handleEditStudent(student)} // Pass the selected student's details
                                                             >
                                                                 <MdEdit /> Edit
@@ -264,6 +264,11 @@ function StudentDashboard({ classData }) {
                                                                                 onChange={(e) => handleChange('studentEmail', e.target.value)}
                                                                             />
                                                                             <Field.Label css={floatingStyles}>Student Email</Field.Label>
+                                                                            {validationError.studentEmail && (
+                                                                                <Text color="red.500" fontSize="sm" mt={1}>
+                                                                                    * {validationError.studentEmail}
+                                                                                </Text>
+                                                                            )}
                                                                         </Box>
                                                                     </Field.Root>
                                                                 </Stack>
@@ -275,7 +280,7 @@ function StudentDashboard({ classData }) {
                                                                         Cancel
                                                                     </Button>
                                                                 </DialogActionTrigger>
-                                                                <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
+                                                                <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={isFormInvalid}>
                                                                     Save
                                                                 </Button>
                                                             </DialogFooter>

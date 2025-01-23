@@ -27,7 +27,9 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     const validateClassName = (value) => {
         const isValid = /^\d*$/.test(value);
         if (!isValid) {
-            setError('Class name must contain only numbers.');
+            setError(' Class name must contain only numbers.');
+        }  else if (value.length > 8) {
+            setError(" Class name cannot be more than 8 characters.");
         } else {
             setError('');
         }
@@ -53,6 +55,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     const resetEditedClass = () => {
         setEditedClass({ ...classItem });
         setError('');
+        setOpen(false);
     };
 
     const floatingStyles = defineStyle({
@@ -143,7 +146,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                         </Box>
                         <DialogRoot size="lg" open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
                             <DialogTrigger asChild>
-                                <MenuItem value="edit-class" borderRadius="xl" closeOnSelect={false} cursor="pointer" mt={2}>
+                                <MenuItem value="edit-class" borderRadius="xl" cursor="pointer" mt={2}>
                                     <MdEdit /> Edit
                                 </MenuItem>
                             </DialogTrigger>
@@ -192,7 +195,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
                                     </DialogActionTrigger>
-                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit}>
+                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={!!error || !editedClass.className || !editedClass.classDescription}>
                                         Save
                                     </Button>
                                 </DialogFooter>
