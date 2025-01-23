@@ -13,16 +13,19 @@ function CreateAccount() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (authToken) {
-            toaster.create({
-                title: "Logged in!",
-                description: "You are already logged in!",
-                type: "success",
-                duration: 3000
-            })            
-            navigate('/');
+        if (user && authToken) {     
+            if (!error && loaded) {
+                if (user.userRole === "student") {
+                    navigate("/student/home");
+                } else if (user.userRole === "teacher") {
+                    navigate("/teachers");
+                } else {
+                    navigate("/admin/dashboard");
+                }
+            }
+            ShowToast("success", "Success", "You are already logged in!");
         }
-    }, [authToken]);
+    }, [user, error, loaded, authToken]);
 
     const renderForm = () => {
         switch (selectedAccountType) {

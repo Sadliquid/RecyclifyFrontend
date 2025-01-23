@@ -6,6 +6,23 @@ import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 function EmailVerification() {
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (user && authToken) {     
+            if (!error && loaded) {
+                if (user.userRole === "student") {
+                    navigate("/student/home");
+                } else if (user.userRole === "teacher") {
+                    navigate("/teachers");
+                } else {
+                    navigate("/admin/dashboard");
+                }
+            }
+            ShowToast("success", "Success", "You are already logged in!");
+        }
+    }, [user, error, loaded, authToken]);
+
+    
+
     return (
         <Box
             bgPosition="center"
