@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTrigger } from "@/components/ui/drawer"
 import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
@@ -14,23 +15,51 @@ import { LuNotebookPen } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useState } from "react";
 
 function Navbar() {
     const navigate = useNavigate();
-    const location = useLocation();
+
+    const { user, loaded, error } = useSelector((state) => state.auth);
+    const [sidebar, setSidebar] = useState(<LoginSidebar />);
 
     function conditionallyRenderSidebar() {
-        if (location.pathname.startsWith("/student")) {
-            return <StudentsSidebar />;
-        } else if (location.pathname.startsWith("/teachers")) {
-            return <TeachersSidebar />;
-        } else if (location.pathname.startsWith("/admin")) {
-            return <AdminSidebar />;
-        } else {
-            return <LoginSidebar />;
+        if (user.userRole === "student") {
+            setSidebar(<StudentsSidebar />);
+        } else if (user.userRole === "teacher") {
+            setSidebar(<TeachersSidebar />);
+        } else if (user.userRole === "admin") {
+            setSidebar(<AdminSidebar />);
         }
     }
+
+    function handleNavbarTitleClick() {
+        if (!error && loaded && user) {
+            if (user.userRole === "student") {
+                navigate("/student/home");
+            } else if (user.userRole === "teacher") {
+                navigate("/teachers");
+            } else {
+                navigate("/admin/dashboard");
+            }
+        } else {
+            navigate("/");
+        }
+    }
+
+    useEffect(() => {
+        if (!error) {
+            if (loaded) {
+                if (user) {
+                    conditionallyRenderSidebar();
+                }
+            }
+        } else {
+            console.log("Error", "An error occured while fetching user state");
+        }
+    }, [loaded]);
 
     // Login Sidebar
     function LoginSidebar() {
@@ -263,14 +292,13 @@ function Navbar() {
 
     // Parent Sidebar
 
-    // Use state to determine which sidebar to display through useEffect hook to fetch user role from the backend
     return (
         <>
             <Flex as="nav" bg="#4DCBA4" w="100%" p="8px 24px 8px 24px" rounded="10px" justify="space-between" align="center" alignItems="center">
 
-                {conditionallyRenderSidebar()}
+                {sidebar}
 
-                <Heading color="white" cursor="pointer">RECYCLIFY</Heading>
+                <Heading color="white" cursor="pointer" onClick={() => handleNavbarTitleClick()}>RECYCLIFY</Heading>
                 <Avatar name="Joshua Long" src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
             </Flex>
         </>
