@@ -1,6 +1,7 @@
-import { Box, Flex, Image, Tabs} from '@chakra-ui/react';
+import { Box, Flex, Image, Tabs } from '@chakra-ui/react';
 import { FaLeaf } from "react-icons/fa";
 import { Avatar } from "@/components/ui/avatar";
+import ClassPieChart from './ClassPieChart'; // Import the pie chart component
 
 function ClassDashboard({ classData, students }) {
 
@@ -17,8 +18,8 @@ function ClassDashboard({ classData, students }) {
 
     // Sort the students by TotalPoints in accending order and get the least contributed top 3
     const lowest3Students = studentsList
-    .sort((a, b) => a.totalPoints - b.totalPoints)
-    .slice(0, 3);
+        .sort((a, b) => a.totalPoints - b.totalPoints)
+        .slice(0, 3);
 
 
     return (
@@ -45,7 +46,7 @@ function ClassDashboard({ classData, students }) {
                                                 {/* Rank Icon or Badge */}
                                                 <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
                                                     <Image src={index === 0 ? "/gold-medal.png" : index === 1 ? "/silver-medal.png" : "/bronze-medal.png"}
-                                                        alt={`Rank ${index + 1}`} w="100%" h="auto"/>
+                                                        alt={`Rank ${index + 1}`} w="100%" h="auto" />
                                                 </Box>
                                                 {/* Student Avatar */}
                                                 <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
@@ -72,14 +73,19 @@ function ClassDashboard({ classData, students }) {
                             <Flex gap={4} w="70%" h="100%" direction="row">
                                 {/* Month Contribution */}
                                 <Box w="70%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
-                                    Month Contribution
+                                    <Flex direction="column" textAlign="left" w="90%" h="90%" gap={4} p={2}>
+                                        <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Class Contribution</Box>
+                                        <Box w="100%" h="80%" p={2}>
+                                            <ClassPieChart students={studentsList} />
+                                        </Box>
+                                    </Flex>
                                 </Box>
                                 <Flex w="30%" h="100%" gap={4} direction="column" >
                                     {/* Total Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
-                                        <Flex direction="column" textAlign="left" gap={5} w="90%" h="90%" p={2} >
+                                        <Flex direction="column" textAlign="left" gap={4} w="90%" h="90%" p={2} >
                                             <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Total Class Clovers</Box>
-                                            <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center">
+                                            <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center" gap={2}>
                                                 <Box w="35%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
                                                     {classData.classPoints}
                                                 </Box>
@@ -91,9 +97,9 @@ function ClassDashboard({ classData, students }) {
                                     </Box >
                                     {/* Weekly Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
-                                        <Flex direction="column" textAlign="left" gap={5} w="90%" h="90%" p={2} >
+                                        <Flex direction="column" textAlign="left" gap={4} w="90%" h="90%" p={2} >
                                             <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Weekly Class Clovers</Box>
-                                            <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center">
+                                            <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center" gap={2}>
                                                 <Box w="35%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
                                                     {classData.classPoints}
                                                 </Box>
