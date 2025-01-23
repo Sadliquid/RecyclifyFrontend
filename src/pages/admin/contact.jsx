@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner } from "@chakra-ui/react";
 import { useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom";
-import { MdReply, MdEdit } from "react-icons/md";
+import { MdReply } from "react-icons/md"; // Removed MdEdit
 import { Button } from "@/components/ui/button";
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import Server from "../../../networking";
+import { useNavigate } from 'react-router-dom';
 
 const ContactFormManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -14,9 +14,7 @@ const ContactFormManagement = () => {
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
     const subjectRef = useRef(null);
-    const editMessageRef = useRef(null);
     const { user, loaded, error, authToken } = useSelector((state) => state.auth);
     const navigate = useNavigate();
 
@@ -32,7 +30,7 @@ const ContactFormManagement = () => {
                 }
             }
         } else {
-            ShowToast("error", "Error", "An error occured while fetching user state");
+            ShowToast("error", "Error", "An error occurred while fetching user state");
         }
     }, [loaded]);
 
@@ -42,21 +40,12 @@ const ContactFormManagement = () => {
         }
     }, [loaded]);
 
-    if (!loaded) {
-        return (
-            <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
-                <Spinner />
-            </Box>
-        )
-    }
-
     const fetchMessages = async () => {
         try {
             const response = await Server.get("/api/ContactManagement");
 
-            // Check if the request was successful (status code 2xx)
             if (response.status >= 200 && response.status < 300) {
-                const data = response.data; // Access the data property
+                const data = response.data;
                 setMessages(data);
                 setIsLoading(false);
             } else {
@@ -68,22 +57,14 @@ const ContactFormManagement = () => {
         }
     };
 
-    // Filter messages based on the search term
     const filteredMessages = messages.filter(
         (message) =>
             message.senderName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             message.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Handle reply button click
     const handleReply = (message) => {
         setSelectedMessage(message);
-    };
-
-    // Handle edit button click
-    const handleEdit = (message) => {
-        setSelectedMessage(message);
-        setIsEditing(true);
     };
 
     const handleSendReply = async (subject, body) => {
@@ -92,9 +73,7 @@ const ContactFormManagement = () => {
                 `${import.meta.env.VITE_BACKEND_URL}/api/ContactManagement/${selectedMessage.id}/mark-replied`
             );
 
-            // Check if the request was successful
             if (markRepliedResponse.status >= 200 && markRepliedResponse.status < 300) {
-                // Update the message in the local state to mark it as replied
                 setMessages((prevMessages) =>
                     prevMessages.map((message) =>
                         message.id === selectedMessage.id
@@ -102,48 +81,12 @@ const ContactFormManagement = () => {
                             : message
                     )
                 );
-                setSelectedMessage(null); // Clear the selected message
+                setSelectedMessage(null);
             } else {
                 throw new Error("Failed to mark the message as replied");
             }
         } catch (error) {
             console.error("Error marking the message as replied:", error);
-        }
-    };
-
-    const handleSaveEdit = async (newMessage) => {
-        try {
-            const updateResponse = await Server.put(
-                `${import.meta.env.VITE_BACKEND_URL}/api/ContactManagement/${selectedMessage.id
-                }`,
-                {
-                    ...selectedMessage,
-                    message: newMessage,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-
-            // Check if the request was successful
-            if (updateResponse.status >= 200 && updateResponse.status < 300) {
-                // Update the message in the local state
-                setMessages(
-                    messages.map((message) =>
-                        message.id === selectedMessage.id
-                            ? { ...message, message: newMessage }
-                            : message
-                    )
-                );
-                setIsEditing(false);
-                setSelectedMessage(null);
-            } else {
-                throw new Error("Failed to update the message");
-            }
-        } catch (error) {
-            console.error("Error updating the message:", error);
         }
     };
 
@@ -258,46 +201,6 @@ const ContactFormManagement = () => {
                                             </DialogContent>
                                         </DialogRoot>
                                     )}
-                                    <DialogRoot initialFocusEl={() => editMessageRef.current}>
-                                        <DialogTrigger asChild>
-                                            <Button
-                                                variant="link"
-                                                color="green.500"
-                                                onClick={() => handleEdit(message)}
-                                            >
-                                                <MdEdit size={20} /> Edit
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Edit Message</DialogTitle>
-                                            </DialogHeader>
-                                            <DialogBody pb="4">
-                                                <Stack gap="4">
-                                                    <Field label="Message">
-                                                        <Textarea
-                                                            ref={editMessageRef}
-                                                            defaultValue={message.message}
-                                                            placeholder="Edit the message"
-                                                            rows={5}
-                                                        />
-                                                    </Field>
-                                                </Stack>
-                                            </DialogBody>
-                                            <DialogFooter>
-                                                <DialogActionTrigger asChild>
-                                                    <Button
-                                                        onClick={() => {
-                                                            const newMessage = editMessageRef.current.value;
-                                                            handleSaveEdit(newMessage);
-                                                        }}
-                                                    >
-                                                        Save Changes
-                                                    </Button>
-                                                </DialogActionTrigger>
-                                            </DialogFooter>
-                                        </DialogContent>
-                                    </DialogRoot>
                                 </HStack>
                             </Table.Cell>
                         </Table.Row>
