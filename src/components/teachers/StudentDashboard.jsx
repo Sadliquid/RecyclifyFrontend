@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, defineStyle, Badge } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, Image, defineStyle } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
@@ -161,12 +161,12 @@ function StudentDashboard({ classData, students }) {
                         <Table.Header>
                             <Table.Row bg="bg.subtle">
                                 <Table.ColumnHeader>Student Name</Table.ColumnHeader>
+                                <Table.ColumnHeader>League</Table.ColumnHeader>
                                 <Table.ColumnHeader>Current Points</Table.ColumnHeader>
                                 <Table.ColumnHeader>Total Points</Table.ColumnHeader>
                                 <Table.ColumnHeader>Redemptions</Table.ColumnHeader>
                                 <Table.ColumnHeader>Student Email</Table.ColumnHeader>
                                 <Table.ColumnHeader>Parent Email</Table.ColumnHeader>
-                                <Table.ColumnHeader >Flag Status</Table.ColumnHeader>
                                 <Table.ColumnHeader textAlign="end"></Table.ColumnHeader>
                             </Table.Row>
                         </Table.Header>
@@ -190,14 +190,14 @@ function StudentDashboard({ classData, students }) {
                                                 {student.user.name}
                                             </Flex>
                                         </Table.Cell>
+                                        <Table.Cell color="black">
+                                            <Image src={student.league === "Gold" ? "/gold-medal.png" : student.league === "Silver" ? "/silver-medal.png" : "/bronze-medal.png"} alt={student.league} w="30px" h="30px" />
+                                        </Table.Cell>
                                         <Table.Cell color="black">{student.currentPoints}</Table.Cell>
                                         <Table.Cell color="black">{student.totalPoints}</Table.Cell>
-                                        <Table.Cell color="black">{student.redemptions}</Table.Cell>
-                                        <Table.Cell color="black">{student.user.email}</Table.Cell>
-                                        <Table.Cell color="black">{student.parentEmail}</Table.Cell>
-                                        <Table.Cell color="black">
-                                            {student.flagStatus ? <Badge colorPalette="red">Flagged</Badge> : ""}
-                                        </Table.Cell>
+                                        <Table.Cell color="black">{student.redemptions ? student.redemptions : 0}</Table.Cell>
+                                        <Table.Cell color="black">{student.user.email ? student.user.email : "N/A"}</Table.Cell>
+                                        <Table.Cell color="black">{student.parentEmail ? student.parentEmail : "N/A"}</Table.Cell>
                                         <Table.Cell>
                                             <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
                                                 <MenuTrigger asChild>
@@ -227,7 +227,6 @@ function StudentDashboard({ classData, students }) {
                                                                 borderRadius="xl"
                                                                 closeOnSelect={false}
                                                                 cursor="pointer"
-                                                                mt={2}
                                                                 onClick={() => handleEditStudent(student)} // Pass the selected student's details
                                                             >
                                                                 <MdEdit /> Edit
