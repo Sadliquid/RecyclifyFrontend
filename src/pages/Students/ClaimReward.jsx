@@ -22,7 +22,7 @@ function ClaimReward() {
                 console.log("studentID: ", studentID);
                 console.log("redemptionID: ", redemptionID);
                 if (studentID == null || redemptionID ==  null) {
-                    ShowToast('error', 'Error', 'Required parameters were missing.');
+                    ShowToast('error', 'Error', 'Required parameters are missing.');
                 }
 
                 const response = await server.get(`/api/student/claim-reward?studentID=${studentID}&redemptionID=${redemptionID}`);
@@ -52,7 +52,7 @@ function ClaimReward() {
             redeemReward();
         } else {
             setIsLoading(false);
-            setError('Required parameters were missing.');
+            setError('Required parameters are missing.');
         }
     }, [studentID, redemptionID]);
 
