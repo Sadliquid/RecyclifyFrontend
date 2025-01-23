@@ -16,6 +16,18 @@ function Login() {
     const [invalidIdentifier, setInvalidIdentifier] = useState(false)
     const [invalidPassword, setInvalidPassword] = useState(false)
 
+    useEffect(() => {
+        if (authToken) {
+            toaster.create({
+                title: "Logged in!",
+                description: "You are already logged in!",
+                type: "success",
+                duration: 3000
+            })            
+            navigate('/');
+        }
+    }, [authToken]);
+
     const handleSubmit = async (e) => {
         setInvalidIdentifier(false)
         setInvalidPassword(false)
