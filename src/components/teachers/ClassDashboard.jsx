@@ -83,8 +83,8 @@ function ClassDashboard({ classData, students }) {
                                 <Flex w="30%" h="100%" gap={4} direction="column" >
                                     {/* Total Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
-                                        <Flex direction="column" textAlign="left" gap={4} w="90%" h="90%" p={2} >
-                                            <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Total Class Clovers</Box>
+                                        <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2} >
+                                            <Box w="100%" h="20%" fontWeight="bold" fontSize="sm" mt={2}>Total Class Clovers</Box>
                                             <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center" gap={2}>
                                                 <Box w="35%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
                                                     {classData.classPoints}
@@ -97,8 +97,8 @@ function ClassDashboard({ classData, students }) {
                                     </Box >
                                     {/* Weekly Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center">
-                                        <Flex direction="column" textAlign="left" gap={4} w="90%" h="90%" p={2} >
-                                            <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Weekly Class Clovers</Box>
+                                        <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2} >
+                                            <Box w="100%" h="20%" fontWeight="bold" fontSize="sm" mt={2}>Weekly Class Clovers</Box>
                                             <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="center" gap={2}>
                                                 <Box w="35%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
                                                     {classData.classPoints}
