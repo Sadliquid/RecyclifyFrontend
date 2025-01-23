@@ -82,7 +82,7 @@ const ContactForm = () => {
                         color={"black"}
                     />
                 </Box>
-                <Button type="submit" background={'teal'} mt={3}>Send</Button>
+                <Button type="submit" backgroundColor={'blue'} mt={3}>Send</Button>
             </VStack>
             <Toaster />
         </Box>

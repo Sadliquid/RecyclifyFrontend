@@ -45,7 +45,7 @@ const ContactFormManagement = () => {
         try {
             const response = await Server.get("/api/ContactManagement");
 
-            if (response.status >= 200 && response.status < 300) {
+            if (response.status == 200 ) {
                 const data = response.data;
                 setMessages(data);
                 setIsLoading(false);
@@ -71,7 +71,7 @@ const ContactFormManagement = () => {
     const handleSendReply = async (subject, body) => {
         try {
             const markRepliedResponse = await Server.put(
-                `${import.meta.env.VITE_BACKEND_URL}/api/ContactManagement/${selectedMessage.id}/mark-replied`
+                `/api/ContactManagement/${selectedMessage.id}/mark-replied`
             );
 
             if (markRepliedResponse.status >= 200 && markRepliedResponse.status < 300) {
