@@ -58,20 +58,22 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
                 <Box>
                     <Card.Body maxW={"100%"} overflow={"hidden"}>
                         <Card.Title mb="2" isTruncated>{reward.rewardTitle}</Card.Title>
-                        <Card.Description>
-                            <Text
-                                noOfLines={2}
-                                display="-webkit-box"
-                                overflow="hidden"
-                                textOverflow="ellipsis"
-                                style={{
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: 'vertical'
-                                }}
-                            >
-                                {reward.rewardDescription}
-                            </Text>
-                            <Text mt={3}>Required leafs: {reward.requiredPoints}</Text>
+                        <Card.Description as="div">
+                            <Box>
+                                <Text
+                                    noOfLines={2}
+                                    display="-webkit-box"
+                                    overflow="hidden"
+                                    textOverflow="ellipsis"
+                                    style={{
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: 'vertical'
+                                    }}
+                                >
+                                    {reward.rewardDescription}
+                                </Text>
+                                <Text mt={3}>Required leafs: {reward.requiredPoints}</Text>
+                            </Box>
                         </Card.Description>
                     </Card.Body>
                     <Card.Footer>
