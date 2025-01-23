@@ -4,6 +4,8 @@ import { Avatar } from "@/components/ui/avatar";
 import ClassPieChart from './ClassPieChart'; // Import the pie chart component
 import { useEffect, useState } from 'react';
 import server from "../../../networking";
+import { PiCloverFill } from "react-icons/pi";
+import { LuBox } from 'react-icons/lu';
 
 function ClassDashboard({ classData, students }) {
 
@@ -14,6 +16,7 @@ function ClassDashboard({ classData, students }) {
 
     console.log("Class Dashboard Data: ", classDashboardData);
     console.log("Students List: ", studentsList);
+    console.log("School Classes Data: ", schoolClassesData);
 
     // Sort the students by totalPoints in descending order and get the top 3
     const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
@@ -25,7 +28,7 @@ function ClassDashboard({ classData, students }) {
         try {
             const response = await server.get(`/api/Teacher/get-overall-classes-data/`);
             if (response.status === 200) {
-                setSchoolClassesData(Array.isArray(response.data.data) ? response.data.data : []);
+                setSchoolClassesData(Array.isArray(response.data.data) ? sortSchoolClassesData(response.data.data) : []);
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
@@ -37,6 +40,39 @@ function ClassDashboard({ classData, students }) {
     useEffect(() => {
         fetchSchoolClasses();
     }, [classData && students]);
+
+    //Function to sort school classes data in descending order
+    function sortSchoolClassesData(schoolClassesData) {
+        if (!Array.isArray(schoolClassesData) || schoolClassesData.length === 0) {
+            return [];
+        }
+
+        return [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
+    }
+
+    // Function to get the ranking of a class based on classPoints
+    function getClassRanking(schoolClassesData, targetClassID) {
+        if (!Array.isArray(schoolClassesData) || schoolClassesData.length === 0) {
+            return "No class data available.";
+        }
+
+        // Sort classes by classPoints in descending order
+        const sortedClasses = [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
+
+        // Find the index of the target class
+        const targetIndex = sortedClasses.findIndex((classData) => classData.classID === targetClassID);
+
+        // If the class ID is not found, return a message
+        if (targetIndex === -1) {
+            return "Class not found.";
+        }
+
+        // Rank is 1-based, so add 1 to the index
+        return targetIndex + 1;
+    }
+
+    // Get the class ranking
+    const classRanking = getClassRanking(schoolClassesData, classData.classID);
 
     return (
         <Tabs.Content value='Class' >
@@ -56,9 +92,9 @@ function ClassDashboard({ classData, students }) {
                                     </Box>
 
                                     {/* Top 3 Students Contributor based on their totalPoints */}
-                                    <Flex direction="column" w="100%" h="70%" alignItems="center" justifyContent="center" gap={4}>
+                                    <Flex direction="column" w="100%" h="80%" alignItems="center" justifyContent="center" gap={4}>
                                         {top3Students.map((student, index) => (
-                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="center" justifyContent="center" borderBottom={index < 2 ? '1px solid #e0e0e0' : 'none'} pb={4}>
+                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="center" justifyContent="center" >
                                                 {/* Rank Icon or Badge */}
                                                 <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
                                                     <Image src={index === 0 ? "/gold-medal.png" : index === 1 ? "/silver-medal.png" : "/bronze-medal.png"}
@@ -106,7 +142,7 @@ function ClassDashboard({ classData, students }) {
                                                     {classData.classPoints}
                                                 </Box>
                                                 <Box w="65%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="left" alignItems="center">
-                                                    <FaLeaf />
+                                                    <PiCloverFill />
                                                 </Box>
                                             </Flex>
                                         </Flex>
@@ -120,7 +156,7 @@ function ClassDashboard({ classData, students }) {
                                                     {classData.classPoints}
                                                 </Box>
                                                 <Box w="65%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="left" alignItems="center">
-                                                    <FaLeaf />
+                                                    <PiCloverFill />
                                                 </Box>
                                             </Flex>
                                         </Flex>
@@ -135,9 +171,9 @@ function ClassDashboard({ classData, students }) {
                                     </Box>
 
                                     {/* Top 3 Students Contributor based on their totalPoints */}
-                                    <Flex direction="column" w="100%" h="70%" alignItems="center" justifyContent="center" gap={4}>
+                                    <Flex direction="column" w="100%" h="80%" alignItems="center" justifyContent="center" gap={4}>
                                         {lowest3Students.map((student, index) => (
-                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="center" justifyContent="center" borderBottom={index < 2 ? '1px solid #e0e0e0' : 'none'} pb={4} >
+                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="center" justifyContent="center" >
                                                 {/* Student Avatar */}
                                                 <Box w="20%" h="100%" display="flex" justifyContent="center" alignItems="center">
                                                     <Avatar name={student.user.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
@@ -161,7 +197,51 @@ function ClassDashboard({ classData, students }) {
                     </Flex>
                     {/* Leaderboards */}
                     <Box w="20%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center" >
-                        Leaderboards
+                        <Flex direction="column" textAlign="left" gap={2} w="90%" h="100%" p={2}>
+                            <Box w="100%" h="5%" fontWeight="bold" fontSize="sm" mt={3}>
+                                Class Leaderboards
+                            </Box>
+
+                            <Box w="100%" h="25%" fontWeight="bold" fontSize="sm" bg="#6A5AE0" borderRadius="xl" p={2} color="white">
+                                <Flex direction="row" w="100%" h="100%" gap={2} display="flex" justifyContent="center" alignItems="center">
+                                    <Box w="50%" h="100%" fontSize="sm" display="flex" justifyContent="center" alignItems="center" >
+                                        <Flex direction="column" alignItems="center" justifyContent="center" >
+                                            <Box h="80%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center"><PiCloverFill /></Box>
+                                            <Box h="10%" fontSize="sm" fontWeight="bold" >Clovers</Box>
+                                            <Box h="10%" fontSize="sm" fontWeight="bold" >{classData.classPoints}</Box>
+                                        </Flex>
+                                    </Box>
+                                    <Box w="50%" h="100%" fontSize="sm" display="flex" justifyContent="center" alignItems="center">
+                                        <Flex direction="column" alignItems="center" justifyContent="center">
+                                            <Box h="80%" size={30} display="flex" justifyContent="center" alignItems="center"><LuBox /></Box>
+                                            <Box h="10%" fontSize="sm" fontWeight="bold" >Rank</Box>
+                                            <Box h="10%" fontSize="sm" fontWeight="bold" >{classRanking}</Box>
+                                        </Flex>
+                                    </Box>
+                                </Flex>
+                            </Box>
+
+                            {/* School Classes Mini leaderboard */}
+                            <Box w="100%" h="70%" p={2}>
+                                <Flex direction="column" gap={2}>
+                                    {schoolClassesData.map((leaderboardClassData, index) => (
+                                        <Flex key={index} direction="row" w="100%" h="20%" gap={2} alignItems="center" justifyContent="center" 
+                                        bg={ index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "bronze" : "#C4D0FB" } borderRadius="3xl" p={4}
+                                        border={classData.className === leaderboardClassData.className ? "3px solid #483EA8" : "none"}>
+                                            <Box w="100%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
+                                                <Box w="60%" fontSize="2xl" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{leaderboardClassData.className}</Box>
+                                                <Box w="30%" fontSize="2xl" fontWeight="bold" display="flex" justifyContent="flex-end">
+                                                    {leaderboardClassData.classPoints}
+                                                </Box>
+                                                <Box w="10%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center" ml={1}>
+                                                    <FaLeaf />
+                                                </Box>
+                                            </Box>
+                                        </Flex>
+                                    ))}
+                                </Flex>
+                            </Box>
+                        </Flex>
                     </Box>
                 </Flex>
             </Box>
