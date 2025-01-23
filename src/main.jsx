@@ -24,7 +24,7 @@ import UserManagement from './pages/admin/user'
 import InventoryManagement from './pages/admin/inventory'
 import ContactFormManagement from './pages/admin/contact'
 import ContactForm from './pages/contact/contact'
-import Cyclobot from './pages/cyclobot/cyclobot'
+import EcoPilot from './pages/EcoPilot/EcoPilot'
 import TeachersLanding from './pages/Teachers/Landing'
 import Class from './pages/Teachers/Class'
 import StudentRedemption from './pages/Teachers/StudentRedemption'
@@ -92,7 +92,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"contactManagement"} element={<ContactFormManagement />} />
                         </Route>
 
-                        <Route path={"cyclobot"} element={<Cyclobot />} />
+                        <Route path={"ecoPilot"} element={<EcoPilot />} />
 
                         <Route path={"contact"} element={<ContactForm />} />
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Cyclobot = () => {
+const EcoPilot = () => {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (event) => {
@@ -77,4 +77,4 @@ const styles = {
   },
 };
 
-export default Cyclobot;
+export default EcoPilot;
