@@ -33,7 +33,7 @@ function Login() {
                     navigate("/admin/dashboard");
                 }
             }
-            ShowToast("success", "Success", "You are already logged in!");
+            ShowToast("success", "Logged In", "You are already logged in!");
         }
     }, [user, error, loaded, authToken]);
 
@@ -59,21 +59,11 @@ function Login() {
                 Password: password,
             });
             localStorage.setItem('jwt', response.data.token);
-            toaster.create({
-                title: "Welcome back!",
-                description: "Successfully logged in.",
-                type: "success",
-                duration: 3000
-            })
+            ShowToast("success", "Welcome Back!", "Successfully logged in.");
             navigate("/identity/myAccount");
         } catch (error) {
             setIsLoading(false);
-            toaster.create({
-                title: "Invalid Login Credentials",
-                description: "Please try again",
-                type: "error",
-                duration: 3000
-            })
+            ShowToast("error", "Invalid Login Credentials", "Please try again.");
             console.log(error)
         }
     };

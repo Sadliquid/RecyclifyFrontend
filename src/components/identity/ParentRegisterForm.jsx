@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { PasswordInput } from "@/components/ui/password-input"
 import server from "../../../networking"
 import { FaIdBadge } from "react-icons/fa";
+import ShowToast from '../../Extensions/ShowToast';
 
 function ParentRegistrationForm({ goBack }) {
     const navigate = useNavigate();
@@ -48,12 +49,7 @@ function ParentRegistrationForm({ goBack }) {
             if (rawResponseMessage.startsWith("SUCCESS")) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
                 if (responseMessage === "Account created successfully.") {
-                    toaster.create({
-                        title: "Account Created!",
-                        description: "Please verify your email.",
-                        type: "success",
-                        duration: 3000
-                    })
+                    ShowToast( "success", "Account Created!", "Please verify your email.")
                     navigate("/auth/emailVerification")
                 }
             }
@@ -73,20 +69,10 @@ function ParentRegistrationForm({ goBack }) {
                 if (errorMessage === "Invalid student ID.") {
                     formik.setFieldError('studentID', 'Invalid StudentID');
                 }
-                toaster.create({
-                    title: "Invalid Input.",
-                    description: errorMessage,
-                    type: "error",
-                    duration: 3000
-                })
+                ShowToast("error", "Invalid Input.", errorMessage)
             } else {
                 console.log(err)
-                toaster.create({
-                    title: "Something went wrong.",
-                    description: "Please try again later.",
-                    type: "error",
-                    duration: 3000
-                })
+                ShowToast( "error", "Something went wrong.", "Please try again later.")
             }
         }
     }

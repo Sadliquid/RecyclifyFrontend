@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Box, VStack, Heading, Link, Text, HStack, Image } from '@chakra-ui/react'
-import { toaster } from "@/components/ui/toaster"
+import ShowToast from '../../Extensions/ShowToast';
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 import ParentRegistrationForm from '../../components/identity/ParentRegisterForm'
 import StudentRegistrationForm from '../../components/identity/StudentRegisterForm'
@@ -23,7 +23,7 @@ function CreateAccount() {
                     navigate("/admin/dashboard");
                 }
             }
-            ShowToast("success", "Success", "You are already logged in!");
+            ShowToast("success", "Logged In", "You are already logged in!");
         }
     }, [user, error, loaded, authToken]);
 

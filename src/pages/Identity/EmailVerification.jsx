@@ -1,28 +1,106 @@
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { PinInput } from "@/components/ui/pin-input"
-import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
+import { StepsItem, StepsList, StepsRoot } from "@/components/ui/steps"
 
 function EmailVerification() {
     const navigate = useNavigate();
+    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isResending, setIsResending] = useState(false);
 
     useEffect(() => {
-        if (user && authToken) {     
-            if (!error && loaded) {
-                if (user.userRole === "student") {
-                    navigate("/student/home");
-                } else if (user.userRole === "teacher") {
-                    navigate("/teachers");
-                } else {
-                    navigate("/admin/dashboard");
-                }
-            }
-            ShowToast("success", "Success", "You are already logged in!");
+        if (user?.emailVerified) {
+            navigateBasedOnRole();
         }
-    }, [user, error, loaded, authToken]);
+    }, [user]);
 
+    const navigateBasedOnRole = () => {
+        if (user?.userRole === "student") {
+            navigate("/student/home");
+        } else if (user?.userRole === "teacher") {
+            navigate("/teachers");
+        } else {
+            navigate("/admin/dashboard");
+        }
+    };
+
+    const verifyEmail = async () => {
+        if (!verificationCode || verificationCode.length !== 6) {
+            toast({
+                title: "Invalid Code",
+                description: "Please enter a 6-digit verification code",
+                status: "error",
+            });
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await axios.post(
+                '/api/identity/verifyEmail',
+                { code: verificationCode },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
+                }
+            );
+
+            if (response.data.message === "SUCCESS: Email verified successfully") {
+                await updateUser(); // Refresh user data
+                toast({
+                    title: "Email Verified!",
+                    status: "success",
+                });
+                navigateBasedOnRole();
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || "Verification failed";
+            toast({
+                title: "Error",
+                description: errorMessage,
+                status: "error",
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const sendVerificationEmail = async () => {
+        setIsResending(true);
+        try {
+            const response = await axios.post(
+                '/api/identity/emailVerification',
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
+                }
+            );
+
+            if (response.data.message === "SUCCESS: Verification code sent") {
+                toast({
+                    title: "Code Sent!",
+                    description: "Check your email for a new verification code",
+                    status: "success",
+                });
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || "Failed to send code";
+            toast({
+                title: "Error",
+                description: errorMessage,
+                status: "error",
+            });
+        } finally {
+            setIsResending(false);
+        }
+    };
     
-
     return (
         <Box
             bgPosition="center"
@@ -74,19 +152,37 @@ function EmailVerification() {
                         display="flex"
                         justifyContent="center"
                         backgroundColor="#2D65FF"
-                        mb={2}
+                        mb={4}
                         colorScheme="white"
                         _hover={{ bg: "#1752FD" }}
                         borderRadius="30px"
                         alignItems="center"
-                        mt={10}
+                        mt={8}
                         w={150}
-                        onClick={() => {
-                            navigate("/auth/contactVerification");
-                        }}
+                        onClick={verifyEmail}
+                        isLoading={isLoading}
+                        loadingText="Verifying..."
                     >
                         <Text>Verify Email</Text>
                     </Button>
+
+                    <Text
+                        mt={2}
+                        fontSize={12}
+                    >
+                        Didn’t receive the email? 
+                        <Button 
+                            variant="link" 
+                            colorScheme="blue" 
+                            ml={2}
+                            size={'sm'}
+                            onClick={sendVerificationEmail}
+                            isLoading={isResending}
+                            loadingText="Sending..."
+                        >
+                            Resend Email
+                        </Button>
+                    </Text> 
                 </VStack>
             </Box>
         </Box>
