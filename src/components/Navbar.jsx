@@ -49,6 +49,14 @@ function Navbar() {
         }
     }
 
+    function handleProfilePictureClick() {
+        if (!error && loaded && user) {
+            navigate("/identity/myAccount");
+        } else {
+            navigate("/auth/login");
+        }
+    }
+
     useEffect(() => {
         if (!error) {
             if (loaded) {
@@ -299,7 +307,7 @@ function Navbar() {
                 {sidebar}
 
                 <Heading color="white" cursor="pointer" onClick={() => handleNavbarTitleClick()}>RECYCLIFY</Heading>
-                <Avatar name="Joshua Long" src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+                <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" onClick={() => handleProfilePictureClick()} />
             </Flex>
         </>
     );
