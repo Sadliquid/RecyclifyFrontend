@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
-import { MdEdit, MdAdd, MdDelete } from "react-icons/md";
+import { MdEdit, MdAdd } from "react-icons/md";
 import Server from "../../../networking";
 
 const InventoryManagement = () => {
@@ -27,9 +27,10 @@ const InventoryManagement = () => {
                 }
             }
         } else {
-            ShowToast("error", "Error", "An error occured while fetching user state");
+            ShowToast("error", "Error", "An error occurred while fetching user state");
         }
     }, [loaded]);
+
     // Fetch reward items from the backend
     useEffect(() => {
         const fetchRewardItems = async () => {
@@ -87,8 +88,7 @@ const InventoryManagement = () => {
     const handleSave = async () => {
         try {
             const response = await Server.put(
-                `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${editingItem.rewardID
-                }`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${editingItem.rewardID}`,
                 editingItem, // Pass the data as the second argument
                 {
                     headers: {
