@@ -1,16 +1,43 @@
-import { useState } from "react";
-import {
-  Stack,
-  Table,
-  Heading,
-  Input,
-  HStack,
-  Button,
-  Box,
-} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import {Stack, Table, Heading, Input, HStack, Button, Box, Spinner } from "@chakra-ui/react";
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!error) {
+      if (loaded) {
+        if (!user) {
+          navigate("/auth/login");
+          ShowToast("error", "You are not logged in", "Please log in first");
+        } else if (user.userRole != "admin") {
+          navigate("/auth/login");
+          ShowToast("error", "Access denied", "Please log in as a admin");
+        }
+      }
+    } else {
+      ShowToast("error", "Error", "An error occured while fetching user state");
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return (
+      <Box
+        display="flex"
+        flexDir={"column"}
+        justifyContent="center"
+        alignItems="center"
+        width="100%"
+        height="100%"
+      >
+        <Spinner />
+      </Box>
+    );
+  }
 
   // Filter items based on the search term
   const filteredItems = items.filter((item) =>
@@ -26,7 +53,9 @@ const UserManagement = () => {
   return (
     <Stack gap="10">
       <Box textAlign="center">
-        <Heading fontSize={"30px"} m={10}>User Management</Heading>
+        <Heading fontSize={"30px"} m={10}>
+          User Management
+        </Heading>
         <HStack justifyContent="center" mb="4">
           <Input
             placeholder="Search for user..."
