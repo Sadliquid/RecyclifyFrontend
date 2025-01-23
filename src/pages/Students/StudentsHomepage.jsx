@@ -96,7 +96,7 @@ function StudentsHomepage() {
         )
     }
 
-    if (loaded && studentProfile !== null) return (
+    if (loaded && user && studentProfile !== null) return (
         <>
             <Box display="flex" justifyContent={"space-between"} width="100%" height={"77vh"} mt={10} boxSizing={"border-box"}>
                 <Box display="flex" width="69%" height={"100%"} backgroundColor={"#E5ECFF"} borderRadius={20} boxSizing={"border-box"}>
