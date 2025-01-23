@@ -6,17 +6,14 @@ import { useEffect, useState } from 'react';
 import server from "../../../networking";
 import { PiCloverFill } from "react-icons/pi";
 import { LuBox } from 'react-icons/lu';
+import { motion } from 'framer-motion';
 
 function ClassDashboard({ classData, students }) {
-
     const studentsList = students || [];
     const classDashboardData = classData || {};
     const [schoolClassesData, setSchoolClassesData] = useState([]);
 
-
-    console.log("Class Dashboard Data: ", classDashboardData);
-    console.log("Students List: ", studentsList);
-    console.log("School Classes Data: ", schoolClassesData);
+    const MotionFlex = motion(Flex);
 
     // Sort the students by totalPoints in descending order and get the top 3
     const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
@@ -225,9 +222,11 @@ function ClassDashboard({ classData, students }) {
                             <Box w="100%" h="70%" p={2}>
                                 <Flex direction="column" gap={2}>
                                     {schoolClassesData.map((leaderboardClassData, index) => (
-                                        <Flex key={index} direction="row" w="100%" h="20%" gap={2} alignItems="center" justifyContent="center" 
+                                        <MotionFlex key={index} direction="row" w="100%" h="20%" gap={2} alignItems="center" justifyContent="center" 
                                         bg={ index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "bronze" : "#C4D0FB" } borderRadius="3xl" p={4}
-                                        border={classData.className === leaderboardClassData.className ? "3px solid #483EA8" : "none"}>
+                                        border={classData.className === leaderboardClassData.className ? "3px solid #483EA8" : "none"}
+                                        _hover={{ transform: "scale(1.05)",  boxShadow: "lg", transition: "all 0.3s ease" }}
+                                        whileHover={{ scale: 1.05 }}>
                                             <Box w="100%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
                                                 <Box w="60%" fontSize="2xl" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{leaderboardClassData.className}</Box>
                                                 <Box w="30%" fontSize="2xl" fontWeight="bold" display="flex" justifyContent="flex-end">
@@ -237,7 +236,7 @@ function ClassDashboard({ classData, students }) {
                                                     <FaLeaf />
                                                 </Box>
                                             </Box>
-                                        </Flex>
+                                        </MotionFlex>
                                     ))}
                                 </Flex>
                             </Box>
