@@ -8,6 +8,7 @@ import { FaCamera, FaExclamationTriangle } from 'react-icons/fa';
 import { useState } from 'react';
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
+import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
 function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPoints, VerificationPending, TaskVerified }) {
@@ -57,9 +58,15 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                         }
                     })
                     .catch(error => {
-                        const errorMessage = error.response?.data?.error || "An unknown error occurred";
-                        reject(errorMessage);
-                        console.error("ERROR: ", error);
+                        if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                            if (error.response.data.error.startsWith("UERROR")) {
+                                ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                                reject(error.response.data.error.substring("UERROR: ".length));
+                            } else {
+                                ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                                reject("Unknown system error");
+                            }
+                        }
                     });
             });
 

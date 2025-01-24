@@ -4,6 +4,7 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import { CloseButton } from "@/components/ui/close-button";
 import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle } from "@/components/ui/dialog"
+import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
 function ImageRecognition() {
@@ -38,35 +39,46 @@ function ImageRecognition() {
         const formData = new FormData();
         formData.append("file", selectedFile);
     
-        const uploadPromise = server.post("/api/student/recognise-image", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            transformRequest: (formData) => formData,
-        });
-    
-        toaster.promise(
-            uploadPromise
+        const uploadPromise = new Promise((resolve, reject) => {
+            server.post("/api/student/recognise-image", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                transformRequest: (formData) => formData,
+            })
                 .then((response) => {
                     if (response.status === 200) {
                         setItemCategory(response.data.category);
                         setItemRecyclable(response.data.result === "Yes");
                         clearFile();
                         setOpen(true);
+                        resolve("The file was uploaded successfully!");
                     } else {
-                        throw new Error(`Unexpected response status: ${response.status}`);
+                        reject(`Unexpected response status: ${response.status}`);
                     }
                 })
                 .catch((error) => {
-                    console.error("Upload failed:", error.response?.data || error.message);
-                    throw error.response?.data?.error || "An unknown error occurred.";
-                }),
-            {
-                loading: { title: "Uploading...", description: "Please wait while your file is being processed." },
-                success: { title: "Success", description: "The file was uploaded successfully!" },
-                error: { title: "Error", description: (err) => `Upload failed: ${err}` },
-            }
-        );
+                    if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                        if (error.response.data.error.startsWith("UERROR")) {
+                            const errorMessage = error.response.data.error.substring("UERROR:".length);
+                            ShowToast("error", errorMessage);
+                            reject(errorMessage);
+                        } else {
+                            const errorMessage = error.response.data.error.substring("ERROR:".length);
+                            ShowToast("error", errorMessage);
+                            reject("Unknown system error");
+                        }
+                    } else {
+                        reject("An unexpected error occurred");
+                    }
+                });
+        });
+    
+        toaster.promise(uploadPromise, {
+            loading: { title: "Uploading...", description: "Please wait while your file is being processed." },
+            success: { title: "Success", description: "Upload successful!" },
+            error: { title: "Error", description: (err) => `Upload failed: ${err}` },
+        });
     };
 
     return (

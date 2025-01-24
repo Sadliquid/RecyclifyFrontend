@@ -2,6 +2,7 @@
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Box, Button, Text, Card, Image } from "@chakra-ui/react"
 import { Toaster, toaster } from "@/components/ui/toaster"
+import ShowToast from "../../Extensions/ShowToast"
 import server from "../../../networking"
 
 function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
@@ -25,8 +26,10 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
             .catch(error => {
                 if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                     if (error.response.data.error.startsWith("UERROR")) {
+                        ShowToast("error", error.response.data.error.substring("UERROR:".length));
                         reject(error.response.data.error.substring("UERROR: ".length));
                     } else {
+                        ShowToast("error", error.response.data.error.substring("ERROR:".length));
                         reject("Unknown system error");
                     }
                 }
@@ -52,26 +55,28 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
                 <Image
                     objectFit="cover"
                     maxW="200px"
-                    src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+                    src={reward.imageUrl != null ? reward.imageUrl : "https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
                     alt="Caffe Latte"
                 />
                 <Box>
                     <Card.Body maxW={"100%"} overflow={"hidden"}>
                         <Card.Title mb="2" isTruncated>{reward.rewardTitle}</Card.Title>
-                        <Card.Description>
-                            <Text
-                                noOfLines={2}
-                                display="-webkit-box"
-                                overflow="hidden"
-                                textOverflow="ellipsis"
-                                style={{
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: 'vertical'
-                                }}
-                            >
-                                {reward.rewardDescription}
-                            </Text>
-                            <Text mt={3}>Required leafs: {reward.requiredPoints}</Text>
+                        <Card.Description as="div">
+                            <Box>
+                                <Text
+                                    noOfLines={2}
+                                    display="-webkit-box"
+                                    overflow="hidden"
+                                    textOverflow="ellipsis"
+                                    style={{
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: 'vertical'
+                                    }}
+                                >
+                                    {reward.rewardDescription}
+                                </Text>
+                                <Text mt={3}>Required leafs: {reward.requiredPoints}</Text>
+                            </Box>
                         </Card.Description>
                     </Card.Body>
                     <Card.Footer>

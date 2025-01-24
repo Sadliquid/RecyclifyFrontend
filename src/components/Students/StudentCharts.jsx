@@ -3,6 +3,7 @@ import { Box, Text, Spinner } from '@chakra-ui/react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useEffect, useState } from 'react';
+import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -57,9 +58,15 @@ function StudentCharts({ studentID }) {
                 }
             })
             .catch(error => {
-                const errorMessage = error.response?.data?.error || "An unknown error occurred";
-                reject(errorMessage);
-                console.error("ERROR: ", error);
+                if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                    if (error.response.data.error.startsWith("UERROR")) {
+                        ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                        reject(error.response.data.error.substring("UERROR: ".length));
+                    } else {
+                        ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                        reject("Unknown system error");
+                    }
+                }
             });
         });
     }, [studentID]);

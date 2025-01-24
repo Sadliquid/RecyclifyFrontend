@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Heading, Span, Text } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import RewardRedemptionCard from '../../components/Students/RewardRedemptionCard';
 import ShowToast from '../../Extensions/ShowToast';
@@ -29,9 +30,9 @@ function Redemption() {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error);
+                    ShowToast("error", error.response.data.error);
                 }
             }
         }
@@ -51,25 +52,27 @@ function Redemption() {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                    return;
                 } else {
-                    ShowToast(error.response.data.error);
+                    ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                    return;
                 }
             }
         }
     }
 
-    useState(() => {
+    useEffect(() => {
         if (!error && loaded && user && user.userRole == "student") {
             fetchLeafs(user.id);
         }
     }, [loaded]);
 
-    useState(() => {
+    useEffect(() => {
         fetchRewards();
     }, []);
 
-    if (!error && loaded && user!= null && rewards != null && redeemablePoints != null) return (
+    if (!error && loaded && user && rewards != null && redeemablePoints != null) return (
         <Box display="flex" justifyContent="center" flexDir="column" alignItems="center" mt={10}>
             <Heading fontSize="30px" mb={10}>Redeem my leafs</Heading>
 

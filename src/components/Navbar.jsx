@@ -4,10 +4,9 @@ import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/reac
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
-import { BsClipboard2Check, BsMailbox, BsPeople } from "react-icons/bs";
+import { BsGift, BsMailbox, BsPeople } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
-import { GrAddCircle } from "react-icons/gr";
 import { FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
 import { BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
@@ -163,14 +162,14 @@ function Navbar() {
                                 <Text ml={2}>Redeem my leafs</Text>
                             </Button>
 
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myRewards")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
+                                <Text as={BsGift} fontSize="20px" color="#515F7C" />
+                                <Text ml={2}>My Rewards</Text>
+                            </Button>
+
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scanItem")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <IoSparklesOutline ml={4}/>
                                 <Text ml={2}>Scan my item</Text>
-                            </Button>
-
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/submittedTasks")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={BsClipboard2Check} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>Submitted tasks</Text>
                             </Button>
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/inbox")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
@@ -180,12 +179,7 @@ function Navbar() {
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Text as={BsPeople} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>My class</Text>
-                            </Button>
-
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/enrolClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={GrAddCircle} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>Enrol into class</Text>
+                                <Text ml={2}>My Class</Text>
                             </Button>
                         </Box>
 
