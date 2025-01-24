@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, Image, defineStyle } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
@@ -153,6 +153,12 @@ function StudentDashboard({ classData, students }) {
 
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
+    useEffect(() => {
+        if (classData && students) {
+            fetchStudents();
+        }
+    }, [classData && students]);
+
     return (
         <Tabs.Content value='Students'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
@@ -195,9 +201,9 @@ function StudentDashboard({ classData, students }) {
                                         </Table.Cell>
                                         <Table.Cell color="black">{student.currentPoints}</Table.Cell>
                                         <Table.Cell color="black">{student.totalPoints}</Table.Cell>
-                                        <Table.Cell color="black">{student.redemptions ? student.redemptions : 0}</Table.Cell>
+                                        <Table.Cell color="black">{student.redemptions.length > 0 ? student.redemptions : 0}</Table.Cell>
                                         <Table.Cell color="black">{student.user.email ? student.user.email : "N/A"}</Table.Cell>
-                                        <Table.Cell color="black">{student.parentEmail ? student.parentEmail : "N/A"}</Table.Cell>
+                                        <Table.Cell color="black">{student.parent != null && student.parent.parentEmail ? student.parent.parentEmail : "N/A"}</Table.Cell>
                                         <Table.Cell>
                                             <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
                                                 <MenuTrigger asChild>
@@ -220,19 +226,19 @@ function StudentDashboard({ classData, students }) {
                                                         borderColor: 'gray.200',
                                                     }}
                                                 >
-                                                    <DialogRoot size="lg" open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
-                                                        <DialogTrigger asChild>
+                                                    <DialogRoot size="lg" isOpen={open} onClose={resetEditedStudent}>
+                                                        <DialogTrigger >
                                                             <MenuItem
-                                                                value="edit-class"
-                                                                borderRadius="xl"
+                                                                bg="white"
+                                                                value="edit-student-details"
                                                                 closeOnSelect={false}
                                                                 cursor="pointer"
                                                                 onClick={() => handleEditStudent(student)} // Pass the selected student's details
                                                             >
-                                                                <MdEdit /> Edit
+                                                                <MdEdit /> Edit Student
                                                             </MenuItem>
                                                         </DialogTrigger>
-                                                        <DialogContent>
+                                                        <DialogContent >
                                                             <DialogHeader>
                                                                 <DialogTitle color="black" fontWeight="bold" textAlign="left">
                                                                     Edit Student Details
@@ -280,18 +286,20 @@ function StudentDashboard({ classData, students }) {
                                                                         Cancel
                                                                     </Button>
                                                                 </DialogActionTrigger>
-                                                                <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={isFormInvalid}>
-                                                                    Save
-                                                                </Button>
+                                                                <DialogActionTrigger asChild>
+                                                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={isFormInvalid}>
+                                                                        Save
+                                                                    </Button>
+                                                                </DialogActionTrigger>
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </DialogRoot>
-                                                    <MenuItem value="copy-uuid" borderRadius="xl" mt={2}>
+                                                    <MenuItem value="copy-uuid" borderRadius="xl" mt={2} cursor="pointer">
                                                         <MdOutlineEmail /> Send Email
                                                     </MenuItem>
                                                     <DialogRoot size="lg">
                                                         <DialogTrigger asChild>
-                                                            <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2}>
+                                                            <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2} cursor="pointer">
                                                                 <MdDelete /> Delete
                                                             </MenuItem>
                                                         </DialogTrigger>

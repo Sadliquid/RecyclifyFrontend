@@ -8,7 +8,7 @@ import { LuBox } from "react-icons/lu"
 
 function ClassTabs({ classData, students }) {
     const studentsList = students || [];
-
+    
     return (
         <>
             {/* Conditionally render tabs based on student count */}
