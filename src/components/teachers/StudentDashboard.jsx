@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, Image, defineStyle } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
@@ -152,6 +152,12 @@ function StudentDashboard({ classData, students }) {
     };
 
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
+
+    useEffect(() => {
+        if (classData && students) {
+            fetchStudents();
+        }
+    }, [classData && students]);
 
     return (
         <Tabs.Content value='Students'>
