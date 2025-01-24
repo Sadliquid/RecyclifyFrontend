@@ -1,19 +1,29 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
-import { PinInput } from "@/components/ui/pin-input"
-import { StepsItem, StepsList, StepsRoot } from "@/components/ui/steps"
+import { Box, VStack, Heading, Text, Button, Field } from '@chakra-ui/react'
+import { StepsItem, StepsList, StepsRoot } from "@/components/ui/steps";
+import { PinInput } from "@/components/ui/pin-input";
+import { Controller, useForm } from "react-hook-form"
+import server from "../../../networking";
+import ShowToast from '../../Extensions/ShowToast';
 
 function EmailVerification() {
     const navigate = useNavigate();
-    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
-    const [isLoading, setIsLoading] = useState(false);
+    const { user, authToken } = useSelector((state) => state.auth);
     const [isResending, setIsResending] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { handleSubmit, control, formState: { errors } } = useForm({
+        defaultValues: {
+            pin: Array(6).fill(''),
+        },
+    });
 
     useEffect(() => {
         if (user?.emailVerified) {
             navigateBasedOnRole();
+            ShowToast("success", "Email Verified", "Your email is already verified.")
         }
     }, [user]);
 
@@ -27,44 +37,27 @@ function EmailVerification() {
         }
     };
 
-    const verifyEmail = async () => {
-        if (!verificationCode || verificationCode.length !== 6) {
-            toast({
-                title: "Invalid Code",
-                description: "Please enter a 6-digit verification code",
-                status: "error",
-            });
+
+    const verifyEmail = async (data) => {
+        const isComplete = data.pin.every(digit => digit.length === 1);
+        if (!isComplete) {
+            ShowToast("error", "Missing Digits", "Please enter all 6 digits of the verification code");
             return;
         }
-
         setIsLoading(true);
         try {
-            const response = await axios.post(
-                '/api/identity/verifyEmail',
-                { code: verificationCode },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                }
+            const verificationCode = data.pin.join('');
+            const response = await server.post('/api/identity/verifyEmail', { code: verificationCode }
             );
 
             if (response.data.message === "SUCCESS: Email verified successfully") {
-                await updateUser(); // Refresh user data
-                toast({
-                    title: "Email Verified!",
-                    status: "success",
-                });
+                ShowToast("success", "Email Verified!", "Your email has been successfully verified.");
                 navigateBasedOnRole();
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.error || "Verification failed";
-            toast({
-                title: "Error",
-                description: errorMessage,
-                status: "error",
-            });
-        } finally {
+            ShowToast("error", "Verification Failed", error.response?.data?.error || "Verification failed");
+        }
+        finally {
             setIsLoading(false);
         }
     };
@@ -72,35 +65,15 @@ function EmailVerification() {
     const sendVerificationEmail = async () => {
         setIsResending(true);
         try {
-            const response = await axios.post(
-                '/api/identity/emailVerification',
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                }
-            );
-
-            if (response.data.message === "SUCCESS: Verification code sent") {
-                toast({
-                    title: "Code Sent!",
-                    description: "Check your email for a new verification code",
-                    status: "success",
-                });
-            }
+            await server.post('/api/identity/emailVerification');
+            ShowToast("success", "Code Sent!", "A new verification code has been sent to your email.");
         } catch (error) {
-            const errorMessage = error.response?.data?.error || "Failed to send code";
-            toast({
-                title: "Error",
-                description: errorMessage,
-                status: "error",
-            });
+            ShowToast("error", "Sending Failed", error.response?.data?.error || "Failed to send code");
         } finally {
             setIsResending(false);
         }
     };
-    
+
     return (
         <Box
             bgPosition="center"
@@ -142,11 +115,35 @@ function EmailVerification() {
                         Check your inbox
                     </Heading>
 
-                    <Text mt={2}>
+                    <Text mt={2} mb={20}>
                         We've sent a verification code to your email inbox!
                     </Text>
                     
-                    <PinInput size="md" otp mt={10} p={10} />
+                    <Controller
+                        control={control}
+                        name="pin"
+                        rules={{
+                            validate: (value) => 
+                                value.every(digit => digit.length === 1) || 
+                                "Please enter all 6 digits"
+                        }}
+                        render={({ field }) => (
+                            <Box>
+                                <PinInput
+                                    value={field.value}
+                                    onValueChange={(values) => field.onChange(values.value)}
+                                    otp
+                                    size="md"
+                                    gap={2}
+                                />
+                                {errors.pin && (
+                                    <Text color="red.500" fontSize="sm" mt={2}>
+                                        {errors.pin.message}
+                                    </Text>
+                                )}
+                            </Box>
+                        )}
+                    />
 
                     <Button
                         display="flex"
@@ -157,9 +154,14 @@ function EmailVerification() {
                         _hover={{ bg: "#1752FD" }}
                         borderRadius="30px"
                         alignItems="center"
-                        mt={8}
+                        mt={20}
                         w={150}
-                        onClick={verifyEmail}
+                        onClick={handleSubmit(
+                            (data) => verifyEmail(data),
+                            (errors) => {
+                                ShowToast("error", "Validation Error", "Please enter a complete 6-digit code");
+                            }
+                        )}
                         isLoading={isLoading}
                         loadingText="Verifying..."
                     >
@@ -189,4 +191,4 @@ function EmailVerification() {
     );
 }
 
-export default EmailVerification
+export default EmailVerification;
