@@ -54,8 +54,14 @@ function EmailVerification() {
                 ShowToast("success", "Email Verified!", "Your email has been successfully verified.");
                 navigateBasedOnRole();
             }
-        } catch (error) {
-            ShowToast("error", "Verification Failed", error.response?.data?.error || "Verification failed");
+        } catch (err) {
+            const rawErrorMessage = err.response.data.error;
+            if (rawErrorMessage.startsWith("UERROR")) {
+                const errorMessage = rawErrorMessage.substring("UERROR: ".length).trim()
+                ShowToast("error", "Verification Failed.", errorMessage)
+            } else {
+                ShowToast( "error", "Something went wrong.", "Please try again later.")
+            }
         }
         finally {
             setIsLoading(false);
@@ -159,7 +165,7 @@ function EmailVerification() {
                         onClick={handleSubmit(
                             (data) => verifyEmail(data),
                             (errors) => {
-                                ShowToast("error", "Validation Error", "Please enter a complete 6-digit code");
+                                ShowToast("error", "Invalid Verification Code", "Please enter a complete 6-digit code");
                             }
                         )}
                         isLoading={isLoading}
