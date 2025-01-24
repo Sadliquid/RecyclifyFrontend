@@ -11,27 +11,27 @@ const ContactForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const response = await Server.post(`${import.meta.env.VITE_BACKEND_URL}/api/ContactForm`, {
-                Id: 1, // Static ID for the form
+            const response = await Server.post(`/api/ContactForm`, {
                 senderName: name,
                 senderEmail: email,
                 message,
-                hasReplied: false,
             });
-
+    
             if (response.status === 200) {
-                ShowToast('success', 'Success', 'Form submitted successfully!');
+                ShowToast('success', 'Success', response.data.message);
                 setName('');
                 setEmail('');
                 setMessage('');
             } else {
-                console.log(response)
-                ShowToast('error', 'Error', 'Failed to submit form');
+                ShowToast('error', 'Error', response.data.error || 'Failed to submit form');
             }
         } catch (error) {
-            ShowToast('error', 'Error', `Error: ${error.message}`);
+            ShowToast('error', 'Error', 
+                error.response?.data?.error || 
+                error.message || 
+                'Failed to submit form'
+            );
         }
     };
 
