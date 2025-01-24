@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './App.css'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, setLoading } from './slices/AuthState';
@@ -8,7 +9,7 @@ import Navbar from './components/Navbar'
 
 function App() {
 	const dispatch = useDispatch();
-    const { user, loaded, error } = useSelector(state => state.auth)
+    const { error } = useSelector(state => state.auth)
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
