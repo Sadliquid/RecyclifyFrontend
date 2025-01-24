@@ -36,18 +36,15 @@ const UserManagement = () => {
         const fetchUsers = async () => {
             try {
                 const response = await Server.get(`/api/UserManagement`);
-                console.log("Response:", response);
-
-                // Check if the request was successful (status code 2xx)
+                
                 if (response.status === 200) {
-                    const data = response.data; // Access the data property
-                    setUsers(data); // Set all users
+                    setUsers(response.data.data);
                     setIsLoading(false);
                 } else {
-                    throw new Error(`Failed to fetch users: ${response.statusText}`);
+                    throw new Error(response.data.error || `Failed to fetch users`);
                 }
             } catch (error) {
-                setErrorMessage(error.message);
+                setErrorMessage(error.response?.data?.error || error.message);
                 setIsLoading(false);
             }
         };
@@ -90,29 +87,20 @@ const UserManagement = () => {
             const response = await Server.put(
                 `/api/UserManagement/${editingUser.id}`,
                 editingUser,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${authToken}`, // Ensure auth token is sent
-                    },
-                }
+                { headers: { Authorization: `Bearer ${authToken}` } }
             );
     
             if (response.status === 200) {
-                // Update state with the response data
-                const updatedUser = response.data;
                 setUsers(users.map(user => 
-                    user.id === updatedUser.id ? updatedUser : user
+                    user.id === response.data.data.id ? response.data.data : user
                 ));
                 setEditingUser(null);
-                // Show success message
-                ShowToast("success", "Success", "User updated successfully");
+                ShowToast("success", "Success", response.data.message);
             } else {
-                throw new Error("Failed to update user");
+                throw new Error(response.data.error || "Failed to update user");
             }
         } catch (error) {
-            console.error("Error updating user:", error);
-            ShowToast("error", "Error", "Failed to update user. Please try again.");
+            ShowToast("error", "Error", error.response?.data?.error || error.message);
         }
     };
 

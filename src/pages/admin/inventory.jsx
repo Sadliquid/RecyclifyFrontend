@@ -35,23 +35,18 @@ const InventoryManagement = () => {
     useEffect(() => {
         const fetchRewardItems = async () => {
             try {
-                const response = await Server.get(
-                    `/api/RewardItem`
-                );
+                const response = await Server.get(`/api/RewardItem`);
                 console.log("Response:", response);
-
-                // Check if the request was successful (status code 2xx)
-                if (response.status == 200) {
-                    const data = response.data; // Access the data property
-                    setRewardItems(data); // Set all items (both available and unavailable)
+        
+                if (response.status === 200) {
+                    // Access nested data property
+                    setRewardItems(response.data.data);
                     setIsLoading(false);
                 } else {
-                    throw new Error(
-                        `Failed to fetch reward items: ${response.statusText}`
-                    );
+                    throw new Error(response.data.error || `Failed to fetch reward items`);
                 }
             } catch (error) {
-                setErrorMessage(error.message);
+                setErrorMessage(error.response?.data?.error || error.message);
                 setIsLoading(false);
             }
         };
@@ -89,55 +84,45 @@ const InventoryManagement = () => {
         try {
             const response = await Server.put(
                 `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${editingItem.rewardID}`,
-                editingItem, // Pass the data as the second argument
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
+                editingItem,
+                { headers: { "Content-Type": "application/json" } }
             );
-
-            // Check if the request was successful
+    
             if (response.status >= 200 && response.status < 300) {
-                // Update the item in the local state
-                setRewardItems(
-                    rewardItems.map((item) =>
-                        item.rewardID === editingItem.rewardID ? editingItem : item
-                    )
-                );
-
-                setEditingItem(null); // Clear the editing state
+                setRewardItems(rewardItems.map(item =>
+                    item.rewardID === response.data.data.rewardID ? response.data.data : item
+                ));
+                setEditingItem(null);
+                ShowToast("success", "Success", response.data.message);
             } else {
-                throw new Error("Failed to update reward item");
+                throw new Error(response.data.error || "Failed to update reward item");
             }
         } catch (error) {
-            console.log("Error:", error);
+            ShowToast("error", "Error", error.response?.data?.error || error.message);
         }
     };
 
     const handleToggleAvailability = async (rewardID) => {
         try {
-            const response = await Server.put( // Use PUT instead of PATCH
+            const response = await Server.put(
                 `/api/RewardItem/${rewardID}/toggle-availability`
             );
     
-            if (response.status == 200) {
-                // Update the local state to reflect the change
+            if (response.status === 200) {
                 setRewardItems(prevItems =>
                     prevItems.map(item =>
-                        item.rewardID === rewardID
-                            ? { ...item, isAvailable: response.data.data.isAvailable }
-                            : item
+                        item.rewardID === rewardID ? response.data.data : item
                     )
                 );
+                ShowToast("success", "Success", response.data.message);
             } else {
-                throw new Error("Failed to toggle availability");
+                throw new Error(response.data.error || "Failed to toggle availability");
             }
         } catch (error) {
-            console.log("Error:", error);
+            ShowToast("error", "Error", error.response?.data?.error || error.message);
         }
     };
-
+    
     if (isLoading) {
         return <Spinner />;
     }
