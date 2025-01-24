@@ -83,7 +83,7 @@ const InventoryManagement = () => {
     const handleSave = async () => {
         try {
             const response = await Server.put(
-                `${import.meta.env.VITE_BACKEND_URL}/api/RewardItem/${editingItem.rewardID}`,
+                `/api/RewardItem/${editingItem.rewardID}`,
                 editingItem,
                 { headers: { "Content-Type": "application/json" } }
             );
