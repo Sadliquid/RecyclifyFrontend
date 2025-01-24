@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Heading, Text, Image, HStack } from '@chakra-ui/react';
+import { Box, Heading, Text, Image, HStack, Spinner, Button } from '@chakra-ui/react';
 import { Avatar } from "@/components/ui/avatar";
 import LeaderboardPlaceCard from '../../components/Students/LeaderboardPlaceCard';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import server from "../../../networking";
+import ShowToast from '../../Extensions/ShowToast';
 import { motion } from 'framer-motion';
 
 function Leaderboards() {
@@ -12,6 +14,9 @@ function Leaderboards() {
     const [studentsFetched, setStudentsFetched] = useState(false)
     const [sessionStudent, setSessionStudent] = useState(null);
     const [timeLeft, setTimeLeft] = useState("");
+    const [available, setAvailable] = useState(false);
+    const [checked, setChecked] = useState(false);
+    const navigate = useNavigate();
 
     const { user, loaded, error } = useSelector((state) => state.auth);
 
@@ -24,13 +29,23 @@ function Leaderboards() {
             });
 
             if (response.status == 200) {
-                console.log(response.data.data)
                 setAllStudents(response.data.data);
                 setStudentsFetched(true)
                 setSessionStudent(response.data.data.find(student => student.studentID == user.id))
+                setAvailable(true)
             }
         } catch (error) {
-            console.error("Failed to fetch student data for leaderboards:", error);
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                    return;
+                } else {
+                    ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                    return;
+                }
+            }
+        } finally {
+            setChecked(true);
         }
     }
 
@@ -61,6 +76,32 @@ function Leaderboards() {
             fetchAllStudents(user.id);
         }
     }, [loaded]);
+
+    if (checked == true && available == false) {
+        return (
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Box 
+                    display="flex" 
+                    justifyContent="center" 
+                    alignItems="center" 
+                    flexDir="column" 
+                    height="80vh"
+                >
+                    <Spinner 
+                        color="#3A9F83" 
+                        animationDuration="0.5s" 
+                        css={{ "--spinner-track-color": "colors.gray.200" }} 
+                    />
+                    <Text mt={4}>Leaderboard details not available. Please try again later.</Text>
+                    <Button backgroundColor={"#4DCBA4"} borderRadius={10} mt={5} onClick={() => navigate("/student/joinClass")}>Join a Class</Button>
+                </Box>
+            </motion.div>
+        )
+    }
 
     if (studentsFetched && user != null && sessionStudent != null) return (
         <Box display="flex" justifyContent={"center"} flexDir="column" mt={10} width={"100%"}>

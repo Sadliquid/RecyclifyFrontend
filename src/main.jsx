@@ -63,7 +63,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Route index element={<Homepage />} />
 
                         <Route path={"student"}>
-                            <Route path={"enrolClass"} element={<ClassEnrolment />} />
+                            <Route path={"joinClass"} element={<ClassEnrolment />} />
                             <Route path={"claimReward"} element={<ClaimReward />} />
                             <Route path={"leaderboards"} element={<Leaderboards />} />
                             <Route path={"milestones"} element={<Milestones />} />

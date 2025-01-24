@@ -30,9 +30,9 @@ function Redemption() {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error);
+                    ShowToast("error", error.response.data.error);
                 }
             }
         }
@@ -52,9 +52,11 @@ function Redemption() {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                    return;
                 } else {
-                    ShowToast(error.response.data.error);
+                    ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                    return;
                 }
             }
         }

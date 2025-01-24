@@ -2,6 +2,7 @@
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Box, Button, Text, Card, Image } from "@chakra-ui/react"
 import { Toaster, toaster } from "@/components/ui/toaster"
+import ShowToast from "../../Extensions/ShowToast"
 import server from "../../../networking"
 
 function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
@@ -25,8 +26,10 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
             .catch(error => {
                 if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                     if (error.response.data.error.startsWith("UERROR")) {
+                        ShowToast("error", error.response.data.error.substring("UERROR:".length));
                         reject(error.response.data.error.substring("UERROR: ".length));
                     } else {
+                        ShowToast("error", error.response.data.error.substring("ERROR:".length));
                         reject("Unknown system error");
                     }
                 }

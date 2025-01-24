@@ -51,7 +51,7 @@ function StudentProfileCard({ user, studentProfile }) {
                         <Image src={studentProfile.league === "Bronze" ? "/bronze-medal.png" : studentProfile.league === "Silver" ? "/silver-medal.png" : "/gold-medal.png"} boxSize={8}/>
                         <Box>
                             <Text fontSize="sm" fontWeight="medium">{studentProfile.league !== null ? `${studentProfile.league} League` : "League Unregistered"}</Text>
-                            <Text textAlign={"left"} fontSize="xs" color="gray.500">{studentProfile.leagueRank == 1 ? "1st" : studentProfile.leagueRank == 2 ? "2nd" : studentProfile.leagueRank == 3 ? "3rd" : studentProfile.leagueRank + "th"} place</Text>
+                            <Text textAlign={"left"} fontSize="xs" color="gray.500">{studentProfile.leagueRank == 1 ? "1st" : studentProfile.leagueRank == 2 ? "2nd" : studentProfile.leagueRank == 3 ? "3rd" : studentProfile.leagueRank != null ? studentProfile.leagueRank + "th place" : "No position"}</Text>
                         </Box>
                     </Flex>
 

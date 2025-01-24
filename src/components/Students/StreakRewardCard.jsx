@@ -4,6 +4,7 @@ import { BsGift } from 'react-icons/bs';
 import { motion } from "framer-motion";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { useState } from "react";
+import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
 function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentPoints }) {
@@ -33,14 +34,18 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
                     setGiftClaimed(true);
                     updateStudentPoints(pointsAwarded);
                     resolve(pointsAwarded);
-                } else {
-                    reject("Unexpected response status: " + response.status);
                 }
             })
             .catch(error => {
-                const errorMessage = error.response?.data?.error || "An unknown error occurred";
-                reject(errorMessage);
-                console.error("ERROR: ", error);
+                if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                    if (error.response.data.error.startsWith("UERROR")) {
+                        ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                        reject(error.response.data.error.substring("UERROR: ".length));
+                    } else {
+                        ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                        reject("Unknown system error");
+                    }
+                }
             });
         });
     

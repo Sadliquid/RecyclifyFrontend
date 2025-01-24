@@ -7,7 +7,6 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { BsGift, BsMailbox, BsPeople } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
-import { GrAddCircle } from "react-icons/gr";
 import { FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
 import { BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
@@ -180,12 +179,7 @@ function Navbar() {
 
                             <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
                                 <Text as={BsPeople} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>My class</Text>
-                            </Button>
-
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/enrolClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={GrAddCircle} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>Enrol into class</Text>
+                                <Text ml={2}>My Class</Text>
                             </Button>
                         </Box>
 

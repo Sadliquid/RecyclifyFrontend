@@ -19,7 +19,7 @@ function StudentsHomepage() {
     const [studentProfile, setStudentProfile] = useState({});
     const [allStudents, setAllStudents] = useState([]);
 
-    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+    const { user, loaded, error } = useSelector((state) => state.auth);
 
     const navigate = useNavigate();
 
@@ -40,11 +40,17 @@ function StudentsHomepage() {
 
             if (response.status == 200) {
                 setStudentTasks(response.data.data);
-            } else {
-                console.error("Failed to fetch tasks:", response.data.error);
             }
         } catch (error) {
-            console.error("Failed to fetch tasks:", error);
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                    return;
+                } else {
+                    ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                    return;
+                }
+            }
         }
     }
 
@@ -61,7 +67,7 @@ function StudentsHomepage() {
             }
         } catch (error) {
             console.error("Failed to fetch student data:", error);
-            ShowToast("error", "Error", "Failed to fetch student data");
+            ShowToast("error", "Failed to fetch student data");
         }
     }
 
@@ -70,10 +76,10 @@ function StudentsHomepage() {
             if (loaded) {
                 if (!user) {
                     navigate("/auth/login");
-                    ShowToast("error", "You are not logged in", "Please log in first");
+                    ShowToast("error", "Please log in first");
                 } else if (user.userRole != "student") {
                     navigate("/auth/login");
-                    ShowToast("error", "Access denied", "Please log in as a student");
+                    ShowToast("error", "Please log in as a student");
                 }
             }
         } else {
@@ -91,7 +97,7 @@ function StudentsHomepage() {
     if (!loaded) {
         return (
             <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
-                <Spinner />
+                <Spinner color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
             </Box>
         )
     }

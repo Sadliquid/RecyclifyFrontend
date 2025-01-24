@@ -41,10 +41,10 @@ function MyRewards() {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR:".length));
+                    ShowToast("error", error.response.data.error.substring("UERROR:".length));
                     return;
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR:".length));
+                    ShowToast("error", error.response.data.error.substring("ERROR:".length));
                     return;
                 }
             }
@@ -70,10 +70,10 @@ function MyRewards() {
                         transition={{ duration: 0.5 }}
                     >
                         <Tabs.List display="flex" justifyContent="center" mb={6} width="auto" borderBottom="2px solid" borderColor="gray.200">
-                            <Tabs.Trigger value="available" backgroundColor="inherit" px={6} py={2} _selected={{ borderBottom: "2px solid", borderColor: "#4DCBA4", color: "#4DCBA4" }}>
+                            <Tabs.Trigger value="available" backgroundColor="inherit" px={6} py={2} _selected={{ borderBottom: "2px solid", borderColor: "#4DCBA4", color: "#3BA684" }}>
                                 Available
                             </Tabs.Trigger>
-                            <Tabs.Trigger value="claimed" backgroundColor="inherit" px={6} py={2} _selected={{ borderBottom: "2px solid", borderColor: "#4DCBA4", color: "#4DCBA4" }}>
+                            <Tabs.Trigger value="claimed" backgroundColor="inherit" px={6} py={2} _selected={{ borderBottom: "2px solid", borderColor: "#4DCBA4", color: "#3BA684" }}>
                                 Claimed
                             </Tabs.Trigger>
                         </Tabs.List>
@@ -88,85 +88,103 @@ function MyRewards() {
                         animationDuration: "300ms",
                     }}
                 >
-                    <Box
-                        display="grid"
-                        gridTemplateColumns="repeat(2, 1fr)"
-                        gap={6}
-                        maxWidth="1200px"
-                        width="100%"
-                        mt={10}
-                        px={4}
-                        mx="auto"
-                    >
-                        {activeRewards.map((reward, index) => (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5 }}
-                                key={index}
-                            >
-                                <Box
+                    {activeRewards.length > 0 ? (
+                        <Box
+                            display="grid"
+                            gridTemplateColumns="repeat(2, 1fr)"
+                            gap={6}
+                            maxWidth="1200px"
+                            width="100%"
+                            mt={10}
+                            px={4}
+                            mx="auto"
+                        >
+                            {activeRewards.map((reward, index) => (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
                                     key={index}
-                                    display="flex"
-                                    flexDirection="row"
-                                    overflow="hidden"
-                                    borderRadius="lg"
-                                    boxShadow="lg"
-                                    backgroundColor="white"
                                 >
-                                    <Image
-                                        objectFit="cover"
-                                        maxW="200px"
-                                        src={"https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
-                                        alt={reward.rewardTitle}
-                                    />
-                                    <Box flex={1} p={4}>
-                                        <Heading fontSize="xl" mb={2} isTruncated>{reward.rewardTitle}</Heading>
-                                        <Text
-                                            noOfLines={2}
-                                            display="-webkit-box"
-                                            overflow="hidden"
-                                            textOverflow="ellipsis"
-                                            style={{
-                                                WebkitLineClamp: 2,
-                                                WebkitBoxOrient: 'vertical'
-                                            }}
-                                            mb={4}
-                                        >
-                                            {reward.rewardDescription}
-                                        </Text>
-                                        <Text fontWeight="bold" mb={4}>Required leafs: {reward.requiredPoints}</Text>
-                                        <DialogRoot placement="center" motionPreset="slide-in-bottom">
-                                            <DialogTrigger asChild>
-                                                <Button color="white" variant="outline" backgroundColor="#4DCBA4" _hover={{ bg: "#41B594" }}>
-                                                    Redeem
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogHeader>
-                                                    <DialogTitle>Redeem reward</DialogTitle>
-                                                </DialogHeader>
-                                                <DialogBody>
-                                                    <Text>Are you sure you want to redeem this reward?</Text>
-                                                </DialogBody>
-                                                <DialogFooter>
-                                                    <DialogActionTrigger asChild>
-                                                        <Box display="flex" gap={4}>
-                                                            <Button variant="outline">Cancel</Button>
-                                                            <Button color="white" backgroundColor="#2D65FF">
-                                                                Redeem
-                                                            </Button>
-                                                        </Box>
-                                                    </DialogActionTrigger>
-                                                </DialogFooter>
-                                                <DialogCloseTrigger />
-                                            </DialogContent>
-                                        </DialogRoot>
+                                    <Box
+                                        key={index}
+                                        display="flex"
+                                        flexDirection="row"
+                                        overflow="hidden"
+                                        borderRadius="lg"
+                                        boxShadow="lg"
+                                        backgroundColor="white"
+                                    >
+                                        <Image
+                                            objectFit="cover"
+                                            maxW="200px"
+                                            src={"https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
+                                            alt={reward.rewardTitle}
+                                        />
+                                        <Box flex={1} p={4}>
+                                            <Heading fontSize="xl" mb={2} isTruncated>{reward.rewardTitle}</Heading>
+                                            <Text
+                                                noOfLines={2}
+                                                display="-webkit-box"
+                                                overflow="hidden"
+                                                textOverflow="ellipsis"
+                                                style={{
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: 'vertical'
+                                                }}
+                                                mb={4}
+                                            >
+                                                {reward.rewardDescription}
+                                            </Text>
+                                            <Text fontWeight="bold" mb={4}>Required leafs: {reward.requiredPoints}</Text>
+                                            <DialogRoot placement="center" motionPreset="slide-in-bottom">
+                                                <DialogTrigger asChild>
+                                                    <Button color="white" variant="outline" backgroundColor="#4DCBA4" _hover={{ bg: "#41B594" }}>
+                                                        Redeem
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>Redeem reward</DialogTitle>
+                                                    </DialogHeader>
+                                                    <DialogBody>
+                                                        <Text>Are you sure you want to redeem this reward?</Text>
+                                                    </DialogBody>
+                                                    <DialogFooter>
+                                                        <DialogActionTrigger asChild>
+                                                            <Box display="flex" gap={4}>
+                                                                <Button variant="outline">Cancel</Button>
+                                                                <Button color="white" backgroundColor="#2D65FF">
+                                                                    Redeem
+                                                                </Button>
+                                                            </Box>
+                                                        </DialogActionTrigger>
+                                                    </DialogFooter>
+                                                    <DialogCloseTrigger />
+                                                </DialogContent>
+                                            </DialogRoot>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            </motion.div>
-                        ))}
-                    </Box>
+                                </motion.div>
+                            ))}
+                        </Box>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <Box 
+                                display="flex" 
+                                justifyContent="center" 
+                                alignItems="center" 
+                                flexDir="column"
+                                height="30vh"
+                            >
+                                <Text fontFamily={"Lilita One"} mt={4} color="#3BA684">You do not have any available rewards</Text>
+                            </Box>
+                        </motion.div>
+                    )}
                 </Tabs.Content>
 
                 <Tabs.Content
@@ -177,48 +195,66 @@ function MyRewards() {
                         animationDuration: "300ms",
                     }}
                 >
-                    <Box
-                        display="grid"
-                        gridTemplateColumns="repeat(2, 1fr)"
-                        gap={6}
-                        maxWidth="1200px"
-                        width="100%"
-                        mt={10}
-                        px={4}
-                        mx="auto"
-                    >
-                        {claimedRewards.map((reward, index) => (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5 }}
-                                key={index}
-                            >
-                                <Box
-                                    display="flex"
-                                    flexDirection="row"
-                                    overflow="hidden"
-                                    borderRadius="lg"
-                                    boxShadow="lg"
-                                    backgroundColor="white"
+                    {claimedRewards.length > 0 ? (
+                        <Box
+                            display="grid"
+                            gridTemplateColumns="repeat(2, 1fr)"
+                            gap={6}
+                            maxWidth="1200px"
+                            width="100%"
+                            mt={10}
+                            px={4}
+                            mx="auto"
+                        >
+                            {claimedRewards.map((reward, index) => (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    key={index}
                                 >
-                                    <Image
-                                        objectFit="cover"
-                                        maxW="200px"
-                                        src={"https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
-                                        alt={reward.rewardTitle}
-                                    />
-                                    <Box flex={1} p={4}>
-                                        <Heading fontSize="xl" mb={2}>{reward.rewardTitle}</Heading>
-                                        <Text noOfLines={3} mb={4}>{reward.rewardDescription}</Text>
-                                        <Text fontWeight="bold">
-                                            Claimed on: { reward.claimedOn ? formatDate(reward.claimedOn) : "Date not available" }
-                                        </Text>
+                                    <Box
+                                        display="flex"
+                                        flexDirection="row"
+                                        overflow="hidden"
+                                        borderRadius="lg"
+                                        boxShadow="lg"
+                                        backgroundColor="white"
+                                    >
+                                        <Image
+                                            objectFit="cover"
+                                            maxW="200px"
+                                            src={"https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
+                                            alt={reward.rewardTitle}
+                                        />
+                                        <Box flex={1} p={4}>
+                                            <Heading fontSize="xl" mb={2}>{reward.rewardTitle}</Heading>
+                                            <Text noOfLines={3} mb={4}>{reward.rewardDescription}</Text>
+                                            <Text fontWeight="bold">
+                                                Claimed on: { reward.claimedOn ? formatDate(reward.claimedOn) : "Date not available" }
+                                            </Text>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            </motion.div>
-                        ))}
-                    </Box>
+                                </motion.div>
+                            ))}
+                        </Box>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <Box 
+                                display="flex" 
+                                justifyContent="center" 
+                                alignItems="center" 
+                                flexDir="column"
+                                height="30vh"
+                            >
+                                <Text fontFamily={"Lilita One"} color="#3BA684" mt={4}>You do not have any previously claimed rewards</Text>
+                            </Box>
+                        </motion.div>
+                    )}
                 </Tabs.Content>
             </Tabs.Root>
         </Box>
