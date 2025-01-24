@@ -7,6 +7,7 @@ import { LuUser, LuLock, LuIdCard, LuPhone, LuMail } from "react-icons/lu"
 import { InputGroup } from "@/components/ui/input-group"
 import { PasswordInput } from "@/components/ui/password-input"
 import server from "../../../networking"
+import ShowToast from '../../Extensions/ShowToast';
 
 function StudentRegistrationForm({ goBack }) {
     const navigate = useNavigate();
@@ -41,15 +42,11 @@ function StudentRegistrationForm({ goBack }) {
         try {
             const response = await server.post("/api/Identity/createAccount", values);
             const rawResponseMessage = response.data.message;
-            if (rawResponseMessage.startsWith("SUCCESS")) {
+            if (rawResponseMessage.startsWith("SUCCESS") && response.status === 200) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
                 if (responseMessage === "Account created successfully.") {
-                    toaster.create({
-                        title: "Account Created!",
-                        description: "Please verify your email.",
-                        type: "success",
-                        duration: 3000
-                    })
+                    localStorage.setItem('jwt', response.data.token);
+                    ShowToast("success", "Account Created!", "Please verify your email.")
                     navigate("/auth/emailVerification")
                 }
             }
@@ -65,21 +62,11 @@ function StudentRegistrationForm({ goBack }) {
                 } 
                 if (errorMessage === "Contact number must be unique.") {
                     formik.setFieldError('contactNumber', 'Contact number already exists');
-                } 
-                toaster.create({
-                    title: "Invalid Input.",
-                    description: errorMessage,
-                    type: "error",
-                    duration: 3000
-                })
+                }
+                ShowToast("error", "Invalid Input.", errorMessage)
             } else {
                 console.log(err)
-                toaster.create({
-                    title: "Something went wrong.",
-                    description: "Please try again later.",
-                    type: "error",
-                    duration: 3000
-                })
+                ShowToast( "error", "Something went wrong.", "Please try again later.")
             }
         }
     }
@@ -261,7 +248,8 @@ function StudentRegistrationForm({ goBack }) {
                         borderRadius={30}
                         mt={5}
                         alignSelf="center"
-                        isLoading={formik.isSubmitting}
+                        loading={formik.isSubmitting}
+                        loadingText={"Creating Account..."}
                     >
                         Get Started!
                     </Button>

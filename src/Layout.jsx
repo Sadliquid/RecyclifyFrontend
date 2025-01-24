@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, setLoading } from './slices/AuthState';
 import { Toaster, toaster } from "@/components/ui/toaster"
 import Navbar from './components/Navbar'
+import ShowToast from './Extensions/ShowToast';
 
 function App() {
 	const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function App() {
                 description: "We failed to load information for you. Please try again.",
                 type: "error",
             })
+            ShowToast("error", "Something went wrong", "We failed to load information for you. Please try again.")
         }
     }, [error])
 

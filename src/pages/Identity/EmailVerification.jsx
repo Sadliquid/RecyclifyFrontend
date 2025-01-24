@@ -1,10 +1,86 @@
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
-import { PinInput } from "@/components/ui/pin-input"
-import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
+import { Box, VStack, Heading, Text, Button, Field } from '@chakra-ui/react'
+import { StepsItem, StepsList, StepsRoot } from "@/components/ui/steps";
+import { PinInput } from "@/components/ui/pin-input";
+import { Controller, useForm } from "react-hook-form"
+import server from "../../../networking";
+import ShowToast from '../../Extensions/ShowToast';
 
 function EmailVerification() {
     const navigate = useNavigate();
+    const { user, authToken, error, loaded } = useSelector((state) => state.auth);
+    const [isResending, setIsResending] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { handleSubmit, control, formState: { errors } } = useForm({
+        defaultValues: {
+            pin: Array(6).fill(''),
+        },
+    });
+
+    useEffect(() => {
+        if(authToken && !error && loaded && user) {
+            if (user.emailVerified) {
+                navigateBasedOnRole();
+                ShowToast("success", "Email Verified", "Your email is already verified.")
+            }
+        }
+    }, [user, loaded]);
+
+    const navigateBasedOnRole = () => {
+        if (user?.userRole === "student") {
+            navigate("/student/home");
+        } else if (user?.userRole === "teacher") {
+            navigate("/teachers");
+        } else {
+            navigate("/admin/dashboard");
+        }
+    };
+
+
+    const verifyEmail = async (data) => {
+        const isComplete = data.pin.every(digit => digit.length === 1);
+        if (!isComplete) {
+            ShowToast("error", "Missing Digits", "Please enter all 6 digits of the verification code");
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const verificationCode = data.pin.join('');
+            const response = await server.post('/api/identity/verifyEmail', { code: verificationCode }
+            );
+
+            if (response.data.message.startsWith("SUCCESS") && response.status === 200) {
+                ShowToast("success", "Email Verified!", "Your email has been successfully verified.");
+                navigate("/auth/contactVerification");
+            }
+        } catch (err) {
+            const rawErrorMessage = err.response.data.error;
+            if (rawErrorMessage.startsWith("UERROR")) {
+                const errorMessage = rawErrorMessage.substring("UERROR: ".length).trim()
+                ShowToast("error", "Verification Failed.", errorMessage)
+            } else {
+                ShowToast( "error", "Something went wrong.", "Please try again later.")
+            }
+        }
+        finally {
+            setIsLoading(false);
+        }
+    };
+
+    const sendVerificationEmail = async () => {
+        setIsResending(true);
+        try {
+            await server.post('/api/identity/emailVerification');
+            ShowToast("success", "Code Sent!", "A new verification code has been sent to your email.");
+        } catch (error) {
+            ShowToast("error", "Sending Failed", error.response?.data?.error || "Failed to send code");
+        } finally {
+            setIsResending(false);
+        }
+    };
 
     return (
         <Box
@@ -47,33 +123,80 @@ function EmailVerification() {
                         Check your inbox
                     </Heading>
 
-                    <Text mt={2}>
+                    <Text mt={2} mb={20}>
                         We've sent a verification code to your email inbox!
                     </Text>
                     
-                    <PinInput size="md" otp mt={10} p={10} />
+                    <Controller
+                        control={control}
+                        name="pin"
+                        rules={{
+                            validate: (value) => 
+                                value.every(digit => digit.length === 1) || 
+                                "Please enter all 6 digits"
+                        }}
+                        render={({ field }) => (
+                            <Box>
+                                <PinInput
+                                    value={field.value}
+                                    onValueChange={(values) => field.onChange(values.value)}
+                                    otp
+                                    size="md"
+                                    gap={2}
+                                />
+                                {errors.pin && (
+                                    <Text color="red.500" fontSize="sm" mt={2}>
+                                        {errors.pin.message}
+                                    </Text>
+                                )}
+                            </Box>
+                        )}
+                    />
 
                     <Button
                         display="flex"
                         justifyContent="center"
                         backgroundColor="#2D65FF"
-                        mb={2}
+                        mb={4}
                         colorScheme="white"
                         _hover={{ bg: "#1752FD" }}
                         borderRadius="30px"
                         alignItems="center"
-                        mt={10}
+                        mt={20}
                         w={150}
-                        onClick={() => {
-                            navigate("/auth/contactVerification");
-                        }}
+                        onClick={handleSubmit(
+                            (data) => verifyEmail(data),
+                            (errors) => {
+                                ShowToast("error", "Invalid Verification Code", "Please enter a complete 6-digit code");
+                            }
+                        )}
+                        loading={isLoading}
+                        loadingText="Verifying..."
                     >
                         <Text>Verify Email</Text>
                     </Button>
+
+                    <Text
+                        mt={2}
+                        fontSize={12}
+                    >
+                        Didn’t receive the email? 
+                        <Button 
+                            variant="link" 
+                            colorScheme="blue" 
+                            ml={2}
+                            size={'sm'}
+                            onClick={sendVerificationEmail}
+                            loading={isResending}
+                            loadingText="Sending..."
+                        >
+                            Resend Email
+                        </Button>
+                    </Text> 
                 </VStack>
             </Box>
         </Box>
     );
 }
 
-export default EmailVerification
+export default EmailVerification;

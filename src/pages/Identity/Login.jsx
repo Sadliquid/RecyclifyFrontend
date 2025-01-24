@@ -1,9 +1,6 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
-import { toaster } from "@/components/ui/toaster"
 import { PasswordInput } from "@/components/ui/password-input"
 import { InputGroup } from "@/components/ui/input-group";
 import { Field } from "@/components/ui/field";
@@ -33,7 +30,7 @@ function Login() {
                     navigate("/admin/dashboard");
                 }
             }
-            ShowToast("success", "Success", "You are already logged in!");
+            ShowToast("success", "Logged In", "You are already logged in!");
         }
     }, [user, error, loaded, authToken]);
 
@@ -59,21 +56,11 @@ function Login() {
                 Password: password,
             });
             localStorage.setItem('jwt', response.data.token);
-            toaster.create({
-                title: "Welcome back!",
-                description: "Successfully logged in.",
-                type: "success",
-                duration: 3000
-            })
+            ShowToast("success", "Welcome Back!", "Successfully logged in.");
             navigate("/identity/myAccount");
         } catch (error) {
             setIsLoading(false);
-            toaster.create({
-                title: "Invalid Login Credentials",
-                description: "Please try again",
-                type: "error",
-                duration: 3000
-            })
+            ShowToast("error", "Invalid Login Credentials", "Please try again.");
             console.log(error)
         }
     };
@@ -87,7 +74,8 @@ function Login() {
         >
             <Box
                 p={8}
-                borderRadius={15}
+                as={"form"}
+                onSubmit={handleSubmit}
             >
                 <VStack 
                     spacing={4} 
@@ -170,8 +158,8 @@ function Login() {
                         mb={5}
                         type="submit"
                         borderRadius={30}
-                        isLoading={isLoading}
-                        onClick={handleSubmit}
+                        loading={isLoading}
+                        loadingText={"Logging in..."}
                     >
                         Login
                     </Button>
