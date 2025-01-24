@@ -223,7 +223,7 @@ function ClassDashboard({ classData, students }) {
                                 <Flex direction="column" gap={2}>
                                     {schoolClassesData.map((leaderboardClassData, index) => (
                                         <Flex key={index} direction="row" w="100%" h="20%" gap={2} alignItems="center" justifyContent="center"
-                                            bg={index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "bronze" : "#C4D0FB"} borderRadius="3xl" p={4}
+                                            bg={index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "#F6B191" : "#C4D0FB"} borderRadius="3xl" p={4}
                                             border={classData.className === leaderboardClassData.className ? "3px solid #483EA8" : "none"}
                                             _hover={{ transform: "scale(1.05)", boxShadow: "lg", transition: "all 0.3s ease" }}
                                             whileHover={{ scale: 1.05 }}>
