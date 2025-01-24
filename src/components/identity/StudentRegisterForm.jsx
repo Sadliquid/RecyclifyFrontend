@@ -42,7 +42,7 @@ function StudentRegistrationForm({ goBack }) {
         try {
             const response = await server.post("/api/Identity/createAccount", values);
             const rawResponseMessage = response.data.message;
-            if (rawResponseMessage.startsWith("SUCCESS")) {
+            if (rawResponseMessage.startsWith("SUCCESS") && response.status === 200) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
                 if (responseMessage === "Account created successfully.") {
                     ShowToast("success", "Account Created!", "Please verify your email.")

@@ -50,9 +50,9 @@ function EmailVerification() {
             const response = await server.post('/api/identity/verifyEmail', { code: verificationCode }
             );
 
-            if (response.data.message === "SUCCESS: Email verified successfully") {
+            if (response.data.message.startsWith("SUCCESS") && response.status === 200) {
                 ShowToast("success", "Email Verified!", "Your email has been successfully verified.");
-                navigateBasedOnRole();
+                navigate("/auth/contactVerification");
             }
         } catch (err) {
             const rawErrorMessage = err.response.data.error;
