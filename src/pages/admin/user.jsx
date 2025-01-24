@@ -89,29 +89,30 @@ const UserManagement = () => {
         try {
             const response = await Server.put(
                 `/api/UserManagement/${editingUser.id}`,
-                editingUser, // Pass the data as the second argument
+                editingUser,
                 {
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${authToken}`, // Ensure auth token is sent
                     },
                 }
             );
-
-            // Check if the request was successful
-            if (response.status == 200) {
-                // Update the user in the local state
-                setUsers(
-                    users.map((user) =>
-                        user.id === editingUser.id ? editingUser : user
-                    )
-                );
-
-                setEditingUser(null); // Clear the editing state
+    
+            if (response.status === 200) {
+                // Update state with the response data
+                const updatedUser = response.data;
+                setUsers(users.map(user => 
+                    user.id === updatedUser.id ? updatedUser : user
+                ));
+                setEditingUser(null);
+                // Show success message
+                ShowToast("success", "Success", "User updated successfully");
             } else {
                 throw new Error("Failed to update user");
             }
         } catch (error) {
-            console.log("Error:", error);
+            console.error("Error updating user:", error);
+            ShowToast("error", "Error", "Failed to update user. Please try again.");
         }
     };
 
