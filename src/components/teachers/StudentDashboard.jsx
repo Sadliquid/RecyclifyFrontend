@@ -153,8 +153,6 @@ function StudentDashboard({ classData, students }) {
 
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
-    console.log(studentsList)
-
     return (
         <Tabs.Content value='Students'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
