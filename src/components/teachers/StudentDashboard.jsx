@@ -153,6 +153,8 @@ function StudentDashboard({ classData, students }) {
 
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
+    console.log(studentsList)
+
     return (
         <Tabs.Content value='Students'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
@@ -197,7 +199,7 @@ function StudentDashboard({ classData, students }) {
                                         <Table.Cell color="black">{student.totalPoints}</Table.Cell>
                                         <Table.Cell color="black">{student.redemptions ? student.redemptions : 0}</Table.Cell>
                                         <Table.Cell color="black">{student.user.email ? student.user.email : "N/A"}</Table.Cell>
-                                        <Table.Cell color="black">{student.parentEmail ? student.parentEmail : "N/A"}</Table.Cell>
+                                        <Table.Cell color="black">{student.parent != null && student.parent.parentEmail ? student.parent.parentEmail : "N/A"}</Table.Cell>
                                         <Table.Cell>
                                             <MenuRoot positioning={{ placement: 'left-start' }} cursor="pointer">
                                                 <MenuTrigger asChild>
