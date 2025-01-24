@@ -215,31 +215,31 @@ const UserManagement = () => {
                                 <Table.Cell color={"black"}>
                                     {editingUser?.id === user.id ? (
                                         <Input
-                                            value={user.ContactNumber}
+                                            value={editingUser.contactNumber}
                                             onChange={(e) =>
                                                 setEditingUser({
                                                     ...editingUser,
-                                                    ContactNumber: e.target.value,
+                                                    contactNumber: e.target.value,
                                                 })
                                             }
                                         />
                                     ) : (
-                                        user.ContactNumber
+                                        user.contactNumber
                                     )}
                                 </Table.Cell>
                                 <Table.Cell color={"black"}>
                                     {editingUser?.id === user.id ? (
                                         <Input
-                                            value={editingUser.UserRole}
+                                            value={editingUser.userRole}
                                             onChange={(e) =>
                                                 setEditingUser({
                                                     ...editingUser,
-                                                    UserRole: e.target.value,
+                                                    userRole: e.target.value,
                                                 })
                                             }
                                         />
                                     ) : (
-                                        user.UserRole
+                                        user.userRole
                                     )}
                                 </Table.Cell>
                                 <Table.Cell>
