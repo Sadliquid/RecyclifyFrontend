@@ -45,6 +45,7 @@ function StudentRegistrationForm({ goBack }) {
             if (rawResponseMessage.startsWith("SUCCESS") && response.status === 200) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
                 if (responseMessage === "Account created successfully.") {
+                    localStorage.setItem('jwt', response.data.token);
                     ShowToast("success", "Account Created!", "Please verify your email.")
                     navigate("/auth/emailVerification")
                 }
@@ -247,7 +248,8 @@ function StudentRegistrationForm({ goBack }) {
                         borderRadius={30}
                         mt={5}
                         alignSelf="center"
-                        isLoading={formik.isSubmitting}
+                        loading={formik.isSubmitting}
+                        loadingText={"Creating Account..."}
                     >
                         Get Started!
                     </Button>

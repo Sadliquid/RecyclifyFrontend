@@ -9,7 +9,7 @@ import StudentRegistrationForm from '../../components/identity/StudentRegisterFo
 
 function CreateAccount() {
     const [selectedAccountType, setSelectedAccountType] = useState(null);
-    const authToken = useSelector((state) => state.auth.authToken);
+    const { user, authToken, error, loaded } = useSelector((state) => state.auth);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -86,7 +86,7 @@ function CreateAccount() {
                                     cursor={"pointer"}
                                     onClick={() => setSelectedAccountType('Parent')}
                                 >
-                                    <Image src="https://placehold.co/130x130" size="2xl" mt={30} ml={110} borderRadius={100} />
+                                    <Image src='/public/AvatarParent.png' size="2xl" mt={30} ml={110} borderRadius={100} />
                                     <Heading mt={5} mb={1}>Parent</Heading>
                                     <Text w={"80%"} ml={35}>Receive the latest updates and keep track of your child's recycling progress in school.</Text>
                                 </Box>
@@ -100,7 +100,7 @@ function CreateAccount() {
                                     cursor={"pointer"}
                                     onClick={() => setSelectedAccountType('Student')}
                                 >
-                                    <Image src="https://placehold.co/130x130" size="2xl" mt={30} ml={110} borderRadius={100} />
+                                    <Image src='/public/AvatarStudent.png' size="2xl" mt={30} ml={110} borderRadius={100} />
                                     <Heading mt={5} mb={1}>Student</Heading>
                                     <Text w={"80%"} ml={35}>Recycle, complete tasks, earn points and redeem attractive rewards! Contribute to your class and climb the ranks of your school.</Text>
                                 </Box>

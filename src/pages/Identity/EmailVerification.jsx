@@ -170,7 +170,7 @@ function EmailVerification() {
                                 ShowToast("error", "Invalid Verification Code", "Please enter a complete 6-digit code");
                             }
                         )}
-                        isLoading={isLoading}
+                        loading={isLoading}
                         loadingText="Verifying..."
                     >
                         <Text>Verify Email</Text>
@@ -187,7 +187,7 @@ function EmailVerification() {
                             ml={2}
                             size={'sm'}
                             onClick={sendVerificationEmail}
-                            isLoading={isResending}
+                            loading={isResending}
                             loadingText="Sending..."
                         >
                             Resend Email

@@ -1,9 +1,6 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
-import { toaster } from "@/components/ui/toaster"
 import { PasswordInput } from "@/components/ui/password-input"
 import { InputGroup } from "@/components/ui/input-group";
 import { Field } from "@/components/ui/field";
@@ -77,7 +74,8 @@ function Login() {
         >
             <Box
                 p={8}
-                borderRadius={15}
+                as={"form"}
+                onSubmit={handleSubmit}
             >
                 <VStack 
                     spacing={4} 
@@ -160,8 +158,8 @@ function Login() {
                         mb={5}
                         type="submit"
                         borderRadius={30}
-                        isLoading={isLoading}
-                        onClick={handleSubmit}
+                        loading={isLoading}
+                        loadingText={"Logging in..."}
                     >
                         Login
                     </Button>

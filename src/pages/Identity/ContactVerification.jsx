@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux'
 import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { PinInput } from "@/components/ui/pin-input"
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 
 function ContactVerification() {
+    const { user, authToken, error, loaded } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (user && authToken) {     
