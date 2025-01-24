@@ -10,7 +10,7 @@ import ShowToast from '../../Extensions/ShowToast';
 
 function EmailVerification() {
     const navigate = useNavigate();
-    const { user, authToken } = useSelector((state) => state.auth);
+    const { user, authToken, error, loaded } = useSelector((state) => state.auth);
     const [isResending, setIsResending] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -21,11 +21,13 @@ function EmailVerification() {
     });
 
     useEffect(() => {
-        if (user?.emailVerified) {
-            navigateBasedOnRole();
-            ShowToast("success", "Email Verified", "Your email is already verified.")
+        if(authToken && !error && loaded && user) {
+            if (user.emailVerified) {
+                navigateBasedOnRole();
+                ShowToast("success", "Email Verified", "Your email is already verified.")
+            }
         }
-    }, [user]);
+    }, [user, loaded]);
 
     const navigateBasedOnRole = () => {
         if (user?.userRole === "student") {
