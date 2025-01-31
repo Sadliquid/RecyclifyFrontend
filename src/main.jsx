@@ -36,6 +36,9 @@ import ContactVerification from './pages/Identity/ContactVerification'
 import MyAccount from './pages/Identity/MyAccount'
 import "@fontsource/sora";
 import "@fontsource/lilita-one";
+import ParentsHomepage from './pages/parents/ParentsHomepage';
+import EmailNewsletter from './pages/parents/EmailNewsletter';
+import Faq from './pages/parents/Faq';
 
 const system = createSystem(defaultConfig, {
   theme: {
@@ -106,6 +109,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"tasks"} element={<TaskVerification />} /> 
                             {/* Add class id afterward */}
                             <Route path={"leaderboards"} element={<ClassLeaderboards />} />
+                        </Route>
+
+                        <Route path="parents">
+                            <Route index element={<ParentsHomepage />} />
+                            <Route path="emailNewsletter" element={<EmailNewsletter />} />
+                            <Route path="faq" element={<Faq />} />
                         </Route>
                     </Route>
                 </Routes>

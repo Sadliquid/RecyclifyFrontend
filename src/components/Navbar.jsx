@@ -4,7 +4,7 @@ import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/reac
 import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx"; 
-import { BsGift, BsMailbox, BsPeople } from "react-icons/bs";
+import { BsGift, BsMailbox, BsNewspaper, BsPeople, BsQuestionCircle } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
 import { FcStatistics } from "react-icons/fc";
@@ -31,6 +31,8 @@ function Navbar() {
             setSidebar(<TeachersSidebar />);
         } else if (user.userRole === "admin") {
             setSidebar(<AdminSidebar />);
+        } else if (user.userRole === "parent") {
+            setSidebar(<ParentSidebar />);
         }
     }
 
@@ -299,6 +301,47 @@ function Navbar() {
     }
 
     // Parent Sidebar
+    function ParentSidebar() {
+        return (
+            <DrawerRoot placement={"start"}>
+                <DrawerBackdrop />
+                <DrawerTrigger asChild>
+                    <RxHamburgerMenu size="24px" color="white" cursor="pointer" />
+                </DrawerTrigger>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <Image src="../RecyclifyTransparentLogoV1.png" alt="logo" mt={3} />
+                    </DrawerHeader>
+                    <DrawerBody display={"flex"} flexDirection={"column"}>
+                        <Box display="flex" flexDirection="column" height="100%">
+                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <BsNewspaper fontSize={"20px"} />
+                                <Text ml={2}>Events Bulletin</Text>
+                            </Button>
+
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents/emailNewsletter")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <BsMailbox />
+                                <Text ml={3}>Email Newsletter</Text>
+                            </Button>
+
+                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents/faq")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <BsQuestionCircle ml={1} />
+                                <Text ml={2.5}>Frequently Asked Questions</Text>
+                            </Button>
+                        </Box>
+
+                        <Box textAlign="center" >
+                            <Text color={"#515F7C"}>©2025 Recyclify</Text>
+                        </Box>
+                    </DrawerBody>
+                    <DrawerFooter>
+
+                    </DrawerFooter>
+                    <DrawerCloseTrigger />
+                </DrawerContent>
+            </DrawerRoot>
+        )
+    }
 
     return (
         <>
