@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
 import { PasswordInput } from "@/components/ui/password-input"
 import { InputGroup } from "@/components/ui/input-group";
@@ -19,6 +21,8 @@ function Login() {
     const dispatch = useDispatch();
     const [invalidIdentifier, setInvalidIdentifier] = useState(false)
     const [invalidPassword, setInvalidPassword] = useState(false)
+
+    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
         setInvalidIdentifier(false)
@@ -51,6 +55,31 @@ function Login() {
             console.log(error)
         }
     };
+
+    useEffect(() => {
+        if (user && authToken) {     
+            if (localStorage.getItem('jwt')) {
+                if (!error && loaded) {
+                    if (location.pathname === "/auth/login") {
+                        if (user.userRole === "student") {
+                            console.log("This line ran")
+                            navigate("/student/home");
+                            ShowToast("success", "You're already logged in!");
+                        } else if (user.userRole === "teacher") {
+                            navigate("/teachers");
+                            ShowToast("success", "You're already logged in!");
+                        } else if (user.userRole === "parent") {
+                            navigate("/parents");
+                            ShowToast("success", "You're already logged in!");
+                        } else if (user.userRole === "admin") {
+                            navigate("/admin/dashboard");
+                            ShowToast("success", "You're already logged in!");
+                        }
+                    }
+                }
+            }
+        }
+    }, [user, error, loaded, authToken]);
 
     return (
         <Box

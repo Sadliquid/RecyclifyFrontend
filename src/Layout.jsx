@@ -35,20 +35,7 @@ function App() {
                             if (!error && loaded) {
                                 if ((location.pathname.startsWith("/student") && user.userRole != "student") || (location.pathname.startsWith("/teachers") && user.userRole != "teacher") || (location.pathname.startsWith("/parents") && user.userRole != "parent") || (location.pathname.startsWith("/admin") && user.userRole != "admin")) {
                                     navigate("/");
-                                    setTimeout(() => ShowToast("error", "Access denied"));
-                                } else {
-                                    if (location.pathname === "/auth/login") {
-                                        if (user.userRole === "student") {
-                                            navigate("/student/home");
-                                        } else if (user.userRole === "teacher") {
-                                            navigate("/teachers");
-                                        } else if (user.userRole === "parent") {
-                                            navigate("/parents");
-                                        } else if (user.userRole === "admin") {
-                                            navigate("/admin/dashboard");
-                                        }
-                                        ShowToast("success", "You're already logged in!");
-                                    }
+                                    setTimeout(() => ShowToast("error", "Access unauthorized"));
                                 }
                             }
                         }
