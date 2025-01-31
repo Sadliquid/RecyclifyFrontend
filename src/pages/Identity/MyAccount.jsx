@@ -132,7 +132,7 @@ function MyAccount() {
     if (renderReady) {
         return (
             <Box>
-                <Heading as="h2" size="lg">My Account</Heading>
+                <Heading fontSize="30px" mt={10}>My Account</Heading>
                 <Box mt={4}>
                     <Flex direction="column" gap={4}>
                         <Flex>
@@ -175,6 +175,11 @@ function MyAccount() {
                             ) : (
                                 <Text flex="2">{userDetails.contactNumber}</Text>
                             )}
+                        </Flex>
+
+                        <Flex>
+                            <Text flex="1"><strong>Role:</strong></Text>
+                            <Text flex="2">{user.userRole === "student" ? "Student" : user.userRole === "teacher" ? "Teacher" : user.userRole === "parent" ? "Parent" : "Admin"}</Text>
                         </Flex>
 
                         {isEditing && (
