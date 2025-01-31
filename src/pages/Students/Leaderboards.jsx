@@ -112,14 +112,14 @@ function Leaderboards() {
     }
 
     if (studentsFetched && user != null && sessionStudent != null) return (
-        <Box display="flex" justifyContent={"center"} flexDir="column" mt={10} width={"100%"}>
-            <Heading fontSize="30px">Leaderboards</Heading>
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <Box display="flex" justifyContent={"center"} flexDir="column" mt={10} width={"100%"}>
+                <Heading fontSize="30px">Leaderboards</Heading>
 
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
                 <Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"}>
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="28%">
                         <Box display="flex" flexDir={"column"} justifyContent={"space-around"} alignItems={"center"} backgroundColor="#E5ECFF" borderRadius={20} height="85%" padding={2}>
@@ -198,8 +198,8 @@ function Leaderboards() {
                         ))}
                     </Box>
                 </Box>
-            </motion.div>
-        </Box>
+            </Box>
+        </motion.div>
     )
 }
 
