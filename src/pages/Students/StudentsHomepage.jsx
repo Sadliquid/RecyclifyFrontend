@@ -74,7 +74,7 @@ function StudentsHomepage() {
 
     if (!loaded) {
         return (
-            <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
+            <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100vw" height="80vh">
                 <Spinner color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
             </Box>
         )
