@@ -7,6 +7,7 @@ import AddClassButton from "@/components/teachers/AddClassButton"
 import ClassCard from "@/components/teachers/ClassCard"
 import server from "../../../networking"
 import { useSelector } from 'react-redux'
+import { motion } from "framer-motion"
 
 function Landing() {
     const navigate = useNavigate();
@@ -107,28 +108,35 @@ function Landing() {
     if (!error && loaded && user) {
         return (
             <>
-                <Stack gap="8" direction="row" wrap="wrap" justify="center" mt={8}>
-                    {classes.length ? (
-                        classes.map((classItem, classIndex) => (
-                            <ClassCard
-                                key={classItem.classID}
-                                classIndex={classIndex}
-                                classItem={classItem}
-                                cardWidth={cardWidth}
-                                cardHeight={cardHeight}
-                                onCardClick={() => navigate(`/teachers/class/${classItem.classID}`)}
-                                onDelete={() => handleDeleteClass(classItem.classID)}
-                                onEdit={(updatedClass) => handleEditClass(classItem.classID, updatedClass)}
-                            />
-                        ))
-                    ) : (
-                        <VStack textAlign="center" fontWeight="medium">
-                            <LuBox />
-                            <Text>No class data available</Text>
-                        </VStack>
-                    )}
-                </Stack>
-    
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Stack gap="8" direction="row" wrap="wrap" justify="center" mt={8}>
+                        {classes.length ? (
+                            classes.map((classItem, classIndex) => (
+                                <ClassCard
+                                    key={classItem.classID}
+                                    classIndex={classIndex}
+                                    classItem={classItem}
+                                    cardWidth={cardWidth}
+                                    cardHeight={cardHeight}
+                                    onCardClick={() => navigate(`/teachers/class/${classItem.classID}`)}
+                                    onDelete={() => handleDeleteClass(classItem.classID)}
+                                    onEdit={(updatedClass) => handleEditClass(classItem.classID, updatedClass)}
+                                />
+                            ))
+                        ) : (
+                            <VStack textAlign="center" fontWeight="medium">
+                                <LuBox />
+                                <Text>No class data available</Text>
+                            </VStack>
+                        )}
+                    </Stack>
+        
+                </motion.div>
+
                 {/* Add new class button */}
                 <AddClassButton onCreate={handleAddClass} />
             </>

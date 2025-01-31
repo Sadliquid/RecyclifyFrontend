@@ -3,6 +3,7 @@ import { Box, Heading, Text, Button, SimpleGrid, Spinner } from '@chakra-ui/reac
 import { useSelector } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { motion } from 'framer-motion';
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -76,39 +77,45 @@ function Dashboard() {
 
 	return (
 		<>
-			<Box p={5}>
-				<Heading mb={5}>School's Recycling Progress</Heading>
+			<motion.div
+				initial={{ opacity: 0, y: 10 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.5 }}
+			>
+				<Box p={5}>
+					<Heading mb={5}>School's Recycling Progress</Heading>
 
-				{/* Chart */}
-				<Box mb={10} h="400px">
-					<Bar data={data} options={options} />
+					{/* Chart */}
+					<Box mb={10} h="400px">
+						<Bar data={data} options={options} />
+					</Box>
+
+					<SimpleGrid columns={[1, null, 2]} spacing={4} mt={8}>
+						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
+							<Heading size="md">User Management</Heading>
+							<Text mt={2}>View all users on the Recyclifly system and be able to carry out functions to manage users</Text>
+							<Button mt={4} colorScheme="teal" background={"white"}>User Management Screen</Button>
+						</Box>
+						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
+							<Heading size="md">Inventory Management</Heading>
+							<Text mt={2}>View all rewards offered in the Recyclifly program.</Text>
+							<Button mt={4} colorScheme="teal" background={"white"}>Inventory Management Screen</Button>
+						</Box>
+
+						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
+							<Heading size="md">System Services</Heading>
+							<Text mt={2}>View all services Recyclifly uses and toggle on and off the service.</Text>
+							<Button mt={4} colorScheme="teal" background={"white"}>System Services Screen</Button>
+						</Box>
+
+						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
+							<Heading size="md">View Contact Questions</Heading>
+							<Text mt={2}>View the questions sent in via the contact form and reply to them</Text>
+							<Button mt={4} colorScheme="teal" background={"white"}>Answer Contact Queries</Button>
+						</Box>
+					</SimpleGrid>
 				</Box>
-
-				<SimpleGrid columns={[1, null, 2]} spacing={4} mt={8}>
-					<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
-						<Heading size="md">User Management</Heading>
-						<Text mt={2}>View all users on the Recyclifly system and be able to carry out functions to manage users</Text>
-						<Button mt={4} colorScheme="teal" background={"white"}>User Management Screen</Button>
-					</Box>
-					<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
-						<Heading size="md">Inventory Management</Heading>
-						<Text mt={2}>View all rewards offered in the Recyclifly program.</Text>
-						<Button mt={4} colorScheme="teal" background={"white"}>Inventory Management Screen</Button>
-					</Box>
-
-					<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
-						<Heading size="md">System Services</Heading>
-						<Text mt={2}>View all services Recyclifly uses and toggle on and off the service.</Text>
-						<Button mt={4} colorScheme="teal" background={"white"}>System Services Screen</Button>
-					</Box>
-
-					<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
-						<Heading size="md">View Contact Questions</Heading>
-						<Text mt={2}>View the questions sent in via the contact form and reply to them</Text>
-						<Button mt={4} colorScheme="teal" background={"white"}>Answer Contact Queries</Button>
-					</Box>
-				</SimpleGrid>
-			</Box>
+			</motion.div>
 		</>
 	);
 }
