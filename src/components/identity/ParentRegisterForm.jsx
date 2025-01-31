@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 import * as Yup from "yup"
 import { useFormik } from 'formik';
-import { toaster } from "@/components/ui/toaster"
 import { VStack, Box, Button, Input, Text, Flex } from "@chakra-ui/react"
 import { InputGroup } from "@/components/ui/input-group"
 import { LuUser, LuLock, LuIdCard, LuPhone, LuMail } from "react-icons/lu"

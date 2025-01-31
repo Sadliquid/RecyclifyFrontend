@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, Image, defineStyle } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
@@ -133,7 +135,7 @@ function StudentDashboard({ classData, students }) {
                 setOpen(false);
             }
         } catch (error) {
-            console.error('Error updating student.');
+            console.error('Error updating student: ', error.message);
             setOpen(true);
         }
     };

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Tabs } from '@chakra-ui/react';
 import ClassDashboard from './ClassDashboard';
 import StudentDashboard from './StudentDashboard';

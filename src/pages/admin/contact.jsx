@@ -1,27 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect } from "react";
-import {
-  Stack,
-  Table,
-  Heading,
-  Input,
-  HStack,
-  Box,
-  Textarea,
-  Spinner,
-} from "@chakra-ui/react";
+import { Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { MdReply } from "react-icons/md"; // Removed MdEdit
+import { MdReply } from "react-icons/md";
 import { Button } from "@/components/ui/button";
-import {
-  DialogActionTrigger,
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import Server from "../../../networking";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +17,7 @@ const ContactFormManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const subjectRef = useRef(null);
-  const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+  const { user, loaded, error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -92,7 +75,7 @@ const ContactFormManagement = () => {
     setSelectedMessage(message);
   };
 
-  const handleSendReply = async (subject, body) => {
+  const handleSendReply = async () => {
     try {
         const markRepliedResponse = await Server.put(
             `/api/ContactManagement/${selectedMessage.id}/mark-replied`

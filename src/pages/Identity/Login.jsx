@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';

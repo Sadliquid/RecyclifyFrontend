@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { Box, Flex, Image, Tabs, Text } from '@chakra-ui/react';
 import { FaLeaf } from "react-icons/fa";
 import { Avatar } from "@/components/ui/avatar";

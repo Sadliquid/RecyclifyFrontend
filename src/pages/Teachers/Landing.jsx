@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import { Stack, VStack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { LuBox } from "react-icons/lu"
@@ -9,7 +10,7 @@ import { useSelector } from 'react-redux'
 
 function Landing() {
     const navigate = useNavigate();
-    const { user, loaded, error, authToken } = useSelector((state) => state.auth)
+    const { user, loaded, error } = useSelector((state) => state.auth)
     const [teacherID, setTeacherID] = useState(null)
 
     // Class Data

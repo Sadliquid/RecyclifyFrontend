@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { Box, Card, Image, Button, Text, Stack, Field, Input, defineStyle, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';

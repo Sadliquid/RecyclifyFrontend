@@ -1,7 +1,9 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, VStack, Heading, Text, Button, Field } from '@chakra-ui/react'
+import { Box, VStack, Heading, Text, Button } from '@chakra-ui/react'
 import { StepsItem, StepsList, StepsRoot } from "@/components/ui/steps";
 import { PinInput } from "@/components/ui/pin-input";
 import { Controller, useForm } from "react-hook-form"
@@ -168,6 +170,7 @@ function EmailVerification() {
                             (data) => verifyEmail(data),
                             (errors) => {
                                 ShowToast("error", "Invalid Verification Code", "Please enter a complete 6-digit code");
+                                console.error(errors);
                             }
                         )}
                         loading={isLoading}

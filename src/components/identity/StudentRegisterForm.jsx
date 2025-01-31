@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from 'react-router-dom'
 import * as Yup from "yup"
 import { useFormik } from 'formik';
-import { toaster } from "@/components/ui/toaster"
 import { VStack, Box, Button, Input, Text, Flex, } from "@chakra-ui/react"
 import { LuUser, LuLock, LuIdCard, LuPhone, LuMail } from "react-icons/lu"
 import { InputGroup } from "@/components/ui/input-group"

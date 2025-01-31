@@ -1,8 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
 import { MdEdit, MdAdd } from "react-icons/md";
+import { Toaster } from "@/components/ui/toaster";
+import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
 
 const UserManagement = () => {
@@ -105,155 +108,159 @@ const UserManagement = () => {
     };
 
     return (
-        <Stack gap="10">
-            <Box textAlign="center">
-                <Heading fontSize={"30px"} m={10}>
-                    User Management
-                </Heading>
-                <HStack justifyContent="center" mb="4">
-                    <Input
-                        placeholder="Search for users..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        width="400px"
-                        background={"white"}
-                        align={"center"}
-                        color={"black"}
-                    />
-                    <Button
-                        leftIcon={<MdAdd />} // Add icon
-                        colorScheme="teal"
-                        onClick={() => console.log("Add User button clicked")}
-                    >
-                        Add User
-                    </Button>
-                </HStack>
-            </Box>
-            {filteredUsers.length === 0 ? (
-                <Box textAlign="center" py={10}>
-                    <Text fontSize="lg" color="gray.500">
-                        No users found.
-                    </Text>
-                    <Button
-                        mt={4}
-                        leftIcon={<MdAdd />}
-                        colorScheme="teal"
-                        onClick={() => console.log("Add User button clicked")}
-                    >
-                        Add a New User
-                    </Button>
+        <>
+            <Stack gap="10">
+                <Box textAlign="center">
+                    <Heading fontSize={"30px"} m={10}>
+                        User Management
+                    </Heading>
+                    <HStack justifyContent="center" mb="4">
+                        <Input
+                            placeholder="Search for users..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            width="400px"
+                            background={"white"}
+                            align={"center"}
+                            color={"black"}
+                        />
+                        <Button
+                            leftIcon={<MdAdd />} // Add icon
+                            colorScheme="teal"
+                            onClick={() => console.log("Add User button clicked")}
+                        >
+                            Add User
+                        </Button>
+                    </HStack>
                 </Box>
-            ) : (
-                <Table.Root size="sm" showColumnBorder>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.ColumnHeader>Name</Table.ColumnHeader>
-                            <Table.ColumnHeader>Email</Table.ColumnHeader>
-                            <Table.ColumnHeader>Contact Number</Table.ColumnHeader>
-                            <Table.ColumnHeader>User Role</Table.ColumnHeader>
-                            <Table.ColumnHeader>Action</Table.ColumnHeader>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {filteredUsers.map((user) => (
-                            <Table.Row key={user.id}>
-                                <Table.Cell color={"black"}>
-                                    <Box display="flex" alignItems="center">
-                                        <Box
-                                            borderRadius="full"
-                                            width="40px"
-                                            height="40px"
-                                            bg="pink.200"
-                                            display="flex"
-                                            alignItems="center"
-                                            justifyContent="center"
-                                            mr="2"
-                                        >
-                                            {user.name[0]} {/* Placeholder for icon or initial */}
+                {filteredUsers.length === 0 ? (
+                    <Box textAlign="center" py={10}>
+                        <Text fontSize="lg" color="gray.500">
+                            No users found.
+                        </Text>
+                        <Button
+                            mt={4}
+                            leftIcon={<MdAdd />}
+                            colorScheme="teal"
+                            onClick={() => console.log("Add User button clicked")}
+                        >
+                            Add a New User
+                        </Button>
+                    </Box>
+                ) : (
+                    <Table.Root size="sm" showColumnBorder>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.ColumnHeader>Name</Table.ColumnHeader>
+                                <Table.ColumnHeader>Email</Table.ColumnHeader>
+                                <Table.ColumnHeader>Contact Number</Table.ColumnHeader>
+                                <Table.ColumnHeader>User Role</Table.ColumnHeader>
+                                <Table.ColumnHeader>Action</Table.ColumnHeader>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {filteredUsers.map((user) => (
+                                <Table.Row key={user.id}>
+                                    <Table.Cell color={"black"}>
+                                        <Box display="flex" alignItems="center">
+                                            <Box
+                                                borderRadius="full"
+                                                width="40px"
+                                                height="40px"
+                                                bg="pink.200"
+                                                display="flex"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                mr="2"
+                                            >
+                                                {user.name[0]} {/* Placeholder for icon or initial */}
+                                            </Box>
+                                            {editingUser?.id === user.id ? (
+                                                <Input
+                                                    value={editingUser.name}
+                                                    onChange={(e) =>
+                                                        setEditingUser({
+                                                            ...editingUser,
+                                                            name: e.target.value,
+                                                        })
+                                                    }
+                                                />
+                                            ) : (
+                                                user.name
+                                            )}
                                         </Box>
+                                    </Table.Cell>
+                                    <Table.Cell color={"black"}>
                                         {editingUser?.id === user.id ? (
                                             <Input
-                                                value={editingUser.name}
+                                                value={editingUser.email}
                                                 onChange={(e) =>
                                                     setEditingUser({
                                                         ...editingUser,
-                                                        name: e.target.value,
+                                                        email: e.target.value,
                                                     })
                                                 }
                                             />
                                         ) : (
-                                            user.name
+                                            user.email
                                         )}
-                                    </Box>
-                                </Table.Cell>
-                                <Table.Cell color={"black"}>
-                                    {editingUser?.id === user.id ? (
-                                        <Input
-                                            value={editingUser.email}
-                                            onChange={(e) =>
-                                                setEditingUser({
-                                                    ...editingUser,
-                                                    email: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    ) : (
-                                        user.email
-                                    )}
-                                </Table.Cell>
-                                <Table.Cell color={"black"}>
-                                    {editingUser?.id === user.id ? (
-                                        <Input
-                                            value={editingUser.contactNumber}
-                                            onChange={(e) =>
-                                                setEditingUser({
-                                                    ...editingUser,
-                                                    contactNumber: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    ) : (
-                                        user.contactNumber
-                                    )}
-                                </Table.Cell>
-                                <Table.Cell color={"black"}>
-                                    {editingUser?.id === user.id ? (
-                                        <Input
-                                            value={editingUser.userRole}
-                                            onChange={(e) =>
-                                                setEditingUser({
-                                                    ...editingUser,
-                                                    userRole: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    ) : (
-                                        user.userRole
-                                    )}
-                                </Table.Cell>
-                                <Table.Cell>
-                                    {editingUser?.id === user.id ? (
-                                        <Button colorScheme="teal" onClick={handleSave}>
-                                            Save
-                                        </Button>
-                                    ) : (
-                                        <HStack spacing={2}>
-                                            <Button
-                                                variant="link"
-                                                color="blue.500"
-                                                onClick={() => handleEdit(user)}
-                                            >
-                                                <MdEdit size={20} />
+                                    </Table.Cell>
+                                    <Table.Cell color={"black"}>
+                                        {editingUser?.id === user.id ? (
+                                            <Input
+                                                value={editingUser.contactNumber}
+                                                onChange={(e) =>
+                                                    setEditingUser({
+                                                        ...editingUser,
+                                                        contactNumber: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        ) : (
+                                            user.contactNumber
+                                        )}
+                                    </Table.Cell>
+                                    <Table.Cell color={"black"}>
+                                        {editingUser?.id === user.id ? (
+                                            <Input
+                                                value={editingUser.userRole}
+                                                onChange={(e) =>
+                                                    setEditingUser({
+                                                        ...editingUser,
+                                                        userRole: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        ) : (
+                                            user.userRole
+                                        )}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {editingUser?.id === user.id ? (
+                                            <Button colorScheme="teal" onClick={handleSave}>
+                                                Save
                                             </Button>
-                                        </HStack>
-                                    )}
-                                </Table.Cell>
-                            </Table.Row>
-                        ))}
-                    </Table.Body>
-                </Table.Root>
-            )}
-        </Stack>
+                                        ) : (
+                                            <HStack spacing={2}>
+                                                <Button
+                                                    variant="link"
+                                                    color="blue.500"
+                                                    onClick={() => handleEdit(user)}
+                                                >
+                                                    <MdEdit size={20} />
+                                                </Button>
+                                            </HStack>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table.Root>
+                )}
+            </Stack>
+
+            <Toaster />
+        </>
     );
 };
 

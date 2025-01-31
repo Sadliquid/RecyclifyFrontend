@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Box, Button, Input, Field, Stack, defineStyle } from '@chakra-ui/react';
 import { IoAddOutline } from 'react-icons/io5';

@@ -13,7 +13,6 @@ function StudentCharts({ studentID }) {
 
     const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    // Prepare data for the chart
     const data = {
         labels,
         datasets: [

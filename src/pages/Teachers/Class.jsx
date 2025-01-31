@@ -1,4 +1,5 @@
-import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { IoArrowBack } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import ClassTabs from '../../components/teachers/ClassTabs';
