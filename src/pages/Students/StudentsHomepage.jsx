@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
