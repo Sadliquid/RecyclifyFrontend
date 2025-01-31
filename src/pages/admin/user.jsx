@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
 import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
 import { MdEdit, MdAdd } from "react-icons/md";
 import ShowToast from "../../Extensions/ShowToast";
@@ -13,25 +11,7 @@ const UserManagement = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState(null);
     const [editingUser, setEditingUser] = useState(null); // Track the user being edited
-    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!error) {
-            if (loaded) {
-                if (!user) {
-                    navigate("/auth/login");
-                    ShowToast("error", "You are not logged in", "Please log in first");
-                } else if (user.userRole !== "admin") {
-                    navigate("/auth/login");
-                    ShowToast("error", "Access denied", "Please log in as an admin");
-                }
-            }
-        } else {
-            ShowToast("error", "Error", "An error occurred while fetching user state");
-        }
-    }, [loaded]);
+    const { loaded, authToken } = useSelector((state) => state.auth);
 
     // Fetch users from the backend
     useEffect(() => {

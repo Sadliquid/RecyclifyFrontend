@@ -5,6 +5,7 @@ import { FaLeaf } from "react-icons/fa";
 import { Avatar } from "@/components/ui/avatar";
 import ClassPieChart from './ClassPieChart'; // Import the pie chart component
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import server from "../../../networking";
 import { PiCloverFill } from "react-icons/pi";
 import { LuBox } from 'react-icons/lu';
@@ -18,6 +19,8 @@ function ClassDashboard({ classData, students }) {
 
     // Sort the students by TotalPoints in accending order and get the least contributed top 3
     const lowest3Students = studentsList.sort((a, b) => a.totalPoints - b.totalPoints).slice(0, 3);
+
+    const { user, loaded, error } = useSelector((state) => state.auth);
 
     const fetchSchoolClasses = async () => {
         try {
@@ -33,7 +36,9 @@ function ClassDashboard({ classData, students }) {
 
     // Fetch school classes data on component mount
     useEffect(() => {
-        fetchSchoolClasses();
+        if (!error && loaded && user && user.userRole == "teacher") {
+            fetchSchoolClasses();
+        }
     }, [classData && students]);
 
     //Function to sort school classes data in descending order

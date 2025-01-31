@@ -13,7 +13,7 @@ function ClaimReward() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const redeemReward = async () => {
@@ -33,11 +33,11 @@ function ClaimReward() {
             } catch (error) {
                 if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                     if (error.response.data.error.startsWith("UERROR")) {
-                        setError(error.response.data.error.substring("UERROR:".length));
+                        setErrorMessage(error.response.data.error.substring("UERROR:".length));
                         setIsSuccess(false);
                         return;
                     } else {
-                        setError(error.response.data.error.substring("ERROR:".length));
+                        setErrorMessage(error.response.data.error.substring("ERROR:".length));
                         setIsSuccess(false);
                         return;
                     }
@@ -51,7 +51,7 @@ function ClaimReward() {
             redeemReward();
         } else {
             setIsLoading(false);
-            setError('Required parameters are missing.');
+            setErrorMessage('Required parameters are missing.');
         }
     }, [studentID, redemptionID]);
 
@@ -75,7 +75,7 @@ function ClaimReward() {
                                 ) : (
                                     <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
                                         <Text as={PiWarningCircleFill} boxSize={100} color="orange.400" mb={5} />
-                                        <Text fontFamily={"Lilita One"} color="orange.400" textAlign={"center"}>{error}</Text>
+                                        <Text fontFamily={"Lilita One"} color="orange.400" textAlign={"center"}>{errorMessage}</Text>
                                     </Box>
                                 )}
                             </Card.Body>

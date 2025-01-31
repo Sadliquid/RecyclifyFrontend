@@ -51,15 +51,10 @@ function MyAccount() {
     };
 
     useEffect(() => {
-        fetchAccountInfo();
-    }, [loaded]);
-
-    useEffect(() => {
-        if (!localStorage.getItem('jwt')) {
-            navigate("/auth/login")
-            ShowToast("error", "Error", "Please login first");
+        if (localStorage.getItem('jwt')) {
+            fetchAccountInfo();
         }
-    }, [])
+    }, [loaded])
 
     const handleChange = (e) => {
         setEditableDetails({
@@ -117,6 +112,7 @@ function MyAccount() {
     const handleLogout = () => {
         localStorage.removeItem('jwt');
         navigate("/auth/login")
+        ShowToast("success", "Logged out successfully");
     }
 
     useEffect(() => {
@@ -127,7 +123,7 @@ function MyAccount() {
 
     if (!loaded) {
         return (
-            <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
+            <Box display="flex" justifyContent="center" alignItems="center" width="100vw" height="80vh">
                 <Spinner />
             </Box>
         )

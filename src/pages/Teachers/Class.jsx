@@ -42,22 +42,11 @@ function Class() {
 
     // Fetch class data on component mount
     useEffect(() => {
-        if (!error) {
-            if (loaded) {
-                if (!user || user.userRole != "teacher") {
-                    navigate("/auth/login");
-                } else {
-                    if (id) {
-                        fetchClassData();
-                        fetchStudents();
-                    }
-                    else {
-                        navigate("/teachers");
-                    }
-                }
+        if (!error && loaded && user && user.userRole == "teacher") {
+            if (id) {
+                fetchClassData();
+                fetchStudents();
             }
-        } else {
-            console.log("Error", "An error occured while fetching user state");
         }
     }, [loaded && id]);
 

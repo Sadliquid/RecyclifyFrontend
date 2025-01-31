@@ -1,33 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useState } from 'react'
 import { Box, VStack, Heading, Link, Text, HStack, Image } from '@chakra-ui/react'
-import ShowToast from '../../Extensions/ShowToast';
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 import ParentRegistrationForm from '../../components/identity/ParentRegisterForm'
 import StudentRegistrationForm from '../../components/identity/StudentRegisterForm'
 
 function CreateAccount() {
     const [selectedAccountType, setSelectedAccountType] = useState(null);
-    const { user, authToken, error, loaded } = useSelector((state) => state.auth);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (user && authToken) {     
-            if (!error && loaded) {
-                if (user.userRole === "student") {
-                    navigate("/student/home");
-                } else if (user.userRole === "teacher") {
-                    navigate("/teachers");
-                } else {
-                    navigate("/admin/dashboard");
-                }
-            }
-            ShowToast("success", "Logged In", "You are already logged in!");
-        }
-    }, [user, error, loaded, authToken]);
 
     const renderForm = () => {
         switch (selectedAccountType) {

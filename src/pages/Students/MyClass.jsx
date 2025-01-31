@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Heading, Table, Flex, Image, Spinner, Text, Button } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,13 +38,8 @@ function MyClass() {
     };
 
     useEffect(() => {
-        if (!error && loaded && user) {
-            if (user.userRole !== "student") {
-                navigate("/auth/login");
-                ShowToast("error", "Access unauthorized.");
-            } else {
-                fetchStudents(user.id);
-            }
+        if (!error && loaded && user && user.userRole == "student") {
+            fetchStudents(user.id);
         }
     }, [error, loaded, user]);
 

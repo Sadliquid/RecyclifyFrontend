@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, Image, defineStyle } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
 import { LuDiamond } from 'react-icons/lu';
@@ -9,6 +10,7 @@ import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHea
 import server from "../../../networking"
 
 function StudentDashboard({ classData, students }) {
+    const { user, loaded, error } = useSelector((state) => state.auth);
     const [studentsList, setStudentsList] = useState(students || []);
     const [editedStudent, setEditedStudent] = useState({
         name: '',
@@ -156,8 +158,10 @@ function StudentDashboard({ classData, students }) {
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
     useEffect(() => {
-        if (classData && students) {
-            fetchStudents();
+        if (!error && loaded && user && user.userRole == "teacher") {
+            if (classData && students) {
+                fetchStudents();
+            }
         }
     }, [classData && students]);
 

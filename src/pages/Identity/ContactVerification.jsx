@@ -1,30 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { PinInput } from "@/components/ui/pin-input"
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
-import ShowToast from '../../Extensions/ShowToast';
 function ContactVerification() {
-    const navigate = useNavigate();
-    const { user, authToken, error, loaded } = useSelector((state) => state.auth);
-
-    useEffect(() => {
-        if (user && authToken) {     
-            if (!error && loaded) {
-                if (user.userRole === "student") {
-                    navigate("/student/home");
-                } else if (user.userRole === "teacher") {
-                    navigate("/teachers");
-                } else {
-                    navigate("/admin/dashboard");
-                }
-            }
-            ShowToast("success", "Success", "You are already logged in!");
-        }
-    }, [user, error, loaded, authToken]);
 
     return (
         <>

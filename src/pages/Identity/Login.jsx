@@ -1,13 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Box, VStack, Heading, Button, Link, Text, Input } from '@chakra-ui/react';
 import { PasswordInput } from "@/components/ui/password-input"
 import { InputGroup } from "@/components/ui/input-group";
 import { Field } from "@/components/ui/field";
 import { LuUser, LuLock } from "react-icons/lu";
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchUser } from '../../slices/AuthState';
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
@@ -20,25 +19,6 @@ function Login() {
     const dispatch = useDispatch();
     const [invalidIdentifier, setInvalidIdentifier] = useState(false)
     const [invalidPassword, setInvalidPassword] = useState(false)
-
-    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
-
-    useEffect(() => {
-        if (localStorage.getItem('jwt')) {
-            if (user && authToken) {     
-                if (!error && loaded) {
-                    if (user.userRole === "student") {
-                        navigate("/student/home");
-                    } else if (user.userRole === "teacher") {
-                        navigate("/teachers");
-                    } else {
-                        navigate("/admin/dashboard");
-                    }
-                }
-                ShowToast("success", "Logged In", "You are already logged in!");
-            }
-        }
-    }, [user, error, loaded, authToken]);
 
     const handleSubmit = async (e) => {
         setInvalidIdentifier(false)

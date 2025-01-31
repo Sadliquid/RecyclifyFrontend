@@ -111,7 +111,7 @@ function ClassEnrolment() {
     }
 
     useEffect(() => {
-        if (!error && loaded && user) {
+        if (!error && loaded && user && user.userRole === "student") {
             checkStudentEnrolment(user.id)
         }
     }, [error, loaded, user])

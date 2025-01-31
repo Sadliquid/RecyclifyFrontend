@@ -1,34 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 import { Box, Heading, Text, Button, SimpleGrid, Spinner } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
-import ShowToast from '../../Extensions/ShowToast';	
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function Dashboard() {
-	const { user, loaded, error } = useSelector((state) => state.auth);
-	const navigate = useNavigate();
-	useEffect(() => {
-		if (!error) {
-			if (loaded) {
-				if (!user) {
-					navigate("/auth/login");
-					ShowToast("error", "You are not logged in", "Please log in first");
-				} else if (user.userRole != "admin") {
-					navigate("/auth/login");
-					ShowToast("error", "Access denied", "Please log in as a admin");
-				}
-			}
-		} else {
-			ShowToast("error", "Error", "An error occured while fetching user state");
-		}
-	}, [loaded]);
+	const { loaded } = useSelector((state) => state.auth);
+	
 	if (!loaded) {
 		return (
 			<Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">

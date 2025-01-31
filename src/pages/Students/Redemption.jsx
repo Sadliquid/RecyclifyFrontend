@@ -65,12 +65,9 @@ function Redemption() {
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "student") {
             fetchLeafs(user.id);
+            fetchRewards();
         }
     }, [loaded]);
-
-    useEffect(() => {
-        fetchRewards();
-    }, []);
 
     if (!error && loaded && user && rewards != null && redeemablePoints != null) return (
         <Box display="flex" justifyContent="center" flexDir="column" alignItems="center" mt={10}>

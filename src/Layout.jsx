@@ -13,7 +13,7 @@ function App() {
     const navigate = useNavigate();
 	const dispatch = useDispatch();
     const location = useLocation();
-    const { loaded, user, error } = useSelector(state => state.auth)
+    const { loaded, user, error, authToken } = useSelector(state => state.auth)
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
@@ -26,21 +26,39 @@ function App() {
     useEffect(() => {
         if (!error) {
             if (loaded) {
-                if (!user) {
+                if (!user && ((location.pathname !== "/auth/login") && (location.pathname !== "/auth/createAccount"))) {
                     navigate("/auth/login");
                     ShowToast("error", "Please log in first");
                 } else {
-                    if ((location.pathname.startsWith("/student") && user.userRole != "student") || (location.pathname.startsWith("/teachers") && user.userRole != "teacher") || (location.pathname.startsWith("/parents") && user.userRole != "parent") || (location.pathname.startsWith("/admin") && user.userRole != "admin")) {
-                        navigate("/");
-                        setTimeout(() => ShowToast("error", "Access denied"));
-                        console.log("Access denied. You are not logged in as a " + location.pathname.split("/")[1]);
+                    if (localStorage.getItem('jwt')) {
+                        if (user && authToken) {     
+                            if (!error && loaded) {
+                                if ((location.pathname.startsWith("/student") && user.userRole != "student") || (location.pathname.startsWith("/teachers") && user.userRole != "teacher") || (location.pathname.startsWith("/parents") && user.userRole != "parent") || (location.pathname.startsWith("/admin") && user.userRole != "admin")) {
+                                    navigate("/");
+                                    setTimeout(() => ShowToast("error", "Access denied"));
+                                } else {
+                                    if (location.pathname === "/auth/login") {
+                                        if (user.userRole === "student") {
+                                            navigate("/student/home");
+                                        } else if (user.userRole === "teacher") {
+                                            navigate("/teachers");
+                                        } else if (user.userRole === "parent") {
+                                            navigate("/parents");
+                                        } else if (user.userRole === "admin") {
+                                            navigate("/admin/dashboard");
+                                        }
+                                        ShowToast("success", "You're already logged in!");
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         } else {
             ShowToast("error", "Error", "An error occured while fetching user state");
         }
-    }, [loaded]);
+    }, [user, error, loaded, authToken]);
 
     useEffect(() => {
         if (error) {
