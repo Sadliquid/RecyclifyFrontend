@@ -77,7 +77,7 @@ function MyClass() {
         >
             <Box display="flex" justifyContent={"center"} flexDir="column" mt={10}>
                 <Heading fontSize="30px">My Class</Heading>
-                <Box h="70dvh" p={4} bg="#E5ECFF" borderRadius="xl" boxShadow="md" overflowX="auto" mt={10}>
+                <Box maxH={"70dvh"} p={4} bg="#E5ECFF" borderRadius="xl" boxShadow="md" overflowX="auto" mt={10}>
                     <Table.Root size="sm">
                         <Table.Header>
                             <Table.Row bg="bg.subtle">

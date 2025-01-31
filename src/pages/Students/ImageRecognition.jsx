@@ -4,6 +4,7 @@ import { toaster } from "@/components/ui/toaster";
 import { CloseButton } from "@/components/ui/close-button";
 import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle } from "@/components/ui/dialog"
+import { motion } from "framer-motion";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
@@ -83,42 +84,48 @@ function ImageRecognition() {
 
     return (
         <>
-            <Box display="flex" justifyContent={"center"} flexDir="column" mt={10}>
-                <Heading fontSize="30px">Scan my item</Heading>
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Box display="flex" justifyContent={"center"} flexDir="column" mt={10}>
+                    <Heading fontSize="30px">Scan my item</Heading>
 
-                <Box display="flex" justifyContent={"center"} alignItems={"center"} flexDir={"column"} boxShadow={"0 2px 4px 2px rgba(0.1, 0.1, 0.1, 0.1)"} borderRadius={20} width="40%" margin="auto" p={5} mt={5}>
-                    <Heading fontSize="20px" mb={5}>Upload your image</Heading>
-                    <FileUploadRoot onFileChange={handleFileChange} maxW="xl" alignItems="stretch" maxFiles={1}>
-                        <FileUploadDropzone
-                            label="Drag and drop here to upload"
-                            description=".png, .jpg up to 5MB"
-                        />
+                    <Box display="flex" justifyContent={"center"} alignItems={"center"} flexDir={"column"} boxShadow={"0 2px 4px 2px rgba(0.1, 0.1, 0.1, 0.1)"} borderRadius={20} width="40%" margin="auto" p={5} mt={5}>
+                        <Heading fontSize="20px" mb={5}>Upload your image</Heading>
+                        <FileUploadRoot onFileChange={handleFileChange} maxW="xl" alignItems="stretch" maxFiles={1}>
+                            <FileUploadDropzone
+                                label="Drag and drop here to upload"
+                                description=".png, .jpg up to 5MB"
+                            />
 
-                        {selectedFile && (
-                            <Box display="flex" alignItems="center" justifyContent="space-between" mt="4">
-                                <Text>{selectedFile.name}</Text>
-                                <CloseButton size="sm" variant="outline" onClick={clearFile} />
-                            </Box>
-                        )}
-                    </FileUploadRoot>
+                            {selectedFile && (
+                                <Box display="flex" alignItems="center" justifyContent="space-between" mt="4">
+                                    <Text>{selectedFile.name}</Text>
+                                    <CloseButton size="sm" variant="outline" onClick={clearFile} />
+                                </Box>
+                            )}
+                        </FileUploadRoot>
 
-                    <Button
-                        display="flex"
-                        justifyContent="center"
-                        backgroundColor="#2D65FF"
-                        mb={2}
-                        colorScheme="white"
-                        _hover={{ bg: "#1752FD" }}
-                        borderRadius="30px"
-                        alignItems="center"
-                        mt={10}
-                        onClick={handleUploadItem}
-                        disabled={!submissionReady}
-                    >
-                        <Text>Scan my item</Text>
-                    </Button>
+                        <Button
+                            display="flex"
+                            justifyContent="center"
+                            backgroundColor="#2D65FF"
+                            mb={2}
+                            colorScheme="white"
+                            _hover={{ bg: "#1752FD" }}
+                            borderRadius="30px"
+                            alignItems="center"
+                            mt={10}
+                            onClick={handleUploadItem}
+                            disabled={!submissionReady}
+                        >
+                            <Text>Scan my item</Text>
+                        </Button>
+                    </Box>
                 </Box>
-            </Box>
+            </motion.div>
 
             <DialogRoot
                 placement={"center"}
