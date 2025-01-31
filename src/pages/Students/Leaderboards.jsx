@@ -51,18 +51,26 @@ function Leaderboards() {
 
     const calculateTimeLeft = () => {
         const now = new Date();
-        const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (7 - now.getDay()), 23, 59, 59);
+        const daysUntilMonday = (8 - now.getDay()) % 7;
+        
+        const endOfWeek = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() + daysUntilMonday, 0, 0, 0
+        );
+    
         const difference = endOfWeek - now;
     
         if (difference > 0) {
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
             const minutes = Math.floor((difference / (1000 * 60)) % 60);
-            const seconds = Math.floor((difference / 1000) % 60);
-            setTimeLeft(`${hours} Hours, ${minutes} Minutes and ${seconds}s`);
+            setTimeLeft(`${days} Days, ${hours} Hours, ${minutes} Minutes`);
         } else {
-            setTimeLeft("0 Hours, 0 Minutes and 0s");
+            setTimeLeft("0 Days, 0 Hours, 0 Minutes");
         }
     };
+    
 
     useEffect(() => {
         calculateTimeLeft();
