@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Box, Button, Text, Card, Image } from "@chakra-ui/react"
-import { Toaster, toaster } from "@/components/ui/toaster"
+import { toaster } from "@/components/ui/toaster"
 import ShowToast from "../../Extensions/ShowToast"
 import server from "../../../networking"
 
@@ -116,8 +116,6 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
                     </Card.Footer>
                 </Box>
             </Card.Root>
-
-            <Toaster />
         </>
     )
 }

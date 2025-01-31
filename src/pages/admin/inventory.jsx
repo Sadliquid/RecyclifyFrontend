@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
-import { Toaster } from "@/components/ui/toaster";  
 import { MdEdit, MdAdd } from "react-icons/md";
 import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
@@ -294,8 +293,6 @@ const InventoryManagement = () => {
                     </Table.Root>
                 )}
             </Stack>
-
-            <Toaster />
         </>
     );
 };

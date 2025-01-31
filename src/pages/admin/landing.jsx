@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 import { Box, Heading, Text, Button, SimpleGrid, Spinner } from '@chakra-ui/react';
-import { Toaster } from '@/components/ui/toaster';	
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -129,8 +128,6 @@ function Dashboard() {
 					</Box>
 				</SimpleGrid>
 			</Box>
-
-			<Toaster />
 		</>
 	);
 }

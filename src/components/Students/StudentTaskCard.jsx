@@ -6,7 +6,7 @@ import { CloseButton } from "@/components/ui/close-button";
 import { Box, Text, Button, Badge, Stack } from '@chakra-ui/react';
 import { FaCamera, FaExclamationTriangle } from 'react-icons/fa';
 import { useState } from 'react';
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
@@ -260,8 +260,6 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                     </DialogContent>
                 </DialogRoot>
             </motion.div>
-
-            <Toaster />
         </>
     );
 }

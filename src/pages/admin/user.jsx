@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
 import { MdEdit, MdAdd } from "react-icons/md";
-import { Toaster } from "@/components/ui/toaster";
 import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
 
@@ -258,8 +257,6 @@ const UserManagement = () => {
                     </Table.Root>
                 )}
             </Stack>
-
-            <Toaster />
         </>
     );
 };

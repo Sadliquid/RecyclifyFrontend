@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import StudentCharts from '../../components/Students/StudentCharts';
 import StudentProfileCard from '../../components/Students/StudentProfileCard';
@@ -11,7 +10,6 @@ import StreakCard from '../../components/Students/StreakCard';
 import StreakRewardCard from '../../components/Students/StreakRewardCard';
 import server from "../../../networking";
 import ShowToast from '../../Extensions/ShowToast';
-import { Toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
 
 function StudentsHomepage() {
@@ -20,8 +18,6 @@ function StudentsHomepage() {
     const [allStudents, setAllStudents] = useState([]);
 
     const { user, loaded, error } = useSelector((state) => state.auth);
-
-    const navigate = useNavigate();
 
     const updateStudentPoints = (newPoints) => {
         setStudentProfile((prevProfile) => ({
@@ -70,22 +66,6 @@ function StudentsHomepage() {
             ShowToast("error", "Failed to fetch student data");
         }
     }
-
-    useEffect(() => {
-        if (!error) {
-            if (loaded) {
-                if (!user) {
-                    navigate("/auth/login");
-                    ShowToast("error", "Please log in first");
-                } else if (user.userRole != "student") {
-                    navigate("/auth/login");
-                    ShowToast("error", "Please log in as a student");
-                }
-            }
-        } else {
-            ShowToast("error", "Error", "An error occured while fetching user state");
-        }
-    }, [loaded]);
 
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "student") {
@@ -190,8 +170,6 @@ function StudentsHomepage() {
                     </Box>
                 </Box>
             </Box>
-
-            <Toaster />
         </>
     );
 }

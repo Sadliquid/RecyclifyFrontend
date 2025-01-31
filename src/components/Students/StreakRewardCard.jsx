@@ -2,7 +2,7 @@
 import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 import { BsGift } from 'react-icons/bs';
 import { motion } from "framer-motion";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import { useState } from "react";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
@@ -135,8 +135,6 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
                     </Box>
                 </Box>
             </motion.div>
-
-            <Toaster />
         </>
     );
 }

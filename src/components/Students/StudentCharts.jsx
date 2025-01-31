@@ -1,14 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { Box, Text, Spinner } from '@chakra-ui/react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function StudentCharts({ studentID }) {
+    const { user, loaded, error } = useSelector((state) => state.auth);
     const [accumulatedLeafs, setAccumulatedLeafs] = useState({});
 
     const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -40,34 +43,36 @@ function StudentCharts({ studentID }) {
     };
 
     useEffect(() => {
-        if (!studentID) return;
+        if (!error && loaded && user && user.userRole == "student") {
+            if (!studentID) return;
 
-        new Promise((resolve, reject) => {    
-            server.get(`/api/student/get-student-chart-statistics?studentID=${studentID}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    setAccumulatedLeafs(response.data.data);
-                    resolve();
-                } else {
-                    reject("Unexpected response status: " + response.status);
-                }
-            })
-            .catch(error => {
-                if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
-                    if (error.response.data.error.startsWith("UERROR")) {
-                        ShowToast("error", error.response.data.error.substring("UERROR:".length));
-                        reject(error.response.data.error.substring("UERROR: ".length));
-                    } else {
-                        ShowToast("error", error.response.data.error.substring("ERROR:".length));
-                        reject("Unknown system error");
+            new Promise((resolve, reject) => {    
+                server.get(`/api/student/get-student-chart-statistics?studentID=${studentID}`, {
+                    headers: {
+                        "Content-Type": "application/json",
                     }
-                }
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        setAccumulatedLeafs(response.data.data);
+                        resolve();
+                    } else {
+                        reject("Unexpected response status: " + response.status);
+                    }
+                })
+                .catch(error => {
+                    if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                        if (error.response.data.error.startsWith("UERROR")) {
+                            ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                            reject(error.response.data.error.substring("UERROR: ".length));
+                        } else {
+                            ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                            reject("Unknown system error");
+                        }
+                    }
+                });
             });
-        });
+        }
     }, [studentID]);
 
     if (!studentID || Object.keys(accumulatedLeafs) <= 0) {

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 import { Box, Heading, Text, Button, Spinner } from '@chakra-ui/react';
-import { Toaster, toaster } from "@/components/ui/toaster"
+import { toaster } from "@/components/ui/toaster"
 import { PinInput } from "@/components/ui/pin-input"
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -187,8 +187,6 @@ function ClassEnrolment() {
                     </Box>
                 </Box>
             </motion.div>
-            
-            <Toaster />
         </>
     );
     

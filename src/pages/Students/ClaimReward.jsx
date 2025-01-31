@@ -1,5 +1,4 @@
 import { Box, Heading, Text, Spinner, Card } from '@chakra-ui/react';
-import { Toaster } from "@/components/ui/toaster";
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { BsCheckCircleFill } from 'react-icons/bs';
@@ -84,7 +83,6 @@ function ClaimReward() {
                     </Box>
                 </Box>
             </Box>
-            <Toaster />
         </>
     );
 }

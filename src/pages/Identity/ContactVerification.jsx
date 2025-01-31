@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { PinInput } from "@/components/ui/pin-input"
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
-import { Toaster } from '@/components/ui/toaster';
 import ShowToast from '../../Extensions/ShowToast';
 function ContactVerification() {
     const navigate = useNavigate();
@@ -92,8 +91,6 @@ function ContactVerification() {
                     </VStack>
                 </Box>
             </Box>
-
-            <Toaster />
         </>
     );
 }

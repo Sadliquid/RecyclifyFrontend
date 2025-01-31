@@ -7,10 +7,13 @@ import { fetchUser, setLoading } from './slices/AuthState';
 import { Toaster, toaster } from "@/components/ui/toaster"
 import Navbar from './components/Navbar'
 import ShowToast from './Extensions/ShowToast';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function App() {
+    const navigate = useNavigate();
 	const dispatch = useDispatch();
-    const { error } = useSelector(state => state.auth)
+    const location = useLocation();
+    const { loaded, user, error } = useSelector(state => state.auth)
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
@@ -19,6 +22,25 @@ function App() {
             dispatch(setLoading(true))
         }
     }, []);
+
+    useEffect(() => {
+        if (!error) {
+            if (loaded) {
+                if (!user) {
+                    navigate("/auth/login");
+                    ShowToast("error", "Please log in first");
+                } else {
+                    if ((location.pathname.startsWith("/student") && user.userRole != "student") || (location.pathname.startsWith("/teachers") && user.userRole != "teacher") || (location.pathname.startsWith("/parents") && user.userRole != "parent") || (location.pathname.startsWith("/admin") && user.userRole != "admin")) {
+                        navigate("/");
+                        setTimeout(() => ShowToast("error", "Access denied"));
+                        console.log("Access denied. You are not logged in as a " + location.pathname.split("/")[1]);
+                    }
+                }
+            }
+        } else {
+            ShowToast("error", "Error", "An error occured while fetching user state");
+        }
+    }, [loaded]);
 
     useEffect(() => {
         if (error) {

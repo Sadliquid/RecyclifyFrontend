@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Heading, Box, Button, Text } from '@chakra-ui/react';
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import { CloseButton } from "@/components/ui/close-button";
 import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle } from "@/components/ui/dialog"
@@ -145,8 +145,6 @@ function ImageRecognition() {
                     <DialogCloseTrigger />
                 </DialogContent>
             </DialogRoot>
-
-            <Toaster />
         </>
     );
 }
