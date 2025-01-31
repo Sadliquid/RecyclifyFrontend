@@ -36,13 +36,14 @@ function Navbar() {
 
     function handleNavbarTitleClick() {
         if (localStorage.getItem('jwt')) {
-            console.log("JWT exists");
             if (!error && loaded && user) {
                 if (user.userRole === "student") {
                     navigate("/student/home");
                 } else if (user.userRole === "teacher") {
                     navigate("/teachers");
-                } else {
+                } else if (user.userRole === "parent") { 
+                    navigate("/parents");
+                } else if (user.userRole === "admin") { 
                     navigate("/admin/dashboard");
                 }
             } else {

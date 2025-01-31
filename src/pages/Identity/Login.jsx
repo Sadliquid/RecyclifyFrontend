@@ -7,7 +7,8 @@ import { PasswordInput } from "@/components/ui/password-input"
 import { InputGroup } from "@/components/ui/input-group";
 import { Field } from "@/components/ui/field";
 import { LuUser, LuLock } from "react-icons/lu";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUser } from '../../slices/AuthState';
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
 
@@ -16,6 +17,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [invalidIdentifier, setInvalidIdentifier] = useState(false)
     const [invalidPassword, setInvalidPassword] = useState(false)
 
@@ -60,6 +62,7 @@ function Login() {
                 Password: password,
             });
             localStorage.setItem('jwt', response.data.token);
+            await dispatch(fetchUser());
             ShowToast("success", "Welcome Back!", "Successfully logged in.");
             navigate("/identity/myAccount");
         } catch (error) {
