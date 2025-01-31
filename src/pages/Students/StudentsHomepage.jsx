@@ -15,7 +15,6 @@ import { motion } from "framer-motion";
 function StudentsHomepage() {
     const [studentTasks, setStudentTasks] = useState([]);
     const [studentProfile, setStudentProfile] = useState({});
-    const [allStudents, setAllStudents] = useState([]);
 
     const { user, loaded, error } = useSelector((state) => state.auth);
 
