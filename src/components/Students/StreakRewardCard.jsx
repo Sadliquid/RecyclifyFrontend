@@ -66,7 +66,6 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
         return (
             <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
                 <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
-                <Text color="white">Getting your info...</Text>
             </Box>
         )
     }
