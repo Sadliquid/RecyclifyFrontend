@@ -22,17 +22,19 @@ function Login() {
     const { user, loaded, error, authToken } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (user && authToken) {     
-            if (!error && loaded) {
-                if (user.userRole === "student") {
-                    navigate("/student/home");
-                } else if (user.userRole === "teacher") {
-                    navigate("/teachers");
-                } else {
-                    navigate("/admin/dashboard");
+        if (localStorage.getItem('jwt')) {
+            if (user && authToken) {     
+                if (!error && loaded) {
+                    if (user.userRole === "student") {
+                        navigate("/student/home");
+                    } else if (user.userRole === "teacher") {
+                        navigate("/teachers");
+                    } else {
+                        navigate("/admin/dashboard");
+                    }
                 }
+                ShowToast("success", "Logged In", "You are already logged in!");
             }
-            ShowToast("success", "Logged In", "You are already logged in!");
         }
     }, [user, error, loaded, authToken]);
 
