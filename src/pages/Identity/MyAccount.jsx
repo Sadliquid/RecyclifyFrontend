@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Text, Box, Heading, Input, Button, Flex, Spinner } from '@chakra-ui/react';
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
+import { motion } from "framer-motion";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
@@ -131,97 +132,103 @@ function MyAccount() {
 
     if (renderReady) {
         return (
-            <Box>
-                <Heading fontSize="30px" mt={10}>My Account</Heading>
-                <Box mt={4}>
-                    <Flex direction="column" gap={4}>
-                        <Flex>
-                            <Text flex="1"><strong>Name:</strong></Text>
-                            {isEditing ? (
-                                <Input
-                                    name="name"
-                                    value={editableDetails.name}
-                                    onChange={handleChange}
-                                    placeholder="Enter name"
-                                />
-                            ) : (
-                                <Text flex="2">{userDetails.name}</Text>
-                            )}
-                        </Flex>
-
-                        <Flex>
-                            <Text flex="1"><strong>Email:</strong></Text>
-                            {isEditing ? (
-                                <Input
-                                    name="email"
-                                    value={editableDetails.email}
-                                    onChange={handleChange}
-                                    placeholder="Enter email"
-                                />
-                            ) : (
-                                <Text flex="2">{userDetails.email}</Text>
-                            )}
-                        </Flex>
-
-                        <Flex>
-                            <Text flex="1"><strong>Contact Number:</strong></Text>
-                            {isEditing ? (
-                                <Input
-                                    name="contactNumber"
-                                    value={editableDetails.contactNumber}
-                                    onChange={handleChange}
-                                    placeholder="Enter contact number"
-                                />
-                            ) : (
-                                <Text flex="2">{userDetails.contactNumber}</Text>
-                            )}
-                        </Flex>
-
-                        <Flex>
-                            <Text flex="1"><strong>Role:</strong></Text>
-                            <Text flex="2">{user.userRole === "student" ? "Student" : user.userRole === "teacher" ? "Teacher" : user.userRole === "parent" ? "Parent" : "Admin"}</Text>
-                        </Flex>
-
-                        {isEditing && (
-                            <Flex gap={4} mt={4}>
-                                <Button onClick={handleSave} colorScheme="blue" backgroundColor={"#4DCBA4"}>Save Changes</Button>
-                                <Button onClick={handleCancel} colorScheme="red" backgroundColor={"#4DCBA4"}>Cancel</Button>
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Box>
+                    <Heading fontSize="30px" mt={10}>My Account</Heading>
+                    <Box mt={4}>
+                        <Flex direction="column" gap={4}>
+                            <Flex>
+                                <Text flex="1"><strong>Name:</strong></Text>
+                                {isEditing ? (
+                                    <Input
+                                        name="name"
+                                        value={editableDetails.name}
+                                        onChange={handleChange}
+                                        placeholder="Enter name"
+                                    />
+                                ) : (
+                                    <Text flex="2">{userDetails.name}</Text>
+                                )}
                             </Flex>
-                        )}
 
-                        {!isEditing && (
-                            <Button onClick={() => setIsEditing(true)} colorScheme="teal" mt={4} backgroundColor={"#4DCBA4"}>
-                                Edit
+                            <Flex>
+                                <Text flex="1"><strong>Email:</strong></Text>
+                                {isEditing ? (
+                                    <Input
+                                        name="email"
+                                        value={editableDetails.email}
+                                        onChange={handleChange}
+                                        placeholder="Enter email"
+                                    />
+                                ) : (
+                                    <Text flex="2">{userDetails.email}</Text>
+                                )}
+                            </Flex>
+
+                            <Flex>
+                                <Text flex="1"><strong>Contact Number:</strong></Text>
+                                {isEditing ? (
+                                    <Input
+                                        name="contactNumber"
+                                        value={editableDetails.contactNumber}
+                                        onChange={handleChange}
+                                        placeholder="Enter contact number"
+                                    />
+                                ) : (
+                                    <Text flex="2">{userDetails.contactNumber || "Not set"}</Text>
+                                )}
+                            </Flex>
+
+                            <Flex>
+                                <Text flex="1"><strong>Role:</strong></Text>
+                                <Text flex="2">{user.userRole === "student" ? "Student" : user.userRole === "teacher" ? "Teacher" : user.userRole === "parent" ? "Parent" : "Admin"}</Text>
+                            </Flex>
+
+                            {isEditing && (
+                                <Flex gap={4} mt={4}>
+                                    <Button onClick={handleSave} colorScheme="blue" backgroundColor={"#4DCBA4"}>Save Changes</Button>
+                                    <Button onClick={handleCancel} colorScheme="red" backgroundColor={"#4DCBA4"}>Cancel</Button>
+                                </Flex>
+                            )}
+
+                            {!isEditing && (
+                                <Button onClick={() => setIsEditing(true)} colorScheme="teal" mt={4} backgroundColor={"#4DCBA4"}>
+                                    Edit
+                                </Button>
+                            )}
+
+                            <DialogRoot open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                                <DialogTrigger asChild>
+                                    <Button colorScheme="red" mt={4} backgroundColor={"#4DCBA4"}>Delete Account</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Confirm Account Deletion</DialogTitle>
+                                    </DialogHeader>
+                                    <DialogBody>
+                                        <Text>Are you sure you want to delete your account? This action is irreversible.</Text>
+                                    </DialogBody>
+                                    <DialogFooter>
+                                        <DialogActionTrigger asChild>
+                                            <Button variant="outline" backgroundColor={"red"} color="white" onClick={handleCancelDelete}>Cancel</Button>
+                                        </DialogActionTrigger>
+                                        <Button onClick={handleDeleteAccount} backgroundColor={"#4DCBA4"}>Delete</Button>
+                                    </DialogFooter>
+                                    <DialogCloseTrigger />
+                                </DialogContent>
+                            </DialogRoot>
+
+                            <Button onClick={handleLogout} colorScheme="gray" mt={4} backgroundColor={"#4DCBA4"}>
+                                Logout
                             </Button>
-                        )}
-
-                        <DialogRoot open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button colorScheme="red" mt={4} backgroundColor={"#4DCBA4"}>Delete Account</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Confirm Account Deletion</DialogTitle>
-                                </DialogHeader>
-                                <DialogBody>
-                                    <Text>Are you sure you want to delete your account? This action is irreversible.</Text>
-                                </DialogBody>
-                                <DialogFooter>
-                                    <DialogActionTrigger asChild>
-                                        <Button variant="outline" backgroundColor={"red"} color="white" onClick={handleCancelDelete}>Cancel</Button>
-                                    </DialogActionTrigger>
-                                    <Button onClick={handleDeleteAccount} backgroundColor={"#4DCBA4"}>Delete</Button>
-                                </DialogFooter>
-                                <DialogCloseTrigger />
-                            </DialogContent>
-                        </DialogRoot>
-
-                        <Button onClick={handleLogout} colorScheme="gray" mt={4} backgroundColor={"#4DCBA4"}>
-                            Logout
-                        </Button>
-                    </Flex>
+                        </Flex>
+                    </Box>
                 </Box>
-            </Box>
+            </motion.div>
         );
     }
 }
