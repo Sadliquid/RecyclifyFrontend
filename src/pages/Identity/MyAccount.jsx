@@ -43,7 +43,7 @@ function MyAccount() {
         } catch (err) {
             console.log("Error fetching account info:", err);
             if (err && err.response && err.response.status && err.response.status == 404) {
-                dispatch(logout());
+                dispatch(logout()); // add logout() function to authSlice
                 localStorage.removeItem('jwt');
             }
             // showToast("Unable to retrieve account information", "Please try again", 3000, true, "error");
