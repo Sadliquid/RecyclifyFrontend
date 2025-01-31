@@ -1,7 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Grid, Heading } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 import BulletinCard from '../../components/parents/BulletinCard';
+import { useEffect } from 'react';
 
 function ParentsHomepage() {
+    const { user, loaded, error } = useSelector((state) => state.auth);
+
     const events = [
         {
             title: 'School Play',
@@ -40,6 +45,12 @@ function ParentsHomepage() {
             image: 'https://picsum.photos/id/11/200/300',
         }
     ];
+
+    useEffect(() => {
+        if (!error && loaded && user && user.userRole == "parent") {
+            console.log("User logged in as parent with ID:", user.id);
+        }
+    }, [loaded]);
 
     return (
         <Box textAlign="center" fontSize="xl">
