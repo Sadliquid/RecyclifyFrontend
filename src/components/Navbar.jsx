@@ -35,13 +35,18 @@ function Navbar() {
     }
 
     function handleNavbarTitleClick() {
-        if (!error && loaded && user) {
-            if (user.userRole === "student") {
-                navigate("/student/home");
-            } else if (user.userRole === "teacher") {
-                navigate("/teachers");
+        if (localStorage.getItem('jwt')) {
+            console.log("JWT exists");
+            if (!error && loaded && user) {
+                if (user.userRole === "student") {
+                    navigate("/student/home");
+                } else if (user.userRole === "teacher") {
+                    navigate("/teachers");
+                } else {
+                    navigate("/admin/dashboard");
+                }
             } else {
-                navigate("/admin/dashboard");
+                navigate("/");
             }
         } else {
             navigate("/");
