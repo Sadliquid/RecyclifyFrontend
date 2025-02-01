@@ -26,7 +26,7 @@ function App() {
     useEffect(() => {
         if (!error) {
             if (loaded) {
-                if (!user && ((location.pathname !== "/auth/login") && (location.pathname !== "/auth/createAccount"))) {
+                if (!user && ((location.pathname !== "/auth/login") && (location.pathname !== "/auth/createAccount") && (location.pathname !== "/"))) {
                     navigate("/auth/login");
                     ShowToast("error", "Please log in first");
                 } else {
