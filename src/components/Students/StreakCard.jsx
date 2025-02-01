@@ -2,7 +2,6 @@
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Text, Box, Button, Spinner } from '@chakra-ui/react';
 import { BsFire } from 'react-icons/bs';
-import { motion } from "framer-motion";
 import MiniCalendar from "./MiniCalendar";
 
 function StreakCard({ streak }) {
@@ -10,23 +9,12 @@ function StreakCard({ streak }) {
         return (
             <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
                 <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
-                <Text>Getting your info...</Text>
             </Box>
         )
     } else {
         if (streak >= 0) return (
             <>
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        width: "100%",
-                        divideX: "2px"
-                    }}
-                >
+                
                     <Box display="flex" justifyContent={"space-between"} width="100%" divideX={"2px"}>
                         <Box display="flex" justifyContent={"space-around"} alignItems={"center"} width="50%">
                             <Text as={BsFire} fontSize="40px" color={"#CCAC00"} />
@@ -70,7 +58,6 @@ function StreakCard({ streak }) {
                             </DialogRoot>
                         </Box>
                     </Box>
-                </motion.div>
             </>
         )
     }
