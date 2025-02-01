@@ -133,12 +133,10 @@ function MyAccount() {
                 transition={{ duration: 0.5 }}
             >
                 <Box>
-                    <Heading fontSize="30px" mt={10}>My Account</Heading>
-                    <Box mt={4}>
-
-                        <ProfileBanner />
+                    <Heading fontSize="30px" mt={10} mb={6}>My Account</Heading>
+                    <ProfileBanner />
                         
-                        <AccountDetails />
+                        {/* <AccountDetails /> */}
                         {/* <Flex direction="column" gap={4}>
                             <Flex>
                                 <Text flex="1"><strong>Name:</strong></Text>
@@ -225,7 +223,6 @@ function MyAccount() {
                                 Logout
                             </Button>
                         </Flex> */}
-                    </Box>
                 </Box>
             </motion.div>
         );
