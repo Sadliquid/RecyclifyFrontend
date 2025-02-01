@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 import { BsGift } from 'react-icons/bs';
-import { motion } from "framer-motion";
 import { toaster } from "@/components/ui/toaster";
 import { useState } from "react";
 import ShowToast from '../../Extensions/ShowToast';
@@ -66,17 +65,13 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
         return (
             <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
                 <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
-                <Text>Getting your info...</Text>
             </Box>
         )
     }
 
     if ((remainingStreaks >= 0) && (isClaimable == true || isClaimable == false)) return (
         <>
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+            <Box 
                 style={{
                     display: "flex",
                     flexDirection: "column",
@@ -86,7 +81,6 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
                     height: "100%",
                     padding: 6,
                     boxSizing: "border-box",
-                    backgroundColor: "#4DCBA4",
                     borderRadius: 20
                 }}
             >
@@ -134,7 +128,7 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
                         </Box>
                     </Box>
                 </Box>
-            </motion.div>
+            </Box>
         </>
     );
 }

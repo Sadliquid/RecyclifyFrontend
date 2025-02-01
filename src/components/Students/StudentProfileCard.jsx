@@ -2,7 +2,6 @@
 import { Box, Text, Flex, Image, Spinner } from '@chakra-ui/react';
 import { FaLeaf } from 'react-icons/fa';
 import { Avatar } from "@/components/ui/avatar";
-import { motion } from "framer-motion";
 
 function StudentProfileCard({ user, studentProfile }) {
     var validProp = studentProfile && Object.keys(studentProfile).length > 0;
@@ -11,17 +10,13 @@ function StudentProfileCard({ user, studentProfile }) {
         return (
             <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
                 <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
-                <Text>Getting your info...</Text>
             </Box>
         )
     }
 
     if (validProp) return (
         <>
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+            <Box
                 style={{
                     display: "flex",
                     flexDirection: "column",
@@ -60,7 +55,7 @@ function StudentProfileCard({ user, studentProfile }) {
                         <Text fontSize="sm" fontWeight="medium">{studentProfile.currentPoints} leafs</Text>
                     </Flex>
                 </Flex>
-            </motion.div>
+            </Box>
         </>
     );
 }
