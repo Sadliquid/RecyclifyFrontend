@@ -2,11 +2,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Text, Box, Heading, Input, Button, Flex, Spinner } from '@chakra-ui/react';
+import { Text, Box, Heading, Input, Button, Image, Spinner, HStack, VStack, Textarea } from '@chakra-ui/react';
+import { Avatar, AvatarGroup } from "@/components/ui/avatar"
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
+import ProfileBanner from '../../components/identity/ProfileBanner';
+import AccountDetails from '../../components/identity/AccountDetails';
 
 function MyAccount() {
     const [userDetails, setUserDetails] = useState(null);
@@ -30,24 +33,16 @@ function MyAccount() {
                 setError('Authorization token is missing.');
                 return;
             }
-            // const userID = user.userID;
             const response = await server.get(`/api/Identity/getUserDetails`);
-            // dispatch(reloadAuthToken(authToken))
             setEditableDetails(response.data);
             setUserDetails(response.data);
             setAccountInfo(response.data);
-            console.log("Account info fetched and set: ", response.data)
-            // setOriginalAccountInfo(response.data);
-            // setAccountLoaded(true);
-            // setProfilePicture(`${import.meta.env.VITE_BACKEND_URL}/cdn/getProfilePicture?userID=${userID}`);
         } catch (err) {
             console.log("Error fetching account info:", err);
             if (err && err.response && err.response.status && err.response.status == 404) {
-                dispatch(logout()); // add logout() function to authSlice
+                dispatch(logout()); 
                 localStorage.removeItem('jwt');
-            }
-            // showToast("Unable to retrieve account information", "Please try again", 3000, true, "error");
-            // navigate('/');
+            };
         }
     };
 
@@ -140,7 +135,11 @@ function MyAccount() {
                 <Box>
                     <Heading fontSize="30px" mt={10}>My Account</Heading>
                     <Box mt={4}>
-                        <Flex direction="column" gap={4}>
+
+                        <ProfileBanner />
+                        
+                        <AccountDetails />
+                        {/* <Flex direction="column" gap={4}>
                             <Flex>
                                 <Text flex="1"><strong>Name:</strong></Text>
                                 {isEditing ? (
@@ -225,7 +224,7 @@ function MyAccount() {
                             <Button onClick={handleLogout} colorScheme="gray" mt={4} backgroundColor={"#4DCBA4"}>
                                 Logout
                             </Button>
-                        </Flex>
+                        </Flex> */}
                     </Box>
                 </Box>
             </motion.div>
