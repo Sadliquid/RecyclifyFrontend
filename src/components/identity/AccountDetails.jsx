@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@chakra-ui/react";
+import EditPasswordDialog from "./EditPasswordDialog";
+import DeleteAccountDialog from "./DeleteAccountDialog";
+import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
 
 function AccountDetails({ userDetails }) {
-    console.log(userDetails);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showEditPasswordDialog, setShowEditPasswordDialog] = useState(false);
+    const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
     const [height, setHeight] = useState('auto');
     const hiddenDivRef = useRef(null);
     const textareaRef = useRef(null);
@@ -113,6 +118,7 @@ function AccountDetails({ userDetails }) {
                             variant="solid"
                             background="#2D65FF"
                             color="white"
+                            onClick={() => setShowEditPasswordDialog(true)}
                         >
                             Edit Password
                         </Button>
@@ -130,6 +136,7 @@ function AccountDetails({ userDetails }) {
                         variant="solid"
                         background="#2D65FF"
                         color={"white"}
+                        // onClick={}
                     >
                         Parents Account
                     </Button>
@@ -138,6 +145,7 @@ function AccountDetails({ userDetails }) {
                         variant="solid"
                         background="#2D65FF"
                         color={"white"}
+                        onClick={() => setShowRedemptionDialog(true)}
                     >
                         Redemption History
                     </Button>
@@ -146,6 +154,7 @@ function AccountDetails({ userDetails }) {
                         variant="solid"
                         background="#2D65FF"
                         color={"white"}
+                        // onClick={}
                     >
                         Public Account
                     </Button>
@@ -154,11 +163,16 @@ function AccountDetails({ userDetails }) {
                         variant="solid"
                         background="red"
                         color={"white"}
+                        onClick={() => setShowDeleteDialog(true)}
                     >
                         Delete Account
                     </Button>
                 </HStack>
             </VStack>
+
+            <DeleteAccountDialog isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} />
+            <EditPasswordDialog isOpen={showEditPasswordDialog} onClose={() => setShowEditPasswordDialog(false)} />
+            <RedemptionHistoryDialog isOpen={showRedemptionDialog} onClose={() => setShowRedemptionDialog(false)} />
         </Box>
     );
 }

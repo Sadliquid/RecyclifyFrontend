@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Box, HStack, Button, VStack } from '@chakra-ui/react';
 import { Avatar } from "@/components/ui/avatar";
-import EditAvatarDialog from './EditAvatarDialog'; // Import the Avatar Dialog
-import EditBannerDialog from './EditBannerDialog'; // Import the Banner Dialog
+import EditAvatarDialog from './EditAvatarDialog';
+import EditBannerDialog from './EditBannerDialog';
 
 function ProfileBanner() {
     const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
@@ -41,7 +41,6 @@ function ProfileBanner() {
                 w={"25%"}
             >
                 <VStack justifyContent="center" gap={6}>
-                    {/* Button to open Avatar Edit Dialog */}
                     <Button 
                         w={"60%"} 
                         borderRadius={30}
@@ -53,7 +52,6 @@ function ProfileBanner() {
                         Edit Avatar
                     </Button>
 
-                    {/* Button to open Banner Edit Dialog */}
                     <Button 
                         w={"60%"} 
                         borderRadius={30}
@@ -67,7 +65,6 @@ function ProfileBanner() {
                 </VStack>
             </Box>
 
-            {/* Dialogs for Avatar and Banner Editing */}
             <EditAvatarDialog isOpen={isAvatarDialogOpen} onClose={() => setIsAvatarDialogOpen(false)} />
             <EditBannerDialog isOpen={isBannerDialogOpen} onClose={() => setIsBannerDialogOpen(false)} />
         </HStack>
