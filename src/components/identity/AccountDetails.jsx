@@ -64,11 +64,11 @@ function AccountDetails({ userDetails }) {
             {/* Name Section */}
             <VStack align="start" spacing={4} mb={6}>
                 <Heading size="md">Name</Heading>
-                <VStack align="start" w="100%">
-                    <Text>Username</Text>
-                    <Input value={userDetails.name} isReadOnly />
-                </VStack>
                 <HStack spacing={4} w="100%">
+                    <VStack align="start" flex={1}>
+                        <Text>Username (Display Name)</Text>
+                        <Input value={userDetails.name} isReadOnly />
+                    </VStack>
                     <VStack align="start" flex={1}>
                         <Text>First Name</Text>
                         <Input value={userDetails.fName} isReadOnly />
@@ -98,30 +98,33 @@ function AccountDetails({ userDetails }) {
             {/* Security Section */}
             <VStack align="start" spacing={4} mb={6}>
                 <Heading size="md">Security and Authentication</Heading>
-                <HStack spacing={4} w="100%" align="center">
-                    <VStack align="start" flex={1}>
-                        <Text>Password</Text>
-                        <Box w="100%">
+                <HStack spacing="5%" w="100%" align="center">
+                    <Box flex="0.8" w="80%">
+                        <VStack align="start" w="100%">
+                            <Text>Password</Text>
                             <Input type="password" value="************" isReadOnly />
-                        </Box>
-                    </VStack>
-                    <Button 
-                        alignSelf={"flex-end"}
-                        borderRadius={30}
-                        variant="solid"
-                        background="#2D65FF"
-                        color={"white"}
-                    >
-                        Edit Password
-                    </Button>
+                        </VStack>
+                    </Box>
+
+                    <Box flex="0.25" w="25%" alignSelf={"flex-end"}>
+                        <Button
+                            w="60%"
+                            borderRadius={30}
+                            variant="solid"
+                            background="#2D65FF"
+                            color="white"
+                        >
+                            Edit Password
+                        </Button>
+                    </Box>
                 </HStack>
             </VStack>
 
 
             {/* More Actions */}
             <VStack align="start" spacing={4} mb={6}>
-                <Heading size="md">More Actions</Heading>
-                <HStack spacing={4} w="100%">
+                <Heading size="md" mb={2}>More Actions</Heading>
+                <HStack gap={8} w="100%">
                     <Button 
                         borderRadius={30}
                         variant="solid"
