@@ -164,11 +164,36 @@ function StudentDashboard({ classData, students }) {
                 ? prevRecipients.filter((recipient) => recipient !== value)
                 : [...prevRecipients, value];
     
-            console.log("Updated recipients:", updatedRecipients);
             return updatedRecipients;
         });
     };
 
+    const sendEmail = async (student) => {
+        if (selectedRecipients.length === 0) return;
+    
+        try {
+            const queryParams = new URLSearchParams({
+                recipients: selectedRecipients.join(","),
+                classID: classData.classID,
+                studentID: student.studentID, 
+                studentEmail: student.user.email,
+                parentID: student.parentID ? student.parentID : "", 
+                parentEmail: student.parent ? student.parent.parentEmail : ""
+            }).toString();
+    
+            const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
+    
+            if (response.status === 200) {
+                console.log("Email sent successfully.");
+                setSelectedRecipients([]); 
+            }
+        } catch (error) {
+            console.error("Error sending email:", error.message);
+            setSelectedRecipients([]); 
+        }
+    };
+    
+        
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
     useEffect(() => {
@@ -332,10 +357,10 @@ function StudentDashboard({ classData, students }) {
                                                                         The system will automatically generate an email to the selected recipient
                                                                     </Text>
                                                                     <Stack spacing={4} align="start" width="20%" mx="auto">
-                                                                        <Checkbox onChange={() => handleCheckboxChange("students")} size="lg" mb={2} colorPalette="green">
+                                                                        <Checkbox onChange={() => handleCheckboxChange("students")} size="lg" mb={2} colorPalette="green" disabled={!student.user.email}>
                                                                             Students
                                                                         </Checkbox>
-                                                                        <Checkbox onChange={() => handleCheckboxChange("parents")} size="lg" mb={2} colorPalette="green">
+                                                                        <Checkbox onChange={() => handleCheckboxChange("parents")} size="lg" mb={2} colorPalette="green" disabled={student.parent == null || !student.parent.parentEmail}>
                                                                             Parents
                                                                         </Checkbox>
                                                                     </Stack>
@@ -347,7 +372,7 @@ function StudentDashboard({ classData, students }) {
                                                                         </Button>
                                                                     </DialogActionTrigger>
                                                                     <DialogActionTrigger asChild>
-                                                                        <Button bg="#FF8080" color="white" onClick={() => console.log("Send email to:", selectedRecipients)} disabled={selectedRecipients.length === 0}> 
+                                                                        <Button bg="#FF8080" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}> 
                                                                             Send
                                                                         </Button>
                                                                     </DialogActionTrigger>
