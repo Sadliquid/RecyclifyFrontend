@@ -300,9 +300,11 @@ function StudentDashboard({ classData, students }) {
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </DialogRoot>
-                                                    <MenuItem value="copy-uuid" borderRadius="xl" mt={2} cursor="pointer">
-                                                        <MdOutlineEmail /> Send Email
-                                                    </MenuItem>
+                                                    {(student.user.email || (student.parent && student.parent.parentEmail)) && (
+                                                        <MenuItem value="copy-uuid" borderRadius="xl" mt={2} cursor="pointer">
+                                                            <MdOutlineEmail /> Send Email
+                                                        </MenuItem>
+                                                    )}
                                                     <DialogRoot size="lg">
                                                         <DialogTrigger asChild>
                                                             <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2} cursor="pointer">
