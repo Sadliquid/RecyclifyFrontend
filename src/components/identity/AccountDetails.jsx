@@ -1,30 +1,81 @@
-import React from "react";
-import { Box, Button, HStack, Input, VStack, Heading, Text } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@chakra-ui/react";
 
-function AccountDetails() {
+function AccountDetails({ userDetails }) {
+    console.log(userDetails);
+    const [height, setHeight] = useState('auto');
+    const hiddenDivRef = useRef(null);
+    const textareaRef = useRef(null);
+  
+    const value = userDetails.aboutMe || "Let others know what you are passionate about!";
+  
+    useEffect(() => {
+      if (hiddenDivRef.current && textareaRef.current) {
+        // Set the hidden div's content to the same value as the textarea
+        hiddenDivRef.current.innerText = value;
+  
+        // Get the height of the hidden div
+        const newHeight = hiddenDivRef.current.offsetHeight;
+  
+        // Update the textarea height
+        setHeight(`${newHeight}px`);
+      }
+    }, [value]);
+
     return (
-        <Box w="70%" mx="auto" p={6}>
-            {/* About Me */}
-            <HStack spacing={4} mb={6}>
+        <Box w="70%" mx="auto">
+            <HStack spacing={4} mb={6} mt={6}>
                 <VStack align="start" flex={1}>
                     <Heading size="md" mb={4}>
-                        About Me
+                    About Me
                     </Heading>
-                    <Input isReadOnly />
+                    <Box position="relative" width="100%">
+                    {/* Hidden div to measure the height of the content */}
+                    <Box
+                        ref={hiddenDivRef}
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        visibility="hidden"
+                        whiteSpace="pre-wrap"
+                        wordBreak="break-word"
+                        width="100%"
+                        fontSize="md"
+                        lineHeight="base"
+                        padding="2"
+                    />
+                        {/* Textarea with dynamic height */}
+                        <Textarea
+                            ref={textareaRef}
+                            value={value}
+                            isReadOnly
+                            resize="none"
+                            w="100%"
+                            height={height}
+                            minHeight="80px"
+                            whiteSpace="pre-wrap"
+                            wordBreak="break-word"
+                            overflow="hidden"
+                        />
+                    </Box>
                 </VStack>
             </HStack>
 
             {/* Name Section */}
             <VStack align="start" spacing={4} mb={6}>
                 <Heading size="md">Name</Heading>
+                <VStack align="start" w="100%">
+                    <Text>Username</Text>
+                    <Input value={userDetails.name} isReadOnly />
+                </VStack>
                 <HStack spacing={4} w="100%">
                     <VStack align="start" flex={1}>
                         <Text>First Name</Text>
-                        <Input value="" isReadOnly />
+                        <Input value={userDetails.fName} isReadOnly />
                     </VStack>
                     <VStack align="start" flex={1}>
                         <Text>Last Name</Text>
-                        <Input value="" isReadOnly />
+                        <Input value={userDetails.lName} isReadOnly />
                     </VStack>
                 </HStack>
             </VStack>
@@ -35,11 +86,11 @@ function AccountDetails() {
                 <HStack spacing={4} w="100%">
                     <VStack align="start" flex={1}>
                         <Text>Email</Text>
-                        <Input value="" isReadOnly />
+                        <Input value={userDetails.email} isReadOnly />
                     </VStack>
                     <VStack align="start" flex={1}>
                         <Text>Phone Number</Text>
-                        <Input value="" isReadOnly />
+                        <Input value={userDetails.contactNumber} isReadOnly />
                     </VStack>
                 </HStack>
             </VStack>
@@ -51,7 +102,7 @@ function AccountDetails() {
                     <VStack align="start" flex={1}>
                         <Text>Password</Text>
                         <Box w="100%">
-                            <Input type="password" value="" isReadOnly />
+                            <Input type="password" value="************" isReadOnly />
                         </Box>
                     </VStack>
                     <Button 
@@ -61,7 +112,7 @@ function AccountDetails() {
                         background="#2D65FF"
                         color={"white"}
                     >
-                        View Public Account
+                        Edit Password
                     </Button>
                 </HStack>
             </VStack>
@@ -77,7 +128,7 @@ function AccountDetails() {
                         background="#2D65FF"
                         color={"white"}
                     >
-                        View Parents Account
+                        Parents Account
                     </Button>
                     <Button 
                         borderRadius={30}
@@ -85,7 +136,7 @@ function AccountDetails() {
                         background="#2D65FF"
                         color={"white"}
                     >
-                        View Redemption History
+                        Redemption History
                     </Button>
                     <Button 
                         borderRadius={30}
@@ -93,7 +144,7 @@ function AccountDetails() {
                         background="#2D65FF"
                         color={"white"}
                     >
-                        View Public Account
+                        Public Account
                     </Button>
                     <Button
                         borderRadius={30}

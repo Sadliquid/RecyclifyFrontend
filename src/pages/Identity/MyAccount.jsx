@@ -136,7 +136,7 @@ function MyAccount() {
                     <Heading fontSize="30px" mt={10} mb={6}>My Account</Heading>
                     <ProfileBanner />
                         
-                    <AccountDetails />
+                    <AccountDetails userDetails={userDetails}/>
                         {/* <Flex direction="column" gap={4}>
                             <Flex>
                                 <Text flex="1"><strong>Name:</strong></Text>

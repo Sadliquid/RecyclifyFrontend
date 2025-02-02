@@ -17,9 +17,12 @@ import { TbMessageShare } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useState } from "react";
+import { fetchUser } from '../slices/AuthState'
+import { useDispatch } from "react-redux";
 
 function Navbar() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const { user, loaded, error } = useSelector((state) => state.auth);
     const [sidebar, setSidebar] = useState(<LoginSidebar />);
@@ -56,7 +59,9 @@ function Navbar() {
         }
     }
 
-    function handleProfilePictureClick() {
+    async function handleProfilePictureClick() {
+        console.log("Clicked")
+        await dispatch(fetchUser());
         if (!error && loaded && user) {
             navigate("/identity/myAccount");
         } else {
