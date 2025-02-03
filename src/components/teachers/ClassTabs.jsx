@@ -6,6 +6,8 @@ import { PiStudentFill } from 'react-icons/pi';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Text, VStack } from '@chakra-ui/react';
 import { LuBox } from "react-icons/lu"
+import { FaClipboardList } from "react-icons/fa6";
+import ClassQuest from './ClassQuest';
 
 function ClassTabs({ classData, students }) {
     const studentsList = students || [];
@@ -44,6 +46,28 @@ function ClassTabs({ classData, students }) {
                             <SiGoogleclassroom />Class Dashboard
                         </Tabs.Trigger>
                         <Tabs.Trigger 
+                            value='Class Quests' 
+                            bg="#AEC7ED" 
+                            color="black" 
+                            align="center"
+                            _selected={{
+                                bg: "#B9D4FF",
+                                color: "black",
+                                border: "2px solid #000",
+                                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
+                                fontSize: "1.2rem",
+                                padding: "0.8rem 1.2rem",
+                                transition: "all 0.3s ease-out, transform 0.3s ease-out",
+                                transform: "scale(1.05)",
+                            }}
+                            _hover={{
+                                bg: "#B9D4FF",
+                                transform: "scale(1.05)",
+                            }}
+                        >
+                            <FaClipboardList />Class Quest
+                        </Tabs.Trigger>
+                        <Tabs.Trigger 
                             value='Students' 
                             bg="#94E9B8" 
                             color="black" 
@@ -67,6 +91,7 @@ function ClassTabs({ classData, students }) {
                         </Tabs.Trigger>
                     </Tabs.List>
                     <ClassDashboard classData={classData} students={students} />
+                    <ClassQuest classData={classData} />
                     <StudentDashboard classData={classData} students={students} />
                 </Tabs.Root>
             )}

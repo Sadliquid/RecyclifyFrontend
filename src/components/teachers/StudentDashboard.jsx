@@ -7,6 +7,7 @@ import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons
 import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Checkbox } from "@/components/ui/checkbox"
 import server from "../../../networking"
 
 function StudentDashboard({ classData, students }) {
@@ -20,6 +21,7 @@ function StudentDashboard({ classData, students }) {
         name: '',
     });
     const [open, setOpen] = useState(false);
+    const [selectedRecipients, setSelectedRecipients] = useState([]);
 
     const validateName = (name) => {
         const nameRegex = /^[a-zA-Z\s]+$/;
@@ -155,6 +157,43 @@ function StudentDashboard({ classData, students }) {
         }
     };
 
+    // Function to handle checkbox change
+    const handleCheckboxChange = (value) => {
+        setSelectedRecipients((prevRecipients) => {
+            const updatedRecipients = prevRecipients.includes(value)
+                ? prevRecipients.filter((recipient) => recipient !== value)
+                : [...prevRecipients, value];
+    
+            return updatedRecipients;
+        });
+    };
+
+    const sendEmail = async (student) => {
+        if (selectedRecipients.length === 0) return;
+    
+        try {
+            const queryParams = new URLSearchParams({
+                recipients: selectedRecipients.join(","),
+                classID: classData.classID,
+                studentID: student.studentID, 
+                studentEmail: student.user.email,
+                parentID: student.parentID ? student.parentID : "", 
+                parentEmail: student.parent ? student.parent.parentEmail : ""
+            }).toString();
+    
+            const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
+    
+            if (response.status === 200) {
+                console.log("Email sent successfully.");
+                setSelectedRecipients([]); 
+            }
+        } catch (error) {
+            console.error("Error sending email:", error.message);
+            setSelectedRecipients([]); 
+        }
+    };
+    
+        
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
     useEffect(() => {
@@ -168,7 +207,7 @@ function StudentDashboard({ classData, students }) {
     return (
         <Tabs.Content value='Students'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
-                <Table.ScrollArea  rounded="md" w="100%" h="100%" overflowY="auto">
+                <Table.ScrollArea rounded="md" w="100%" h="100%" overflowY="auto" borderRadius="xl">
                     <Table.Root size="sm" stickyHeader>
                         <Table.Header>
                             <Table.Row bg="bg.subtle">
@@ -207,7 +246,7 @@ function StudentDashboard({ classData, students }) {
                                         </Table.Cell>
                                         <Table.Cell color="black">{student.currentPoints}</Table.Cell>
                                         <Table.Cell color="black">{student.totalPoints}</Table.Cell>
-                                        <Table.Cell color="black">{student.redemptions.length > 0 ? student.redemptions : 0}</Table.Cell>
+                                        <Table.Cell color="black">{student.redemptions.length > 0 ? student.redemptions.length : 0}</Table.Cell>
                                         <Table.Cell color="black">{student.user.email ? student.user.email : "N/A"}</Table.Cell>
                                         <Table.Cell color="black">{student.parent != null && student.parent.parentEmail ? student.parent.parentEmail : "N/A"}</Table.Cell>
                                         <Table.Cell>
@@ -300,9 +339,47 @@ function StudentDashboard({ classData, students }) {
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </DialogRoot>
-                                                    <MenuItem value="copy-uuid" borderRadius="xl" mt={2} cursor="pointer">
-                                                        <MdOutlineEmail /> Send Email
-                                                    </MenuItem>
+                                                    {(student.user.email || (student.parent && student.parent.parentEmail)) && (
+                                                        <DialogRoot size="lg">
+                                                            <DialogTrigger asChild>
+                                                                <MenuItem value="copy-uuid" borderRadius="xl" mt={2} cursor="pointer" closeOnSelect={false}>
+                                                                    <MdOutlineEmail /> Send Email
+                                                                </MenuItem>
+                                                            </DialogTrigger>
+                                                            <DialogContent>
+                                                                <DialogHeader>
+                                                                    <DialogTitle color="black" fontWeight="bold" textAlign="center">
+                                                                        Choose the email recipient:
+                                                                    </DialogTitle>
+                                                                </DialogHeader>
+                                                                <DialogBody textAlign="center">
+                                                                    <Text color="#FF0000" mb={4}>
+                                                                        The system will automatically generate an email to the selected recipient
+                                                                    </Text>
+                                                                    <Stack spacing={4} align="start" width="20%" mx="auto">
+                                                                        <Checkbox onChange={() => handleCheckboxChange("students")} size="lg" mb={2} colorPalette="green" disabled={!student.user.email}>
+                                                                            Students
+                                                                        </Checkbox>
+                                                                        <Checkbox onChange={() => handleCheckboxChange("parents")} size="lg" mb={2} colorPalette="green" disabled={student.parent == null || !student.parent.parentEmail}>
+                                                                            Parents
+                                                                        </Checkbox>
+                                                                    </Stack>
+                                                                </DialogBody>
+                                                                <DialogFooter display="flex" gap={10} justifyContent="center">
+                                                                    <DialogActionTrigger asChild>
+                                                                        <Button variant="outline" bg="#2D65FF" color="white">
+                                                                            Cancel
+                                                                        </Button>
+                                                                    </DialogActionTrigger>
+                                                                    <DialogActionTrigger asChild>
+                                                                        <Button bg="#FF8080" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}> 
+                                                                            Send
+                                                                        </Button>
+                                                                    </DialogActionTrigger>
+                                                                </DialogFooter>
+                                                            </DialogContent>
+                                                        </DialogRoot>
+                                                    )}
                                                     <DialogRoot size="lg">
                                                         <DialogTrigger asChild>
                                                             <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2} cursor="pointer">
@@ -311,7 +388,7 @@ function StudentDashboard({ classData, students }) {
                                                         </DialogTrigger>
                                                         <DialogContent>
                                                             <DialogHeader>
-                                                                <DialogTitle color="black" textAlign="center">
+                                                                <DialogTitle color="black" fontWeight="bold" textAlign="center">
                                                                     Are you sure you want to remove this student from this class?
                                                                 </DialogTitle>
                                                             </DialogHeader>

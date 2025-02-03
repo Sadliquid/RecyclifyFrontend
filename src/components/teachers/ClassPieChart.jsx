@@ -4,7 +4,6 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useState } from 'react';
 
-// Register necessary chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ClassPieChart = ({ students }) => {
@@ -23,7 +22,7 @@ const ClassPieChart = ({ students }) => {
     // Initial dataset visibility state
     const [visibility, setVisibility] = useState(Array(top5Students.length + 1).fill(true));
 
-    // Prepare data for the pie chart
+    // Data for the pie chart
     const chartData = {
         labels: [...top5Students.map((student) => student.user.name), 'Others'],
         datasets: [
@@ -54,19 +53,22 @@ const ClassPieChart = ({ students }) => {
         plugins: {
             legend: { display: false }, // Disable default chart legend
             tooltip: {
+                titleFont: { size: 10, family: 'Sora, sans-serif' },
+                bodyFont: { size: 10, family: 'Sora, sans-serif' },
                 callbacks: {
-                    label: (context) => `${context.label}: ${context.raw}%`,
+                    label: (context) => `${context.raw}%`,
                 },
             },
         },
+        responsive: true,
         maintainAspectRatio: false,
     };
 
     return (
         <Flex w="100%" h="100%" align="center" justify="flex-start" gap="4" flexDirection="row">
-            {/* Pie Chart - Align to the left */}
-            <Box w="353%" maxW="160px" h="160px">
-                <Pie data={chartData} options={chartOptions} />
+            {/* Pie Chart */}
+            <Box w="35%" h="100%">
+                <Pie type="pie" data={chartData} options={chartOptions} />
             </Box>
 
             {/* Custom Legends with Percentage Labels */}
@@ -87,13 +89,23 @@ const ClassPieChart = ({ students }) => {
                                     h="10px"
                                     bg={visibility[index] ? chartData.datasets[0].backgroundColor[index] : 'gray.300'}
                                     borderRadius="full"
+                                    boxShadow="sm"
                                 />
-                                <Box fontSize="sm" fontWeight="bold" color={visibility[index] ? 'inherit' : 'gray.500'}>
+                                <Box
+                                    fontSize="sm"
+                                    fontWeight="bold"
+                                    color={visibility[index] ? 'inherit' : 'gray.500'}
+                                    fontFamily="Sora, sans-serif"
+                                >
                                     {label}
                                 </Box>
                             </Flex>
                             {/* Percentage Label */}
-                            <Box fontSize="sm" color={visibility[index] ? 'inherit' : 'gray.500'}>
+                            <Box
+                                fontSize="sm"
+                                color={visibility[index] ? 'inherit' : 'gray.500'}
+                                fontFamily="Sora, sans-serif"
+                            >
                                 {visibility[index]
                                     ? `${chartData.datasets[0].data[index]}%`
                                     : '0%'}
