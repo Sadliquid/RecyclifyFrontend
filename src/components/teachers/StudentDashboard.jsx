@@ -8,7 +8,9 @@ import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Toaster, toaster } from "@/components/ui/toaster"
 import server from "../../../networking"
+import ShowToast from '../../Extensions/ShowToast';
 
 function StudentDashboard({ classData, students }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
@@ -28,6 +30,9 @@ function StudentDashboard({ classData, students }) {
         if (!nameRegex.test(name)) {
             return 'Name can only contain letters and spaces.';
         }
+        if (name.length > 60) {
+            return 'Name cannot be more than 60 character.';
+        }
         return '';
     };
 
@@ -36,6 +41,9 @@ function StudentDashboard({ classData, students }) {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!emailRegex.test(email)) {
             return 'Please enter a valid email address.';
+        }
+        if (email.length > 60) {
+            return 'Email cannot be more than 60 character.';
         }
         return '';
     };
@@ -112,6 +120,13 @@ function StudentDashboard({ classData, students }) {
             }
         } catch (error) {
             console.error("Error fetching students:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error fetching students", error.response.data.message.split("UERROR: "));
+                setStudentsList([]);
+            } else {
+                ShowToast("error", "Error fetching students", "Please try again.");
+                setStudentsList([]);
+            }
             setStudentsList([]);
         }
     };
@@ -135,11 +150,17 @@ function StudentDashboard({ classData, students }) {
 
             if (response.status === 200) {
                 console.log('Student successfully updated.');
-                await fetchStudents(); // Refresh the students list
+                ShowToast("success", "Student successfully updated.");
+                await fetchStudents(); 
                 setOpen(false);
             }
         } catch (error) {
             console.error('Error updating student: ', error.message);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error updating student", error.response.data.message.split("UERROR: "));
+            } else {
+                ShowToast("error", "Error updating student", "Please try again.");
+            }
             setOpen(true);
         }
     };
@@ -150,10 +171,16 @@ function StudentDashboard({ classData, students }) {
 
             if (response.status === 200) {
                 console.log("Student successfully deleted.");
+                ShowToast("success", "Student successfully deleted.");
                 await fetchStudents();
             }
         } catch (error) {
             console.error("Error deleting student.", error.message);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error deleting student", error.response.data.message.split("UERROR: "));
+            } else {
+                ShowToast("error", "Error deleting student", "Please try again.");
+            }
         }
     };
 
@@ -171,26 +198,46 @@ function StudentDashboard({ classData, students }) {
     const sendEmail = async (student) => {
         if (selectedRecipients.length === 0) return;
     
-        try {
-            const queryParams = new URLSearchParams({
-                recipients: selectedRecipients.join(","),
-                classID: classData.classID,
-                studentID: student.studentID, 
-                studentEmail: student.user.email,
-                parentID: student.parentID ? student.parentID : "", 
-                parentEmail: student.parent ? student.parent.parentEmail : ""
-            }).toString();
+        // Define the promise
+        const emailPromise = new Promise(async (resolve, reject) => {
+            try {
+                const queryParams = new URLSearchParams({
+                    recipients: selectedRecipients.join(","),
+                    classID: classData.classID,
+                    studentID: student.studentID,
+                    studentEmail: student.user.email,
+                    parentID: student.parentID ? student.parentID : "",
+                    parentEmail: student.parent ? student.parent.parentEmail : "",
+                }).toString();
     
-            const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
+                const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
     
-            if (response.status === 200) {
-                console.log("Email sent successfully.");
-                setSelectedRecipients([]); 
+                if (response.status === 200) {
+                    console.log("Email sent successfully.");
+                    setSelectedRecipients([]); 
+                    resolve();
+                }
+            } catch (error) {
+                console.error("Error sending email:", error.message);
+                setSelectedRecipients([]);
+    
+                if (error.response?.status === 400) {
+                    reject(error.response.data.message.split("UERROR: ")[1] || "An error occurred.");
+                } else {
+                    reject("Please try again.");
+                }
             }
-        } catch (error) {
-            console.error("Error sending email:", error.message);
-            setSelectedRecipients([]); 
-        }
+        });
+    
+        // Show toast with promise-based status
+        toaster.promise(emailPromise, {
+            loading: { title: "Sending email...", description: "Please wait and don't leave this page." },
+            success: { title: "Email sent successfully!", description: "The email has been delivered." },
+            error: (errorMessage) => ({
+                title: "Error sending email",
+                description: errorMessage,
+            }),
+        });
     };
     
         
