@@ -3,16 +3,18 @@
 import { Box, Flex, Image, Tabs, Text } from '@chakra-ui/react';
 import { FaLeaf } from "react-icons/fa";
 import { Avatar } from "@/components/ui/avatar";
-import ClassPieChart from './ClassPieChart'; // Import the pie chart component
+import ClassPieChart from './ClassPieChart'; 
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import server from "../../../networking";
 import { PiCloverFill } from "react-icons/pi";
 import { LuBox } from 'react-icons/lu';
+import ClassLineChart from './ClassLineGraph';
 
 function ClassDashboard({ classData, students }) {
     const studentsList = students || [];
     const [schoolClassesData, setSchoolClassesData] = useState([]);
+    const [classPoints, setClassPoints] = useState([]);
 
     // Sort the students by totalPoints in descending order and get the top 3
     const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
@@ -34,10 +36,23 @@ function ClassDashboard({ classData, students }) {
         }
     }
 
+    const fetchClassPoints = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-class-points/?classId=${classData.classID}`);
+            if (response.status === 200) {
+                setClassPoints(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching classes:", error);
+            setClassPoints([]);
+        }
+    }
+
     // Fetch school classes data on component mount
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "teacher") {
             fetchSchoolClasses();
+            fetchClassPoints();
         }
     }, [classData && students]);
 
@@ -77,13 +92,18 @@ function ClassDashboard({ classData, students }) {
     return (
         <Tabs.Content value='Class' >
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
-                <Flex gap={4} w="100%" h="100%" padding={4} align="center">
+                <Flex gap={4} w="100%" h="100%" align="center">
                     <Flex w="80%" h="100%" direction="column" gap={4}>
                         <Flex gap={4} w="100%" h="50%">
                             {/* Student Contribution */}
-                            <Box w="70%" h="100%" p={4} bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
+                            <Box w="70%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
                             _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
-                                Students Contribution
+                                <Flex direction="column" textAlign="left" w="90%" h="90%">
+                                    <Box w="100%" h="10%" fontWeight="bold" fontSize="sm" mt={2}>Class Clover Points (Past 7 Days)</Box>
+                                    <Box w="100%" h="90%">
+                                        <ClassLineChart classPoints={classPoints} />
+                                    </Box>
+                                </Flex>
                             </Box>
                             {/* Class Top Contributors */}
                             <Box w="30%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
