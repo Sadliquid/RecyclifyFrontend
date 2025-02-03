@@ -53,8 +53,10 @@ const ClassPieChart = ({ students }) => {
         plugins: {
             legend: { display: false }, // Disable default chart legend
             tooltip: {
+                titleFont: { size: 10, family: 'Sora, sans-serif' },
+                bodyFont: { size: 10, family: 'Sora, sans-serif' },
                 callbacks: {
-                    label: (context) => `${context.label}: ${context.raw}%`,
+                    label: (context) => `${context.raw}%`,
                 },
             },
         },
@@ -64,7 +66,7 @@ const ClassPieChart = ({ students }) => {
     return (
         <Flex w="100%" h="100%" align="center" justify="flex-start" gap="4" flexDirection="row">
             {/* Pie Chart */}
-            <Box w="353%" maxW="160px" h="160px">
+            <Box w="35%" maxW="160px" h="160px">
                 <Pie data={chartData} options={chartOptions} />
             </Box>
 
@@ -86,13 +88,23 @@ const ClassPieChart = ({ students }) => {
                                     h="10px"
                                     bg={visibility[index] ? chartData.datasets[0].backgroundColor[index] : 'gray.300'}
                                     borderRadius="full"
+                                    boxShadow="sm"
                                 />
-                                <Box fontSize="sm" fontWeight="bold" color={visibility[index] ? 'inherit' : 'gray.500'}>
+                                <Box
+                                    fontSize="sm"
+                                    fontWeight="bold"
+                                    color={visibility[index] ? 'inherit' : 'gray.500'}
+                                    fontFamily="Sora, sans-serif"
+                                >
                                     {label}
                                 </Box>
                             </Flex>
                             {/* Percentage Label */}
-                            <Box fontSize="sm" color={visibility[index] ? 'inherit' : 'gray.500'}>
+                            <Box
+                                fontSize="sm"
+                                color={visibility[index] ? 'inherit' : 'gray.500'}
+                                fontFamily="Sora, sans-serif"
+                            >
                                 {visibility[index]
                                     ? `${chartData.datasets[0].data[index]}%`
                                     : '0%'}

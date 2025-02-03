@@ -54,7 +54,7 @@ const ClassLineGraph = ({ classPoints }) => {
                 position: 'top',
                 labels: {
                     font: {
-                        size: 14,
+                        size: 12,
                         family: 'Sora, sans-serif', // Modern font
                         weight: 'bold',
                     },
@@ -63,8 +63,8 @@ const ClassLineGraph = ({ classPoints }) => {
             },
             tooltip: {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)', // Dark tooltip
-                titleFont: { size: 14, family: 'Sora, sans-serif' },
-                bodyFont: { size: 14, family: 'Sora, sans-serif' },
+                titleFont: { size: 12, family: 'Sora, sans-serif' },
+                bodyFont: { size: 12, family: 'Sora, sans-serif' },
                 bodyColor: '#fff',
                 titleColor: '#fff',
                 displayColors: false,
@@ -78,7 +78,7 @@ const ClassLineGraph = ({ classPoints }) => {
                 title: {
                     display: true,
                     text: 'Date',
-                    font: { size: 14, family: 'Sora, sans-serif', weight: 'bold' },
+                    font: { size: 12, family: 'Sora, sans-serif', weight: 'bold' },
                     color: '#4A5568',
                 },
                 grid: {
@@ -93,7 +93,7 @@ const ClassLineGraph = ({ classPoints }) => {
                 title: {
                     display: true,
                     text: 'Clovers',
-                    font: { size: 14, family: 'Sora, sans-serif', weight: 'bold' },
+                    font: { size: 12, family: 'Sora, sans-serif', weight: 'bold' },
                     color: '#4A5568',
                 },
                 grid: {
