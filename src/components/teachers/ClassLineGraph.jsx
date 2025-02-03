@@ -108,7 +108,7 @@ const ClassLineGraph = ({ classPoints }) => {
             },
         },
         animation: {
-            duration: 2000, // Smooth animations
+            duration: 1500,
             easing: 'easeInOutQuart',
         },
     };
