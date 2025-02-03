@@ -10,6 +10,7 @@ import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 import ProfileBanner from '../../components/identity/ProfileBanner';
 import AccountDetails from '../../components/identity/AccountDetails';
+import AccountActionButtons from '../../components/identity/AccountActionButtons';
 
 function MyAccount() {
     const [userDetails, setUserDetails] = useState(null);
@@ -78,11 +79,6 @@ function MyAccount() {
         }
     };
 
-    const handleCancel = () => {
-        setEditableDetails(userDetails); // Revert to the original details
-        setIsEditing(false); // Exit editing mode
-    };
-
     const handleDeleteAccount = async () => {
         try {
             const token = localStorage.getItem('jwt');
@@ -126,6 +122,7 @@ function MyAccount() {
                     <Heading fontSize="30px" mt={10} mb={6}>My Account</Heading>
                     <ProfileBanner />
                     <AccountDetails userDetails={userDetails}/>
+                    <AccountActionButtons />
                 </Box>
             </motion.div>
         );
