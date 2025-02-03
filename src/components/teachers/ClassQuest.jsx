@@ -1,4 +1,4 @@
-import { Box, Flex, Tabs, Text, Stack, Badge, Button } from '@chakra-ui/react';
+import { Box, Flex, Tabs, Text, Stack, Badge, Button, Progress } from '@chakra-ui/react';
 import { FiRefreshCw } from 'react-icons/fi';
 import { PiCloverFill } from "react-icons/pi";
 
@@ -9,6 +9,7 @@ function ClassQuest() {
             description: "Defeat the ancient fire dragon in Mount Doom",
             points: 250,
             type: "Combat",
+            completed: 0,
             totalAmountToComplete: 1,
         },
         {
@@ -16,6 +17,7 @@ function ClassQuest() {
             description: "Collect 15 enchanted mushrooms from the Fae Forest",
             points: 150,
             type: "Gathering",
+            completed: 7,
             totalAmountToComplete: 15,
         },
         {
@@ -23,13 +25,14 @@ function ClassQuest() {
             description: "Retrieve the stolen crown from the Bandit King's fortress",
             points: 200,
             type: "Exploration",
+            completed: 1,
             totalAmountToComplete: 1,
         },
     ];
 
     return (
-        <Tabs.Content value='Class Quest'>
-            <Box w="100%" h="65dvh" p={4} bg="linear-gradient(135deg, #9F9FF8, #6A6AFF)" borderRadius="xl" boxShadow="lg">
+        <Tabs.Content value='Class Quests'>
+            <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="lg">
                 <Box w="100%" maxW="600px" h="100%" p={6} bg="white" borderRadius="xl" boxShadow="2xl" mx="auto">
                     {/* Header with Refresh Button */}
                     <Text fontSize="2xl" fontWeight="extrabold" color="black" flex={1} mb={6}>
@@ -43,29 +46,59 @@ function ClassQuest() {
                                 key={index}
                                 w="100%"
                                 p={4}
-                                bg="#EDEEFC"
+                                bg={quest.completed === quest.totalAmountToComplete ? "#C6F6D5" : "#EDEEFC"}
                                 borderRadius="xl"
-                                boxShadow="sm"
                                 transition="all 0.3s ease"
+                                opacity={quest.completed === quest.totalAmountToComplete ? 0.7 : 1}
                                 _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }}
                             >
                                 <Stack align="start" gap={2}>
                                     {/* Quest Title and Points */}
                                     <Flex w="100%" justify="space-between" align="center">
-                                        <Text fontSize="lg" fontWeight="bold" color="black">
-                                            {quest.title}
-                                        </Text>
+                                        <Flex direction="row" align="center" gap={2}>
+                                            <Text fontSize="lg" fontWeight="bold" color="black">
+                                                {quest.title}
+                                            </Text>
+                                            <Badge variant="solid" bg="#AEC7ED" color="black" borderRadius="full" px={2} py={1}>
+                                                {quest.type}
+                                            </Badge>
+                                        </Flex>
                                         <Badge variant="solid" bg="white" color="black" borderRadius="full" px={2} py={1}>
-                                        {quest.points} 
+                                            {quest.points}
                                             <PiCloverFill boxSize={25} color="#2CD776" />
                                         </Badge>
                                     </Flex>
 
                                     {/* Quest Description */}
-                                    <Text fontSize="sm" color="gray.600" lineHeight="tall">
+                                    <Text fontSize="sm" color="gray.600">
                                         {quest.description}
                                     </Text>
                                 </Stack>
+
+                                {/* Progress Bar */}
+                                <Box w="100%" mt={2} textAlign="left">
+                                    {quest.completed === quest.totalAmountToComplete ? (
+                                        <Text fontSize="sm" color="black" fontWeight="bold">
+                                            ✅ Quest Completed!
+                                        </Text>
+                                    ) : (
+                                        <Text fontSize="sm" color="black" fontWeight="bold">
+                                            {quest.completed} / {quest.totalAmountToComplete} Completed
+                                        </Text>
+                                    )}
+                                    <Progress.Root w="100%" value={quest.completed} max={quest.totalAmountToComplete} mt={2}>
+                                        <Stack direction="row" justify="space-between" align="center">
+                                            <Progress.Track  flex="1">
+                                                {quest.completed === quest.totalAmountToComplete ? (
+                                                    <Progress.Range bg="#2CD776" />
+                                                ) : (
+                                                    <Progress.Range bg="#6A6AFF" />
+                                                )}
+                                            </Progress.Track>
+                                            <Progress.ValueText>100%</Progress.ValueText>
+                                        </Stack>
+                                    </Progress.Root>
+                                </Box>
                             </Box>
                         ))}
 
@@ -77,6 +110,7 @@ function ClassQuest() {
                             </Stack>
                         </Button>
                     </Stack>
+
                 </Box>
             </Box>
         </Tabs.Content>

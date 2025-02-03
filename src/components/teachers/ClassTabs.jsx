@@ -46,7 +46,7 @@ function ClassTabs({ classData, students }) {
                             <SiGoogleclassroom />Class Dashboard
                         </Tabs.Trigger>
                         <Tabs.Trigger 
-                            value='Class Quest' 
+                            value='Class Quests' 
                             bg="#AEC7ED" 
                             color="black" 
                             align="center"
