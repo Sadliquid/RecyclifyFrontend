@@ -3,12 +3,6 @@ import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@ch
 import EditPasswordDialog from "./EditPasswordDialog";
 import DeleteAccountDialog from "./DeleteAccountDialog";
 import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
-import { LuCheck, LuX } from "react-icons/lu"
-import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator,
-} from "@/components/ui/action-bar";
-import ShowToast from '../../Extensions/ShowToast';
-import server from "../../../networking";
-
 
 function AccountActionButtons({ userDetails }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -26,7 +20,7 @@ function AccountActionButtons({ userDetails }) {
                     <Box flex="0.8" w="80%">
                         <VStack align="start" w="100%">
                             <Text>Password</Text>
-                            <Input type="password" value="************" isReadOnly />
+                            <Input type="password" value="************" disabled />
                         </VStack>
                     </Box>
 

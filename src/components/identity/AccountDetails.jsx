@@ -2,14 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@chakra-ui/react";
-import EditPasswordDialog from "./EditPasswordDialog";
-import DeleteAccountDialog from "./DeleteAccountDialog";
-import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
-import { Editable, IconButton } from "@chakra-ui/react"
 import { LuCheck, LuX } from "react-icons/lu"
 import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator,
 } from "@/components/ui/action-bar";
-import { logout } from "../../slices/AuthState";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 

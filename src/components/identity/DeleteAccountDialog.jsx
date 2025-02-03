@@ -6,8 +6,11 @@ import { Button, Text } from "@chakra-ui/react";
 import { PasswordInput } from "@/components/ui/password-input"
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
+import { logout } from "../../slices/AuthState";
+import { useDispatch } from 'react-redux';
 
 function DeleteAccountDialog({ isOpen, onClose }) {
+    const dispatch = useDispatch
     const navigate = useNavigate();
     const [password, setPassword] = useState("");
 
@@ -24,6 +27,7 @@ function DeleteAccountDialog({ isOpen, onClose }) {
             const rawResponseMessage = response.data.message;
             if (rawResponseMessage.startsWith("SUCCESS") && response.status === 200) {
                 localStorage.removeItem('jwt');
+                dispatch(logout())
                 navigate("/auth/login");
                 ShowToast("success", "Account Deleted", "It was fun while it lasted...");
             }
