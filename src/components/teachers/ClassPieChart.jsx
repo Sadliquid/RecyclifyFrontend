@@ -60,14 +60,15 @@ const ClassPieChart = ({ students }) => {
                 },
             },
         },
+        responsive: true,
         maintainAspectRatio: false,
     };
 
     return (
         <Flex w="100%" h="100%" align="center" justify="flex-start" gap="4" flexDirection="row">
             {/* Pie Chart */}
-            <Box w="35%" maxW="160px" h="160px">
-                <Pie data={chartData} options={chartOptions} />
+            <Box w="35%" h="100%">
+                <Pie type="pie" data={chartData} options={chartOptions} />
             </Box>
 
             {/* Custom Legends with Percentage Labels */}

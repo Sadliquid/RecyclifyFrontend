@@ -15,7 +15,6 @@ const ClassLineGraph = ({ classPoints }) => {
     // Sort dates in ascending order
     const sortedDates = Object.keys(pointsByDate).sort();
 
-    // Gradient for the line fill
     const gradientFill = (context) => {
         const ctx = context.chart.ctx;
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -24,7 +23,6 @@ const ClassLineGraph = ({ classPoints }) => {
         return gradient;
     };
 
-    // Chart data
     const chartData = {
         labels: sortedDates, // X-axis (Dates)
         datasets: [
@@ -32,14 +30,14 @@ const ClassLineGraph = ({ classPoints }) => {
                 label: 'Total Clovers Earned',
                 data: sortedDates.map(date => pointsByDate[date]),
                 borderColor: '#36A2EB',
-                backgroundColor: gradientFill, // Gradient fill
+                backgroundColor: gradientFill, 
                 borderWidth: 3,
                 tension: 0.4,
-                pointRadius: 5, // Larger points
+                pointRadius: 5, 
                 pointBackgroundColor: '#36A2EB',
                 pointBorderColor: '#fff',
                 pointHoverRadius: 8,
-                fill: true, // Enable fill
+                fill: true, 
             },
         ],
     };
@@ -55,14 +53,14 @@ const ClassLineGraph = ({ classPoints }) => {
                 labels: {
                     font: {
                         size: 12,
-                        family: 'Sora, sans-serif', // Modern font
+                        family: 'Sora, sans-serif', 
                         weight: 'bold',
                     },
-                    color: '#4A5568', // Dark gray for better readability
+                    color: '#4A5568',
                 },
             },
             tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Dark tooltip
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 titleFont: { size: 12, family: 'Sora, sans-serif' },
                 bodyFont: { size: 12, family: 'Sora, sans-serif' },
                 bodyColor: '#fff',
@@ -86,7 +84,7 @@ const ClassLineGraph = ({ classPoints }) => {
                 },
                 ticks: {
                     font: { size: 12, family: 'Sora, sans-serif' },
-                    color: '#718096', // Gray ticks
+                    color: '#718096', 
                 },
             },
             y: {
@@ -97,12 +95,12 @@ const ClassLineGraph = ({ classPoints }) => {
                     color: '#4A5568',
                 },
                 grid: {
-                    color: '#E2E8F0', // Light gray grid lines
-                    borderDash: [5], // Dashed grid lines
+                    color: '#E2E8F0',
+                    borderDash: [5], 
                 },
                 ticks: {
                     font: { size: 12, family: 'Sora, sans-serif' },
-                    color: '#718096', // Gray ticks
+                    color: '#718096',
                 },
                 beginAtZero: true,
             },
