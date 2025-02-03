@@ -207,7 +207,7 @@ function StudentDashboard({ classData, students }) {
     return (
         <Tabs.Content value='Students'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
-                <Table.ScrollArea rounded="md" w="100%" h="100%" overflowY="auto">
+                <Table.ScrollArea rounded="md" w="100%" h="100%" overflowY="auto" borderRadius="xl">
                     <Table.Root size="sm" stickyHeader>
                         <Table.Header>
                             <Table.Row bg="bg.subtle">

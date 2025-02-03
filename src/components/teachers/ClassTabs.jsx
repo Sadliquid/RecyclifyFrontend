@@ -6,7 +6,7 @@ import { PiStudentFill } from 'react-icons/pi';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Text, VStack } from '@chakra-ui/react';
 import { LuBox } from "react-icons/lu"
-import { FaRegQuestionCircle } from "react-icons/fa";
+import { FaClipboardList } from "react-icons/fa6";
 import ClassQuest from './ClassQuest';
 
 function ClassTabs({ classData, students }) {
@@ -65,7 +65,7 @@ function ClassTabs({ classData, students }) {
                                 transform: "scale(1.05)",
                             }}
                         >
-                            <FaRegQuestionCircle />Class Quest
+                            <FaClipboardList />Class Quest
                         </Tabs.Trigger>
                         <Tabs.Trigger 
                             value='Students' 

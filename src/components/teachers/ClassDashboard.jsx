@@ -92,7 +92,7 @@ function ClassDashboard({ classData, students }) {
     return (
         <Tabs.Content value='Class' >
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="md">
-                <Flex gap={4} w="100%" h="100%" padding={4} align="center">
+                <Flex gap={4} w="100%" h="100%" align="center">
                     <Flex w="80%" h="100%" direction="column" gap={4}>
                         <Flex gap={4} w="100%" h="50%">
                             {/* Student Contribution */}
