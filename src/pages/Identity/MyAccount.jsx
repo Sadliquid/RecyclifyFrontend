@@ -16,17 +16,12 @@ function MyAccount() {
     const [userDetails, setUserDetails] = useState(null);
     const [editableDetails, setEditableDetails] = useState(null);
     const [error, setError] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);  // To handle delete confirmation state
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const navigate = useNavigate();
     const { user, loaded, authToken } = useSelector((state) => state.auth);
     const [accountInfo,  setAccountInfo] = useState(null);
     const dispatch = useDispatch()
     const [renderReady, setRenderReady] = useState(false);
 
     const fetchAccountInfo = async () => {
-        console.log("Fetching Account Info...")
         try {
             const token = localStorage.getItem('jwt'); 
 
@@ -53,50 +48,6 @@ function MyAccount() {
         }
     }, [loaded])
 
-    const handleChange = (e) => {
-        setEditableDetails({
-            ...editableDetails,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSave = async () => {
-        try {
-            const token = localStorage.getItem('jwt');
-            if (!token) {
-                setError('Authorization token is missing.');
-                return;
-            }
-    
-            const detailsToUpdate = { ...editableDetails };
-    
-            await server.put(`/api/Identity/editDetails`, detailsToUpdate);
-    
-            setUserDetails(editableDetails); // Save the updated details
-            setIsEditing(false); // Exit editing mode
-        } catch (err) {
-            setError('Failed to save changes.' + err);
-        }
-    };
-
-    const handleDeleteAccount = async () => {
-        try {
-            const token = localStorage.getItem('jwt');
-            if (!token) {
-                setError('Authorization token is missing.');
-                return;
-            }
-
-            await server.delete(`/api/Identity/deleteAccount`);
-
-            // After deletion, redirect user to the home page or login page
-            localStorage.removeItem('jwt');  // Clear the token
-            navigate("/")
-        } catch (err) {
-            setError('Failed to delete account: ' + err);
-        }
-    };
-
     useEffect(() => {
         if (loaded && accountInfo && editableDetails, userDetails) {
             setRenderReady(true);
@@ -111,6 +62,12 @@ function MyAccount() {
         )
     }
 
+    if (error) {
+        console.log("ERROR: " + error)
+        ShowToast("error", "Error", error);
+        setError(null);
+    }
+
     if (renderReady) {
         return (
             <motion.div
@@ -121,7 +78,7 @@ function MyAccount() {
                 <Box>
                     <Heading fontSize="30px" mt={10} mb={6}>My Account</Heading>
                     <ProfileBanner />
-                    <AccountDetails userDetails={userDetails}/>
+                    <AccountDetails userDetails={userDetails} setUserDetails={setUserDetails}/>
                     <AccountActionButtons />
                 </Box>
             </motion.div>
