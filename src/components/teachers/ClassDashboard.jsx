@@ -3,14 +3,13 @@
 import { Box, Flex, Image, Tabs, Text } from '@chakra-ui/react';
 import { FaLeaf } from "react-icons/fa";
 import { Avatar } from "@/components/ui/avatar";
-import ClassPieChart from './ClassPieChart'; // Import the pie chart component
+import ClassPieChart from './ClassPieChart'; 
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import server from "../../../networking";
 import { PiCloverFill } from "react-icons/pi";
 import { LuBox } from 'react-icons/lu';
 import ClassLineChart from './ClassLineGraph';
-import { set } from 'react-hook-form';
 
 function ClassDashboard({ classData, students }) {
     const studentsList = students || [];
