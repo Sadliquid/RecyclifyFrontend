@@ -97,11 +97,11 @@ function ClassDashboard({ classData, students }) {
                     <Flex w="80%" h="100%" direction="column" gap={4}>
                         <Flex gap={4} w="100%" h="50%">
                             {/* Student Contribution */}
-                            <Box w="70%" h="100%" p={4} bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
+                            <Box w="70%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
                             _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
-                                <Flex direction="column" textAlign="left" w="90%" h="90%" gap={4} p={2}>
-                                    <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Daily Class Points</Box>
-                                    <Box w="100%" h="80%" p={2}>
+                                <Flex direction="column" textAlign="left" w="90%" h="90%">
+                                    <Box w="100%" h="10%" fontWeight="bold" fontSize="sm" mt={2}>Class Clover Points (Past 7 Days)</Box>
+                                    <Box w="100%" h="90%">
                                         <ClassLineChart classPoints={classPoints} />
                                     </Box>
                                 </Flex>
