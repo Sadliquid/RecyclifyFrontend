@@ -3,6 +3,11 @@ import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@ch
 import EditPasswordDialog from "./EditPasswordDialog";
 import DeleteAccountDialog from "./DeleteAccountDialog";
 import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
+import { Editable, IconButton } from "@chakra-ui/react"
+import { LuCheck, LuPencilLine, LuX } from "react-icons/lu"
+import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator,
+} from "@/components/ui/action-bar";
+import { EditRoadTwoTone } from "@mui/icons-material";
 
 function AccountDetails({ userDetails }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -11,49 +16,66 @@ function AccountDetails({ userDetails }) {
     const [height, setHeight] = useState('auto');
     const hiddenDivRef = useRef(null);
     const textareaRef = useRef(null);
-  
-    const value = userDetails.aboutMe || "Let others know what you are passionate about!";
-  
+    const [editedDetails, setEditedDetails] = useState(userDetails);
+    const [isEditing, setIsEditing] = useState(false);
+
     useEffect(() => {
-      if (hiddenDivRef.current && textareaRef.current) {
-        // Set the hidden div's content to the same value as the textarea
-        hiddenDivRef.current.innerText = value;
-  
-        // Get the height of the hidden div
-        const newHeight = hiddenDivRef.current.offsetHeight;
-  
-        // Update the textarea height
-        setHeight(`${newHeight}px`);
-      }
-    }, [value]);
+        if (hiddenDivRef.current && textareaRef.current) {
+            hiddenDivRef.current.innerText = editedDetails.aboutMe;
+            setHeight(`${hiddenDivRef.current.offsetHeight}px`);
+        }
+    }, [editedDetails.aboutMe]);
+
+    useEffect(() => {
+        const isReverted = JSON.stringify(editedDetails) === JSON.stringify(userDetails);
+        if (isReverted) {
+            setIsEditing(false);
+        }
+    }, [editedDetails, userDetails]);
+
+    const handleSave = () => {
+        console.log("Saving changes", editedDetails);
+        setIsEditing(false);
+    };
+
+    const handleCancel = () => {
+        setEditedDetails(userDetails);
+        setIsEditing(false);
+    };
 
     return (
         <Box w="70%" mx="auto">
+            <ActionBarRoot open={isEditing}>
+                <ActionBarContent>
+                    <ActionBarSelectionTrigger>Unsaved Changes</ActionBarSelectionTrigger>
+                    <ActionBarSeparator />
+                    <Button variant="outline" size="sm" onClick={handleCancel}>
+                        <LuX /> Cancel
+                    </Button>
+                    <Button variant="solid" size="sm" onClick={handleSave}>
+                        <LuCheck /> Save Changes
+                    </Button>
+                </ActionBarContent>
+            </ActionBarRoot>
+
+            {/* About Me */}
             <HStack spacing={4} mb={6} mt={6}>
                 <VStack align="start" flex={1}>
-                    <Heading size="md" mb={4}>
-                    About Me
-                    </Heading>
+                    <Heading size="md">About Me</Heading>
                     <Box position="relative" width="100%">
-                    {/* Hidden div to measure the height of the content */}
-                    <Box
-                        ref={hiddenDivRef}
-                        position="absolute"
-                        top={0}
-                        left={0}
-                        visibility="hidden"
-                        whiteSpace="pre-wrap"
-                        wordBreak="break-word"
-                        width="100%"
-                        fontSize="md"
-                        lineHeight="base"
-                        padding="2"
-                    />
-                        {/* Textarea with dynamic height */}
+                        <Box
+                            ref={hiddenDivRef}
+                            position="absolute"
+                            visibility="hidden"
+                            whiteSpace="pre-wrap"
+                            wordBreak="break-word"
+                            width="100%"
+                            fontSize="md"
+                        />
                         <Textarea
                             ref={textareaRef}
-                            value={value}
-                            isReadOnly
+                            value={editedDetails.aboutMe}
+                            placeholder="Share something interesting about yourself!"
                             resize="none"
                             w="100%"
                             height={height}
@@ -61,6 +83,10 @@ function AccountDetails({ userDetails }) {
                             whiteSpace="pre-wrap"
                             wordBreak="break-word"
                             overflow="hidden"
+                            onChange={(e) => {
+                                setEditedDetails({ ...editedDetails, aboutMe: e.target.value });
+                                setIsEditing(true);
+                            }}
                         />
                     </Box>
                 </VStack>
@@ -72,15 +98,33 @@ function AccountDetails({ userDetails }) {
                 <HStack spacing={4} w="100%">
                     <VStack align="start" flex={1}>
                         <Text>Username (Display Name)</Text>
-                        <Input value={userDetails.name} isReadOnly />
+                        <Input 
+                            value={editedDetails.name} 
+                            onChange={(e) => {
+                                setEditedDetails({ ...editedDetails, name: e.target.value });
+                                setIsEditing(true);
+                            }}
+                        />
                     </VStack>
                     <VStack align="start" flex={1}>
                         <Text>First Name</Text>
-                        <Input value={userDetails.fName} isReadOnly />
+                        <Input 
+                            value={editedDetails.fName} 
+                            onChange={(e) => {
+                                setEditedDetails({ ...editedDetails, fName: e.target.value });
+                                setIsEditing(true);
+                            }}
+                        />
                     </VStack>
                     <VStack align="start" flex={1}>
                         <Text>Last Name</Text>
-                        <Input value={userDetails.lName} isReadOnly />
+                        <Input 
+                            value={editedDetails.lName} 
+                            onChange={(e) => {
+                                setEditedDetails({ ...editedDetails, lName: e.target.value });
+                                setIsEditing(true);
+                            }}
+                        />
                     </VStack>
                 </HStack>
             </VStack>
@@ -91,11 +135,23 @@ function AccountDetails({ userDetails }) {
                 <HStack spacing={4} w="100%">
                     <VStack align="start" flex={1}>
                         <Text>Email</Text>
-                        <Input value={userDetails.email} isReadOnly />
+                        <Input 
+                            value={editedDetails.email} 
+                            onChange={(e) => {
+                                setEditedDetails({ ...editedDetails, email: e.target.value });
+                                setIsEditing(true);
+                            }}
+                        />
                     </VStack>
                     <VStack align="start" flex={1}>
                         <Text>Phone Number</Text>
-                        <Input value={userDetails.contactNumber} isReadOnly />
+                        <Input 
+                            value={editedDetails.contactNumber} 
+                            onChange={(e) => {
+                                setEditedDetails({ ...editedDetails, contactNumber: e.target.value });
+                                setIsEditing(true);
+                            }}
+                        />
                     </VStack>
                 </HStack>
             </VStack>
@@ -107,7 +163,7 @@ function AccountDetails({ userDetails }) {
                     <Box flex="0.8" w="80%">
                         <VStack align="start" w="100%">
                             <Text>Password</Text>
-                            <Input type="password" value="************" isReadOnly />
+                            <Input type="password" value="************" isReadOnly="true" />
                         </VStack>
                     </Box>
 
@@ -126,36 +182,20 @@ function AccountDetails({ userDetails }) {
                 </HStack>
             </VStack>
 
-
             {/* More Actions */}
             <VStack align="start" spacing={4} mb={6}>
                 <Heading size="md" mb={2}>More Actions</Heading>
                 <HStack gap={8} w="100%">
-                    <Button 
-                        borderRadius={30}
-                        variant="solid"
-                        background="#2D65FF"
-                        color={"white"}
-                        // onClick={}
-                    >
+                    <Button borderRadius={30} variant="solid" background="#2D65FF" color={"white"}>
                         Parents Account
                     </Button>
                     <Button 
-                        borderRadius={30}
-                        variant="solid"
-                        background="#2D65FF"
-                        color={"white"}
+                        borderRadius={30} variant="solid" background="#2D65FF" color={"white"} 
                         onClick={() => setShowRedemptionDialog(true)}
                     >
                         Redemption History
                     </Button>
-                    <Button 
-                        borderRadius={30}
-                        variant="solid"
-                        background="#2D65FF"
-                        color={"white"}
-                        // onClick={}
-                    >
+                    <Button borderRadius={30} variant="solid" background="#2D65FF" color={"white"}>
                         Public Account
                     </Button>
                     <Button
