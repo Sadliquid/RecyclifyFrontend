@@ -1,21 +1,45 @@
 import { useState } from "react";
-import { Box, Heading, List, ListItem, Card, CardBody, Input, Button, Stack, Text, Flex, Spacer, Icon, CardRoot } from "@chakra-ui/react";
+import Server from "../../../networking";
+import { 
+    Box, Heading, List, ListItem, Card, CardBody, Input, Button, Stack, Text, 
+    Flex, Spacer, Icon, Spinner, 
+	CardRoot
+} from "@chakra-ui/react";
 import { FaRobot, FaQuestionCircle } from "react-icons/fa";
 
 const EcoPilot = () => {
     const [inputValue, setInputValue] = useState("");
+    const [response, setResponse] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (!inputValue.trim()) {
             alert("Please enter a valid prompt.");
             return;
         }
-        console.log("User input:", inputValue);
+        setLoading(true);
+        setResponse(""); // Clear previous response while loading
+
+        try {
+            const result = await Server.post(`/api/chat-completion/prompt`, {
+                userPrompt: inputValue
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            setResponse(result.data);
+        } catch (error) {
+            console.error("Error fetching response:", error);
+            setResponse("Failed to get a response from the server.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const suggestedTopics = [
@@ -68,14 +92,37 @@ const EcoPilot = () => {
                                     bg="white"
                                     borderRadius="md"
                                     _focus={{ borderColor: "teal.500", boxShadow: "0 0 0 1px teal.500" }}
+                                    isDisabled={loading}
                                 />
                                 <Flex justify="flex-end">
-                                    <Button type="submit" colorScheme="teal" size="lg" px={8}>
+                                    <Button
+                                        type="submit"
+                                        colorScheme="teal"
+                                        size="lg"
+                                        px={8}
+                                        isLoading={loading}
+                                        loadingText="Thinking..."
+                                        isDisabled={loading || !inputValue.trim()}
+                                    >
                                         Submit
                                     </Button>
                                 </Flex>
                             </Stack>
                         </form>
+
+                        {/* Show loading spinner while fetching response */}
+                        {loading && (
+                            <Flex justify="center" align="center" mt={6}>
+                                <Spinner size="lg" color="teal.500" />
+                            </Flex>
+                        )}
+
+                        {/* Show response once available */}
+                        {response && !loading && (
+                            <Box mt={6} p={4} bg="teal.50" borderRadius="md">
+                                <Text fontSize="md" color="teal.700">{response}</Text>
+                            </Box>
+                        )}
                     </CardBody>
                 </CardRoot>
             </Box>
