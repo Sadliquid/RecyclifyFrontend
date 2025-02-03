@@ -79,7 +79,7 @@ function MyAccount() {
                     <Heading fontSize="30px" mt={10} mb={6}>My Account</Heading>
                     <ProfileBanner />
                     <AccountDetails userDetails={userDetails} setUserDetails={setUserDetails}/>
-                    <AccountActionButtons />
+                    <AccountActionButtons userDetails={userDetails}/>
                 </Box>
             </motion.div>
         );

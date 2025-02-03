@@ -10,10 +10,12 @@ import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
 
-function AccountActionButtons() {
+function AccountActionButtons({ userDetails }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showEditPasswordDialog, setShowEditPasswordDialog] = useState(false);
     const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
+
+    const userRole = userDetails.userRole
 
     return (
         <Box w="70%" mx="auto">
@@ -24,7 +26,7 @@ function AccountActionButtons() {
                     <Box flex="0.8" w="80%">
                         <VStack align="start" w="100%">
                             <Text>Password</Text>
-                            <Input type="password" value="************" isReadOnly="true" />
+                            <Input type="password" value="************" isReadOnly />
                         </VStack>
                     </Box>
 
@@ -43,30 +45,44 @@ function AccountActionButtons() {
                 </HStack>
             </VStack>
 
+            {/* More Actions */}
             <VStack align="start" spacing={4} mb={6}>
                 <Heading size="md" mb={2}>More Actions</Heading>
                 <HStack gap={8} w="100%">
-                    <Button borderRadius={30} variant="solid" background="#2D65FF" color={"white"}>
-                        Parents Account
-                    </Button>
-                    <Button 
-                        borderRadius={30} variant="solid" background="#2D65FF" color={"white"} 
-                        onClick={() => setShowRedemptionDialog(true)}
-                    >
-                        Redemption History
-                    </Button>
-                    <Button borderRadius={30} variant="solid" background="#2D65FF" color={"white"}>
-                        Public Account
-                    </Button>
-                    <Button
-                        borderRadius={30}
-                        variant="solid"
-                        background="red"
-                        color={"white"}
-                        onClick={() => setShowDeleteDialog(true)}
-                    >
-                        Delete Account
-                    </Button>
+                    {userRole === "parent" && (
+                        <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                            Child's Account
+                        </Button>
+                    )}
+                    {userRole === "student" && (
+                        <>
+                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                                Parent's Account
+                            </Button>
+                            <Button 
+                                borderRadius={30} variant="solid" background="#2D65FF" color="white"
+                                onClick={() => setShowRedemptionDialog(true)}
+                            >
+                                Redemption History
+                            </Button>
+                        </>
+                    )}
+                    {["parent", "student", "teacher"].includes(userRole) && (
+                        <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                            View Public Account
+                        </Button>
+                    )}
+                    {["parent", "student"].includes(userRole) && (
+                        <Button
+                            borderRadius={30}
+                            variant="solid"
+                            background="red"
+                            color="white"
+                            onClick={() => setShowDeleteDialog(true)}
+                        >
+                            Delete Account
+                        </Button>
+                    )}
                 </HStack>
             </VStack>
 
@@ -74,7 +90,7 @@ function AccountActionButtons() {
             <EditPasswordDialog isOpen={showEditPasswordDialog} onClose={() => setShowEditPasswordDialog(false)} />
             <RedemptionHistoryDialog isOpen={showRedemptionDialog} onClose={() => setShowRedemptionDialog(false)} />
         </Box>
-    )
+    );
 }
 
-export default AccountActionButtons
+export default AccountActionButtons;

@@ -87,17 +87,6 @@ function AccountDetails({ userDetails, setUserDetails }) {
         ShowToast("warning", "Changes reverted", "Your changes have been reverted.");
     };
 
-    const handleDeleteAccount = async () => {
-        try {
-            await server.delete(`/api/Identity/deleteAccount`);
-            dispatch(logout())
-            localStorage.removeItem('jwt'); 
-            navigate("/");
-        } catch (err) {
-            console.log('Failed to delete account: ' + err);
-        }
-    };
-
     return (
         <Box w="70%" mx="auto">
             {/* About Me */}
