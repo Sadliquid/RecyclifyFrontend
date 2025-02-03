@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { MdOutlineMoreVert, MdEdit, MdDelete } from 'react-icons/md';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/uuid-clipboard"
+import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/join-code-clipboard"
 
 
 function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
@@ -158,7 +158,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                         }}
                     >
                         <Box align="center" justifyContent="center" display="flex" gap={4} >
-                            <ClipboardRoot value={classItem.classID} >
+                            <ClipboardRoot value={classItem.joinCode} >
                                 <ClipboardButton />
                             </ClipboardRoot>
                         </Box>
@@ -207,10 +207,10 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                         <Field.Root >
                                             <Flex direction="row" align="center" gap={4}>
                                                 <Box pos="relative" w="50%">
-                                                    <Input className="class-uuid" value={classItem.classID} disabled />
-                                                    <Field.Label css={floatingStyles}>Class UUID</Field.Label>
+                                                    <Input className="class-join-code" value={classItem.joinCode} disabled />
+                                                    <Field.Label css={floatingStyles}>Class Join Code</Field.Label>
                                                 </Box>
-                                                <ClipboardRoot value={classItem.classID}>
+                                                <ClipboardRoot value={classItem.joinCode}>
                                                     <ClipboardIconButton />
                                                 </ClipboardRoot>
                                             </Flex>
