@@ -4,7 +4,6 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useState } from 'react';
 
-// Register necessary chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ClassPieChart = ({ students }) => {
@@ -23,7 +22,7 @@ const ClassPieChart = ({ students }) => {
     // Initial dataset visibility state
     const [visibility, setVisibility] = useState(Array(top5Students.length + 1).fill(true));
 
-    // Prepare data for the pie chart
+    // Data for the pie chart
     const chartData = {
         labels: [...top5Students.map((student) => student.user.name), 'Others'],
         datasets: [
@@ -64,7 +63,7 @@ const ClassPieChart = ({ students }) => {
 
     return (
         <Flex w="100%" h="100%" align="center" justify="flex-start" gap="4" flexDirection="row">
-            {/* Pie Chart - Align to the left */}
+            {/* Pie Chart */}
             <Box w="353%" maxW="160px" h="160px">
                 <Pie data={chartData} options={chartOptions} />
             </Box>

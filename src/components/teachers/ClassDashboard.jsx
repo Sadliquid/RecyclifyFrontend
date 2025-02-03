@@ -9,10 +9,13 @@ import { useSelector } from 'react-redux';
 import server from "../../../networking";
 import { PiCloverFill } from "react-icons/pi";
 import { LuBox } from 'react-icons/lu';
+import ClassLineChart from './ClassLineGraph';
+import { set } from 'react-hook-form';
 
 function ClassDashboard({ classData, students }) {
     const studentsList = students || [];
     const [schoolClassesData, setSchoolClassesData] = useState([]);
+    const [classPoints, setClassPoints] = useState([]);
 
     // Sort the students by totalPoints in descending order and get the top 3
     const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
@@ -34,10 +37,23 @@ function ClassDashboard({ classData, students }) {
         }
     }
 
+    const fetchClassPoints = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-class-points/?classId=${classData.classID}`);
+            if (response.status === 200) {
+                setClassPoints(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching classes:", error);
+            setClassPoints([]);
+        }
+    }
+
     // Fetch school classes data on component mount
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "teacher") {
             fetchSchoolClasses();
+            fetchClassPoints();
         }
     }, [classData && students]);
 
@@ -83,7 +99,12 @@ function ClassDashboard({ classData, students }) {
                             {/* Student Contribution */}
                             <Box w="70%" h="100%" p={4} bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
                             _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
-                                Students Contribution
+                                <Flex direction="column" textAlign="left" w="90%" h="90%" gap={4} p={2}>
+                                    <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Daily Class Points</Box>
+                                    <Box w="100%" h="80%" p={2}>
+                                        <ClassLineChart classPoints={classPoints} />
+                                    </Box>
+                                </Flex>
                             </Box>
                             {/* Class Top Contributors */}
                             <Box w="30%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
