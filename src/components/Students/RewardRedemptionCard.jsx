@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Box, Button, Text, Card, Image } from "@chakra-ui/react"
+import { useState, useEffect } from "react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { toaster } from "@/components/ui/toaster"
-import ShowToast from "../../Extensions/ShowToast"
 import server from "../../../networking"
 
 function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
+    const [loading, setLoading] = useState(false);
 
     const handleRedeemReward = () => {
         const promise = new Promise((resolve, reject) => {
@@ -26,10 +28,8 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
             .catch(error => {
                 if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                     if (error.response.data.error.startsWith("UERROR")) {
-                        ShowToast("error", error.response.data.error.substring("UERROR:".length));
                         reject(error.response.data.error.substring("UERROR: ".length));
                     } else {
-                        ShowToast("error", error.response.data.error.substring("ERROR:".length));
                         reject("Unknown system error");
                     }
                 }
@@ -43,21 +43,46 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
                 description: "Reward redeemed successfully!",
             },
             error: (err) => ({
-                title: "Error",
+                title: "",
                 description: `${err}`,
             }),
         });
     }
 
+    useEffect(() => {
+        if (reward.imageUrl) {
+            setLoading(true);
+        }
+    }, [reward.imageUrl]);
+
     return (
         <>
             <Card.Root flexDirection="row" overflow="hidden" width={"100%"}>
-                <Image
-                    objectFit="cover"
-                    maxW="200px"
-                    src={reward.imageUrl != null ? reward.imageUrl : "https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
-                    alt="Caffe Latte"
-                />
+                <Box position="relative">
+                    <Box 
+                        position="absolute" 
+                        top="0" left="0" 
+                        width="100%" height="100%" 
+                        display="flex" 
+                        alignItems="center" 
+                        justifyContent="center" 
+                    >
+                        <Skeleton height="100%" width="100%" loading={loading} />
+                    </Box>
+                    
+                    <Image
+                        objectFit="fill"
+                        width="250px"
+                        maxW="250px"
+                        height="100%"
+                        src={reward.imageUrl || "https://images.unsplash.com/photo-1667489022797-ab608913feeb?auto=format&fit=crop&w=800&q=60"}
+                        alt="Reward Image"
+                        onLoad={() => setLoading(false)}
+                        onError={() => setLoading(false)}
+                        visibility={loading ? "hidden" : "visible"}
+                    />
+                </Box>
+
                 <Box>
                     <Card.Body maxW={"100%"} overflow={"hidden"}>
                         <Card.Title mb="2" isTruncated>{reward.rewardTitle}</Card.Title>
