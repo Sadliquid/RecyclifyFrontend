@@ -29,6 +29,8 @@ function AddClassButton({ onCreate }) {
         } else if (field === "classDescription") {
             if (!value) {
                 error = "* Class description is required.";
+            } else if (value.length > 60) {
+                error = "* Class description cannot be more than 60 characters.";
             }
         }
         return error;
