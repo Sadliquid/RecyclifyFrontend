@@ -43,7 +43,7 @@ const EcoPilot = () => {
     };
 
     const suggestedTopics = [
-        "Reservations", "Payments", "Cancellations", "Host's reviews", "Hosting a meal"
+        "Recycling", "Sustainability", "Points", "Leaderboard", "Contactl"
     ];
 
     return (
@@ -70,7 +70,7 @@ const EcoPilot = () => {
                 </List.Root>
                 <Flex direction="column" alignItems="center" mt={8}>
                     <Icon as={FaRobot} boxSize={8} color="teal.500" />
-                    <Text fontSize="xl" fontWeight="bold" color="teal.700" mt={2}>MakanBot</Text>
+                    <Text fontSize="xl" fontWeight="bold" color="teal.700" mt={2}>EcoPilot</Text>
                 </Flex>
             </Box>
 
@@ -78,9 +78,9 @@ const EcoPilot = () => {
                 <CardRoot borderRadius="lg" boxShadow="lg">
                     <CardBody p={8}>
                         <Flex justify="space-between" alignItems="center" mb={6}>
-                            <Heading as="h2" size="lg" color="teal.700">MakanBot</Heading>
+                            <Heading as="h2" size="lg" color="teal.700">EcoPilot</Heading>
                             <Spacer />
-                            <Text color="gray.500" fontSize="sm">Having doubts? MakanBot is here to help.</Text>
+                            <Text color="gray.500" fontSize="sm">Having doubts? EcoPilot is here to help.</Text>
                         </Flex>
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={6}>
