@@ -153,13 +153,6 @@ function Navbar({ onLogout }) {
                             </DrawerActionTrigger>
 
                             <DrawerActionTrigger asChild>
-                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                    <BiMedal />
-                                    <Text ml={2}>Milestones</Text>
-                                </Button>
-                            </DrawerActionTrigger>
-
-                            <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <Box>
                                         <MdOutlineLeaderboard fontSize={"20px"} />
