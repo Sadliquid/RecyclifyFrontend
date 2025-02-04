@@ -3,7 +3,6 @@ import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 import { BsGift } from 'react-icons/bs';
 import { toaster } from "@/components/ui/toaster";
 import { useState } from "react";
-import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
 function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentPoints }) {
@@ -38,12 +37,12 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
             .catch(error => {
                 if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                     if (error.response.data.error.startsWith("UERROR")) {
-                        ShowToast("error", error.response.data.error.substring("UERROR:".length));
                         reject(error.response.data.error.substring("UERROR: ".length));
                     } else {
-                        ShowToast("error", error.response.data.error.substring("ERROR:".length));
-                        reject("Unknown system error");
+                        reject(error.response.data.error.substring("ERROR: ".length));
                     }
+                } else {
+                    reject("An unexpected error occurred");
                 }
             });
         });
@@ -51,12 +50,12 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
         toaster.promise(promise, {
             loading: { title: "Processing...", description: "Please wait" },
             success: (points) => ({
-                title: "Success",
+                title: "",
                 description: `${points} leafs awarded successfully!`,
             }),
             error: {
-                title: "Error",
-                description: err => `Failed to award gift: ${err}`,
+                title: "",
+                description: err => `${err}`,
             },
         });
     };

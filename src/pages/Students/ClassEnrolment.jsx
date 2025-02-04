@@ -52,18 +52,16 @@ function ClassEnrolment() {
                 .then(response => {
                     if (response.status === 200) {
                         setAvailable(true)
-                        resolve("Class joined successfully!");
+                        resolve();
                     }
                 })
                 .catch(error => {
                     if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                         if (error.response.data.error.startsWith("UERROR")) {
                             setAvailable(false)
-                            ShowToast("error", error.response.data.error.substring("UERROR: ".length))
                             reject(error.response.data.error.substring("UERROR: ".length));
                         } else {
                             setAvailable(false)
-                            ShowToast("error", error.response.data.error.substring("UERROR: ".length))
                             reject(error.response.data.error.substring("ERROR: ".length));
                         }
                     } else {
@@ -75,11 +73,11 @@ function ClassEnrolment() {
             toaster.promise(promise, {
                 loading: { title: "Joining Class...", description: "Please wait" },
                 success: {
-                    title: "Success",
+                    title: "",
                     description: "Class joined successfully!",
                 },
                 error: (err) => ({
-                    title: "Error",
+                    title: "",
                     description: `${err}`,
                 }),
             });
