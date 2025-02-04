@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import { Stack, VStack, Text, useBreakpointValue } from '@chakra-ui/react'
+import { Stack, VStack, Text, useBreakpointValue, Show } from '@chakra-ui/react'
 import { LuBox } from "react-icons/lu"
 import { useNavigate } from 'react-router-dom'
 import AddClassButton from "@/components/teachers/AddClassButton"
@@ -8,6 +8,7 @@ import ClassCard from "@/components/teachers/ClassCard"
 import server from "../../../networking"
 import { useSelector } from 'react-redux'
 import { motion } from "framer-motion"
+import ShowToast from '../../Extensions/ShowToast';
 
 function Landing() {
     const navigate = useNavigate();
@@ -26,6 +27,13 @@ function Landing() {
             } 
         } catch (error) {
             console.error("Error fetching classes:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error fetching classes", error.response.data.message.split("UERROR: "));
+                setClasses([]);
+            } else {
+                ShowToast("error", "Error fetching classes", "Please try again.");
+                setClasses([]);
+            }
             setClasses([]);
         }
     };
@@ -59,10 +67,16 @@ function Landing() {
             });
             if (response.status === 200) {
                 console.log("Class deleted successfully.");
+                ShowToast("success", "Class deleted successfully.");
                 fetchClasses(user.id);
             } 
         } catch (error) {
             console.error("Error deleting class:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error adding class", error.response.data.error.split("UERROR: "));
+            } else {
+                ShowToast("error", "Error adding class", "Please try again.");
+            }
         }
     };
 
@@ -78,10 +92,16 @@ function Landing() {
             });
             if (response.status === 200) {
                 console.log("Class updated successfully.");
+                ShowToast("success", "Class updated successfully.");
                 fetchClasses(user.id);
             }
         } catch (error) {
             console.error("Error updating class:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error adding class", error.response.data.error.split("UERROR: "));
+            } else {
+                ShowToast("error", "Error adding class", "Please try again.");
+            }
         }
     };
 
@@ -98,10 +118,16 @@ function Landing() {
             if (response.status === 200) {
                 // Reload the class list to include the newly created class
                 console.log("Class added successfully.");
+                ShowToast("success", "Class added successfully.");
                 fetchClasses(user.id);
             } 
         } catch (error) {
             console.error("Error adding class:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error adding class", error.response.data.error.split("UERROR: "));
+            } else {
+                ShowToast("error", "Error adding class", "Please try again.");
+            }
         }
     };
 

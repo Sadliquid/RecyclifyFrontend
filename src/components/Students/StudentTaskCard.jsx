@@ -8,7 +8,6 @@ import { FaCamera, FaExclamationTriangle } from 'react-icons/fa';
 import { useState } from 'react';
 import { toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
-import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
 function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPoints, VerificationPending, TaskVerified }) {
@@ -60,12 +59,12 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                     .catch(error => {
                         if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                             if (error.response.data.error.startsWith("UERROR")) {
-                                ShowToast("error", error.response.data.error.substring("UERROR:".length));
                                 reject(error.response.data.error.substring("UERROR: ".length));
                             } else {
-                                ShowToast("error", error.response.data.error.substring("ERROR:".length));
-                                reject("Unknown system error");
+                                reject(error.response.data.error.substring("ERROR: ".length));
                             }
+                        } else {
+                            reject("An unexpected error occurred");
                         }
                     });
             });
@@ -73,12 +72,12 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
             toaster.promise(promise, {
                 loading: { title: "Uploading...", description: "Please wait" },
                 success: {
-                    title: "Success",
+                    title: "",
                     description: "Verification request sent successfully!",
                 },
                 error: {
-                    title: "Error",
-                    description: err => `Upload failed: ${err}`,
+                    title: "",
+                    description: err => `${err}`,
                 },
             });
         }
@@ -220,14 +219,14 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                                 <Box display="flex" gap="10px">
                                     <Button variant="outline">Cancel</Button>
                                     {submissionReady ? (
-                                        <Button backgroundColor={"black"} onClick={handleSubmitTask}>
-                                            Save
+                                        <Button backgroundColor={"#3DAF8B"} onClick={handleSubmitTask}>
+                                            Submit
                                         </Button>
                                     ) : (
                                         <HoverCardRoot size="sm">
                                             <HoverCardTrigger asChild>
-                                            <Button backgroundColor={"black"} onClick={handleSubmitTask} disabled>
-                                                Save
+                                            <Button backgroundColor={"#3DAF8B"} onClick={handleSubmitTask} disabled>
+                                                Submit
                                             </Button>
                                             </HoverCardTrigger>
                                             <HoverCardContent>

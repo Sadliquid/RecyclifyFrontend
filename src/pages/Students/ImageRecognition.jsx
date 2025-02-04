@@ -5,7 +5,6 @@ import { CloseButton } from "@/components/ui/close-button";
 import { FileUploadDropzone, FileUploadRoot } from "@/components/ui/file-upload"
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle } from "@/components/ui/dialog"
 import { motion } from "framer-motion";
-import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
 function ImageRecognition() {
@@ -58,16 +57,12 @@ function ImageRecognition() {
                         reject(`Unexpected response status: ${response.status}`);
                     }
                 })
-                .catch((error) => {
+                .catch(error => {
                     if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                         if (error.response.data.error.startsWith("UERROR")) {
-                            const errorMessage = error.response.data.error.substring("UERROR:".length);
-                            ShowToast("error", errorMessage);
-                            reject(errorMessage);
+                            reject(error.response.data.error.substring("UERROR: ".length));
                         } else {
-                            const errorMessage = error.response.data.error.substring("ERROR:".length);
-                            ShowToast("error", errorMessage);
-                            reject("Unknown system error");
+                            reject(error.response.data.error.substring("ERROR: ".length));
                         }
                     } else {
                         reject("An unexpected error occurred");
@@ -77,8 +72,8 @@ function ImageRecognition() {
     
         toaster.promise(uploadPromise, {
             loading: { title: "Uploading...", description: "Please wait while your file is being processed." },
-            success: { title: "Success", description: "Upload successful!" },
-            error: { title: "Error", description: (err) => `Upload failed: ${err}` },
+            success: { title: "", description: "Upload successful!" },
+            error: { title: "", description: (err) => `${err}` },
         });
     };
 

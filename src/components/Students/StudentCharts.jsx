@@ -2,13 +2,13 @@
 /* eslint-disable react/prop-types */
 import { Box, Text, Spinner } from '@chakra-ui/react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+// Register Chart.js components with Filler plugin
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 function StudentCharts({ studentID }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
@@ -16,14 +16,30 @@ function StudentCharts({ studentID }) {
 
     const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+    // Gradient fill function
+    const gradientFill = (context) => {
+        const ctx = context.chart.ctx;
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(54, 162, 235, 0.6)');
+        gradient.addColorStop(1, 'rgba(54, 162, 235, 0)');
+        return gradient;
+    };
+
     const data = {
         labels,
         datasets: [
             {
                 label: 'Accumulated Leafs',
                 data: Object.values(accumulatedLeafs),
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: '#36A2EB',
+                backgroundColor: gradientFill,
+                borderWidth: 3,
+                tension: 0.4,
+                pointRadius: 5,
+                pointBackgroundColor: '#36A2EB',
+                pointBorderColor: '#fff',
+                pointHoverRadius: 8,
+                fill: true,
             }
         ],
     };
@@ -33,12 +49,66 @@ function StudentCharts({ studentID }) {
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'top',
-            },
-            title: {
                 display: true,
-                text: 'Progression of Leafs This Week',
+                position: 'top',
+                labels: {
+                    font: {
+                        size: 12,
+                        family: 'Sora, sans-serif',
+                        weight: 'bold',
+                    },
+                    color: '#4A5568',
+                },
             },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleFont: { size: 12, family: 'Sora, sans-serif' },
+                bodyFont: { size: 12, family: 'Sora, sans-serif' },
+                bodyColor: '#fff',
+                titleColor: '#fff',
+                displayColors: false,
+                callbacks: {
+                    label: (context) => `${context.raw} Leafs`,
+                },
+            },
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Day of Week',
+                    font: { size: 12, family: 'Sora, sans-serif', weight: 'bold' },
+                    color: '#4A5568',
+                },
+                grid: {
+                    display: false,
+                },
+                ticks: {
+                    font: { size: 12, family: 'Sora, sans-serif' },
+                    color: '#718096',
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Leafs',
+                    font: { size: 12, family: 'Sora, sans-serif', weight: 'bold' },
+                    color: '#4A5568',
+                },
+                grid: {
+                    color: '#E2E8F0',
+                    borderDash: [5],
+                },
+                ticks: {
+                    font: { size: 12, family: 'Sora, sans-serif' },
+                    color: '#718096',
+                },
+                beginAtZero: true,
+            },
+        },
+        animation: {
+            duration: 1500,
+            easing: 'easeInOutQuart',
         },
     };
 
@@ -63,34 +133,32 @@ function StudentCharts({ studentID }) {
                 .catch(error => {
                     if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                         if (error.response.data.error.startsWith("UERROR")) {
-                            ShowToast("error", error.response.data.error.substring("UERROR:".length));
                             reject(error.response.data.error.substring("UERROR: ".length));
                         } else {
-                            ShowToast("error", error.response.data.error.substring("ERROR:".length));
-                            reject("Unknown system error");
+                            reject(error.response.data.error.substring("ERROR: ".length));
                         }
+                    } else {
+                        reject("An unexpected error occurred");
                     }
                 });
             });
         }
     }, [studentID]);
 
-    if (!studentID || Object.keys(accumulatedLeafs) <= 0) {
+    if (!studentID || Object.keys(accumulatedLeafs).length <= 0) {
         return (
             <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems="center" width="100%" height="100%">
                 <Spinner mb={3} color="#3A9F83" animationDuration="0.5s" css={{ "--spinner-track-color": "colors.gray.200" }} />
                 <Text>Getting your info...</Text>
             </Box>
         );
-    } else {
-        return (
-            <>
-                <Box width='100%' height='100%'>
-                    <Line data={data} options={options} />
-                </Box>
-            </>
-        );
     }
+
+    return (
+        <Box width='100%' height='100%'>
+            <Line data={data} options={options} />
+        </Box>
+    );
 }
 
 export default StudentCharts;
