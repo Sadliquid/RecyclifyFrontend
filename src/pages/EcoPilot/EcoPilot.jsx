@@ -43,14 +43,19 @@ const EcoPilot = () => {
     };
 
     const suggestedTopics = [
-        "Recycling", "Sustainability", "Points", "Leaderboard", "Contactl"
+        "Recycling", "Sustainability", "Points", "Leaderboard", "Contact"
     ];
 
     return (
         <Flex p={8} maxW="1200px" mx="auto" gap={8} alignItems="flex-start" direction={{ base: "column", md: "row" }}>
             <Box w={{ base: "100%", md: "25%" }}>
+                <Flex direction="column" alignItems="center" mt={8} mb={5}>
+                    <Icon as={FaRobot} boxSize={8} color="teal.500" />
+                    <Text fontSize="xl" fontWeight="bold" color="teal.700" mt={2}>EcoPilot</Text>
+                </Flex>
+
                 <Heading as="h1" size="lg" mb={6} color="teal.700">Suggested Topics</Heading>
-                <List.Root spacing={3}>
+                <List.Root spacing={3} style={{ listStyleType: "none" }}>
                     {suggestedTopics.map((topic, index) => (
                         <ListItem
                             key={index}
@@ -68,10 +73,6 @@ const EcoPilot = () => {
                         </ListItem>
                     ))}
                 </List.Root>
-                <Flex direction="column" alignItems="center" mt={8}>
-                    <Icon as={FaRobot} boxSize={8} color="teal.500" />
-                    <Text fontSize="xl" fontWeight="bold" color="teal.700" mt={2}>EcoPilot</Text>
-                </Flex>
             </Box>
 
             <Box w={{ base: "100%", md: "75%" }}>
@@ -97,7 +98,7 @@ const EcoPilot = () => {
                                 <Flex justify="flex-end">
                                     <Button
                                         type="submit"
-                                        colorScheme="teal"
+                                        backgroundColor="#3DA287"
                                         size="lg"
                                         px={8}
                                         isLoading={loading}
