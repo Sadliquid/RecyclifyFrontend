@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, HStack, Button, VStack, Text } from '@chakra-ui/react';
-import { Avatar } from "@/components/ui/avatar";
+import { Box, HStack, Button, VStack, Text, Image } from '@chakra-ui/react';
 import EditAvatarDialog from './EditAvatarDialog';
 import EditBannerDialog from './EditBannerDialog';
 import { CgProfile } from 'react-icons/cg';
@@ -52,16 +51,16 @@ function ProfileBanner({ userDetails }) {
             >
                 {/* Render Avatar or Default Icon */}
                 {avatarUrl ? (
-                    <Avatar
-                        size="2xl"
+                    <Image
                         src={avatarUrl}
-                        bg="white"
-                        border="4px solid white"
+                        boxSize="90px" 
+                        borderRadius="full"  
+                        alt="User Avatar"
                         ml={10}
                     />
                 ) : (
                     <Box ml={10}>
-                        <CgProfile size="60" />
+                        <CgProfile size="90" />
                     </Box>
                 )}
 

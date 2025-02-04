@@ -1,17 +1,19 @@
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot } from "@/components/ui/dialog";
-import { Button, Box } from "@chakra-ui/react";
+import { Button, Box, Image } from "@chakra-ui/react";
 import { FileInput, FileUploadClearTrigger, FileUploadLabel, FileUploadRoot } from "@/components/ui/file-upload";
 import { CloseButton } from "@/components/ui/close-button";
 import { InputGroup } from "@/components/ui/input-group";
-import { Avatar } from "@/components/ui/avatar";
 import { LuFileUp } from "react-icons/lu";
 import { useEffect, useState } from "react";
-import server from "../../../networking"
+import server from "../../../networking";
 import { CgProfile } from "react-icons/cg";
+import ShowToast from "../../Extensions/ShowToast";
 
 function EditAvatarDialog({ userDetails, isOpen, onClose }) {
-    const [avatarUrl, setAvatarUrl] = useState(null); // State to hold avatar URL
+    const [avatarUrl, setAvatarUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [isSaveLoading, setIsSaveLoading] = useState(false);  // Separate loading state for Save button
+    const [isRemoveLoading, setIsRemoveLoading] = useState(false);  // Separate loading state for Remove button
 
     useEffect(() => {
         const fetchAvatar = async () => {
@@ -19,35 +21,37 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
                 if (userDetails.avatar) {
                     const response = await server.get(`/api/Identity/getAvatar?userId=${userDetails.id}`);
                     if (response.data.avatarUrl) {
-                        setAvatarUrl(response.data.avatarUrl); // Set avatar URL to state
+                        setAvatarUrl(response.data.avatarUrl);
                     }
                 } else {
-                    setAvatarUrl(null); // No avatar, set to null to fallback to default icon
+                    setAvatarUrl(null);
                 }
             } catch (error) {
-                console.error('Error fetching avatar:', error);
-                setAvatarUrl(null); // In case of error, set to default icon
+                console.error("Error fetching avatar:", error);
+                setAvatarUrl(null);
             }
         };
 
         fetchAvatar();
-    }, [userDetails.id, userDetails.avatar]); // Fetch avatar on userDetails change
+    }, [userDetails.id, userDetails.avatar]);
 
     const handleFileChange = (details) => {
         console.log("File change detected:", details);
         const file = details.acceptedFiles[0];
         setSelectedFile(file);
-    }
+    };
 
     const onSave = async () => {
         if (!selectedFile) {
-            alert("Please select a file before saving."); // Notify the user to select a file
+            alert("Please select a file before saving.");
             return;
         }
-    
+
+        setIsSaveLoading(true);
+
         const formData = new FormData();
         formData.append("file", selectedFile);
-    
+
         try {
             const response = await server.post("/api/Identity/editAvatar", formData, {
                 headers: {
@@ -55,48 +59,75 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
                 },
                 transformRequest: (formData) => formData,
             });
-    
+
             if (response.data.avatarUrl) {
-                setAvatarUrl(response.data.avatarUrl); // Update avatar URL in state
-                onClose(); // Close the dialog after successful update
+                setAvatarUrl(response.data.avatarUrl);
+                onClose();
+                setTimeout(() => window.location.reload(), 1000); // Refresh page after closing
+                ShowToast("success", "Avatar Uploaded Successfully", "Enjoy your new look!")
             } else {
                 console.error("Failed to update avatar:", response.data);
             }
         } catch (error) {
             console.error("Error updating avatar:", error);
+        } finally {
+            setIsSaveLoading(false);
         }
     };
 
+    const onRemove = async () => {
+        setIsRemoveLoading(true);
+
+        try {
+            const response = await server.post(`/api/Identity/removeAvatar`, {}, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.data.message === "SUCCESS: Avatar removed successfully.") {
+                setAvatarUrl(null);
+                onClose();
+                setTimeout(() => window.location.reload(), 1000); // Refresh page after closing
+                ShowToast("success", "Avatar Removed Successfully", "Back to the default...")
+            } else {
+                console.error("Failed to remove avatar:", response.data);
+            }
+        } catch (error) {
+            console.error("Error removing avatar:", error);
+        } finally {
+            setIsRemoveLoading(false);
+        }
+    };
+
+    const onCancel = () => {
+        setSelectedFile(null);
+        onClose();
+    };
+
     return (
-        <DialogRoot
-            placement="center"
-            motionPreset="slide-in-bottom"
-            open={isOpen}
-            onOpenChange={onClose}
-        >
+        <DialogRoot placement="center" motionPreset="slide-in-bottom" open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Edit Avatar</DialogTitle>
                 </DialogHeader>
                 <DialogBody>
-                    {/* Render Avatar or Default Icon */}
-                    {avatarUrl ? (
-                        <Avatar
-                            size="2xl"
-                            src={avatarUrl}
-                            bg="white"
-                            border="4px solid white"
-                            ml={10}
-                        />
-                    ) : (
-                        <Box ml={10}>
-                            <CgProfile size="60" />
-                        </Box>
-                    )}
-                    <FileUploadRoot onFileChange={handleFileChange} gap="1" maxWidth="300px">
-                        <FileUploadLabel>Upload Avatar</FileUploadLabel>
+                    <Box display="flex" alignItems="center" justifyContent="center">
+                        {avatarUrl ? (
+                            <Image
+                                src={avatarUrl}
+                                boxSize="150px"  // Ensuring equal width and height for a circular shape
+                                borderRadius="full"  // Making it a circle
+                                alt="User Avatar"
+                            />
+                        ) : (
+                            <CgProfile size="150" />
+                        )}
+                    </Box>
+                    <FileUploadRoot onFileChange={handleFileChange} gap="1" p={2}>
+                        <FileUploadLabel mb={2}>Upload Avatar</FileUploadLabel>
                         <InputGroup
-                            w="full"
+                            w="100%"
                             startElement={<LuFileUp />}
                             endElement={
                                 <FileUploadClearTrigger asChild>
@@ -117,10 +148,37 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
                     </FileUploadRoot>
                 </DialogBody>
                 <DialogFooter>
+                    <Button 
+                        onClick={onRemove} 
+                        backgroundColor="red" 
+                        color={"white"}
+                        variant="outline" 
+                        loading={isRemoveLoading} 
+                        loadingText="Removing..." 
+                        left={6}
+                        position={"absolute"}
+                    >
+                        Remove
+                    </Button>
                     <DialogActionTrigger asChild>
-                        <Button variant="outline" onClick={onClose}>Cancel</Button>
+                        <Button 
+                            variant="outline" 
+                            onClick={onCancel} 
+                            disabled={isSaveLoading || isRemoveLoading}
+                            mr={2}
+                        >
+                            Cancel
+                        </Button>
                     </DialogActionTrigger>
-                    <Button onClick={onSave} isDisabled={!selectedFile}>Save</Button>
+                    <Button 
+                        onClick={onSave} 
+                        background="#2D65FF"
+                        loading={isSaveLoading} 
+                        loadingText="Uploading..."
+                        disabled={!selectedFile}
+                    >
+                        Save
+                    </Button>
                 </DialogFooter>
                 <DialogCloseTrigger />
             </DialogContent>
@@ -129,4 +187,3 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
 }
 
 export default EditAvatarDialog;
-
