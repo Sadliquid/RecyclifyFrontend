@@ -3,7 +3,7 @@ import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, Dia
 } from "@/components/ui/dialog";
 import { Button } from "@chakra-ui/react";
 
-function EditBannerDialog({ isOpen, onClose }) {
+function EditBannerDialog({ userDetails, isOpen, onClose }) {
     return (
         <DialogRoot
             placement="center"

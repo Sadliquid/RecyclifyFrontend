@@ -77,7 +77,7 @@ function MyAccount() {
             >
                 <Box>
                     <Heading fontSize="30px" mt={10} mb={6}>My Account</Heading>
-                    <ProfileBanner />
+                    <ProfileBanner userDetails={userDetails}/>
                     <AccountDetails userDetails={userDetails} setUserDetails={setUserDetails}/>
                     <AccountActionButtons userDetails={userDetails}/>
                 </Box>

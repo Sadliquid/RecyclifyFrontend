@@ -100,7 +100,7 @@ function AccountDetails({ userDetails, setUserDetails }) {
                         />
                         <Textarea
                             ref={textareaRef}
-                            // value={editedDetails.aboutMe}
+                            value={editedDetails.aboutMe}
                             placeholder="Share something interesting about yourself!"
                             resize="none"
                             w="100%"
