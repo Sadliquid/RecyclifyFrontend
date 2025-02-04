@@ -9,7 +9,9 @@ function ProfileBanner({ userDetails }) {
     const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
     const [isBannerDialogOpen, setIsBannerDialogOpen] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState(null); // State to hold avatar URL
+    const [bannerUrl, setBannerUrl] = useState(null); // State to hold banner URL
 
+    // Fetch Avatar
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
@@ -18,7 +20,6 @@ function ProfileBanner({ userDetails }) {
                     if (response.data.avatarUrl) {
                         setAvatarUrl(response.data.avatarUrl); // Set avatar URL to state
                     }
-                    console.log(response)
                 } else {
                     setAvatarUrl(null); // No avatar, set to null to fallback to default icon
                 }
@@ -30,6 +31,28 @@ function ProfileBanner({ userDetails }) {
         fetchAvatar();
     }, [userDetails.id, userDetails.avatar]); // Fetch avatar on userDetails change
 
+    // Fetch Banner
+    useEffect(() => {
+        const fetchBanner = async () => {
+            try {
+                if (userDetails.banner) {
+                    const response = await server.get(`/api/Identity/getBanner?userId=${userDetails.id}`);
+                    if (response.data.bannerUrl) {
+                        setBannerUrl(response.data.bannerUrl); // Set banner URL to state
+                    }
+                } else {
+                    setBannerUrl(null); // No banner, set to null to fallback to default banner
+                }
+            } catch (error) {
+                console.error("Error fetching banner:", error);
+                setBannerUrl(null); // In case of error, set to default banner
+            }
+        };
+        fetchBanner();
+    }, [userDetails.id, userDetails.banner]); // Fetch banner on userDetails change
+
+    console.log(bannerUrl)
+
     return (
         <HStack
             mx={"auto"}
@@ -38,40 +61,55 @@ function ProfileBanner({ userDetails }) {
         >
             <Box
                 borderRadius={15}
-                borderWidth={1}
-                backgroundImage={`url(/defaultAccountBanner.png)`}
-                backgroundSize="cover"
-                backgroundPosition="center"
-                backgroundRepeat="no-repeat"
                 width="70%"
                 height="20vh"
                 display="flex"
                 alignItems="center"
                 position="relative"
             >
-                {/* Render Avatar or Default Icon */}
-                {avatarUrl ? (
+                {/* Render Banner Image if available */}
+                {bannerUrl ? (
                     <Image
-                        src={avatarUrl}
-                        boxSize="90px" 
-                        borderRadius="full"  
-                        alt="User Avatar"
-                        ml={10}
+                        src={bannerUrl}
+                        alt="User Banner"
+                        objectFit="cover"
+                        borderRadius={15}
+                        w="100%"
+                        h="100%"
+                        position="absolute"
                     />
                 ) : (
-                    <Box ml={10}>
-                        <CgProfile size="90" />
-                    </Box>
+                    <Box
+                        backgroundImage={`url('/defaultAccountBanner.png')`}
+                        backgroundSize="cover"
+                        backgroundPosition="center"
+                        backgroundRepeat="no-repeat"
+                        w="100%"
+                        h="100%"
+                        position="absolute"
+                        borderRadius={15}
+                    />
                 )}
 
-                <Text
-                    position={"absolute"}
-                    right={10}
-                    fontWeight={"bold"}
-                    fontSize={20}
+                {/* Render Avatar or Default Icon */}
+                <Box 
+                    position="absolute" 
+                    top="50%" 
+                    left="10%"
+                    transform="translateY(-50%)"
                 >
-                    {userDetails.userRole}
-                </Text>
+                    {avatarUrl ? (
+                        <Image
+                            border="2px solid white"
+                            src={avatarUrl}
+                            boxSize="90px" 
+                            borderRadius="full"  
+                            alt="User Avatar"
+                        />
+                    ) : (
+                        <CgProfile size="90" />
+                    )}
+                </Box>
             </Box>
             
             <Box

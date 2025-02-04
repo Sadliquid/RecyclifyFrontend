@@ -7,6 +7,7 @@ import { Avatar, AvatarGroup } from "@/components/ui/avatar"
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import ShowToast from '../../Extensions/ShowToast';
+import { logout } from '../../slices/AuthState';
 import server from "../../../networking";
 import ProfileBanner from '../../components/identity/ProfileBanner';
 import AccountDetails from '../../components/identity/AccountDetails';

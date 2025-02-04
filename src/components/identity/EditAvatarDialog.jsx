@@ -36,7 +36,6 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
     }, [userDetails.id, userDetails.avatar]);
 
     const handleFileChange = (details) => {
-        console.log("File change detected:", details);
         const file = details.acceptedFiles[0];
         setSelectedFile(file);
     };
@@ -112,7 +111,7 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
                     <DialogTitle>Edit Avatar</DialogTitle>
                 </DialogHeader>
                 <DialogBody>
-                    <Box display="flex" alignItems="center" justifyContent="center">
+                    <Box display="flex" alignItems="center" justifyContent="center" mb={4}>
                         {avatarUrl ? (
                             <Image
                                 src={avatarUrl}

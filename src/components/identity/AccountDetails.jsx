@@ -87,6 +87,14 @@ function AccountDetails({ userDetails, setUserDetails }) {
             {/* About Me */}
             <HStack spacing={4} mb={6} mt={6}>
                 <VStack align="start" flex={1}>
+                    <Text
+                        fontWeight={"bold"}
+                        fontSize={20}
+                        mb={4}
+                    >
+                        {userDetails.userRole.charAt(0).toUpperCase() + userDetails.userRole.slice(1).toLowerCase()}
+                    </Text>
+
                     <Heading size="md">About Me</Heading>
                     <Box position="relative" width="100%">
                         <Box
