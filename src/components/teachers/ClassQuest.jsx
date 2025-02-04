@@ -62,8 +62,10 @@ function ClassQuest({ classData }) {
                     if (error.response.data.error.startsWith("UERROR")) {
                         reject(error.response.data.error.substring("UERROR: ".length));
                     } else {
-                        reject("Unknown system error");
+                        reject(error.response.data.error.substring("ERROR: ".length));
                     }
+                } else {
+                    reject("An unexpected error occurred");
                 }
             });
         });
@@ -71,7 +73,7 @@ function ClassQuest({ classData }) {
         toaster.promise(promise, {
             loading: { title: "Our AI Model is generating...", description: "Please wait" },
             success: {
-                title: "Success",
+                title: "",
                 description: "Quests re-generated successfully!",
             },
             error: (err) => ({
