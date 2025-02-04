@@ -1,11 +1,10 @@
+/* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../slices/AuthState";
 import { Avatar } from "@/components/ui/avatar";
-import { Button, Box, Menu } from "@chakra-ui/react";
-import { MenuContent, MenuItem, MenuItemCommand, MenuRoot, MenuTrigger,
-} from "@/components/ui/menu"
-import ShowToast from '../../Extensions/ShowToast';
+import { Button } from "@chakra-ui/react";
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu"
 
 const ProfilePictureIcon = ({ onLogout }) => {
     const dispatch = useDispatch();
@@ -33,7 +32,7 @@ const ProfilePictureIcon = ({ onLogout }) => {
 
     if (!loaded || !user) {
         return (
-            <Button variant="unstyled" onClick={() => navigate("/auth/login")}>
+            <Button variant="unstyled" onClick={() => navigate("/auth/login")} backgroundColor={"transparent"}>
                 <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
             </Button>
         );
