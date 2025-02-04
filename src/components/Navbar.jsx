@@ -17,8 +17,10 @@ import { TbMessageShare } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import ProfilePictureIcon from "./identity/ProfilePictureIcon";
 
-function Navbar() {
+function Navbar({ onLogout }) {
     const navigate = useNavigate();
 
     const { user, loaded, error } = useSelector((state) => state.auth);
@@ -53,14 +55,6 @@ function Navbar() {
             }
         } else {
             navigate("/");
-        }
-    }
-
-    function handleProfilePictureClick() {
-        if (!error && loaded && user) {
-            navigate("/identity/myAccount");
-        } else {
-            navigate("/auth/login");
         }
     }
 
@@ -392,7 +386,7 @@ function Navbar() {
                 {sidebar}
 
                 <Heading color="white" cursor="pointer" onClick={() => handleNavbarTitleClick()}>RECYCLIFY</Heading>
-                <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" onClick={() => handleProfilePictureClick()} />
+                <ProfilePictureIcon onLogout={onLogout}/>
             </Flex>
         </>
     );

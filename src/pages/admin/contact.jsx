@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect } from "react";
-import { Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner } from "@chakra-ui/react";
+import { Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner, useDisclosure } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { MdReply } from "react-icons/md";
 import { Button } from "@/components/ui/button";
@@ -15,9 +14,11 @@ const ContactFormManagement = () => {
 	const [messages, setMessages] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [errorMessage, setErrorMessage] = useState(null);
+	const [isSendingEmail, setIsSendingEmail] = useState(false); // New state for email sending
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const subjectRef = useRef(null);
 	const { user, loaded, error } = useSelector((state) => state.auth);
-
+    const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI dialog state
 	useEffect(() => {
 		if (!error && loaded && user && user.userRole == "admin") {
 			fetchMessages();
@@ -49,39 +50,47 @@ const ContactFormManagement = () => {
 			message // Ensure message exists
 	);
 
-	const handleReply = (message) => {
-		setSelectedMessage(message);
-	};
+    const handleReply = (message) => {
+        setSelectedMessage(message);
+        onOpen();
+    };
 
-	const handleSendReply = async () => {
-		try {
-			const markRepliedResponse = await Server.put(
-				`/api/ContactManagement/${selectedMessage.id}/mark-replied`
-			);
-
-			if (markRepliedResponse.status === 200) {
-				setMessages(prevMessages =>
-					prevMessages.map(message =>
-						message.id === selectedMessage.id
-							? {
-								...message,  // Keep existing properties
-								hasReplied: true,
-								...markRepliedResponse.data.data  // Merge new data
-							}
-							: message
-					)
-				);
-				setSelectedMessage(null);
-				ShowToast("success", "Success", markRepliedResponse.data.message);
-			} else {
-				throw new Error(markRepliedResponse.data.error || "Failed to mark as replied");
-			}
-		} catch (error) {
-			ShowToast("error", "Error", error.response?.data?.error || error.message);
-		}
-	};
-
-
+	const handleSendReply = async (subject, body) => {
+        setIsSendingEmail(true); // Start loading state
+        try {
+            const emailResponse = await Server.post(
+                `api/ContactManagement/${selectedMessage.id}/send-email`,
+                { subject, body },
+                { headers: { "Content-Type": "application/json" } }
+            );
+    
+            if (emailResponse.status !== 200) {
+                throw new Error(emailResponse.data.error || "Failed to send email");
+            }
+    
+            const markRepliedResponse = await Server.put(
+                `/api/ContactManagement/${selectedMessage.id}/mark-replied`
+            );
+    
+            if (markRepliedResponse.status === 200) {
+                setMessages(prevMessages =>
+                    prevMessages.map(message =>
+                        message.id === selectedMessage.id
+                            ? { ...message, hasReplied: true }
+                            : message
+                    )
+                );
+                ShowToast("success", "Success", "Reply sent and marked as replied.");
+                setIsDialogOpen(false); // ✅ Close dialog AFTER sending succeeds
+            } else {
+                throw new Error(markRepliedResponse.data.error || "Failed to mark as replied");
+            }
+        } catch (error) {
+            ShowToast("error", "Error", error.response?.data?.error || error.message);
+        } finally {
+            setIsSendingEmail(false); // End loading state
+        }
+    };
 	if (isLoading) {
 		return <Spinner />;
 	}
@@ -146,54 +155,37 @@ const ContactFormManagement = () => {
 							<Table.Cell>
 								<HStack spacing="2">
 									{!message.hasReplied && (
-										<DialogRoot initialFocusEl={() => subjectRef.current}>
-											<DialogTrigger asChild>
-												<Button
-													variant="link"
-													color="blue.500"
-													onClick={() => handleReply(message)}
-												>
-													<MdReply size={20} /> Reply
-												</Button>
-											</DialogTrigger>
-											<DialogContent>
-												<DialogHeader>
-													<DialogTitle>
-														Reply to {message.senderName}
-													</DialogTitle>
-												</DialogHeader>
-												<DialogBody pb="4">
-													<Stack gap="4">
-														<Field label="Subject">
-															<Input
-																ref={subjectRef}
-																placeholder="Enter email subject"
-															/>
-														</Field>
-														<Field label="Message">
-															<Textarea
-																placeholder="Type your reply here"
-																rows={5}
-															/>
-														</Field>
-													</Stack>
-												</DialogBody>
-												<DialogFooter>
-													<DialogActionTrigger asChild>
-														<Button
-															onClick={() => {
-																const subject = subjectRef.current.value;
-																const body =
-																	document.querySelector("textarea").value;
-																handleSendReply(subject, body);
-															}}
-														>
-															Send Reply
-														</Button>
-													</DialogActionTrigger>
-												</DialogFooter>
-											</DialogContent>
-										</DialogRoot>
+										<DialogRoot isOpen={isOpen} onClose={onClose}>
+                                        <DialogTrigger asChild>
+                                            <Button variant="link" color="blue.500" onClick={() => handleReply(message)}>
+                                                <MdReply size={20} /> Reply
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Reply to {selectedMessage?.senderName}</DialogTitle>
+                                            </DialogHeader>
+                                            <DialogBody pb="4">
+                                                <Stack gap="4">
+                                                    <Field label="Subject">
+                                                        <Input ref={subjectRef} placeholder="Enter email subject" disabled={isSendingEmail} />
+                                                    </Field>
+                                                    <Field label="Message">
+                                                        <Textarea placeholder="Type your reply here" rows={5} disabled={isSendingEmail} />
+                                                    </Field>
+                                                </Stack>
+                                            </DialogBody>
+                                            <DialogFooter>
+                                                <Button onClick={() => {
+                                                    const subject = subjectRef.current.value;
+                                                    const body = document.querySelector("textarea").value;
+                                                    handleSendReply(subject, body);
+                                                }} disabled={isSendingEmail}>
+                                                    {isSendingEmail ? <Spinner size="sm" /> : "Send Reply"}
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </DialogRoot>
 									)}
 								</HStack>
 							</Table.Cell>
