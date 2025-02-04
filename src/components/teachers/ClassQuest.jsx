@@ -1,36 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { Box, Flex, Tabs, Text, Stack, Badge, Button, Progress } from '@chakra-ui/react';
 import { FiRefreshCw } from 'react-icons/fi';
 import { PiCloverFill } from "react-icons/pi";
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import ShowToast from '../../Extensions/ShowToast';
+import server from "../../../networking";
 
-function ClassQuest() {
-    const quests = [
-        {
-            title: "Dragon Slayer",
-            description: "Defeat the ancient fire dragon in Mount Doom",
-            points: 250,
-            type: "Combat",
-            completed: 0,
-            totalAmountToComplete: 1,
-        },
-        {
-            title: "Herbalist's Challenge",
-            description: "Collect 15 enchanted mushrooms from the Fae Forest",
-            points: 150,
-            type: "Gathering",
-            completed: 7,
-            totalAmountToComplete: 15,
-        },
-        {
-            title: "Artifact Recovery",
-            description: "Retrieve the stolen crown from the Bandit King's fortress",
-            points: 200,
-            type: "Exploration",
-            completed: 1,
-            totalAmountToComplete: 1,
-        },
-    ];
+function ClassQuest({ classData }) {
+    const [classQuests, setClassQuests] = useState(null);
+    const { user, loaded, error } = useSelector((state) => state.auth);
 
-    return (
+    const fetchClassQuests = async (classID) => {
+        try {
+            const response = await server.get(`/api/student/get-class-quests?classID=${classID}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.status == 200) {
+                setClassQuests(response.data.data);
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast("error", error.response.data.error.substring("UERROR:".length));
+                    return;
+                } else {
+                    ShowToast("error", error.response.data.error.substring("ERROR:".length));
+                    return;
+                }
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (!error && loaded && user && user.userRole == "teacher") {
+            if (classData !== null && classData !== undefined) {
+                if (classData.classID) {
+                    fetchClassQuests(classData.classID);
+                }
+            }
+        }
+    }, [loaded, classData]);
+
+    if (classQuests != null && classQuests != undefined) return (
         <Tabs.Content value='Class Quests'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="lg">
                 <Box w="100%" maxW="600px" h="100%" p={6} bg="white" borderRadius="xl" boxShadow="2xl" mx="auto">
@@ -41,7 +57,7 @@ function ClassQuest() {
 
                     {/* Quest Cards */}
                     <Stack gap={4} overflowY="auto" h="calc(100% - 60px)" pt={1}>
-                        {quests.map((quest, index) => (
+                        {classQuests.map((quest, index) => (
                             <Box
                                 key={index}
                                 w="100%"
@@ -54,48 +70,49 @@ function ClassQuest() {
                             >
                                 <Stack align="start" gap={2}>
                                     {/* Quest Title and Points */}
-                                    <Flex w="100%" justify="space-between" align="center">
+                                    <Flex w="100%" justify="space-between">
                                         <Flex direction="row" align="center" gap={2}>
                                             <Text fontSize="lg" fontWeight="bold" color="black">
-                                                {quest.title}
+                                                {quest.questTitle}
                                             </Text>
                                             <Badge variant="solid" bg="#AEC7ED" color="black" borderRadius="full" px={2} py={1}>
-                                                {quest.type}
+                                                {quest.questType}
                                             </Badge>
                                         </Flex>
                                         <Badge variant="solid" bg="white" color="black" borderRadius="full" px={2} py={1}>
-                                            {quest.points}
-                                            <PiCloverFill boxSize={25} color="#2CD776" />
+                                            {quest.questPoints}
+
+                                            <Text as={PiCloverFill} boxSize={5} color="#2CD776" />
                                         </Badge>
                                     </Flex>
 
                                     {/* Quest Description */}
                                     <Text fontSize="sm" color="gray.600">
-                                        {quest.description}
+                                        {quest.questDescription}
                                     </Text>
                                 </Stack>
 
                                 {/* Progress Bar */}
                                 <Box w="100%" mt={2} textAlign="left">
-                                    {quest.completed === quest.totalAmountToComplete ? (
+                                    {quest.amountCompleted === quest.totalAmountToComplete ? (
                                         <Text fontSize="sm" color="black" fontWeight="bold">
                                             ✅ Quest Completed!
                                         </Text>
                                     ) : (
                                         <Text fontSize="sm" color="black" fontWeight="bold">
-                                            {quest.completed} / {quest.totalAmountToComplete} Completed
+                                            {quest.amountCompleted} / {quest.totalAmountToComplete} Completed
                                         </Text>
                                     )}
-                                    <Progress.Root w="100%" value={quest.completed} max={quest.totalAmountToComplete} mt={2}>
+                                    <Progress.Root w="100%" value={quest.amountCompleted} max={quest.totalAmountToComplete} mt={2}>
                                         <Stack direction="row" justify="space-between" align="center">
-                                            <Progress.Track  flex="1">
-                                                {quest.completed === quest.totalAmountToComplete ? (
+                                            <Progress.Track flex="1">
+                                                {quest.amountCompleted === quest.totalAmountToComplete ? (
                                                     <Progress.Range bg="#2CD776" />
                                                 ) : (
                                                     <Progress.Range bg="#6A6AFF" />
                                                 )}
                                             </Progress.Track>
-                                            <Progress.ValueText>100%</Progress.ValueText>
+                                            <Progress.ValueText>{quest.amountCompleted / quest.totalAmountToComplete}%</Progress.ValueText>
                                         </Stack>
                                     </Progress.Root>
                                 </Box>
