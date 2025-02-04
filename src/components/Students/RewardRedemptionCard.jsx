@@ -30,8 +30,10 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
                     if (error.response.data.error.startsWith("UERROR")) {
                         reject(error.response.data.error.substring("UERROR: ".length));
                     } else {
-                        reject("Unknown system error");
+                        reject(error.response.data.error.substring("ERROR: ".length));
                     }
+                } else {
+                    reject("An unexpected error occurred");
                 }
             });
         });
@@ -39,7 +41,7 @@ function RewardRedemptionCard({ studentID, reward, updateLeafs }) {
         toaster.promise(promise, {
             loading: { title: "Redeeming...", description: "Please wait" },
             success: {
-                title: "Success",
+                title: "",
                 description: "Reward redeemed successfully!",
             },
             error: (err) => ({
