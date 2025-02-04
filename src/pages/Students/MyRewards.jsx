@@ -1,5 +1,5 @@
-import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Box, Heading, Text, Image, Button, Tabs } from '@chakra-ui/react';
+// import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Box, Heading, Text, Image, Tabs } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from "framer-motion";
