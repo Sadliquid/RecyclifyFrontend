@@ -8,7 +8,7 @@ import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Toaster, toaster } from "@/components/ui/toaster"
+import { toaster } from "@/components/ui/toaster"
 import server from "../../../networking"
 import ShowToast from '../../Extensions/ShowToast';
 
@@ -199,7 +199,7 @@ function StudentDashboard({ classData, students }) {
         if (selectedRecipients.length === 0) return;
     
         // Define the promise
-        const emailPromise = new Promise(async (resolve, reject) => {
+        const emailPromise = new Promise((resolve, reject) => {
             try {
                 const queryParams = new URLSearchParams({
                     recipients: selectedRecipients.join(","),
@@ -210,7 +210,7 @@ function StudentDashboard({ classData, students }) {
                     parentEmail: student.parent ? student.parent.parentEmail : "",
                 }).toString();
     
-                const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
+                const response = server.post(`/api/Teacher/send-update-email?${queryParams}`);
     
                 if (response.status === 200) {
                     console.log("Email sent successfully.");
