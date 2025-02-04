@@ -45,6 +45,7 @@ const ProfilePictureIcon = ({ onLogout }) => {
                         variant="unstyled"
                         aria-label="Profile options"
                         onClick={handleProfilePictureClick}
+                        backgroundColor={"transparent"}
                     >
                         <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
                     </Button>
