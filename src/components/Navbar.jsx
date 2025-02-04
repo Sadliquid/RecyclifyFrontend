@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTrigger } from "@/components/ui/drawer"
-import { Flex, Heading, Button, Image, Text, Box, VStack } from "@chakra-ui/react";
+import { Flex, Heading, Button, Image, Text, Box, VStack, DrawerActionTrigger } from "@chakra-ui/react";
+import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { RxHamburgerMenu } from "react-icons/rx"; 
+import { RxHamburgerMenu } from "react-icons/rx";
 import { BsGift, BsMailbox, BsNewspaper, BsPeople, BsQuestionCircle } from "react-icons/bs";
 import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
@@ -44,9 +45,9 @@ function Navbar({ onLogout }) {
                     navigate("/student/home");
                 } else if (user.userRole === "teacher") {
                     navigate("/teachers");
-                } else if (user.userRole === "parent") { 
+                } else if (user.userRole === "parent") {
                     navigate("/parents");
-                } else if (user.userRole === "admin") { 
+                } else if (user.userRole === "admin") {
                     navigate("/admin/dashboard");
                 }
             } else {
@@ -87,33 +88,37 @@ function Navbar({ onLogout }) {
                     <DrawerFooter display={"flex"} flexDirection={"column"}>
                         <VStack width="100%">
                             <Box display="flex" flexDirection="column" width="100%">
-                                <Button
-                                    color="#515F7C"
-                                    mb={2}
-                                    justifyContent={"left"}
-                                    colorScheme="white"
-                                    onClick={() => navigate("/auth/login")}
-                                    _hover={{ bg: "#E4EBF8" }}
-                                    borderRadius={"30px"}
-                                    width="100%" 
-                                >
-                                    <BiLogIn ml={1} />
-                                    <Text ml={2}>Login</Text>
-                                </Button>
-    
-                                <Button
-                                    color="#515F7C"
-                                    mb={2}
-                                    justifyContent={"left"}
-                                    colorScheme="white"
-                                    onClick={() => navigate("/auth/createAccount")}
-                                    _hover={{ bg: "#E4EBF8" }}
-                                    borderRadius={"30px"}
-                                    width="100%" 
-                                >
-                                    <LuNotebookPen ml={1} />
-                                    <Text ml={2}>Sign Up</Text>
-                                </Button>
+                                <DrawerActionTrigger asChild>
+                                    <Button
+                                        color="#515F7C"
+                                        mb={2}
+                                        justifyContent={"left"}
+                                        colorScheme="white"
+                                        onClick={() => navigate("/auth/login")}
+                                        _hover={{ bg: "#E4EBF8" }}
+                                        borderRadius={"30px"}
+                                        width="100%"
+                                    >
+                                        <BiLogIn ml={1} />
+                                        <Text ml={2}>Login</Text>
+                                    </Button>
+                                </DrawerActionTrigger>
+
+                                <DrawerActionTrigger asChild>
+                                    <Button
+                                        color="#515F7C"
+                                        mb={2}
+                                        justifyContent={"left"}
+                                        colorScheme="white"
+                                        onClick={() => navigate("/auth/createAccount")}
+                                        _hover={{ bg: "#E4EBF8" }}
+                                        borderRadius={"30px"}
+                                        width="100%"
+                                    >
+                                        <LuNotebookPen ml={1} />
+                                        <Text ml={2}>Sign Up</Text>
+                                    </Button>
+                                </DrawerActionTrigger>
                             </Box>
                             <Box textAlign="center">
                                 <Text color={"#515F7C"}>©2025 Recyclify</Text>
@@ -125,7 +130,7 @@ function Navbar({ onLogout }) {
             </DrawerRoot>
         );
     }
-    
+
 
     // Student Sidebar
     function StudentsSidebar() {
@@ -141,47 +146,63 @@ function Navbar({ onLogout }) {
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <FcStatistics ml={1}/>
-                                <Text ml={2}>Dashboard</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <FcStatistics ml={1} />
+                                    <Text ml={2}>Dashboard</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <BiMedal/>
-                                <Text ml={2}>Milestones</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <BiMedal />
+                                    <Text ml={2}>Milestones</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Box>
-                                    <MdOutlineLeaderboard fontSize={"20px"}/>
-                                </Box>
-                                <Text ml={2}>Leaderboards</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Box>
+                                        <MdOutlineLeaderboard fontSize={"20px"} />
+                                    </Box>
+                                    <Text ml={2}>Leaderboards</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/redemption")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <BiLeaf ml={1} />
-                                <Text ml={2}>Redeem my leafs</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/redemption")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <BiLeaf ml={1} />
+                                    <Text ml={2}>Redeem my leafs</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myRewards")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={BsGift} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>My Rewards</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myRewards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Text as={BsGift} fontSize="20px" color="#515F7C" />
+                                    <Text ml={2}>My Rewards</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scanItem")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <IoSparklesOutline ml={4}/>
-                                <Text ml={2}>Scan my item</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scanItem")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <IoSparklesOutline ml={4} />
+                                    <Text ml={2}>Scan my item</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/inbox")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={BsMailbox} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>Inbox</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/inbox")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Text as={BsMailbox} fontSize="20px" color="#515F7C" />
+                                    <Text ml={2}>Inbox</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myClass")} _hover={{bg: "#E4EBF8"}} borderRadius={"30px"}>
-                                <Text as={BsPeople} fontSize="20px" color="#515F7C" />
-                                <Text ml={2}>My Class</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/myClass")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Text as={BsPeople} fontSize="20px" color="#515F7C" />
+                                    <Text ml={2}>My Class</Text>
+                                </Button>
+                            </DrawerActionTrigger>
                         </Box>
 
                         <Box textAlign="center" >
@@ -211,22 +232,28 @@ function Navbar({ onLogout }) {
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/redemption")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <MdOutlineRedeem ml={1} />
-                                <Text ml={2}>Student Redemption</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/redemption")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <MdOutlineRedeem ml={1} />
+                                    <Text ml={2}>Student Redemption</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/tasks")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <FaTasks ml={1} />
-                                <Text ml={3}>Task Verification</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/tasks")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <FaTasks ml={1} />
+                                    <Text ml={3}>Task Verification</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <Box ml={0.5}>
-                                    <MdOutlineLeaderboard fontSize={"20px"} />
-                                </Box>
-                                <Text ml={2.5}>Leaderboards</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Box ml={0.5}>
+                                        <MdOutlineLeaderboard fontSize={"20px"} />
+                                    </Box>
+                                    <Text ml={2.5}>Leaderboards</Text>
+                                </Button>
+                            </DrawerActionTrigger>
                         </Box>
 
                         <Box textAlign="center" >
@@ -256,28 +283,38 @@ function Navbar({ onLogout }) {
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/dashboard")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <MdOutlineLeaderboard fontSize={"20px"} />
-                                <Text ml={2}>Dashboard</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/dashboard")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <MdOutlineLeaderboard fontSize={"20px"} />
+                                    <Text ml={2}>Dashboard</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/userManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <CgUserList />
-                                <Text ml={3}>User Managament</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/userManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <CgUserList />
+                                    <Text ml={3}>User Managament</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/inventoryManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <FaTasks ml={1} />
-                                <Text ml={2.5}>Inventory Managament</Text>
-                            </Button>
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <CiSettings />
-                                <Text ml={2.5}>System Services</Text>
-                            </Button>
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/contactManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <TbMessageShare />
-                                <Text ml={2.5}>View Contact Messages</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/inventoryManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <FaTasks ml={1} />
+                                    <Text ml={2.5}>Inventory Managament</Text>
+                                </Button>
+                            </DrawerActionTrigger>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <CiSettings />
+                                    <Text ml={2.5}>System Services</Text>
+                                </Button>
+                            </DrawerActionTrigger>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/contactManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <TbMessageShare />
+                                    <Text ml={2.5}>View Contact Messages</Text>
+                                </Button>
+                            </DrawerActionTrigger>
                         </Box>
 
                         <Box textAlign="center" >
@@ -307,20 +344,26 @@ function Navbar({ onLogout }) {
                     </DrawerHeader>
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <BsNewspaper fontSize={"20px"} />
-                                <Text ml={2}>Events Bulletin</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <BsNewspaper fontSize={"20px"} />
+                                    <Text ml={2}>Events Bulletin</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents/emailNewsletter")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <BsMailbox />
-                                <Text ml={3}>Email Newsletter</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents/emailNewsletter")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <BsMailbox />
+                                    <Text ml={3}>Email Newsletter</Text>
+                                </Button>
+                            </DrawerActionTrigger>
 
-                            <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents/faq")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                <BsQuestionCircle ml={1} />
-                                <Text ml={2.5}>Frequently Asked Questions</Text>
-                            </Button>
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents/faq")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <BsQuestionCircle ml={1} />
+                                    <Text ml={2.5}>Frequently Asked Questions</Text>
+                                </Button>
+                            </DrawerActionTrigger>
                         </Box>
 
                         <Box textAlign="center" >

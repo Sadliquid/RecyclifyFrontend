@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { MdOutlineMoreVert, MdEdit, MdDelete } from 'react-icons/md';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/uuid-clipboard"
+import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/join-code-clipboard"
 
 
 function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
@@ -14,7 +14,10 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
         classDescription: classItem.classDescription
     });
 
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({
+        className: '',
+        classDescription: '',
+    });
     const [open, setOpen] = useState(false);
     const [randomImage, setRandomImage] = useState("");
 
@@ -24,38 +27,52 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
         setRandomImage(images[randomIndex]);
     }, []);
 
-    // Validate class name function to check if only contains integer with only 8 digits
-    const validateClassName = (value) => {
-        const isValid = /^\d*$/.test(value);
-        if (!isValid) {
-            setError(' Class name must contain only numbers.');
-        }  else if (value.length > 8) {
-            setError(" Class name cannot be more than 8 characters.");
-        } else {
-            setError('');
+    const validateField = (field, value) => {
+        let error = "";
+        if (field === "className") {
+            if (!value) {
+                error = "* Class name is required.";
+            } else if (!/^\d+$/.test(value)) {
+                error = "* Class name must contain only numbers.";
+            } else if (value.length > 8) {
+                error = "* Class name cannot be more than 8 characters.";
+            }
+        } else if (field === "classDescription") {
+            if (!value) {
+                error = "* Class description is required.";
+            } else if (value.length > 60) {
+                error = "* Class description cannot be more than 60 characters.";
+            }
         }
-        return isValid;
+        return error;
     };
 
     const handleChange = (field, value) => {
-        if (field === 'className') {
-            validateClassName(value);
+        if (field === "className") {
+            validateField("className", value);
         }
+
         setEditedClass((prev) => ({
             ...prev,
             [field]: value,
         }));
+
+        const error = validateField(field, value);
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: error,
+        }));
     };
 
     const handleSaveEdit = () => {
-        if (error) return; 
+        if (errors.className || errors.classDescription) return; 
         onEdit(editedClass);
         setOpen(false);
     };
 
     const resetEditedClass = () => {
         setEditedClass({ ...classItem });
-        setError('');
+        setErrors('');
         setOpen(false);
     };
 
@@ -141,7 +158,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                         }}
                     >
                         <Box align="center" justifyContent="center" display="flex" gap={4} >
-                            <ClipboardRoot value={classItem.classID} >
+                            <ClipboardRoot value={classItem.joinCode} >
                                 <ClipboardButton />
                             </ClipboardRoot>
                         </Box>
@@ -165,7 +182,11 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                                     onChange={(e) => handleChange("className", e.target.value)}
                                                 />
                                                 <Field.Label css={floatingStyles}>Class Name</Field.Label>
-                                                {error && <Text color="red.500" mt={2}>{`*${error}`}</Text>}
+                                                {errors.className && (
+                                                    <Box color="red.500" mt={1}>
+                                                        {errors.className}
+                                                    </Box>
+                                                )}
                                             </Box>
                                         </Field.Root>
                                         <Field.Root>
@@ -176,15 +197,20 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                                     onChange={(e) => handleChange("classDescription", e.target.value)}
                                                 />
                                                 <Field.Label css={floatingStyles}>Class Description</Field.Label>
+                                                {errors.classDescription && (
+                                                    <Box color="red.500" mt={1}>
+                                                        {errors.classDescription}
+                                                    </Box>
+                                                )}
                                             </Box>
                                         </Field.Root>
                                         <Field.Root >
                                             <Flex direction="row" align="center" gap={4}>
                                                 <Box pos="relative" w="50%">
-                                                    <Input className="class-uuid" value={classItem.classID} disabled />
-                                                    <Field.Label css={floatingStyles}>Class UUID</Field.Label>
+                                                    <Input className="class-join-code" value={classItem.joinCode} disabled />
+                                                    <Field.Label css={floatingStyles}>Class Join Code</Field.Label>
                                                 </Box>
-                                                <ClipboardRoot value={classItem.classID}>
+                                                <ClipboardRoot value={classItem.joinCode}>
                                                     <ClipboardIconButton />
                                                 </ClipboardRoot>
                                             </Flex>
@@ -196,7 +222,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
                                     </DialogActionTrigger>
-                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={!!error || !editedClass.className || !editedClass.classDescription}>
+                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={errors.className || errors.classDescription || !editedClass.className || !editedClass.classDescription}>
                                         Save
                                     </Button>
                                 </DialogFooter>
