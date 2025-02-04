@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import './App.css'
 import { Outlet } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, setLoading } from './slices/AuthState';
 import { Toaster, toaster } from "@/components/ui/toaster"
@@ -14,6 +14,7 @@ function App() {
 	const dispatch = useDispatch();
     const location = useLocation();
     const { loaded, user, error, authToken } = useSelector(state => state.auth)
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
@@ -26,7 +27,7 @@ function App() {
     useEffect(() => {
         if (!error) {
             if (loaded) {
-                if (!user && ((location.pathname !== "/auth/login") && (location.pathname !== "/auth/createAccount") && (location.pathname !== "/"))) {
+                if (!user && !isLoggingOut && ((location.pathname !== "/auth/login") && (location.pathname !== "/auth/createAccount") && (location.pathname !== "/"))) {
                     navigate("/auth/login");
                     ShowToast("error", "Please log in first");
                 } else {
@@ -59,9 +60,16 @@ function App() {
         }
     }, [error])
 
+    const handleLogout = () => {
+        navigate("/auth/login")
+        setIsLoggingOut(true);
+        ShowToast("success", "Logged out successfully");
+    };
+
+
 	return (
 		<div className='defaultLayout'>
-			<Navbar />
+			<Navbar onLogout={handleLogout} />
 			<Outlet />
             <Toaster />
 		</div>

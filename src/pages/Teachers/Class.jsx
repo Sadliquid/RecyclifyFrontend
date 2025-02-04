@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Show, Text } from '@chakra-ui/react';
 import { IoArrowBack } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import ClassTabs from '../../components/teachers/ClassTabs';
 import server from "../../../networking"
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ShowToast from '../../Extensions/ShowToast';
 
 function Class() {
     const { id } = useParams();
@@ -23,6 +24,13 @@ function Class() {
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error fetching class", error.response.data.message.split("UERROR: "));
+                setClassData({});
+            } else {
+                ShowToast("error", "Error fetching class", "Please try again.");
+                setClassData({});
+            }
             setClassData({});
         }
     };
@@ -36,6 +44,13 @@ function Class() {
             }
         } catch (error) {
             console.error("Error fetching students:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error fetching students", error.response.data.message.split("UERROR: "));
+                setStudents([]);
+            } else {
+                ShowToast("error", "Error fetching students", "Please try again.");
+                setStudents([]);
+            }
             setStudents([]);
         }
     };

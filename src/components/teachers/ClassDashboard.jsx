@@ -10,6 +10,7 @@ import server from "../../../networking";
 import { PiCloverFill } from "react-icons/pi";
 import { LuBox } from 'react-icons/lu';
 import ClassLineChart from './ClassLineGraph';
+import ShowToast from '../../Extensions/ShowToast';
 
 function ClassDashboard({ classData, students }) {
     const studentsList = students || [];
@@ -32,6 +33,13 @@ function ClassDashboard({ classData, students }) {
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error fetching classes", error.response.data.message.split("UERROR: "));
+                setSchoolClassesData([]);
+            } else {
+                ShowToast("error", "Error fetching classes", "Please try again.");
+                setSchoolClassesData([]);
+            }
             setSchoolClassesData([]);
         }
     }
@@ -44,6 +52,13 @@ function ClassDashboard({ classData, students }) {
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error fetching classes", error.response.data.message.split("UERROR: "));
+                setClassPoints([]);
+            } else {
+                ShowToast("error", "Error fetching classes", "Please try again.");
+                setClassPoints([]);
+            }
             setClassPoints([]);
         }
     }
