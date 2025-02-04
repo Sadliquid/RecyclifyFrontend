@@ -220,14 +220,14 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                                 <Box display="flex" gap="10px">
                                     <Button variant="outline">Cancel</Button>
                                     {submissionReady ? (
-                                        <Button backgroundColor={"black"} onClick={handleSubmitTask}>
-                                            Save
+                                        <Button backgroundColor={"#3DAF8B"} onClick={handleSubmitTask}>
+                                            Submit
                                         </Button>
                                     ) : (
                                         <HoverCardRoot size="sm">
                                             <HoverCardTrigger asChild>
-                                            <Button backgroundColor={"black"} onClick={handleSubmitTask} disabled>
-                                                Save
+                                            <Button backgroundColor={"#3DAF8B"} onClick={handleSubmitTask} disabled>
+                                                Submit
                                             </Button>
                                             </HoverCardTrigger>
                                             <HoverCardContent>
