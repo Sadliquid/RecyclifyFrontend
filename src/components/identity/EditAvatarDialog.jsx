@@ -12,8 +12,8 @@ import ShowToast from "../../Extensions/ShowToast";
 function EditAvatarDialog({ userDetails, isOpen, onClose }) {
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [isSaveLoading, setIsSaveLoading] = useState(false);  // Separate loading state for Save button
-    const [isRemoveLoading, setIsRemoveLoading] = useState(false);  // Separate loading state for Remove button
+    const [isSaveLoading, setIsSaveLoading] = useState(false);  
+    const [isRemoveLoading, setIsRemoveLoading] = useState(false); 
 
     useEffect(() => {
         const fetchAvatar = async () => {
@@ -157,6 +157,7 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
                         loadingText="Removing..." 
                         left={6}
                         position={"absolute"}
+                        disabled={!userDetails.avatar}
                     >
                         Remove
                     </Button>
