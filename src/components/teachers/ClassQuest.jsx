@@ -5,6 +5,7 @@ import { FiRefreshCw } from 'react-icons/fi';
 import { PiCloverFill } from "react-icons/pi";
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { toaster } from "@/components/ui/toaster";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 
@@ -36,6 +37,50 @@ function ClassQuest({ classData }) {
         }
     }
 
+    const handleRefreshQuests = async (classID, teacherID) => {
+        const formData = new FormData();
+        formData.append("classID", classID);
+        formData.append("teacherID", teacherID);
+    
+        const promise = new Promise((resolve, reject) => {
+            server.post(`/api/Teacher/regenerate-class-quests`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                transformRequest: (formData) => formData,
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setClassQuests(response.data.data);
+                    resolve();
+                } else {
+                    reject(`Unexpected response status: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                    if (error.response.data.error.startsWith("UERROR")) {
+                        reject(error.response.data.error.substring("UERROR: ".length));
+                    } else {
+                        reject("Unknown system error");
+                    }
+                }
+            });
+        });
+    
+        toaster.promise(promise, {
+            loading: { title: "Our AI Model is generating...", description: "Please wait" },
+            success: {
+                title: "Success",
+                description: "Quests re-generated successfully!",
+            },
+            error: (err) => ({
+                title: "",
+                description: `${err}`,
+            }),
+        });
+    };    
+
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "teacher") {
             if (classData !== null && classData !== undefined) {
@@ -46,7 +91,7 @@ function ClassQuest({ classData }) {
         }
     }, [loaded, classData]);
 
-    if (classQuests != null && classQuests != undefined) return (
+    if (classQuests != null && classQuests != undefined && classData != null && classData != undefined) return (
         <Tabs.Content value='Class Quests'>
             <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="lg">
                 <Box w="100%" maxW="600px" h="100%" p={6} bg="white" borderRadius="xl" boxShadow="2xl" mx="auto">
@@ -120,10 +165,10 @@ function ClassQuest({ classData }) {
                         ))}
 
                         {/* Refresh Button */}
-                        <Button color="black" bg="#9F9FF8" borderRadius="xl" boxShadow="md" _hover={{ bg: '#6A6AFF' }}>
+                        <Button color="black" bg="#9F9FF8" borderRadius="xl" boxShadow="md" _hover={{ bg: '#6A6AFF' }} onClick={() => handleRefreshQuests(classData.classID, user.id)}>
                             <Stack direction="row" align="center" justify="center">
                                 <FiRefreshCw />
-                                <Text>Refresh Quests</Text>
+                                <Text>Re-generate Quests</Text>
                             </Stack>
                         </Button>
                     </Stack>
