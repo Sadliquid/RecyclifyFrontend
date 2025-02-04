@@ -199,7 +199,7 @@ function StudentDashboard({ classData, students }) {
         if (selectedRecipients.length === 0) return;
     
         // Define the promise
-        const emailPromise = new Promise((resolve, reject) => {
+        const emailPromise = new Promise(async (resolve, reject) => {
             try {
                 const queryParams = new URLSearchParams({
                     recipients: selectedRecipients.join(","),
@@ -209,18 +209,18 @@ function StudentDashboard({ classData, students }) {
                     parentID: student.parentID ? student.parentID : "",
                     parentEmail: student.parent ? student.parent.parentEmail : "",
                 }).toString();
-    
-                const response = server.post(`/api/Teacher/send-update-email?${queryParams}`);
-    
+
+                const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
+
                 if (response.status === 200) {
                     console.log("Email sent successfully.");
-                    setSelectedRecipients([]); 
+                    setSelectedRecipients([]);
                     resolve();
                 }
             } catch (error) {
                 console.error("Error sending email:", error.message);
                 setSelectedRecipients([]);
-    
+
                 if (error.response?.status === 400) {
                     reject(error.response.data.message.split("UERROR: ")[1] || "An error occurred.");
                 } else {
