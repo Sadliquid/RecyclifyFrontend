@@ -5,7 +5,6 @@ import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
 
 // Register Chart.js components with Filler plugin
@@ -132,10 +131,14 @@ function StudentCharts({ studentID }) {
                     }
                 })
                 .catch(error => {
-                    if (error.response?.data?.error) {
-                        const errorMessage = error.response.data.error.replace(/^(U?ERROR:?\s*)/i, '');
-                        ShowToast("error", errorMessage);
-                        reject(errorMessage);
+                    if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                        if (error.response.data.error.startsWith("UERROR")) {
+                            reject(error.response.data.error.substring("UERROR: ".length));
+                        } else {
+                            reject(error.response.data.error.substring("ERROR: ".length));
+                        }
+                    } else {
+                        reject("An unexpected error occurred");
                     }
                 });
             });
