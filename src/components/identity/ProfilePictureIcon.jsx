@@ -3,42 +3,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../../slices/AuthState";
-import { Avatar } from "@/components/ui/avatar";
-<<<<<<< Updated upstream
-import { Button } from "@chakra-ui/react";
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu"
-=======
-<<<<<<< HEAD
 import { Button, Box, Menu, Image } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu";
 import server from "../../../networking";
-=======
-import { Button } from "@chakra-ui/react";
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu"
->>>>>>> 8fb4c971fdeb00c161cbc400425e27ae0458174b
->>>>>>> Stashed changes
 
 const ProfilePictureIcon = ({ onLogout }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user, loaded, error } = useSelector((state) => state.auth);
     const [avatarUrl, setAvatarUrl] = useState(null);
+    const [renderReady, setRenderReady] = useState(false)
 
     useEffect(() => {
         const fetchAvatar = async () => {
+            console.log("fetching")
             try {
                 if (user?.avatar) {
                     const response = await server.get(`/api/Identity/getAvatar?userId=${user.id}`);
                     if (response.data.avatarUrl) {
                         setAvatarUrl(response.data.avatarUrl);
+                        setRenderReady(true)
                     }
                 } else {
                     setAvatarUrl(null);
+                    setRenderReady(true)
                 }
             } catch (error) {
                 console.error("Error fetching avatar:", error);
                 setAvatarUrl(null);
+                setRenderReady(true)
             }
         };
         if (user) fetchAvatar();
@@ -56,11 +50,8 @@ const ProfilePictureIcon = ({ onLogout }) => {
         onLogout();
     };
 
-    if (!loaded || !user || !user.avatar) {
+    if (!loaded || !user) {
         return (
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
             <Box 
                 display="flex"
                 alignItems="center"
@@ -74,25 +65,41 @@ const ProfilePictureIcon = ({ onLogout }) => {
                     _hover={{ cursor: "pointer" }}
                 />
             </Box>
-=======
->>>>>>> Stashed changes
-            <Button variant="unstyled" onClick={() => navigate("/auth/login")} backgroundColor={"transparent"}>
-                <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
-            </Button>
         );
-    } else {
+    }
+
+    if (renderReady == true) {
         return (
             <MenuRoot>
-                <MenuTrigger asChild>
-                    <Button
-                        variant="unstyled"
-                        aria-label="Profile options"
-                        onClick={handleProfilePictureClick}
-                        backgroundColor={"transparent"}
-                    >
-                        <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
-                    </Button>
-                </MenuTrigger>
+                {!avatarUrl ? (
+                    <MenuTrigger asChild>
+                        <Box display="flex" alignItems="center" justifyContent="center">
+                            <Box 
+                                as={CgProfile} 
+                                boxSize="50px" 
+                                p={2} 
+                            />
+                        </Box>
+                    </MenuTrigger>
+                ) : (
+                    <MenuTrigger asChild>
+                        <Button
+                            variant="unstyled"
+                            aria-label="Profile options"
+                            backgroundColor="transparent"
+                            zIndex={9999}
+                        >
+                            <Box display="flex" alignItems="center" justifyContent="center">
+                                <Image
+                                    src={avatarUrl}
+                                    boxSize="35px"
+                                    borderRadius="full"
+                                    alt="User Avatar"
+                                />
+                            </Box>
+                        </Button>
+                    </MenuTrigger>
+                )}
                 <MenuContent>
                     <MenuItem value="view-profile" onClick={handleViewProfile}>
                         View Profile
@@ -102,46 +109,8 @@ const ProfilePictureIcon = ({ onLogout }) => {
                     </MenuItem>
                 </MenuContent>
             </MenuRoot>
->>>>>>> 8fb4c971fdeb00c161cbc400425e27ae0458174b
         );
     }
-
-    return (
-        <MenuRoot>
-            <MenuTrigger asChild>
-                <Button
-                    variant="unstyled"
-                    aria-label="Profile options"
-                    backgroundColor="transparent"
-                >
-                    <Box display="flex" alignItems="center" justifyContent="center">
-                        {avatarUrl ? (
-                            <Image
-                                src={avatarUrl}
-                                boxSize="35px"
-                                borderRadius="full"
-                                alt="User Avatar"
-                            />
-                        ) : (
-                            <Box 
-                                as={CgProfile} 
-                                boxSize="10px" 
-                                p={2} 
-                            />
-                        )}
-                    </Box>
-                </Button>
-            </MenuTrigger>
-            <MenuContent>
-                <MenuItem value="view-profile" onClick={handleViewProfile}>
-                    View Profile
-                </MenuItem>
-                <MenuItem value="logout" onClick={handleLogout}>
-                    Logout
-                </MenuItem>
-            </MenuContent>
-        </MenuRoot>
-    );
 };
 
 export default ProfilePictureIcon;
