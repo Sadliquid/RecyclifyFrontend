@@ -1,5 +1,5 @@
-import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Box, Heading, Text, Image, Button, Tabs } from '@chakra-ui/react';
+// import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Box, Heading, Text, Image, Tabs } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from "framer-motion";
@@ -122,7 +122,7 @@ function MyRewards() {
                                             <Image
                                                 objectFit="cover"
                                                 maxW="200px"
-                                                src={"https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
+                                                src={reward.imageUrl}
                                                 alt={reward.rewardTitle}
                                             />
                                             <Box flex={1} p={4}>
@@ -140,8 +140,8 @@ function MyRewards() {
                                                 >
                                                     {reward.rewardDescription}
                                                 </Text>
-                                                <Text fontWeight="bold" mb={4}>Required leafs: {reward.requiredPoints}</Text>
-                                                <DialogRoot placement="center" motionPreset="slide-in-bottom">
+                                                {/* <Text fontWeight="bold" mb={4}>Required leafs: {reward.requiredPoints}</Text> */}
+                                                {/* <DialogRoot placement="center" motionPreset="slide-in-bottom">
                                                     <DialogTrigger asChild>
                                                         <Button color="white" variant="outline" backgroundColor="#4DCBA4" _hover={{ bg: "#41B594" }}>
                                                             Redeem
@@ -166,7 +166,7 @@ function MyRewards() {
                                                         </DialogFooter>
                                                         <DialogCloseTrigger />
                                                     </DialogContent>
-                                                </DialogRoot>
+                                                </DialogRoot> */}
                                             </Box>
                                         </Box>
                                     </motion.div>
@@ -228,7 +228,7 @@ function MyRewards() {
                                             <Image
                                                 objectFit="cover"
                                                 maxW="200px"
-                                                src={"https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"}
+                                                src={reward.imageUrl}
                                                 alt={reward.rewardTitle}
                                             />
                                             <Box flex={1} p={4}>

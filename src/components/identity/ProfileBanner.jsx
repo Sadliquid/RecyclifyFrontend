@@ -51,8 +51,6 @@ function ProfileBanner({ userDetails }) {
         fetchBanner();
     }, [userDetails.id, userDetails.banner]); // Fetch banner on userDetails change
 
-    console.log(bannerUrl)
-
     return (
         <HStack
             mx={"auto"}

@@ -1,55 +1,106 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { logout } from "../../slices/AuthState";
-import { Avatar } from "@/components/ui/avatar";
-import { Button, Box, Menu } from "@chakra-ui/react";
-import { MenuContent, MenuItem, MenuItemCommand, MenuRoot, MenuTrigger,
-} from "@/components/ui/menu"
-import ShowToast from '../../Extensions/ShowToast';
+import { Button, Box, Image } from "@chakra-ui/react";
+import { CgProfile } from "react-icons/cg";
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu";
+import server from "../../../networking";
 
 const ProfilePictureIcon = ({ onLogout }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user, loaded, error } = useSelector((state) => state.auth);
+    const [avatarUrl, setAvatarUrl] = useState(null);
+    const [renderReady, setRenderReady] = useState(false)
 
+    useEffect(() => {
+        const fetchAvatar = async () => {
+            console.log("fetching")
+            try {
+                if (user?.avatar) {
+                    const response = await server.get(`/api/Identity/getAvatar?userId=${user.id}`);
+                    if (response.data.avatarUrl) {
+                        setAvatarUrl(response.data.avatarUrl);
+                        setRenderReady(true)
+                    }
+                } else {
+                    setAvatarUrl(null);
+                    setRenderReady(true)
+                }
+            } catch (error) {
+                console.error("Error fetching avatar:", error);
+                setAvatarUrl(null);
+                setRenderReady(true)
+            }
+        };
+        if (user) fetchAvatar();
+    }, [user?.id, user?.avatar]);
+    
     const handleViewProfile = () => {
         if (!error && loaded && user) {
             navigate("/identity/myAccount");
         }
     };
-    
-    async function handleProfilePictureClick() {
-        if (error || !loaded || !user) {
-            navigate("/auth/login");
-        }
-    }
 
     const handleLogout = () => {
         dispatch(logout());
-        localStorage.removeItem('jwt');
+        localStorage.removeItem("jwt");
         onLogout();
     };
 
-
     if (!loaded || !user) {
         return (
-            <Button variant="unstyled" onClick={() => navigate("/auth/login")}>
-                <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
-            </Button>
+            <Box 
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+            >
+                {/* Added boxSize and padding for better control */}
+                <Box 
+                    as={CgProfile} 
+                    boxSize="35px" 
+                    onClick={() => navigate("/auth/login")}
+                    _hover={{ cursor: "pointer" }}
+                />
+            </Box>
         );
-    } else {
+    }
+
+    if (renderReady == true) {
         return (
             <MenuRoot>
-                <MenuTrigger asChild>
-                    <Button
-                        variant="unstyled"
-                        aria-label="Profile options"
-                        onClick={handleProfilePictureClick}
-                        backgroundColor={"transparent"}
-                    >
-                        <Avatar name={"Joshua"} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
-                    </Button>
-                </MenuTrigger>
+                {!avatarUrl ? (
+                    <MenuTrigger asChild>
+                        <Box display="flex" alignItems="center" justifyContent="center">
+                            <Box 
+                                as={CgProfile} 
+                                boxSize="50px" 
+                                p={2} 
+                            />
+                        </Box>
+                    </MenuTrigger>
+                ) : (
+                    <MenuTrigger asChild>
+                        <Button
+                            variant="unstyled"
+                            aria-label="Profile options"
+                            backgroundColor="transparent"
+                            zIndex={9999}
+                        >
+                            <Box display="flex" alignItems="center" justifyContent="center">
+                                <Image
+                                    src={avatarUrl}
+                                    boxSize="35px"
+                                    borderRadius="full"
+                                    alt="User Avatar"
+                                />
+                            </Box>
+                        </Button>
+                    </MenuTrigger>
+                )}
                 <MenuContent>
                     <MenuItem value="view-profile" onClick={handleViewProfile}>
                         View Profile
