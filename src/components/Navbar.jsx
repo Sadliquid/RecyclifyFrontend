@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTrigger } from "@/components/ui/drawer"
 import { Flex, Heading, Button, Image, Text, Box, VStack, DrawerActionTrigger } from "@chakra-ui/react";
-import { Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { BsGift, BsMailbox, BsNewspaper, BsPeople, BsQuestionCircle } from "react-icons/bs";
@@ -9,7 +9,7 @@ import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
 import { FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
-import { BiLeaf, BiLogIn, BiMedal } from "react-icons/bi";
+import { BiLeaf, BiLogIn } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
@@ -17,7 +17,6 @@ import { TbMessageShare } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import ProfilePictureIcon from "./identity/ProfilePictureIcon";
 
 function Navbar({ onLogout }) {
@@ -150,13 +149,6 @@ function Navbar({ onLogout }) {
                                 <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/home")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <FcStatistics ml={1} />
                                     <Text ml={2}>Dashboard</Text>
-                                </Button>
-                            </DrawerActionTrigger>
-
-                            <DrawerActionTrigger asChild>
-                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/milestones")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                    <BiMedal />
-                                    <Text ml={2}>Milestones</Text>
                                 </Button>
                             </DrawerActionTrigger>
 

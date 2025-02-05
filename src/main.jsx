@@ -11,7 +11,6 @@ import Homepage from './pages/main/Homepage'
 import ClassEnrolment from './pages/Students/ClassEnrolment'
 import ClaimReward from './pages/Students/ClaimReward';
 import Leaderboards from './pages/Students/Leaderboards'
-import Milestones from './pages/Students/Milestones'
 import MyRewards from './pages/Students/MyRewards';
 import StudentInbox from './pages/Students/StudentInbox'
 import Redemption from './pages/Students/Redemption'
@@ -69,7 +68,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"joinClass"} element={<ClassEnrolment />} />
                             <Route path={"claimReward"} element={<ClaimReward />} />
                             <Route path={"leaderboards"} element={<Leaderboards />} />
-                            <Route path={"milestones"} element={<Milestones />} />
                             <Route path={"myClass"} element={<MyClass />} />
                             <Route path={"redemption"} element={<Redemption />} />
                             <Route path={"scanItem"} element={<ImageRecognition />} />
