@@ -34,6 +34,7 @@ function AccountDetails({ userDetails, setUserDetails }) {
     const handleSave = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{8}$/;
+        const nameRegex = /^[A-Za-z\s]+$/;
     
         if (!emailRegex.test(editedDetails.email)) {
             ShowToast("error", "Invalid Email", "Please enter a valid email address.");
@@ -44,6 +45,16 @@ function AccountDetails({ userDetails, setUserDetails }) {
             ShowToast("error", "Invalid Phone Number", "Phone number must be exactly 8 digits.");
             return;
         }
+
+        if (!nameRegex.test(editedDetails.fName)) {
+            ShowToast("error", "Invalid First Name", "First name can only contain letters and spaces.");
+            return;
+        }
+    
+        if (!nameRegex.test(editedDetails.lName)) {
+            ShowToast("error", "Invalid Last Name", "Last name can only contain letters and spaces.");
+            return;
+        }    
     
         const detailsToUpdate = { ...editedDetails };
     
