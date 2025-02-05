@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../../slices/AuthState";
-import { Button, Box, Menu, Image } from "@chakra-ui/react";
+import { Button, Box, Image } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu";
 import server from "../../../networking";
