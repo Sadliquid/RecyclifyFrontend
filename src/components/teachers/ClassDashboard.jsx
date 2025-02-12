@@ -16,6 +16,7 @@ function ClassDashboard({ classData, students }) {
     const studentsList = students || [];
     const [schoolClassesData, setSchoolClassesData] = useState([]);
     const [classPoints, setClassPoints] = useState([]);
+    const [lastWeekPoints, setLastWeekPoints] = useState(0);
 
     // Sort the students by totalPoints in descending order and get the top 3
     const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
@@ -49,17 +50,24 @@ function ClassDashboard({ classData, students }) {
             const response = await server.get(`/api/Teacher/get-class-points/?classId=${classData.classID}`);
             if (response.status === 200) {
                 setClassPoints(response.data.data);
+                
+                // Calculate the total points for the last week for the class
+                const lastWeekTotal = classPoints.reduce((acc, curr) => acc + curr.points, 0);
+                setLastWeekPoints(lastWeekTotal);
             }
         } catch (error) {
             console.error("Error fetching classes:", error);
             if (error.response.status === 400) {
                 ShowToast("error", "Error fetching classes", error.response.data.message.split("UERROR: "));
+                setLastWeekPoints(0);
                 setClassPoints([]);
             } else {
                 ShowToast("error", "Error fetching classes", "Please try again.");
+                setLastWeekPoints(0);
                 setClassPoints([]);
             }
             setClassPoints([]);
+            setLastWeekPoints(0);
         }
     }
 
@@ -177,7 +185,7 @@ function ClassDashboard({ classData, students }) {
                                         <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2} >
                                             <Box w="100%" h="20%" fontWeight="bold" fontSize="sm" mt={2}>Total Class Clovers</Box>
                                             <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="left" gap={2}>
-                                                <Box w="35%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
+                                                <Box h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
                                                     {classData.classPoints}
                                                 </Box>
                                                 <Text as={PiCloverFill} boxSize={25} color="#2CD776"></Text>
@@ -190,8 +198,8 @@ function ClassDashboard({ classData, students }) {
                                         <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2} >
                                             <Box w="100%" h="20%" fontWeight="bold" fontSize="sm" mt={2}>Weekly Class Clovers</Box>
                                             <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="left" gap={2}>
-                                                <Box w="35%" h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
-                                                    {classData.classPoints}
+                                                <Box  h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
+                                                    {lastWeekPoints}
                                                 </Box>
                                                 <Text as={PiCloverFill} boxSize={25} color="#2CD776"></Text>
                                             </Flex>
