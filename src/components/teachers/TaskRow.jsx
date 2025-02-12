@@ -1,4 +1,5 @@
 import { Box, Text, Badge } from "@chakra-ui/react";
+import { Avatar } from "@/components/ui/avatar";
 
 const TaskRow = ({ task }) => {
     if (!task) return null; // Prevent errors if task is undefined
@@ -24,6 +25,11 @@ const TaskRow = ({ task }) => {
                     borderRadius="full"
                 />
             )}
+
+            {/* Student Avatar */}
+            <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
+                <Avatar name={task.student.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+            </Box>
 
             {/* Task details */}
             <Text fontWeight="bold">
