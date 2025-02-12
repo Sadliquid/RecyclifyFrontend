@@ -296,11 +296,8 @@ const UserManagement = () => {
                 <DialogFooter>
                   <Button
                     onClick={() => {
-                      const subject = subjectRef.current.value;
-                      const body = document.querySelector("textarea").value;
-                      handleSendReply(subject, body);
                     }}
-                  ></Button>
+                  >Add User</Button>
                 </DialogFooter>
               </DialogContent>
             </DialogRoot>
