@@ -73,13 +73,13 @@ function TaskVerification() {
                 </Flex>
 
                 <Tabs.Root defaultValue="All">
-                    <Tabs.List>
-                        <Tabs.Trigger value="All">All <Badge ml={2}>{tasks.all.length}</Badge></Tabs.Trigger>
-                        <Tabs.Trigger value="Unverified">Unverified <Badge ml={2}>{tasks.unverified.length}</Badge></Tabs.Trigger>
-                        <Tabs.Trigger value="Rejected">Rejected <Badge ml={2}>{tasks.rejected.length}</Badge></Tabs.Trigger>
-                        <Tabs.Trigger value="Verified">Verified <Badge ml={2}>{tasks.verified.length}</Badge></Tabs.Trigger>
-                    </Tabs.List>
-
+                    <Tabs.Trigger value="All">
+                        All {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
+                    </Tabs.Trigger>
+                    <Tabs.Trigger value="Unverified">
+                        Unverified {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
+                    </Tabs.Trigger>
+                    
                     <Tabs.Content value="All">
                         {tasks.all.map((task) => <TaskRow key={task.taskID} task={task} />)}
                     </Tabs.Content>

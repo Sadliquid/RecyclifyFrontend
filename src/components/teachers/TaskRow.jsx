@@ -1,9 +1,7 @@
 import { Box, Text, Badge } from "@chakra-ui/react";
 
-const TaskRow = ({ task, formatDate }) => {
-    console.log("TaskRow received task:", task);
+const TaskRow = ({ task }) => {
     if (!task) return null; // Prevent errors if task is undefined
-    if (!formatDate) formatDate = () => ""; // set format date to empty string if not provided
     return (
         <Box
             key={task.taskID}
@@ -31,7 +29,9 @@ const TaskRow = ({ task, formatDate }) => {
             <Text fontWeight="bold">
                 {task.student?.name} from Class {task.class?.className} has uploaded {task.imageUrls?.split(",").length || 0} images for verification.
             </Text>
-            <Text fontSize="sm">{formatDate(task.dateAssigned)}</Text>
+            {task.dateAssigned && (
+                <Text fontSize="sm">{task.dateAssigned}</Text>
+            )}
 
             {/* Status Badges */}
             {task.taskVerified && <Badge colorScheme="blue">Verified</Badge>}
