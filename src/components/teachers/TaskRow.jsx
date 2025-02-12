@@ -158,7 +158,7 @@ const TaskRow = ({ task, fetchTasks }) => {
 
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>
+                        <DialogTitle color="black" fontWeight="bold" textAlign="left">
                             Task Verification
                         </DialogTitle>
                     </DialogHeader>
@@ -226,12 +226,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                         </Stack>
                     </DialogBody>
                     <DialogFooter display="flex" gap={10} justifyContent="center">
-                        <Button
-                            bg="#FF0000"
-                            color="white"
-                            disabled={rejectDescription.trim().length === 0}
-                            onClick={() => handleReject(rejectDescription.trim())}
-                        >
+                        <Button bg="#FF8080" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}  >
                             Reject
                         </Button>
                         <Button bg="#2D65FF" color="white" onClick={handleVerify}>
