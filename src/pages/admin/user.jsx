@@ -11,7 +11,6 @@ import {
   Spinner,
   Text,
   useDisclosure,
-  Textarea,
 } from "@chakra-ui/react";
 import { MdEdit, MdAdd } from "react-icons/md";
 import {
@@ -89,9 +88,30 @@ const UserManagement = () => {
     setEditingUser(user); // Set the user to be edited
   };
 
-  const handleAdd = () => {
+  const openAddUserDialog = () => {
     onOpen();
   };
+
+  const addTeacherAccount = async (formData) => {
+    try {
+      const response = await Server.post(
+        `/api/UserManagement/CreateTeacherAccount`,
+        formData,
+        {headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.status === 200) {
+        await fetchUsers();
+        setEditingUser(null);
+        onClose();
+        ShowToast("success", "Success", response.data.message);
+      }
+
+    } catch (error) {
+      ShowToast("error", "Error", error.response?.data?.error || error.message);
+    }
+  };
+
 
   // Handle save button click (update user)
   const handleSave = async () => {
@@ -99,7 +119,6 @@ const UserManagement = () => {
       const response = await Server.put(
         `/api/UserManagement/${editingUser.id}`,
         editingUser,
-        { headers: { Authorization: `Bearer ${authToken}` } }
       );
 
       if (response.status === 200) {
@@ -140,14 +159,14 @@ const UserManagement = () => {
                 <Button
                   leftIcon={<MdAdd />} // Add icon
                   colorScheme="teal"
-                  onClick={() => handleAdd()}
+                  onClick={() => openAddUserDialog()}
                 >
-                  Add User
+                  Add Teacher Account
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add User</DialogTitle>
+                  <DialogTitle>Add Teacher Account</DialogTitle>
                 </DialogHeader>
                 <DialogBody pb="4">
                   <Stack gap="4">
@@ -235,11 +254,18 @@ const UserManagement = () => {
                 <DialogFooter>
                   <Button
                     onClick={() => {
-                      const subject = subjectRef.current.value;
-                      const body = document.querySelector("textarea").value;
-                      handleSendReply(subject, body);
+                      const formData = {
+                        name: editingUser.name,
+                        fName: editingUser.fName,
+                        lName: editingUser.LName, // Ensure consistent casing
+                        email: editingUser.email,
+                        password: editingUser.password,
+                        contactNumber: editingUser.contactNumber,
+                        userRole: "teacher",
+                      };
+                      addTeacherAccount(formData);
                     }}
-                  ></Button>
+                  >Add Account</Button>
                 </DialogFooter>
               </DialogContent>
             </DialogRoot>
@@ -256,40 +282,94 @@ const UserManagement = () => {
                   mt={4}
                   leftIcon={<MdAdd />}
                   colorScheme="teal"
-                  onClick={() => console.log("Add User button clicked")}
+                  onClick={() => openAddUserDialog()}
                 >
-                  Add a New User
+                  Add a New Teacher Account
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle></DialogTitle>
+                  <DialogTitle>Add Teacher Account</DialogTitle>
                 </DialogHeader>
                 <DialogBody pb="4">
                   <Stack gap="4">
-                    <Field label="name">
+                    <Field label="Name">
                       <Input
-                        ref={subjectRef}
-                        placeholder="Enter email subject"
+                        value={editingUser?.name || ""}
+                        onChange={(e) =>
+                          setEditingUser({
+                            ...editingUser,
+                            name: e.target.value,
+                          })
+                        }
+                        placeholder="Enter full name"
                       />
                     </Field>
-                    <Field label="fName">
-                      <Textarea placeholder="Type your reply here" rows={5} />
+                    <Field label="First Name">
+                      <Input
+                        value={editingUser?.fName || ""}
+                        onChange={(e) =>
+                          setEditingUser({
+                            ...editingUser,
+                            fName: e.target.value,
+                          })
+                        }
+                        placeholder="Enter first name"
+                      />
                     </Field>
-                    <Field label="LName">
-                      <Textarea placeholder="Type your reply here" rows={5} />
+                    <Field label="Last Name">
+                      <Input
+                        value={editingUser?.LName || ""}
+                        onChange={(e) =>
+                          setEditingUser({
+                            ...editingUser,
+                            LName: e.target.value,
+                          })
+                        }
+                        placeholder="Enter last name"
+                      />
                     </Field>
-                    <Field label="email">
-                      <Textarea placeholder="Type your reply here" rows={5} />
+                    <Field label="Email">
+                      <Input
+                        type="email"
+                        value={editingUser?.email || ""}
+                        onChange={(e) =>
+                          setEditingUser({
+                            ...editingUser,
+                            email: e.target.value,
+                          })
+                        }
+                        placeholder="Enter email address"
+                      />
                     </Field>
-                    <Field label="password">
-                      <Textarea placeholder="Type your reply here" rows={5} />
+                    <Field label="Password">
+                      <Input
+                        type="password"
+                        value={editingUser?.password || ""}
+                        onChange={(e) =>
+                          setEditingUser({
+                            ...editingUser,
+                            password: e.target.value,
+                          })
+                        }
+                        placeholder="Enter password"
+                      />
                     </Field>
-                    <Field label="contactNumber">
-                      <Textarea placeholder="Type your reply here" rows={5} />
+                    <Field label="Contact Number">
+                      <Input
+                        type="tel"
+                        value={editingUser?.contactNumber || ""}
+                        onChange={(e) =>
+                          setEditingUser({
+                            ...editingUser,
+                            contactNumber: e.target.value,
+                          })
+                        }
+                        placeholder="Enter contact number"
+                      />
                     </Field>
-                    <Field label="userRole">
-                      <Textarea placeholder="Type your reply here" rows={5} />
+                    <Field label="User Role">
+                      <Text>teacher</Text>
                     </Field>
                   </Stack>
                 </DialogBody>
@@ -297,7 +377,7 @@ const UserManagement = () => {
                   <Button
                     onClick={() => {
                     }}
-                  >Add User</Button>
+                  >Add Teacher Account</Button>
                 </DialogFooter>
               </DialogContent>
             </DialogRoot>
