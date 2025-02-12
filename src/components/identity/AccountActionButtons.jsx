@@ -40,45 +40,47 @@ function AccountActionButtons({ userDetails }) {
             </VStack>
 
             {/* More Actions */}
-            <VStack align="start" spacing={4} mb={6}>
-                <Heading size="md" mb={2}>More Actions</Heading>
-                <HStack gap={8} w="100%">
-                    {userRole === "parent" && (
-                        <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
-                            Child's Account
-                        </Button>
-                    )}
-                    {userRole === "student" && (
-                        <>
+            {userRole !== "admin" && (
+                <VStack align="start" spacing={4} mb={6}>
+                    <Heading size="md" mb={2}>More Actions</Heading>
+                    <HStack gap={8} w="100%">
+                        {userRole === "parent" && (
                             <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
-                                Parent's Account
+                                Child's Account
                             </Button>
-                            <Button 
-                                borderRadius={30} variant="solid" background="#2D65FF" color="white"
-                                onClick={() => setShowRedemptionDialog(true)}
+                        )}
+                        {userRole === "student" && (
+                            <>
+                                <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                                    Parent's Account
+                                </Button>
+                                <Button 
+                                    borderRadius={30} variant="solid" background="#2D65FF" color="white"
+                                    onClick={() => setShowRedemptionDialog(true)}
+                                >
+                                    Redemption History
+                                </Button>
+                            </>
+                        )}
+                        {["parent", "student", "teacher"].includes(userRole) && (
+                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                                View Public Account
+                            </Button>
+                        )}
+                        {["parent", "student"].includes(userRole) && (
+                            <Button
+                                borderRadius={30}
+                                variant="solid"
+                                background="red"
+                                color="white"
+                                onClick={() => setShowDeleteDialog(true)}
                             >
-                                Redemption History
+                                Delete Account
                             </Button>
-                        </>
-                    )}
-                    {["parent", "student", "teacher"].includes(userRole) && (
-                        <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
-                            View Public Account
-                        </Button>
-                    )}
-                    {["parent", "student"].includes(userRole) && (
-                        <Button
-                            borderRadius={30}
-                            variant="solid"
-                            background="red"
-                            color="white"
-                            onClick={() => setShowDeleteDialog(true)}
-                        >
-                            Delete Account
-                        </Button>
-                    )}
-                </HStack>
-            </VStack>
+                        )}
+                    </HStack>
+                </VStack>
+            )}
 
             <DeleteAccountDialog isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} />
             <EditPasswordDialog isOpen={showEditPasswordDialog} onClose={() => setShowEditPasswordDialog(false)} />
