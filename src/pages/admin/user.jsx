@@ -26,6 +26,7 @@ import {
 import { Field } from "@/components/ui/field";
 import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
+import { set } from "react-hook-form";
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,6 +34,13 @@ const UserManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [editingUser, setEditingUser] = useState(null); // Track the user being edited
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const {
+    isOpen: isDeleteDialogOpen,
+    onOpen: onDeleteDialogOpen,
+    onClose: onDeleteDialogClose,
+  } = useDisclosure();
   const { user, loaded, error } = useSelector((state) => state.auth);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -88,8 +96,35 @@ const UserManagement = () => {
     setEditingUser(user); // Set the user to be edited
   };
 
-  const openAddUserDialog = () => {
+  const openAddTeacherAccount = () => {
     onOpen();
+  };
+
+  const handleDelete = async (userId) => {
+    setUserToDelete(userId);
+    onDeleteDialogOpen();
+  };
+
+  const confirmDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await Server.delete(
+        `/api/UserManagement/${userToDelete}`
+      );
+
+      if (response.status === 200) {
+        setUsers(users.filter((user) => user.id !== userToDelete));
+        ShowToast("success", "Success", response.data.message);
+      } else {
+        throw new Error(response.data.error || "Failed to delete user");
+      }
+    } catch (error) {
+      ShowToast("error", "Error", error.response?.data?.error || error.message);
+    } finally {
+      setIsDeleting(false);
+      onDeleteDialogClose();
+      setUserToDelete(null);
+    }
   };
 
   const addTeacherAccount = async (formData) => {
@@ -98,7 +133,7 @@ const UserManagement = () => {
       const response = await Server.post(
         `/api/UserManagement/CreateTeacherAccount`,
         formData,
-        {headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" } }
       );
 
       if (response.status === 200) {
@@ -107,22 +142,19 @@ const UserManagement = () => {
         onClose();
         ShowToast("success", "Success", response.data.message);
       }
-
     } catch (error) {
       ShowToast("error", "Error", error.response?.data?.error || error.message);
-    }
-    finally{
+    } finally {
       setIsLoading(false);
     }
   };
-
 
   // Handle save button click (update user)
   const handleSave = async () => {
     try {
       const response = await Server.put(
         `/api/UserManagement/${editingUser.id}`,
-        editingUser,
+        editingUser
       );
 
       if (response.status === 200) {
@@ -163,7 +195,7 @@ const UserManagement = () => {
                 <Button
                   leftIcon={<MdAdd />} // Add icon
                   colorScheme="teal"
-                  onClick={() => openAddUserDialog()}
+                  onClick={() => openAddTeacherAccount()}
                 >
                   Add Teacher Account
                 </Button>
@@ -269,7 +301,9 @@ const UserManagement = () => {
                       };
                       addTeacherAccount(formData);
                     }}
-                  >Add Account</Button>
+                  >
+                    Add Account
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </DialogRoot>
@@ -286,7 +320,7 @@ const UserManagement = () => {
                   mt={4}
                   leftIcon={<MdAdd />}
                   colorScheme="teal"
-                  onClick={() => openAddUserDialog()}
+                  onClick={() => openAddTeacherAccount()}
                 >
                   Add a New Teacher Account
                 </Button>
@@ -378,10 +412,7 @@ const UserManagement = () => {
                   </Stack>
                 </DialogBody>
                 <DialogFooter>
-                  <Button
-                    onClick={() => {
-                    }}
-                  >Add Teacher Account</Button>
+                  <Button onClick={() => {}}>Add Teacher Account</Button>
                 </DialogFooter>
               </DialogContent>
             </DialogRoot>
@@ -488,6 +519,39 @@ const UserManagement = () => {
                         >
                           <MdEdit size={20} />
                         </Button>
+                        <DialogRoot
+                          isOpen={onDeleteDialogOpen}
+                          onClose={onDeleteDialogClose}
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="link"
+                              color="red.500"
+                              onClick={() => handleDelete(user.id)}
+                            >
+                              Delete
+                            </Button>
+                          </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Confirm Deletion</DialogTitle>
+                              </DialogHeader>
+                              <DialogBody>
+                                <Text>
+                                  Are you sure you want to delete this user?
+                                </Text>
+                              </DialogBody>
+                              <DialogFooter>
+                                <Button
+                                  colorScheme="red"
+                                  onClick={confirmDelete}
+                                  isLoading={isDeleting}
+                                >
+                                  Delete
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                        </DialogRoot>
                       </HStack>
                     )}
                   </Table.Cell>
