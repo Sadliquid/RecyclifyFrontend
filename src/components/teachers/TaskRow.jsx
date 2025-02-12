@@ -1,4 +1,4 @@
-import { Box, Text, Badge, Button, Stack, Image, IconButton } from "@chakra-ui/react";
+import { Box, Text, Badge, Button, Stack, Image, IconButton, Flex } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
@@ -115,47 +115,40 @@ const TaskRow = ({ task, fetchTasks }) => {
                 onOpenChange={(isOpen) => setOpen(isOpen.open)}
             >
                 <DialogTrigger asChild>
-                    <Box
-                        key={task.taskID}
-                        p={4}
-                        borderRadius="md"
-                        mb={2}
-                        bg={task.taskVerified ? "green.100" : task.taskRejected ? "red.100" : "blue.100"}
-                        position="relative"
-                    >
-                        {/* Indicator for unverified tasks */}
-                        {!task.taskVerified && !task.taskRejected && (
-                            <Box
-                                position="absolute"
-                                left={2}
-                                top="50%"
-                                transform="translateY(-50%)"
-                                w={2}
-                                h={2}
-                                bg="blue.500"
-                                borderRadius="full"
-                            />
-                        )}
+                    <Flex direction="row" align="center" justify="space-between" w="100%" key={task.taskID} p={4} position="relative"
+                        borderRadius="md" mb={2} justifyContent="space-between" alignItems="center" bg={task.taskVerified ? "green.100" : task.taskRejected ? "red.100" : "blue.100"}>
+                        {/* Left Section - Unread dot, student avatar, task details */}
+                        <Box display="flex" alignItems="center" gap={2} width={"50%"} >
+                            {/* Indicator for unverified tasks */}
+                            {!task.taskVerified && !task.taskRejected && (
+                                <Box position="absolute" left={2} top="50%" transform="translateY(-50%)" w={2} h={2} bg="blue.500" borderRadius="full"/>
+                            )}
 
-                        {/* Student Avatar */}
-                        <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
-                            <Avatar name={task.student.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+                            {/* Student Avatar */}
+                            <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
+                                <Avatar name={task.student.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+                            </Box>
+
+                            {/* Task details */}
+                            <Text fontWeight="bold" noOfLines={1} isTruncated >
+                                {task.student?.name} from Class {task.class?.className} has uploaded {task.imageUrls?.split(",").length || 0} image(s) for verification.
+                            </Text>
+
+                            {/* Status Badges */}
+                            {task.taskVerified && <Badge bg="teal" variant="solid">Verified</Badge>}
+                            {task.taskRejected && <Badge bg="red" variant="solid">Rejected</Badge>}
                         </Box>
 
-                        {/* Task details */}
-                        <Text fontWeight="bold">
-                            {task.student?.name} from Class {task.class?.className} has uploaded {task.imageUrls?.split(",").length || 0} images for verification.
-                        </Text>
-                        {task.dateAssigned && (
-                            <Text fontSize="sm">{task.dateAssigned}</Text>
-                        )}
-
-                        {/* Status Badges */}
-                        {task.taskVerified && <Badge colorScheme="blue">Verified</Badge>}
-                        {task.taskRejected && <Badge colorScheme="red">Rejected</Badge>}
-                    </Box>
+                        {/* Right Section - Date and Status Badges */}
+                        <Box display="flex" flexDirection="column" alignItems="flex-end">
+                            {task.dateAssigned && (
+                                <Text fontSize="sm" fontWeight="bold" color="gray.800">
+                                    {task.dateAssigned}
+                                </Text>
+                            )}
+                        </Box>
+                    </Flex>
                 </DialogTrigger>
-
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle color="black" fontWeight="bold" textAlign="left">
