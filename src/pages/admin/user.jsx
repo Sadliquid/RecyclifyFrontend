@@ -11,10 +11,13 @@ const UserManagement = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState(null);
     const [editingUser, setEditingUser] = useState(null); // Track the user being edited
-    const { loaded, authToken } = useSelector((state) => state.auth);
-
+    const { user, loaded, error } = useSelector((state) => state.auth);
+	useEffect(() => {
+		if (!error && loaded && user && user.userRole == "admin") {
+			fetchUsers();
+		}
+	}, [loaded]);
     // Fetch users from the backend
-    useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const response = await Server.get(`/api/UserManagement`);
@@ -30,9 +33,6 @@ const UserManagement = () => {
                 setIsLoading(false);
             }
         };
-
-        fetchUsers();
-    }, [loaded]);
 
     if (!loaded || isLoading) {
         return (
