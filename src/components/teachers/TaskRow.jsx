@@ -121,7 +121,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                         <Box display="flex" alignItems="center" gap={2} width={"50%"} >
                             {/* Indicator for unverified tasks */}
                             {!task.taskVerified && !task.taskRejected && (
-                                <Box position="absolute" left={2} top="50%" transform="translateY(-50%)" w={2} h={2} bg="blue.500" borderRadius="full" />
+                                <Box position="absolute" left={4} top="50%" transform="translateY(-50%)" w={2} h={2} bg="blue.500" borderRadius="full" />
                             )}
 
                             {/* Student Avatar */}
