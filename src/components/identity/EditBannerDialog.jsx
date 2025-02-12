@@ -15,8 +15,6 @@ function EditBannerDialog({ userDetails, isOpen, onClose }) {
     const [isSaveLoading, setIsSaveLoading] = useState(false);  
     const [isRemoveLoading, setIsRemoveLoading] = useState(false); 
 
-    console.log(userDetails)
-
     useEffect(() => {
         const fetchBanner = async () => {
             try {
