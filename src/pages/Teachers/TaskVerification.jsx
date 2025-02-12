@@ -67,16 +67,16 @@ function TaskVerification() {
                     </Box>
                 </Flex>
 
-                <Tabs.Root defaultValue="All">
+                <Tabs.Root defaultValue="All" colorPalette={"blue"}>
                     <Tabs.List>
-                        <Tabs.Trigger value="All">
+                        <Tabs.Trigger value="All" bg="none">
                             All {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
                         </Tabs.Trigger>
-                        <Tabs.Trigger value="Unverified">
+                        <Tabs.Trigger value="Unverified" bg="none">
                             Unverified {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
                         </Tabs.Trigger>
-                        <Tabs.Trigger value="Rejected">Rejected</Tabs.Trigger>
-                        <Tabs.Trigger value="Verified">Verified</Tabs.Trigger>
+                        <Tabs.Trigger value="Rejected" bg="none">Rejected</Tabs.Trigger>
+                        <Tabs.Trigger value="Verified" bg="none">Verified</Tabs.Trigger>
                     </Tabs.List>
 
                     <Tabs.Content value="All">
