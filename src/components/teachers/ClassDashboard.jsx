@@ -49,10 +49,11 @@ function ClassDashboard({ classData, students }) {
         try {
             const response = await server.get(`/api/Teacher/get-class-points/?classId=${classData.classID}`);
             if (response.status === 200) {
-                setClassPoints(response.data.data);
+                const pointsData = response.data.data;
+                setClassPoints(pointsData);
                 
-                // Calculate the total points for the last week for the class
-                const lastWeekTotal = classPoints.reduce((acc, curr) => acc + curr.points, 0);
+                // Calculate the total points for the last week before setting the state
+                const lastWeekTotal = pointsData.reduce((acc, curr) => acc + curr.points, 0);
                 setLastWeekPoints(lastWeekTotal);
             }
         } catch (error) {
@@ -188,7 +189,7 @@ function ClassDashboard({ classData, students }) {
                                                 <Box h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
                                                     {classData.classPoints}
                                                 </Box>
-                                                <Text as={PiCloverFill} boxSize={25} color="#2CD776"></Text>
+                                                <Text as={PiCloverFill} boxSize={25} color="#2CD776" mt={1}></Text>
                                             </Flex>
                                         </Flex>
                                     </Box >
@@ -198,10 +199,10 @@ function ClassDashboard({ classData, students }) {
                                         <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2} >
                                             <Box w="100%" h="20%" fontWeight="bold" fontSize="sm" mt={2}>Weekly Class Clovers</Box>
                                             <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="left" gap={2}>
-                                                <Box  h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
+                                                <Box h="100%" fontSize="3xl" fontWeight="bold" display="flex" justifyContent="left" alignItems="center">
                                                     {lastWeekPoints}
                                                 </Box>
-                                                <Text as={PiCloverFill} boxSize={25} color="#2CD776"></Text>
+                                                <Text as={PiCloverFill} boxSize={25} color="#2CD776" mt={1}></Text>
                                             </Flex>
                                         </Flex>
                                     </Box>
