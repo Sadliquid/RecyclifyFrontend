@@ -12,7 +12,6 @@ import { Field } from "@/components/ui/field"
 import { useSelector } from "react-redux";
 
 const TaskRow = ({ task, fetchTasks }) => {
-    console.log("TaskRow -> task", task)
     if (!task) return null; // Prevent errors if task is undefined
     const [open, setOpen] = useState(false);
     // const [verificationNote, setVerificationNote] = useState("");
