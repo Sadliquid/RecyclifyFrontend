@@ -93,6 +93,7 @@ const UserManagement = () => {
   };
 
   const addTeacherAccount = async (formData) => {
+    setIsLoading(true);
     try {
       const response = await Server.post(
         `/api/UserManagement/CreateTeacherAccount`,
@@ -109,6 +110,9 @@ const UserManagement = () => {
 
     } catch (error) {
       ShowToast("error", "Error", error.response?.data?.error || error.message);
+    }
+    finally{
+      setIsLoading(false);
     }
   };
 
