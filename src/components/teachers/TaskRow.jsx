@@ -121,7 +121,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                         <Box display="flex" alignItems="center" gap={2} width={"50%"} >
                             {/* Indicator for unverified tasks */}
                             {!task.taskVerified && !task.taskRejected && (
-                                <Box position="absolute" left={2} top="50%" transform="translateY(-50%)" w={2} h={2} bg="blue.500" borderRadius="full"/>
+                                <Box position="absolute" left={2} top="50%" transform="translateY(-50%)" w={2} h={2} bg="blue.500" borderRadius="full" />
                             )}
 
                             {/* Student Avatar */}
@@ -130,8 +130,19 @@ const TaskRow = ({ task, fetchTasks }) => {
                             </Box>
 
                             {/* Task details */}
-                            <Text fontWeight="bold" noOfLines={1} isTruncated >
-                                {task.student?.name} from Class {task.class?.className} has uploaded {task.imageUrls?.split(",").length || 0} image(s) for verification.
+                            <Text noOfLines={1} isTruncated>
+                                <Text as="span" fontWeight="bold">
+                                    {task.student?.name}
+                                </Text>
+                                {" from "}
+                                <Text as="span" fontWeight="bold">
+                                    Class {task.class?.className}
+                                </Text>
+                                {" has uploaded "}
+                                <Text as="span" fontWeight="bold">
+                                    {task.imageUrls?.split(",").length || 0}
+                                </Text>
+                                {" image(s) for verification."}
                             </Text>
 
                             {/* Status Badges */}
