@@ -5,7 +5,7 @@ import { useState } from "react";
 import server from "../../../networking";
 import { FaStar } from "react-icons/fa";
 import { BsFillInfoSquareFill } from "react-icons/bs";
-import { IoArrowBack, IoArrowForward} from "react-icons/io5";
+import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { Input } from "@chakra-ui/react"
 import { toaster } from "@/components/ui/toaster"
 import { Field } from "@/components/ui/field"
@@ -120,7 +120,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                         p={4}
                         borderRadius="md"
                         mb={2}
-                        bg={task.taskVerified ? "blue.100" : task.taskRejected ? "red.100" : "green.100"}
+                        bg={task.taskVerified ? "green.100" : task.taskRejected ? "red.100" : "blue.100"}
                         position="relative"
                     >
                         {/* Indicator for unverified tasks */}
@@ -159,7 +159,8 @@ const TaskRow = ({ task, fetchTasks }) => {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle color="black" fontWeight="bold" textAlign="left">
-                            Task Verification
+                            {/* Conditional Render the dialog title */}
+                            {task.taskVerified ? "Task Verified" : task.taskRejected ? "Task Rejected" : "Task Verification"}
                         </DialogTitle>
                     </DialogHeader>
                     <DialogBody>
@@ -204,35 +205,43 @@ const TaskRow = ({ task, fetchTasks }) => {
                                     </Box>
                                 )}
 
-                                <Text fontSize="sm" color="gray.600" mt={4} textAlign="center">
-                                    Please visit the recycling spot to ensure the student recycles the correct items and quantity.
-                                </Text>
-
-                                <Box mt={4}>
-                                    <Field label="Task Reject Description" required>
-                                    <Input
-                                            placeholder="Enter reason for rejection..."
-                                            value={rejectDescription}
-                                            onChange={handleRejectInput}
-                                            maxLength={80}
-                                        />
-                                        <Text fontSize="xs" color={rejectDescription.length >= 80 ? "red.500" : "gray.500"}>
-                                        {rejectDescription.length}/80 characters
+                                {/* Conditionally render the image helper text and task reject description based on task status */}
+                                {!task.taskVerified && !task.taskRejected && (
+                                    <>
+                                        <Text fontSize="sm" color="gray.600" mt={4} textAlign="center">
+                                            Please visit the recycling spot to ensure the student recycles the correct items and quantity.
                                         </Text>
-                                    </Field>
-                                </Box>
+
+                                        <Box mt={4}>
+                                            <Field label="Task Reject Description" required>
+                                                <Input
+                                                    placeholder="Enter reason for rejection..."
+                                                    value={rejectDescription}
+                                                    onChange={handleRejectInput}
+                                                    maxLength={80}
+                                                />
+                                                <Text fontSize="xs" color={rejectDescription.length >= 80 ? "red.500" : "gray.500"}>
+                                                    {rejectDescription.length}/80 characters
+                                                </Text>
+                                            </Field>
+                                        </Box>
+                                    </>
+                                )}
 
                             </Box>
                         </Stack>
                     </DialogBody>
-                    <DialogFooter display="flex" gap={10} justifyContent="center">
-                        <Button bg="#FF8080" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}  >
-                            Reject
-                        </Button>
-                        <Button bg="#2D65FF" color="white" onClick={handleVerify}>
-                            Verify
-                        </Button>
-                    </DialogFooter>
+                    {/* Conditionally render the DialogFooter based on task status */}
+                    {!task.taskVerified && !task.taskRejected && (
+                        <DialogFooter display="flex" gap={10} justifyContent="center">
+                            <Button bg="#FF8080" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}>
+                                Reject
+                            </Button>
+                            <Button bg="#2D65FF" color="white" onClick={handleVerify}>
+                                Verify
+                            </Button>
+                        </DialogFooter>
+                    )}
                 </DialogContent>
             </DialogRoot>
         </>
