@@ -135,8 +135,8 @@ const TaskRow = ({ task, fetchTasks }) => {
                             </Text>
 
                             {/* Status Badges */}
-                            {task.taskVerified && <Badge bg="teal" variant="solid">Verified</Badge>}
-                            {task.taskRejected && <Badge bg="red" variant="solid">Rejected</Badge>}
+                            {task.taskVerified && <Badge bg="teal" variant="solid" ml={2}>Verified</Badge>}
+                            {task.taskRejected && <Badge bg="red" variant="solid" ml={2}>Rejected</Badge>}
                         </Box>
 
                         {/* Right Section - Date and Status Badges */}
