@@ -121,7 +121,7 @@ function ClassDashboard({ classData, students }) {
                         <Flex gap={4} w="100%" h="50%">
                             {/* Student Contribution */}
                             <Box w="70%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                            _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                            _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                 <Flex direction="column" textAlign="left" w="90%" h="90%">
                                     <Box w="100%" h="10%" fontWeight="bold" fontSize="sm" mt={2}>Class Clover Points (Past 7 Days)</Box>
                                     <Box w="100%" h="90%">
@@ -131,7 +131,7 @@ function ClassDashboard({ classData, students }) {
                             </Box>
                             {/* Class Top Contributors */}
                             <Box w="30%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                                _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                 <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2}>
                                     <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">
                                         Class Top 3 Contributors
@@ -171,7 +171,7 @@ function ClassDashboard({ classData, students }) {
                             <Flex gap={4} w="70%" h="100%" direction="row">
                                 {/* Month Contribution */}
                                 <Box w="70%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                                _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                     <Flex direction="column" textAlign="left" w="90%" h="90%" gap={4} p={2}>
                                         <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Class Contribution</Box>
                                         <Box w="100%" h="80%" p={2}>
@@ -182,7 +182,7 @@ function ClassDashboard({ classData, students }) {
                                 <Flex w="30%" h="100%" gap={4} direction="column" >
                                     {/* Total Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                                        _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                        _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                         <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2} >
                                             <Box w="100%" h="20%" fontWeight="bold" fontSize="sm" mt={2}>Total Class Clovers</Box>
                                             <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="left" gap={2}>
@@ -195,7 +195,7 @@ function ClassDashboard({ classData, students }) {
                                     </Box >
                                     {/* Weekly Class Clovers */}
                                     <Box w="100%" h="50%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                                        _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                        _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                         <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2} >
                                             <Box w="100%" h="20%" fontWeight="bold" fontSize="sm" mt={2}>Weekly Class Clovers</Box>
                                             <Flex direction="row" w="100%" h="70%" alignItems="center" justifyContent="left" gap={2}>
@@ -210,7 +210,7 @@ function ClassDashboard({ classData, students }) {
                             </Flex>
                             {/* Flagged Student */}
                             <Box w="30%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                                _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                 <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2}>
                                     <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">
                                         Class Least 3 Contributors
@@ -243,7 +243,7 @@ function ClassDashboard({ classData, students }) {
                     </Flex>
                     {/* Leaderboards */}
                     <Box w="20%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                        _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                        _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                         <Flex direction="column" textAlign="left" gap={2} w="90%" h="100%" p={2}>
                             <Box w="100%" h="5%" fontWeight="bold" fontSize="sm" mt={3}>
                                 Class Leaderboards
