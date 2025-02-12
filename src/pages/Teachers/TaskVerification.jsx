@@ -56,12 +56,12 @@ function TaskVerification() {
     if (!error && loaded && user) {
         return (
             <Box>
-                <Flex direction="row" align="center" justify="flex-start" h="12vh">
+                <Flex direction="row" align="center" justify="space-betweem" h="12vh">
                     <Box bg="#96E2D6" borderRadius="full" p={2}>
                         <IoArrowBack size={50} color="black" cursor="pointer" onClick={() => navigate(`/teachers`)} />
                     </Box>
-                    <Box mt={4} fontSize="2xl" align="left" ml={4}>
-                        <Heading fontSize={40} fontWeight="bold" mb={4} textAlign="left">
+                    <Box mt={4} fontSize="2xl" textAlign="center" flex={1} mr={20}>
+                        <Heading fontSize={40} fontWeight="bold" mb={4} >
                             Task Verification
                         </Heading>
                     </Box>
