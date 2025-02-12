@@ -22,7 +22,7 @@ function StudentRedemption() {
                     <Box bg="#96E2D6" borderRadius="full" p={2}>
                         <IoArrowBack size={50} color="black" cursor="pointer" onClick={() => navigate(`/teachers`)} />
                     </Box>
-                    <Box mt={4} fontSize="2xl" textAlign="center" flex="1" mr={16}>
+                    <Box mt={4} fontSize="2xl" textAlign="center" flex="1" mr={20}>
                         <Heading fontSize={40} fontWeight="bold" mb={4}>
                             Student Redemptions
                         </Heading>
