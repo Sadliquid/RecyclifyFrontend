@@ -17,11 +17,6 @@ function TaskVerification() {
         rejected: [],
     });
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-    };
-
     // Fetch all task data that is assigned to the teacher
     const fetchTasks = async () => {
         try {
@@ -85,16 +80,16 @@ function TaskVerification() {
                     </Tabs.List>
 
                     <Tabs.Content value="All">
-                        {tasks.all.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                        {tasks.all.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
                     </Tabs.Content>
                     <Tabs.Content value="Unverified">
-                        {tasks.unverified.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                        {tasks.unverified.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
                     </Tabs.Content>
                     <Tabs.Content value="Rejected">
-                        {tasks.rejected.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                        {tasks.rejected.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
                     </Tabs.Content>
                     <Tabs.Content value="Verified">
-                        {tasks.verified.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                        {tasks.verified.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
                     </Tabs.Content>
                 </Tabs.Root>
             </Box>
