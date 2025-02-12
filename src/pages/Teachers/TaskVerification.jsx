@@ -1,19 +1,62 @@
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, Tabs, Badge, Text } from "@chakra-ui/react";
 import { IoArrowBack } from "react-icons/io5";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import server from "../../../networking";
+import ShowToast from "../../Extensions/ShowToast";
+import TaskRow from "../../components/teachers/TaskRow";
 
-function TaskVerificaiton() {
-	const { id } = useParams();
+function TaskVerification() {
     const navigate = useNavigate();
     const { user, loaded, error } = useSelector((state) => state.auth);
+    const [tasks, setTasks] = useState({
+        all: [],
+        unverified: [],
+        verified: [],
+        rejected: [],
+    });
 
-    // useEffect(() => {
-    //     if (!error && loaded && user && user.userRole == "teacher") {
-    //         if (id) {
-    //         }
-    //     }
-    // }, [loaded && id]);
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+    };
+
+    // Fetch all task data that is assigned to the teacher
+    const fetchTasks = async () => {
+        try {
+            const response = await server.get(`/api/Teacher/get-all-tasks/?teacherID=${user.id}`);
+            if (response.status === 200) {
+                const data = response.data.data;
+                const tasksWaitingVerification = data.tasksWaitingVerification || [];
+                const tasksVerified = data.tasksVerified || [];
+                const tasksRejected = data.tasksRejected || [];
+
+                setTasks({
+                    all: [...tasksWaitingVerification, ...tasksVerified, ...tasksRejected],
+                    unverified: tasksWaitingVerification.filter((task) => task.verificationPending),
+                    verified: tasksVerified.filter((task) => task.taskVerified),
+                    rejected: tasksRejected.filter((task) => task.taskRejected),
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+            if (error.response.status === 400) {
+                ShowToast("error", "Error fetching tasks", error.response.data.message.split("UERROR: "));
+                setTasks([]);
+            } else {
+                ShowToast("error", "Error fetching tasks", "Please try again.");
+                setTasks([]);
+            }
+            setTasks([]);
+        }
+    };
+
+    useEffect(() => {
+        if (!error && loaded && user && user.userRole == "teacher") {
+            fetchTasks(user.id);
+        }
+    }, [loaded]);
 
     if (!error && loaded && user) {
         return (
@@ -28,9 +71,31 @@ function TaskVerificaiton() {
                         </Heading>
                     </Box>
                 </Flex>
+
+                <Tabs.Root defaultValue="All">
+                    <Tabs.List>
+                        <Tabs.Trigger value="All">All <Badge ml={2}>{tasks.all.length}</Badge></Tabs.Trigger>
+                        <Tabs.Trigger value="Unverified">Unverified <Badge ml={2}>{tasks.unverified.length}</Badge></Tabs.Trigger>
+                        <Tabs.Trigger value="Rejected">Rejected <Badge ml={2}>{tasks.rejected.length}</Badge></Tabs.Trigger>
+                        <Tabs.Trigger value="Verified">Verified <Badge ml={2}>{tasks.verified.length}</Badge></Tabs.Trigger>
+                    </Tabs.List>
+
+                    <Tabs.Content value="All">
+                        {tasks.all.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                    </Tabs.Content>
+                    <Tabs.Content value="Unverified">
+                        {tasks.unverified.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                    </Tabs.Content>
+                    <Tabs.Content value="Rejected">
+                        {tasks.rejected.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                    </Tabs.Content>
+                    <Tabs.Content value="Verified">
+                        {tasks.verified.map((task) => <TaskRow key={task.taskID} task={task} />)}
+                    </Tabs.Content>
+                </Tabs.Root>
             </Box>
         );
     }
 }
 
-export default TaskVerificaiton
+export default TaskVerification
