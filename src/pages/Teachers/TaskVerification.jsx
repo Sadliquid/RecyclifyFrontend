@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Tabs, Badge, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Tabs, Badge, Text, VStack } from "@chakra-ui/react";
 import { IoArrowBack } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import server from "../../../networking";
 import ShowToast from "../../Extensions/ShowToast";
 import TaskRow from "../../components/teachers/TaskRow";
+import { LuBox } from "react-icons/lu";
 
 function TaskVerification() {
     const navigate = useNavigate();
@@ -66,32 +67,40 @@ function TaskVerification() {
                         </Heading>
                     </Box>
                 </Flex>
+                {tasks.unverified.length === 0 && tasks.verified.length === 0 && tasks.rejected.length === 0 ? (
+                    <Box textAlign="center" mt={20}>
+                        <VStack textAlign="center" fontWeight="medium" mt={4}>
+                            <LuBox />
+                            <Text>No task is waiting for verification.</Text>
+                        </VStack>
+                    </Box>
+                ) : (
+                    <Tabs.Root defaultValue="All" colorPalette={"blue"}>
+                        <Tabs.List>
+                            <Tabs.Trigger value="All" bg="none">
+                                All {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
+                            </Tabs.Trigger>
+                            <Tabs.Trigger value="Unverified" bg="none">
+                                Unverified {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
+                            </Tabs.Trigger>
+                            <Tabs.Trigger value="Rejected" bg="none">Rejected</Tabs.Trigger>
+                            <Tabs.Trigger value="Verified" bg="none">Verified</Tabs.Trigger>
+                        </Tabs.List>
 
-                <Tabs.Root defaultValue="All" colorPalette={"blue"}>
-                    <Tabs.List>
-                        <Tabs.Trigger value="All" bg="none">
-                            All {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
-                        </Tabs.Trigger>
-                        <Tabs.Trigger value="Unverified" bg="none">
-                            Unverified {tasks.unverified.length > 0 && <Badge ml={2}>{tasks.unverified.length}</Badge>}
-                        </Tabs.Trigger>
-                        <Tabs.Trigger value="Rejected" bg="none">Rejected</Tabs.Trigger>
-                        <Tabs.Trigger value="Verified" bg="none">Verified</Tabs.Trigger>
-                    </Tabs.List>
-
-                    <Tabs.Content value="All">
-                        {tasks.all.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
-                    </Tabs.Content>
-                    <Tabs.Content value="Unverified">
-                        {tasks.unverified.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
-                    </Tabs.Content>
-                    <Tabs.Content value="Rejected">
-                        {tasks.rejected.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
-                    </Tabs.Content>
-                    <Tabs.Content value="Verified">
-                        {tasks.verified.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
-                    </Tabs.Content>
-                </Tabs.Root>
+                        <Tabs.Content value="All">
+                            {tasks.all.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
+                        </Tabs.Content>
+                        <Tabs.Content value="Unverified">
+                            {tasks.unverified.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
+                        </Tabs.Content>
+                        <Tabs.Content value="Rejected">
+                            {tasks.rejected.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
+                        </Tabs.Content>
+                        <Tabs.Content value="Verified">
+                            {tasks.verified.map((task) => <TaskRow key={task.taskID} task={task} fetchTasks={fetchTasks} />)}
+                        </Tabs.Content>
+                    </Tabs.Root>
+                )}
             </Box>
         );
     }
