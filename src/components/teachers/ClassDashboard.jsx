@@ -3,7 +3,7 @@
 import { Box, Flex, Image, Tabs, Text } from '@chakra-ui/react';
 import { FaLeaf } from "react-icons/fa";
 import { Avatar } from "@/components/ui/avatar";
-import ClassPieChart from './ClassPieChart'; 
+import ClassPieChart from './ClassPieChart';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import server from "../../../networking";
@@ -22,7 +22,16 @@ function ClassDashboard({ classData, students }) {
     const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
 
     // Sort the students by TotalPoints in accending order and get the least contributed top 3
-    const lowest3Students = studentsList.sort((a, b) => a.totalPoints - b.totalPoints).slice(0, 3);
+    var lowest3Students = studentsList.sort((a, b) => a.totalPoints - b.totalPoints).slice(0, 3);
+
+    // Check for any conflicts
+    const conflictStudents = lowest3Students.filter(student => top3Students.includes(student));
+
+    // If there's any conflict, filter them out from the lowest3Students\
+    if (conflictStudents.length > 0) {
+        const updatedLowest3Students = lowest3Students.filter(student => !top3Students.includes(student));
+        lowest3Students = updatedLowest3Students;
+    }
 
     const { user, loaded, error } = useSelector((state) => state.auth);
 
@@ -51,7 +60,7 @@ function ClassDashboard({ classData, students }) {
             if (response.status === 200) {
                 const pointsData = response.data.data;
                 setClassPoints(pointsData);
-                
+
                 // Calculate the total points for the last week before setting the state
                 const lastWeekTotal = pointsData.reduce((acc, curr) => acc + curr.points, 0);
                 setLastWeekPoints(lastWeekTotal);
@@ -121,7 +130,7 @@ function ClassDashboard({ classData, students }) {
                         <Flex gap={4} w="100%" h="50%">
                             {/* Student Contribution */}
                             <Box w="70%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                            _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                 <Flex direction="column" textAlign="left" w="90%" h="90%">
                                     <Box w="100%" h="10%" fontWeight="bold" fontSize="sm" mt={2}>Class Clover Points (Past 7 Days)</Box>
                                     <Box w="100%" h="90%">
@@ -138,9 +147,9 @@ function ClassDashboard({ classData, students }) {
                                     </Box>
 
                                     {/* Top 3 Students Contributor based on their totalPoints */}
-                                    <Flex direction="column" w="100%" h="80%" alignItems="center" justifyContent="center" gap={4}>
+                                    <Flex direction="column" w="100%" h="80%" gap={4}>
                                         {top3Students.map((student, index) => (
-                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="center" justifyContent="center" >
+                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="flex-start" justifyContent="flex-start" >
                                                 {/* Rank Icon or Badge */}
                                                 <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
                                                     <Image src={index === 0 ? "/gold-medal.png" : index === 1 ? "/silver-medal.png" : "/bronze-medal.png"}
@@ -171,7 +180,7 @@ function ClassDashboard({ classData, students }) {
                             <Flex gap={4} w="70%" h="100%" direction="row">
                                 {/* Month Contribution */}
                                 <Box w="70%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center"
-                                _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                    _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                     <Flex direction="column" textAlign="left" w="90%" h="90%" gap={4} p={2}>
                                         <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">Class Contribution</Box>
                                         <Box w="100%" h="80%" p={2}>
@@ -217,9 +226,9 @@ function ClassDashboard({ classData, students }) {
                                     </Box>
 
                                     {/* Least 3 Students Contributor based on their totalPoints */}
-                                    <Flex direction="column" w="100%" h="80%" alignItems="center" justifyContent="center" gap={4}>
+                                    <Flex direction="column" w="100%" h="80%"  gap={4}>
                                         {lowest3Students.map((student, index) => (
-                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="center" justifyContent="center" >
+                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="flex-start" justifyContent="flex-start" >
                                                 {/* Student Avatar */}
                                                 <Box w="20%" h="100%" display="flex" justifyContent="center" alignItems="center">
                                                     <Avatar name={student.user.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
@@ -250,7 +259,7 @@ function ClassDashboard({ classData, students }) {
                             </Box>
 
                             <Box w="100%" h="25%" fontWeight="bold" fontSize="sm" bg="#6A5AE0" borderRadius="xl" p={2} color="white"
-                            _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
+                                _hover={{ transform: "scale(1.05)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                 <Flex direction="row" w="100%" h="100%" gap={2} display="flex" justifyContent="center" alignItems="center">
                                     <Box w="50%" h="100%" fontSize="sm" display="flex" justifyContent="center" alignItems="center" >
                                         <Flex direction="column" alignItems="center" justifyContent="center" >
