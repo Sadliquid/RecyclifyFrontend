@@ -132,7 +132,7 @@ const InventoryManagement = () => {
                         />
                         <Button
                             leftIcon={<MdAdd />} // Add icon
-                            colorScheme="teal"
+                            bg={"#4DCBA4"}
                             onClick={() => console.log("Add Item button clicked")}
                         >
                             Add Item
@@ -245,7 +245,7 @@ const InventoryManagement = () => {
                                     </Table.Cell>
                                     <Table.Cell>
                                         {editingItem?.rewardID === item.rewardID ? (
-                                            <Button colorScheme="teal" onClick={handleSave}>
+                                            <Button bg={"#4DCBA4"} onClick={handleSave}>
                                                 Save
                                             </Button>
                                         ) : (
