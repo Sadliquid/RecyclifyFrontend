@@ -6,10 +6,10 @@ import { PiCloverFill } from "react-icons/pi";
 function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
 
-    console.log(topContributor)
+    console.log(schoolClass)
 
     // Assuming user has a classID field
-    const isUserClass = !error && loaded && schoolClass.classID === user.classID;
+    const isTeacherClass = !error && loaded && schoolClass.teacherID === user.id;
 
     return (
         <HStack
@@ -21,7 +21,7 @@ function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
             padding="10px"
             backgroundColor={"#F4F7FF"}
             borderRadius={12}
-            border={isUserClass ? "2px solid #4DCBA4" : "none"}
+            border={isTeacherClass ? "2px solid #4DCBA4" : "none"}
         >
             {/* Rank Column */}
             <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
