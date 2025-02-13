@@ -284,6 +284,32 @@ const UserManagement = () => {
                                         <Field label="User Role">
                                             <Text>teacher</Text>
                                         </Field>
+                                        <Field label="Class Number">
+                                            <Input
+                                                type="number"
+                                                value={editingUser?.classNumber || ""}
+                                                onChange={(e) =>
+                                                    setEditingUser({
+                                                        ...editingUser,
+                                                        classNumber: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="Enter class number"
+                                            />
+                                        </Field>
+                                        <Field label ="Class Description">
+                                            <Input
+                                                type="text"
+                                                value={editingUser?.classDescription || ""}
+                                                onChange={(e) =>
+                                                    setEditingUser({
+                                                        ...editingUser,
+                                                        classDescription: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="Enter class description"
+                                            />
+                                        </Field>
                                     </Stack>
                                 </DialogBody>
 
@@ -299,6 +325,8 @@ const UserManagement = () => {
                                                 password: editingUser.password,
                                                 contactNumber: editingUser.contactNumber,
                                                 userRole: "teacher",
+                                                classNumber: editingUser.classNumber,
+                                                classDescription: editingUser.classDescription,
                                             };
                                             addTeacherAccount(formData);
                                         }}
@@ -409,6 +437,32 @@ const UserManagement = () => {
                                         </Field>
                                         <Field label="User Role">
                                             <Text>teacher</Text>
+                                        </Field>
+                                        <Field Label="Class Number">
+                                            <Input
+                                                type="number"
+                                                value={editingUser?.classNumber || ""}
+                                                onChange={(e) =>
+                                                    setEditingUser({
+                                                        ...editingUser,
+                                                        classNumber: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="Enter class number"
+                                            />
+                                        </Field>
+                                        <Field Label ="Class Description">
+                                            <Input
+                                                type="text"
+                                                value={editingUser?.classDescription || ""}
+                                                onChange={(e) =>
+                                                    setEditingUser({
+                                                        ...editingUser,
+                                                        classDescription: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="Enter class description"
+                                            />
                                         </Field>
                                     </Stack>
                                 </DialogBody>
