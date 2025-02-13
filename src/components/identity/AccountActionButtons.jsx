@@ -4,13 +4,35 @@ import EditPasswordDialog from "./EditPasswordDialog";
 import DeleteAccountDialog from "./DeleteAccountDialog";
 import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
 import { useNavigate } from "react-router-dom";
+import server from "../../../networking";
 
 function AccountActionButtons({ userDetails }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showEditPasswordDialog, setShowEditPasswordDialog] = useState(false);
     const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
-    const navigate = useNavigate()
-    const userRole = userDetails.userRole
+    const [childId, setChildId] = useState(null);
+    const [parentId, setParentId] = useState(null);
+    const navigate = useNavigate();
+    const userRole = userDetails.userRole;
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                if (userRole === "parent") {
+                    const response = await server.get(`api/Identity/getChildsId?userId=${userDetails.id}`);
+                    setChildId(response.data.studentId);
+                    console.log(response.data.studentId);
+                } else if (userRole === "student") {
+                    const response = await server.get(`api/Identity/getParentsId?userId=${userDetails.id}`);
+                    setParentId(response.data.parentId);
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        };
+
+        fetchUserDetails();
+    }, [userDetails.id, userRole]);
 
     return (
         <Box w="70%" mx="auto">
@@ -46,13 +68,13 @@ function AccountActionButtons({ userDetails }) {
                     <Heading size="md" mb={2}>More Actions</Heading>
                     <HStack gap={8} w="100%">
                         {userRole === "parent" && (
-                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={() => navigate(`/identity/publicProfile/${childId}`)}>
                                 Child's Account
                             </Button>
                         )}
                         {userRole === "student" && (
                             <>
-                                <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                                <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={() => navigate(`/identity/publicProfile/${parentId}`)}> 
                                     Parent's Account
                                 </Button>
                                 <Button 

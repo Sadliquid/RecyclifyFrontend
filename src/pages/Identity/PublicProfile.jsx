@@ -15,7 +15,6 @@ function PublicProfile() {
 
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log(id)
             try {
                 const response = await server.get(`/api/Identity/getPublicUserDetails?userId=${id}`);
                 const userData = response.data;
