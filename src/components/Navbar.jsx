@@ -243,7 +243,7 @@ function Navbar({ onLogout }) {
                                     <Box ml={0.5}>
                                         <MdOutlineLeaderboard fontSize={"20px"} />
                                     </Box>
-                                    <Text ml={2.5}>Leaderboards</Text>
+                                    <Text ml={2.5}>Class Leaderboards</Text>
                                 </Button>
                             </DrawerActionTrigger>
                         </Box>

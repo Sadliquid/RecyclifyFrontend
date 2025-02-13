@@ -143,7 +143,7 @@ function Leaderboards() {
 					</Box>
 					<Box mt={4} fontSize="2xl" textAlign="center" flex="1" mr={20}>
 						<Heading fontSize={40} fontWeight="bold" mb={4}>
-							Leaderboards
+							Class Leaderboards
 						</Heading>
 					</Box>
 				</Flex>
