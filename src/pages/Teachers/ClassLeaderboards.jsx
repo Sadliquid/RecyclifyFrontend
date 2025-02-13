@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, HStack, Image, Text, Button } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -148,6 +148,24 @@ function Leaderboards() {
 		return [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
 	}
 
+	const handleNext = () => {
+		if (classes.length === 0) return;
+
+		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass?.classID);
+		const nextIndex = (currentIndex + 1) % classes.length; // Circular navigation
+		setSelectedClass(classes[nextIndex]);
+		fetchStudents(classes[nextIndex].classID);
+	};
+
+	const handlePrev = () => {
+		if (classes.length === 0) return;
+
+		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass?.classID);
+		const prevIndex = (currentIndex - 1 + classes.length) % classes.length; // Circular navigation
+		setSelectedClass(classes[prevIndex]);
+		fetchStudents(classes[prevIndex].classID);
+	};
+
 	useEffect(() => {
 		if (classes.length > 0) {
 			setSelectedClass(classes[0]); // Automatically select the first class
@@ -179,105 +197,97 @@ function Leaderboards() {
 				{/* Main Content */}
 				<Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"} gap={5}>
 					{/* Leaderboard Panel */}
-					<Flex direction="column" justifyContent={"space-between"} width="28%" >
-						<Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} padding={4}>
+					<Flex direction="column" justifyContent={"space-between"} width="28%" height={"100%"}>
+						<Box display="flex" flexDir={"column"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} >
 							{/* Class brief information card */}
-							<Flex mt={2} mb={3} overflowX="auto" whiteSpace="nowrap" height="35%" width={"100%"}>
-								{classes.map((cls) => (
-									<Button
-										key={cls.classID}
-										onClick={() => handleClassSelection(cls.classID)}
-										mx={1}
-										bg="linear-gradient(135deg, #4DCBA4 0%, #2CD776 100%)"
-										color="white"
-										_hover={{ bg: "linear-gradient(135deg, #2CD776 0%, #4DCBA4 100%)" }}
-										boxShadow="md"
-									>
-										{cls.className}
-									</Button>
-								))}
-							</Flex>
-
-							<Box
-								display="flex"
-								flexDir={"column"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								height="85%"
-								padding={5}
-							>
-								<Heading fontSize={"50px"}>Class {selectedClass?.className || "Class Name"}</Heading>
-								<Flex justifyContent={"center"} alignItems={"center"} mt={4} gap={2}>
-									<Heading fontSize={"24px"}  >
-										{selectedClass?.classPoints || 0}
-									</Heading>
-									<Text as={PiCloverFill} boxSize={25} color="#2CD776" ></Text>
-								</Flex>
-							</Box>
-
-							{topContributor ? (
-								<Text fontWeight={"bold"} textAlign="center" mt={2}>
-								Class Top Contributor
-							</Text>
-							) : (
-								<></>
-							)}
-							
-
-							{/* Top Contributor Panel */}
-							<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} width="100%">
+							<Box position="relative" display="flex" flexDir={"column"} mt={4} p={3} borderRadius={20} height={"30%"} justifyContent={"center"} alignItems={"center"}>
+								<Box bg="#96E2D6" borderRadius="full" position="absolute" left={2} top="50%" transform="translateY(-50%)" p={2}>
+									<IoArrowBack size={30} color="black" cursor="pointer" onClick={handlePrev} />
+								</Box>
 								<Box
 									display="flex"
 									flexDir={"column"}
-									justifyContent={"space-around"}
+									justifyContent={"center"}
 									alignItems={"center"}
-									backgroundColor="#FFFFFF"
-									borderRadius={20}
-									height="85%"
-									padding={5}
-									boxShadow="lg"
+									height="40%"
 								>
-									{topContributor ? (
-										<>
-											{topContributor && topContributor.user && (
-												<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
-											)}
-											<Heading fontSize={"24px"} mt={2} color="#2D3748">{topContributor.user.name}</Heading>
-											<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
-												<Heading >{topContributor.totalPoints}</Heading>
-												<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
-													<FaLeaf />
-												</Box>
-											</Flex>
-											<Box
-												display="flex"
-												justifyContent={"center"}
-												alignItems={"center"}
-												border="3px solid"
-												borderColor={topContributor.league === "Gold" ? "gold" : topContributor.league == "Silver" ? "silver" : "#F6B191"}
-												borderRadius={20}
-												height="30%"
-												mt={2}
-												mb={4}
-												padding={5}
-												boxShadow="md"
-											>
-												<Image
-													src={
-														topContributor.league === "Bronze" ? "/bronze-medal.png" :
-															topContributor.league === "Silver" ? "/silver-medal.png" :
-																"/gold-medal.png"
-													}
-													boxSize={8}
-												/>
-												<Text fontSize={"md"} ml={2} color="#2D3748">{topContributor.league} League</Text>
-											</Box>
-										</>
-									) : (
-										<Text color="#718096" mb={3}>No top contributor available.</Text>
-									)}
+									<Heading fontSize={"40px"}>Class {selectedClass?.className || "Class Name"}</Heading>
+									<Flex justifyContent={"center"} alignItems={"center"} mt={4} gap={2}>
+										<Heading fontSize={"24px"}  >
+											{selectedClass?.classPoints || 0}
+										</Heading>
+										<Text as={PiCloverFill} boxSize={25} color="#2CD776" ></Text>
+									</Flex>
+								</Box>
+								<Box bg="#96E2D6" borderRadius="full" position="absolute" right={2} top="50%" transform="translateY(-50%)" p={2}>
+									<IoArrowForward size={30} color="black" cursor="pointer" onClick={handleNext} />
 								</Box>
 							</Box>
+
+							{/* Top Contributor Panel */}
+							<motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }} width="100%" height="70%">
+								<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
+									{topContributor ? (
+										<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
+											Top Contributor
+										</Heading>
+									) : (
+										<></>
+									)}
+									<Box
+										display="flex"
+										flexDir={"column"}
+										justifyContent={"space-around"}
+										alignItems={"center"}
+										backgroundColor="#FFFFFF"
+										borderRadius={20}
+										width="80%"
+										height="90%"
+										padding={4}
+										boxShadow="lg"
+									>
+										{topContributor ? (
+											<>
+												{topContributor && topContributor.user && (
+													<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" />
+												)}
+												<Heading fontSize={"24px"} mt={2} color="#2D3748">{topContributor.user.name}</Heading>
+												<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
+													<Heading >{topContributor.totalPoints}</Heading>
+													<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
+														<FaLeaf />
+													</Box>
+												</Flex>
+												<Box
+													display="flex"
+													justifyContent={"center"}
+													alignItems={"center"}
+													border="3px solid"
+													borderColor={topContributor.league === "Gold" ? "gold" : topContributor.league == "Silver" ? "silver" : "#F6B191"}
+													borderRadius={20}
+													height="30%"
+													mt={2}
+													mb={4}
+													padding={5}
+													boxShadow="md"
+												>
+													<Image
+														src={
+															topContributor.league === "Bronze" ? "/bronze-medal.png" :
+																topContributor.league === "Silver" ? "/silver-medal.png" :
+																	"/gold-medal.png"
+														}
+														boxSize={8}
+													/>
+													<Text fontSize={"md"} ml={2} color="#2D3748">{topContributor.league} League</Text>
+												</Box>
+											</>
+										) : (
+											<Text color="#718096" mb={3}>No top contributor.</Text>
+										)}
+									</Box>
+								</Box>
+							</motion.div>
 						</Box>
 					</Flex>
 
@@ -326,7 +336,7 @@ function Leaderboards() {
 							.sort((a, b) => b.classPoints - a.classPoints)
 							.map((schoolClass, index) => (
 								<motion.div key={schoolClass.classID} whileHover={{ scale: 1.01 }} style={{ display: "block", width: "100%" }}>
-										<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null} />
+									<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null} />
 								</motion.div>
 							))}
 					</Box>
