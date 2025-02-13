@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import { Box, HStack, Text } from "@chakra-ui/react";
-import { Avatar } from "@/components/ui/avatar";
+import { Box, HStack, Text, Flex, Image } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 
-function LeaderboardPlaceCard({ rank, schoolClass }) {
+function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
 
+    console.log(topContributor)
+    
     // Assuming user has a classID field
     const isUserClass = !error && loaded && schoolClass.classID === user.classID;
 
@@ -31,6 +32,17 @@ function LeaderboardPlaceCard({ rank, schoolClass }) {
                 <Text fontSize="md" fontWeight="bold" textAlign="left">
                     {schoolClass.className}
                 </Text>
+            </Box>
+
+            {/* Display Top Contributor */}
+			<Box width="30%" textAlign="center">
+				{topContributor ? (
+					<Flex alignItems="center" justifyContent="center">
+						<Text fontSize="md">{topContributor.user?.name}</Text>
+					</Flex>
+				) : (
+					<Text fontSize="sm" color="gray.500">No Top Contributor</Text>
+				)}
             </Box>
 
             {/* Class Points Column */}

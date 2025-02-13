@@ -15,6 +15,7 @@ function Leaderboards() {
 	const [classes, setClasses] = useState([]);
 	const [students, setStudents] = useState([]);
 	const [topContributor, setTopContributor] = useState(null);
+	const [topContributors, setTopContributors] = useState({});
 	const [selectedClass, setSelectedClass] = useState(null); // Start as null
 
 
@@ -22,7 +23,9 @@ function Leaderboards() {
 		try {
 			const response = await server.get(`/api/Teacher/get-overall-classes-data/`);
 			if (response.status === 200) {
-				setSchoolClassesData(Array.isArray(response.data.data) ? sortSchoolClassesData(response.data.data) : []);
+				const sortedClasses = Array.isArray(response.data.data) ? sortSchoolClassesData(response.data.data) : [];
+				setSchoolClassesData(sortedClasses);
+				await fetchStudentsForClasses(sortedClasses);
 			}
 		} catch (error) {
 			console.error("Error fetching classes:", error);
@@ -37,25 +40,53 @@ function Leaderboards() {
 		}
 	};
 
-	// Reusable function to fetch classes
-	const fetchClasses = async () => {
-		try {
-			const response = await server.get(`/api/Teacher/get-classes/?teacherID=${user.id}`);
-			if (response.status === 200) {
-				setClasses(Array.isArray(response.data.data) ? response.data.data : []);
+	// Fetch the students for each class
+	const fetchStudentsForClasses = async (classes) => {
+		// Create a mapping of classID to students
+		const updatedClasses = await Promise.all(classes.map(async (cls) => {
+			try {
+				const response = await server.get(`/api/Teacher/get-students/?classId=${cls.classID}`);
+				if (response.status === 200) {
+					const studentsData = response.data.data || [];
+					cls.students = studentsData; // Link the students with their class
+					return cls;
+				} else {
+					cls.students = [];
+					return cls;
+				}
+			} catch (error) {
+				console.error("Error fetching students:", error);
+				cls.students = [];
+				return cls;
 			}
-		} catch (error) {
-			console.error("Error fetching classes:", error);
-			if (error.response.status === 400) {
-				ShowToast("error", "Error fetching classes", error.response.data.message.split("UERROR: "));
-				setClasses([]);
-			} else {
-				ShowToast("error", "Error fetching classes", "Please try again.");
-				setClasses([]);
-			}
-			setClasses([]);
-		}
+		}));
+
+		// Once all students are fetched, update the state
+		setClasses(updatedClasses);
+
+		// Set top contributors after students are fetched for all classes
+		await fetchTopContributors(updatedClasses);
 	};
+
+	// // Reusable function to fetch classes
+	// const fetchClasses = async () => {
+	// 	try {
+	// 		const response = await server.get(`/api/Teacher/get-classes/?teacherID=${user.id}`);
+	// 		if (response.status === 200) {
+	// 			setClasses(Array.isArray(response.data.data) ? response.data.data : []);
+	// 		}
+	// 	} catch (error) {
+	// 		console.error("Error fetching classes:", error);
+	// 		if (error.response.status === 400) {
+	// 			ShowToast("error", "Error fetching classes", error.response.data.message.split("UERROR: "));
+	// 			setClasses([]);
+	// 		} else {
+	// 			ShowToast("error", "Error fetching classes", "Please try again.");
+	// 			setClasses([]);
+	// 		}
+	// 		setClasses([]);
+	// 	}
+	// };
 
 	// Fetch students data from the backend
 	const fetchStudents = async (classID) => {
@@ -98,9 +129,35 @@ function Leaderboards() {
 		setTopContributor(topStudent);
 	};
 
+	const fetchTopContributors = async (classes) => {
+		console.log("Classes:", classes); // Debugging
+		const contributorsMap = {};
+	
+		classes.forEach((cls) => {
+			console.log("Class:", cls.classID, "Students:", cls.students); // Debugging
+	
+			const students = cls.students || []; 
+			if (students.length === 0) {
+				console.warn(`No students found for class ${cls.classID}`);
+			}
+	
+			const topStudent = students.reduce((max, student) =>
+				student.totalPoints > max.totalPoints ? student : max,
+				students[0] || null
+			);
+	
+			contributorsMap[cls.classID] = topStudent || null;
+		});
+	
+		console.log("Final Top Contributors Map:", contributorsMap);
+		setTopContributors(contributorsMap);
+	};
+	
 	const handleClassSelection = (classID) => {
 		const foundClass = classes.find((cls) => cls.classID === classID);
 		setSelectedClass(foundClass);
+		fetchStudents(classID);
+		findTopContributor(students);
 	};
 
 	//Function to sort school classes data in descending order
@@ -122,17 +179,11 @@ function Leaderboards() {
 	useEffect(() => {
 		if (user) {
 			fetchSchoolClasses();
-			fetchClasses();
+			fetchStudentsForClasses();
 		}
 	}, [user]);
 
-	console.log("School classes data:", schoolClassesData);
-	console.log("Classes data:", classes);
-	console.log(selectedClass);
-	console.log("Students data:", students);
-	console.log("Top Contributor:", topContributor);
-	console.log("Top Contributor User:", topContributor?.user);
-	console.log("Top Contributor Name:", topContributor?.user?.name);
+	console.log("School Classes Data:", schoolClassesData);
 
 	if (!error && loaded && user) {
 		return (
@@ -265,7 +316,7 @@ function Leaderboards() {
 						{schoolClassesData
 							.sort((a, b) => b.classPoints - a.classPoints)
 							.map((schoolClass, index) => (
-								<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} />
+								<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null} />
 							))}
 					</Box>
 				</Box>
