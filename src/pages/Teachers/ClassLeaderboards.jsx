@@ -148,22 +148,34 @@ function Leaderboards() {
 		return [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
 	}
 
-	const handleNext = () => {
-		if (classes.length === 0) return;
+	const getPrevClass = () => {
+		if (!selectedClass || classes.length <= 1) return null;
+		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass.classID);
+		const prevIndex = (currentIndex - 1 + classes.length) % classes.length;
+		return classes[prevIndex];
+	};
 
-		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass?.classID);
-		const nextIndex = (currentIndex + 1) % classes.length; // Circular navigation
-		setSelectedClass(classes[nextIndex]);
-		fetchStudents(classes[nextIndex].classID);
+	const getNextClass = () => {
+		if (!selectedClass || classes.length <= 1) return null;
+		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass.classID);
+		const nextIndex = (currentIndex + 1) % classes.length;
+		return classes[nextIndex];
 	};
 
 	const handlePrev = () => {
-		if (classes.length === 0) return;
+		const prevClass = getPrevClass();
+		if (prevClass) {
+			setSelectedClass(prevClass);
+			fetchStudents(prevClass.classID);
+		}
+	};
 
-		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass?.classID);
-		const prevIndex = (currentIndex - 1 + classes.length) % classes.length; // Circular navigation
-		setSelectedClass(classes[prevIndex]);
-		fetchStudents(classes[prevIndex].classID);
+	const handleNext = () => {
+		const nextClass = getNextClass();
+		if (nextClass) {
+			setSelectedClass(nextClass);
+			fetchStudents(nextClass.classID);
+		}
 	};
 
 	useEffect(() => {
@@ -201,27 +213,46 @@ function Leaderboards() {
 						<Box display="flex" flexDir={"column"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} >
 							{/* Class brief information card */}
 							<Box position="relative" display="flex" flexDir={"column"} mt={4} p={3} borderRadius={20} height={"30%"} justifyContent={"center"} alignItems={"center"}>
-								<Box bg="#96E2D6" borderRadius="full" position="absolute" left={2} top="50%" transform="translateY(-50%)" p={2}>
-									<IoArrowBack size={30} color="black" cursor="pointer" onClick={handlePrev} />
-								</Box>
-								<Box
-									display="flex"
-									flexDir={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									height="40%"
-								>
-									<Heading fontSize={"40px"}>Class {selectedClass?.className || "Class Name"}</Heading>
-									<Flex justifyContent={"center"} alignItems={"center"} mt={4} gap={2}>
-										<Heading fontSize={"24px"}  >
-											{selectedClass?.classPoints || 0}
-										</Heading>
-										<Text as={PiCloverFill} boxSize={25} color="#2CD776" ></Text>
+								{/* Left Arrow & Previous Class Name */}
+								{classes.length > 1 && (
+									<Box position="absolute" left={2} top="50%" transform="translateY(-50%)" width="46px" >
+										<Text fontSize="sm" color="gray.600" mb={1} width="100%" textAlign="center" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+											{getPrevClass()?.className}
+										</Text>
+										<Box bg="#96E2D6" borderRadius="full" p={2} cursor="pointer" onClick={handlePrev} transition="all 0.2s ease-in-out"
+											_hover={{
+												transform: "scale(1.1)",
+												bg: "#7DD4C0",
+											}}>
+											<IoArrowBack size={30} color="black" />
+										</Box>
+									</Box>
+								)}
+
+								{/* Class Name & Points */}
+								<Box display="flex" flexDir="column" justifyContent="center" alignItems="center" height="40%">
+									<Heading fontSize="40px">Class {selectedClass?.className || "Class Name"}</Heading>
+									<Flex justifyContent="center" alignItems="center" mt={4} gap={2}>
+										<Heading fontSize="24px">{selectedClass?.classPoints || 0}</Heading>
+										<Text as={PiCloverFill} boxSize={25} color="#2CD776"></Text>
 									</Flex>
 								</Box>
-								<Box bg="#96E2D6" borderRadius="full" position="absolute" right={2} top="50%" transform="translateY(-50%)" p={2}>
-									<IoArrowForward size={30} color="black" cursor="pointer" onClick={handleNext} />
-								</Box>
+
+								{/* Right Arrow & Next Class Name */}
+								{classes.length > 1 && (
+									<Box position="absolute" right={2} top="50%" transform="translateY(-50%)" width="46px">
+										<Text fontSize="sm" color="gray.600" mb={1} textAlign="center" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+											{getNextClass()?.className}
+										</Text>
+										<Box bg="#96E2D6" borderRadius="full" p={2} cursor="pointer" onClick={handleNext} transition="all 0.2s ease-in-out"
+											_hover={{
+												transform: "scale(1.1)",
+												bg: "#7DD4C0",
+											}}>
+											<IoArrowForward size={30} color="black" />
+										</Box>
+									</Box>
+								)}
 							</Box>
 
 							{/* Top Contributor Panel */}
