@@ -5,6 +5,7 @@ import DeleteAccountDialog from "./DeleteAccountDialog";
 import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
 import { useNavigate } from "react-router-dom";
 import server from "../../../networking";
+import ShowToast from "../../Extensions/ShowToast";
 
 function AccountActionButtons({ userDetails }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -33,6 +34,14 @@ function AccountActionButtons({ userDetails }) {
 
         fetchUserDetails();
     }, [userDetails.id, userRole]);
+
+    const handleNavigateToParent = () => {
+        if (!parentId) {
+            ShowToast("error", "No parent account linked", "Please create a parent account and link it first.")
+            return;
+        }
+        navigate(`/identity/publicProfile/${parentId}`);
+    };
 
     return (
         <Box w="70%" mx="auto">
@@ -74,7 +83,7 @@ function AccountActionButtons({ userDetails }) {
                         )}
                         {userRole === "student" && (
                             <>
-                                <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={() => navigate(`/identity/publicProfile/${parentId}`)}> 
+                                <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={handleNavigateToParent}> 
                                     Parent's Account
                                 </Button>
                                 <Button 
