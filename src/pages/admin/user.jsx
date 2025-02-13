@@ -26,7 +26,8 @@ import {
 import { Field } from "@/components/ui/field";
 import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
-import { set } from "react-hook-form";
+import userManagementProfilePictureIcon from "../../components/admin/userManagementProfileIcon";
+import UserManagamentProfilePictureIcon from "../../components/admin/userManagementProfileIcon";
 
 const UserManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -173,6 +174,7 @@ const UserManagement = () => {
             ShowToast("error", "Error", error.response?.data?.error || error.message);
         }
     };
+    
 
     return (
         <>
@@ -493,13 +495,12 @@ const UserManagement = () => {
                                                 borderRadius="full"
                                                 width="40px"
                                                 height="40px"
-                                                bg="pink.200"
                                                 display="flex"
                                                 alignItems="center"
                                                 justifyContent="center"
                                                 mr="2"
                                             >
-                                                {user.name[0]} {/* Placeholder for icon or initial */}
+                                                <UserManagamentProfilePictureIcon userId={user.id} />
                                             </Box>
                                             {editingUser?.id === user.id ? (
                                                 <Input
