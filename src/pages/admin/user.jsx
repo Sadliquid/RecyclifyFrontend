@@ -521,8 +521,8 @@ const UserManagement = () => {
                                                     <MdEdit size={20} />
                                                 </Button>
                                                 <DialogRoot
-                                                    isOpen={onDeleteDialogOpen}
-                                                    onClose={onDeleteDialogClose}
+                                                    isOpen={isOpen}
+                                                    isClose={onClose}
                                                 >
                                                     <DialogTrigger asChild>
                                                         <Button
