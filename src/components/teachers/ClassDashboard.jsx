@@ -270,7 +270,7 @@ function ClassDashboard({ classData, students }) {
                             </Box>
 
                             {/* School Classes Mini leaderboard */}
-                            <Box w="100%" h="70%" p={2}>
+                            <Box w="100%" h="70%" p={2} overflowY="auto">
                                 <Flex direction="column" gap={2}>
                                     {schoolClassesData.map((leaderboardClassData, index) => (
                                         <Flex key={index} direction="row" w="100%" h="20%" gap={2} alignItems="center" justifyContent="center"

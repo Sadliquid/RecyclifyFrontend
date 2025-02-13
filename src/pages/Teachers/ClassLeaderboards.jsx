@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import server from "../../../networking";
 import ShowToast from "../../Extensions/ShowToast";
 import LeaderboardPlaceCard from "../../components/teachers/LeaderboardPlaceCard";
+import { motion } from "framer-motion";
+import { PiCloverFill } from "react-icons/pi";
+import { FaLeaf } from "react-icons/fa";
 
 function Leaderboards() {
 	const navigate = useNavigate();
@@ -17,7 +20,6 @@ function Leaderboards() {
 	const [topContributor, setTopContributor] = useState(null);
 	const [topContributors, setTopContributors] = useState({});
 	const [selectedClass, setSelectedClass] = useState(null); // Start as null
-
 
 	const fetchSchoolClasses = async () => {
 		try {
@@ -95,41 +97,41 @@ function Leaderboards() {
 			setTopContributor(null);
 			return;
 		}
-	
+
 		const validStudents = students.filter(student => student && student.totalPoints !== undefined);
 		if (validStudents.length === 0) {
 			setTopContributor(null);
 			return;
 		}
-	
-		const topStudent = validStudents.reduce((max, student) => 
+
+		const topStudent = validStudents.reduce((max, student) =>
 			student.totalPoints > max.totalPoints ? student : max
 		);
-	
+
 		setTopContributor(topStudent);
 	};
 
 	const fetchTopContributors = async (classes) => {
 		const contributorsMap = {};
-	
+
 		classes.forEach((cls) => {
-	
-			const students = cls.students || []; 
+
+			const students = cls.students || [];
 			if (students.length === 0) {
 				console.warn(`No students found for class ${cls.classID}`);
 			}
-	
+
 			const topStudent = students.reduce((max, student) =>
 				student.totalPoints > max.totalPoints ? student : max,
 				students[0] || null
 			);
-	
+
 			contributorsMap[cls.classID] = topStudent || null;
 		});
-	
+
 		setTopContributors(contributorsMap);
 	};
-	
+
 	const handleClassSelection = (classID) => {
 		const foundClass = classes.find((cls) => cls.classID === classID);
 		setSelectedClass(foundClass);
@@ -180,9 +182,18 @@ function Leaderboards() {
 					<Flex direction="column" justifyContent={"space-between"} width="28%">
 						<Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} padding={4}>
 							{/* Class brief information card */}
-							<Flex justifyContent={"center"} mb={3}>
+							<Flex justifyContent={"center"} mt={2} mb={3} flexWrap="wrap">
 								{classes.map((cls) => (
-									<Button key={cls.classID} onClick={() => handleClassSelection(cls.classID)} mx={1}>
+									<Button
+										key={cls.classID}
+										onClick={() => handleClassSelection(cls.classID)}
+										mx={1}
+										mb={2}
+										bg="linear-gradient(135deg, #4DCBA4 0%, #2CD776 100%)"
+										color="white"
+										_hover={{ bg: "linear-gradient(135deg, #2CD776 0%, #4DCBA4 100%)" }}
+										boxShadow="md"
+									>
 										{cls.className}
 									</Button>
 								))}
@@ -197,13 +208,20 @@ function Leaderboards() {
 								padding={5}
 							>
 								<Heading fontSize={"30px"}>{selectedClass?.className || "Class Name"}</Heading>
-								<Text fontSize={"md"} mt={2} textAlign={"center"}>
+								<Text fontSize={"md"} mt={2} textAlign={"center"} color="#718096">
 									{selectedClass?.classDescription || "Class description goes here."}
 								</Text>
-								<Heading fontSize={"24px"} mt={4} color="#2CD776">
-									{selectedClass?.classPoints || 0} Clovers
-								</Heading>
+								<Flex justifyContent={"center"} alignItems={"center"} mt={4} gap={2}>
+									<Heading fontSize={"24px"} mt={4} >
+										{selectedClass?.classPoints || 0}
+									</Heading>
+									<Text as={PiCloverFill} boxSize={25} color="#2CD776" mt={4}></Text>
+								</Flex>
 							</Box>
+
+							<Text>
+								Top Contributor in Class {selectedClass?.className || "Class Name"}
+							</Text>
 
 							{/* Top Contributor Panel */}
 							<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} width="100%">
@@ -212,27 +230,35 @@ function Leaderboards() {
 									flexDir={"column"}
 									justifyContent={"space-around"}
 									alignItems={"center"}
-									backgroundColor="#E5ECFF"
+									backgroundColor="#FFFFFF"
 									borderRadius={20}
 									height="85%"
 									padding={5}
+									boxShadow="lg"
 								>
 									{topContributor ? (
 										<>
 											{topContributor && topContributor.user && (
 												<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
 											)}
-											<Heading fontSize={"24px"} mt={2}>{topContributor.user.name}</Heading>
-											<Heading color="#2CD776">{topContributor.totalPoints} Leafs</Heading>
+											<Heading fontSize={"24px"} mt={2} color="#2D3748">{topContributor.user.name}</Heading>
+											<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
+												<Heading color="#2CD776" >{topContributor.totalPoints}</Heading>
+												<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
+													<FaLeaf />
+												</Box>
+											</Flex>
 											<Box
 												display="flex"
 												justifyContent={"center"}
 												alignItems={"center"}
 												border="3px solid #4DCBA4"
 												borderRadius={20}
-												height="20%"
+												height="30%"
 												mt={2}
-												padding={3}
+												mb={4}
+												padding={5}
+												boxShadow="md"
 											>
 												<Image
 													src={
@@ -242,11 +268,11 @@ function Leaderboards() {
 													}
 													boxSize={8}
 												/>
-												<Text fontSize={"md"} ml={2}>{topContributor.league}</Text>
+												<Text fontSize={"md"} ml={2} color="#2D3748">{topContributor.league} League</Text>
 											</Box>
 										</>
 									) : (
-										<Text>No top contributor available.</Text>
+										<Text  color="#718096">No top contributor available.</Text>
 									)}
 								</Box>
 							</Box>
@@ -262,6 +288,7 @@ function Leaderboards() {
 						borderRadius={20}
 						overflowY="auto"
 						padding={4}
+						boxShadow="lg"
 					>
 						<HStack
 							mt={2}
@@ -273,6 +300,7 @@ function Leaderboards() {
 							backgroundColor="#CBD8F7"
 							borderRadius={12}
 							fontWeight="bold"
+							boxShadow="md"
 						>
 							<Box width="10%" textAlign="center">
 								<Text fontSize="md">Rank</Text>
@@ -295,7 +323,9 @@ function Leaderboards() {
 						{schoolClassesData
 							.sort((a, b) => b.classPoints - a.classPoints)
 							.map((schoolClass, index) => (
-								<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null} />
+								<motion.div key={schoolClass.classID} whileHover={{ scale: 1.01 }} style={{ display: "block", width: "100%" }}>
+										<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null} />
+								</motion.div>
 							))}
 					</Box>
 				</Box>
@@ -304,4 +334,4 @@ function Leaderboards() {
 	}
 }
 
-export default Leaderboards
+export default Leaderboards;
