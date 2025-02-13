@@ -56,7 +56,8 @@ const UserManagement = () => {
             const response = await Server.get(`/api/UserManagement`);
 
             if (response.status === 200) {
-                setUsers(response.data.data);
+                const filteredUsers = response.data.data.filter(user => user.userRole !== 'admin');
+                setUsers(filteredUsers);
                 setIsLoading(false);
             } else {
                 throw new Error(response.data.error || `Failed to fetch users`);
