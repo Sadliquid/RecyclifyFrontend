@@ -1,4 +1,5 @@
-import { Box, Flex, Heading, Avatar, HStack, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, HStack, Image, Text, Button } from "@chakra-ui/react";
+import { Avatar } from "@/components/ui/avatar";
 import { IoArrowBack } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +13,10 @@ function Leaderboards() {
 	const { user, loaded, error } = useSelector((state) => state.auth);
 	const [schoolClassesData, setSchoolClassesData] = useState([]);
 	const [classes, setClasses] = useState([]);
-	const [classesCollection, setClassesCollection] = useState(null);
 	const [students, setStudents] = useState([]);
 	const [topContributor, setTopContributor] = useState(null);
-	const [selectedClass, setSelectedClass] = useState(null);
+	const [selectedClass, setSelectedClass] = useState(null); // Start as null
+
 
 	const fetchSchoolClasses = async () => {
 		try {
@@ -79,25 +80,27 @@ function Leaderboards() {
 
 	// Find the student with the highest total points
 	const findTopContributor = (students) => {
-		if (students.length > 0) {
-			const topStudent = students.reduce((max, student) =>
-				student.totalPoints > max.totalPoints ? student : max
-			);
-			setTopContributor(topStudent);
-		} else {
+		if (!students || students.length === 0) {
 			setTopContributor(null);
+			return;
 		}
+	
+		const validStudents = students.filter(student => student && student.totalPoints !== undefined);
+		if (validStudents.length === 0) {
+			setTopContributor(null);
+			return;
+		}
+	
+		const topStudent = validStudents.reduce((max, student) => 
+			student.totalPoints > max.totalPoints ? student : max
+		);
+	
+		setTopContributor(topStudent);
 	};
 
-	// Handle class selection
-	const handleClassChange = (classID) => {
-		if (!classesCollection) return;
-		// Use the collection's items array to find the selected item:
-		const selected = classesCollection.items.find((item) => item.value === classID);
-		setSelectedClass(selected);
-		if (selected) {
-			fetchStudents(selected.value);
-		}
+	const handleClassSelection = (classID) => {
+		const foundClass = classes.find((cls) => cls.classID === classID);
+		setSelectedClass(foundClass);
 	};
 
 	//Function to sort school classes data in descending order
@@ -110,11 +113,26 @@ function Leaderboards() {
 	}
 
 	useEffect(() => {
+		if (classes.length > 0) {
+			setSelectedClass(classes[0]); // Automatically select the first class
+			fetchStudents(classes[0].classID); // Fetch students for the first class
+		}
+	}, [classes]);
+
+	useEffect(() => {
 		if (user) {
 			fetchSchoolClasses();
 			fetchClasses();
 		}
 	}, [user]);
+
+	console.log("School classes data:", schoolClassesData);
+	console.log("Classes data:", classes);
+	console.log(selectedClass);
+	console.log("Students data:", students);
+	console.log("Top Contributor:", topContributor);
+	console.log("Top Contributor User:", topContributor?.user);
+	console.log("Top Contributor Name:", topContributor?.user?.name);
 
 	if (!error && loaded && user) {
 		return (
@@ -132,9 +150,18 @@ function Leaderboards() {
 
 				{/* Main Content */}
 				<Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"} gap={5}>
-					{/* Class Details Panel */}
+					{/* Leaderboard Panel */}
 					<Flex direction="column" justifyContent={"space-between"} width="28%">
 						<Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} padding={4}>
+							{/* Class brief information card */}
+							<Flex justifyContent={"center"} mb={3}>
+								{classes.map((cls) => (
+									<Button key={cls.classID} onClick={() => handleClassSelection(cls.classID)} mx={1}>
+										{cls.className}
+									</Button>
+								))}
+							</Flex>
+
 							<Box
 								display="flex"
 								flexDir={"column"}
@@ -166,9 +193,11 @@ function Leaderboards() {
 								>
 									{topContributor ? (
 										<>
-											<Avatar boxSize="100px" src={topContributor.avatar || "https://bit.ly/dan-abramov"} />
-											<Heading fontSize={"24px"} mt={2}>{topContributor.name}</Heading>
-											<Heading color="#2CD776">{topContributor.totalPoints} Clovers</Heading>
+											{topContributor && topContributor.user && (
+												<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+											)}
+											<Heading fontSize={"24px"} mt={2}>{topContributor.user.name}</Heading>
+											<Heading color="#2CD776">{topContributor.totalPoints} Leafs</Heading>
 											<Box
 												display="flex"
 												justifyContent={"center"}
