@@ -179,16 +179,15 @@ function Leaderboards() {
 				{/* Main Content */}
 				<Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"} gap={5}>
 					{/* Leaderboard Panel */}
-					<Flex direction="column" justifyContent={"space-between"} width="28%">
+					<Flex direction="column" justifyContent={"space-between"} width="28%" >
 						<Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} padding={4}>
 							{/* Class brief information card */}
-							<Flex justifyContent={"center"} mt={2} mb={3} flexWrap="wrap">
+							<Flex mt={2} mb={3} overflowX="auto" whiteSpace="nowrap" height="35%" width={"100%"}>
 								{classes.map((cls) => (
 									<Button
 										key={cls.classID}
 										onClick={() => handleClassSelection(cls.classID)}
 										mx={1}
-										mb={2}
 										bg="linear-gradient(135deg, #4DCBA4 0%, #2CD776 100%)"
 										color="white"
 										_hover={{ bg: "linear-gradient(135deg, #2CD776 0%, #4DCBA4 100%)" }}
@@ -207,21 +206,23 @@ function Leaderboards() {
 								height="85%"
 								padding={5}
 							>
-								<Heading fontSize={"30px"}>{selectedClass?.className || "Class Name"}</Heading>
-								<Text fontSize={"md"} mt={2} textAlign={"center"} color="#718096">
-									{selectedClass?.classDescription || "Class description goes here."}
-								</Text>
+								<Heading fontSize={"50px"}>Class {selectedClass?.className || "Class Name"}</Heading>
 								<Flex justifyContent={"center"} alignItems={"center"} mt={4} gap={2}>
-									<Heading fontSize={"24px"} mt={4} >
+									<Heading fontSize={"24px"}  >
 										{selectedClass?.classPoints || 0}
 									</Heading>
-									<Text as={PiCloverFill} boxSize={25} color="#2CD776" mt={4}></Text>
+									<Text as={PiCloverFill} boxSize={25} color="#2CD776" ></Text>
 								</Flex>
 							</Box>
 
-							<Text>
-								Top Contributor in Class {selectedClass?.className || "Class Name"}
+							{topContributor ? (
+								<Text fontWeight={"bold"} textAlign="center" mt={2}>
+								Class Top Contributor
 							</Text>
+							) : (
+								<></>
+							)}
+							
 
 							{/* Top Contributor Panel */}
 							<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} width="100%">
@@ -243,7 +244,7 @@ function Leaderboards() {
 											)}
 											<Heading fontSize={"24px"} mt={2} color="#2D3748">{topContributor.user.name}</Heading>
 											<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
-												<Heading color="#2CD776" >{topContributor.totalPoints}</Heading>
+												<Heading >{topContributor.totalPoints}</Heading>
 												<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
 													<FaLeaf />
 												</Box>
@@ -252,7 +253,8 @@ function Leaderboards() {
 												display="flex"
 												justifyContent={"center"}
 												alignItems={"center"}
-												border="3px solid #4DCBA4"
+												border="3px solid"
+												borderColor={topContributor.league === "Gold" ? "gold" : topContributor.league == "Silver" ? "silver" : "#F6B191"}
 												borderRadius={20}
 												height="30%"
 												mt={2}
@@ -272,7 +274,7 @@ function Leaderboards() {
 											</Box>
 										</>
 									) : (
-										<Text  color="#718096">No top contributor available.</Text>
+										<Text color="#718096" mb={3}>No top contributor available.</Text>
 									)}
 								</Box>
 							</Box>
