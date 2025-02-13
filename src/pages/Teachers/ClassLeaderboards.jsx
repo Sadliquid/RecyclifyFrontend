@@ -303,12 +303,16 @@ function Leaderboards() {
 								<Text fontSize="md">Rank</Text>
 							</Box>
 
-							<Box display="flex" alignItems="center" justifyContent="flex-start" width="30%">
+							<Box width="20%" textAlign="center">
 								<Text fontSize="md">Class Name</Text>
 							</Box>
 
+							<Box width="50%" textAlign="center">
+								<Text fontSize="md">Top Contributor</Text>
+							</Box>
+
 							<Box width="20%" textAlign="center">
-								<Text fontSize="md">Clovers</Text>
+								<Text fontSize="md">Class Clovers</Text>
 							</Box>
 						</HStack>
 

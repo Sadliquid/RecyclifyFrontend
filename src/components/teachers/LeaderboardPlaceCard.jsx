@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import { Box, HStack, Text, Flex, Image } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
+import { PiCloverFill } from "react-icons/pi";
 
 function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
 
     console.log(topContributor)
-    
+
     // Assuming user has a classID field
     const isUserClass = !error && loaded && schoolClass.classID === user.classID;
 
@@ -23,31 +24,41 @@ function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
             border={isUserClass ? "2px solid #4DCBA4" : "none"}
         >
             {/* Rank Column */}
-            <Box width="10%" textAlign="center">
-                <Text fontSize="lg" fontWeight="bold">{rank}</Text>
+            <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
+                {/* Conditionally show the medal image only for ranks 1, 2, or 3 */}
+                {(rank === 1 || rank === 2 || rank === 3) && (
+                    <Image
+                        src={rank === 1 ? "/gold-medal.png" : rank === 2 ? "/silver-medal.png" : "/bronze-medal.png"}
+                        alt={`Rank ${rank}`} w="20%" h="auto"
+                    />
+                )}  
+                <Text fontSize="lg" fontWeight="bold">{rank > 3 ? rank : ""}</Text>
             </Box>
 
             {/* Class Name Column */}
-            <Box display="flex" alignItems="center" justifyContent="flex-start" width="40%">
+            <Box display="flex" alignItems="center" justifyContent="center" width="20%">
                 <Text fontSize="md" fontWeight="bold" textAlign="left">
                     {schoolClass.className}
                 </Text>
             </Box>
 
             {/* Display Top Contributor */}
-			<Box width="30%" textAlign="center">
-				{topContributor ? (
-					<Flex alignItems="center" justifyContent="center">
-						<Text fontSize="md">{topContributor.user?.name}</Text>
-					</Flex>
-				) : (
-					<Text fontSize="sm" color="gray.500">No Top Contributor</Text>
-				)}
+            <Box width="50%" textAlign="center">
+                {topContributor ? (
+                    <Flex alignItems="center" justifyContent="center">
+                        <Text fontSize="md" fontWeight="bold" >{topContributor.user?.name}</Text>
+                    </Flex>
+                ) : (
+                    <Text fontSize="sm" color="gray.500">No Top Contributor</Text>
+                )}
             </Box>
 
             {/* Class Points Column */}
             <Box width="20%" textAlign="center">
-                <Text fontSize="md" fontWeight="bold" color="#2CD776">{schoolClass.classPoints}</Text>
+                <Flex alignItems="center" justifyContent="center" gap={2}>
+                    <Text fontSize="md" fontWeight="bold">{schoolClass.classPoints}</Text>
+                    <Text as={PiCloverFill} boxSize={25} color="#2CD776" mt={1}></Text>
+                </Flex>
             </Box>
         </HStack>
     );

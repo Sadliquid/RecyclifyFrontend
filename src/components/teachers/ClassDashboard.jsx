@@ -216,7 +216,7 @@ function ClassDashboard({ classData, students }) {
                                         Class Least 3 Contributors
                                     </Box>
 
-                                    {/* Top 3 Students Contributor based on their totalPoints */}
+                                    {/* Least 3 Students Contributor based on their totalPoints */}
                                     <Flex direction="column" w="100%" h="80%" alignItems="center" justifyContent="center" gap={4}>
                                         {lowest3Students.map((student, index) => (
                                             <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="center" justifyContent="center" >
