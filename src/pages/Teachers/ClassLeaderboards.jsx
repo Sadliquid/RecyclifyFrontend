@@ -230,7 +230,7 @@ function Leaderboards() {
 								)}
 
 								{/* Class Name & Points */}
-								<Box display="flex" flexDir="column" justifyContent="center" alignItems="center" height="40%">
+								<Box display="flex" flexDir="column" justifyContent="center" alignItems="center" height="40%" mt={8}>
 									<Heading fontSize="40px">Class {selectedClass?.className || "Class Name"}</Heading>
 									<Flex justifyContent="center" alignItems="center" mt={4} gap={2}>
 										<Heading fontSize="24px">{selectedClass?.classPoints || 0}</Heading>
