@@ -102,8 +102,6 @@ const TaskRow = ({ task, fetchTasks }) => {
         });
     };
 
-    console.log("TaskRow -> task", task)
-
     return (
         <>
             {/* Task Verification Dialog */}
@@ -203,7 +201,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                                             objectFit="cover"
                                         />
                                         <Box bg="#96E2D6" borderRadius="full" position="absolute" right={2} top="50%" transform="translateY(-50%)" p={2}>
-                                            <IoArrowForward size={30} color="black" cursor="pointer" onClick={handlePrev} />
+                                            <IoArrowForward size={30} color="black" cursor="pointer" onClick={handleNext} />
                                         </Box>
                                     </Box>
                                 )}
@@ -237,12 +235,17 @@ const TaskRow = ({ task, fetchTasks }) => {
                     {/* Conditionally render the DialogFooter based on task status */}
                     {!task.taskVerified && !task.taskRejected && (
                         <DialogFooter display="flex" gap={10} justifyContent="center">
-                            <Button bg="#FF8080" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}>
-                                Reject
-                            </Button>
-                            <Button bg="#2D65FF" color="white" onClick={handleVerify}>
-                                Verify
-                            </Button>
+                            <DialogActionTrigger asChild>
+                                <Button bg="#FF8080" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}>
+                                    Reject
+                                </Button>
+                            </DialogActionTrigger>
+                            {/* disable to verify button if the task is rejecting */}
+                            <DialogActionTrigger asChild>
+                                <Button bg="#2D65FF" color="white" onClick={handleVerify} disabled={rejectDescription.trim().length > 0}>
+                                    Verify
+                                </Button>
+                            </DialogActionTrigger>
                         </DialogFooter>
                     )}
                 </DialogContent>
