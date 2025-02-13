@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from "@chakra-ui/react";
+import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text, useDisclosure } from "@chakra-ui/react";
 import { MdEdit, MdAdd } from "react-icons/md";
+import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import ShowToast from "../../Extensions/ShowToast";
+import { Field } from "@/components/ui/field";
+import { Checkbox } from "@/components/ui/checkbox"
 import Server from "../../../networking";
 const InventoryManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -11,29 +14,32 @@ const InventoryManagement = () => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [editingItem, setEditingItem] = useState(null); // Track the item being edited
     const { user, loaded, error } = useSelector((state) => state.auth);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [addItem, setAddItem] = useState(null);
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "admin") {
             fetchRewardItems();
         }
     }, [loaded]);
     // Fetch reward items from the backend
-        const fetchRewardItems = async () => {
-            try {
-                const response = await Server.get(`/api/RewardItem`);
-                console.log("Response:", response);
-        
-                if (response.status === 200) {
-                    // Access nested data property
-                    setRewardItems(response.data.data);
-                    setIsLoading(false);
-                } else {
-                    throw new Error(response.data.error || `Failed to fetch reward items`);
-                }
-            } catch (error) {
-                setErrorMessage(error.response?.data?.error || error.message);
+    const fetchRewardItems = async () => {
+        try {
+            const response = await Server.get(`/api/RewardItem`);
+            console.log("Response:", response);
+
+            if (response.status === 200) {
+                // Access nested data property
+                setRewardItems(response.data.data);
                 setIsLoading(false);
+            } else {
+                throw new Error(response.data.error || `Failed to fetch reward items`);
             }
-        };
+        } catch (error) {
+            setErrorMessage(error.response?.data?.error || error.message);
+            setIsLoading(false);
+        }
+    };
 
     if (!loaded) {
         return (
@@ -60,6 +66,10 @@ const InventoryManagement = () => {
         setEditingItem(item); // Set the item to be edited
     };
 
+    const handleAddItem = () => {
+        onOpen();
+    };
+
     // Handle save button click (update item)
     const handleSave = async () => {
         try {
@@ -68,7 +78,7 @@ const InventoryManagement = () => {
                 editingItem,
                 { headers: { "Content-Type": "application/json" } }
             );
-    
+
             if (response.status >= 200 && response.status < 300) {
                 setRewardItems(rewardItems.map(item =>
                     item.rewardID === response.data.data.rewardID ? response.data.data : item
@@ -88,7 +98,7 @@ const InventoryManagement = () => {
             const response = await Server.put(
                 `/api/RewardItem/${rewardID}/toggle-availability`
             );
-    
+
             if (response.status === 200) {
                 setRewardItems(prevItems =>
                     prevItems.map(item =>
@@ -103,7 +113,7 @@ const InventoryManagement = () => {
             ShowToast("error", "Error", error.response?.data?.error || error.message);
         }
     };
-    
+
     if (isLoading) {
         return <Spinner />;
     }
@@ -132,10 +142,11 @@ const InventoryManagement = () => {
                         <Button
                             leftIcon={<MdAdd />} // Add icon
                             bg={"#4DCBA4"}
-                            onClick={() => console.log("Add Item button clicked")}
+                            onClick={() => handleAddItem()}
                         >
                             Add Item
                         </Button>
+
                     </HStack>
                 </Box>
                 {filteredItems.length === 0 ? (
@@ -143,15 +154,102 @@ const InventoryManagement = () => {
                         <Text fontSize="lg" color="gray.500">
                             No reward items found.
                         </Text>
-                        <Button
-                            mt={4}
-                            leftIcon={<MdAdd />}
-                            colorScheme="teal"
-                            onClick={() => console.log("Add Item button clicked")}
-                        >
-                            Add a New Item
-                        </Button>
+                        <DialogRoot isOpen={isOpen} onClose={onClose}>
+                            <DialogTrigger asChild>
+                                <Button
+                                    mt={4}
+                                    leftIcon={<MdAdd />}
+                                    colorScheme="teal"
+                                    onClick={() => handleAddItem()}
+                                >
+                                    Add a New Item
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Add a new item for redemption</DialogTitle>
+                                </DialogHeader>
+                                <DialogBody pb="4">
+                                    <Stack gap="4">
+                                        <Field label ="Reward Title">
+                                            <Input value={addItem?.title || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                title: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Reward Title"/>
+                                        </Field>
+                                        <Field label ="Reward Description">
+                                            <Input value={addItem?.description || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                description: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Reward Description"/>
+                                        </Field>
+                                        <Field label ="Required Points">
+                                            <Input value={addItem?.points || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                points: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Required Points"/>
+                                        </Field>
+                                        <Field label ="Quantity">
+                                            <Input value={addItem?.quantity || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                quantity: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Quantity"/>
+                                        </Field>
+                                        <Field label ="Is Available">
+                                            <Checkbox
+                                            isChecked={addItem?.isAvailable || false}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                isAvailable: e.target.checked
+                                            })
+                                            }
+                                            >
+                                                Is Available
+                                            </Checkbox>
+                                        </Field>
+                                        <Field label="Item Image">
+                                            <Input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => setAddItem({
+                                                    ...addItem,
+                                                    image: e.target.files[0]
+                                                })}
+                                            />
+                                        </Field>
+                                    </Stack>
+                                </DialogBody>
+                                <DialogFooter>
+                                    <Button
+                                        bg={"#4DCBA4"}
+                                        onClick={async () => {
+                                                const formData = new FormData();
+                                                formData.append("title", addItem.title);
+                                                formData.append("description", addItem.description);
+                                                formData.append("points", addItem.points);
+                                                formData.append("quantity", addItem.quantity);
+                                                formData.append("isAvailable", addItem.isAvailable);
+                                                formData.append("image", addItem.image);
+                                            }}
+                                    >Add Item </Button>
+                                </DialogFooter>
+                            </DialogContent>
+
+                        </DialogRoot>
                     </Box>
+
                 ) : (
                     <Table.Root size="sm" showColumnBorder>
                         <Table.Header>

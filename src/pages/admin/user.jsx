@@ -26,7 +26,6 @@ import {
 import { Field } from "@/components/ui/field";
 import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
-import userManagementProfilePictureIcon from "../../components/admin/userManagementProfileIcon";
 import UserManagamentProfilePictureIcon from "../../components/admin/userManagementProfileIcon";
 
 const UserManagement = () => {
@@ -37,11 +36,6 @@ const UserManagement = () => {
     const [editingUser, setEditingUser] = useState(null); // Track the user being edited
     const [userToDelete, setUserToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    const {
-        isOpen: isDeleteDialogOpen,
-        onOpen: onDeleteDialogOpen,
-        onClose: onDeleteDialogClose,
-    } = useDisclosure();
     const { user, loaded, error } = useSelector((state) => state.auth);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -104,7 +98,7 @@ const UserManagement = () => {
 
     const handleDelete = async (userId) => {
         setUserToDelete(userId);
-        onDeleteDialogOpen();
+        onOpen();
     };
 
     const confirmDelete = async () => {
@@ -124,7 +118,7 @@ const UserManagement = () => {
             ShowToast("error", "Error", error.response?.data?.error || error.message);
         } finally {
             setIsDeleting(false);
-            onDeleteDialogClose();
+            onClose();
             setUserToDelete(null);
         }
     };
