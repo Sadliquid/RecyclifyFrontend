@@ -4,17 +4,19 @@ import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text } from
 import { MdEdit, MdAdd } from "react-icons/md";
 import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
-
 const InventoryManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [rewardItems, setRewardItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState(null);
     const [editingItem, setEditingItem] = useState(null); // Track the item being edited
-    const { loaded } = useSelector((state) => state.auth);
-
-    // Fetch reward items from the backend
+    const { user, loaded, error } = useSelector((state) => state.auth);
     useEffect(() => {
+        if (!error && loaded && user && user.userRole == "admin") {
+            fetchRewardItems();
+        }
+    }, [loaded]);
+    // Fetch reward items from the backend
         const fetchRewardItems = async () => {
             try {
                 const response = await Server.get(`/api/RewardItem`);
@@ -32,9 +34,6 @@ const InventoryManagement = () => {
                 setIsLoading(false);
             }
         };
-
-        fetchRewardItems();
-    }, [loaded]);
 
     if (!loaded) {
         return (

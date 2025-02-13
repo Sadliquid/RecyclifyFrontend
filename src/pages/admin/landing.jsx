@@ -4,20 +4,32 @@ import { useSelector } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from "react";
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function Dashboard() {
-	const { loaded } = useSelector((state) => state.auth);
-	
-	if (!loaded) {
-		return (
-			<Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
-				<Spinner />
-			</Box>
-		)
-	}
+	const { user, loaded, error } = useSelector((state) => state.auth);
+		useEffect(() => {
+			if (!error && loaded && user && user.userRole == "admin") {
+				console.log("User is an admin");
+			}
+		}, [loaded]);
+		if (!loaded) {
+			return (
+				<Box
+					display="flex"
+					flexDir={"column"}
+					justifyContent="center"
+					alignItems="center"
+					width="100%"
+					height="100%"
+				>
+					<Spinner />
+				</Box>
+			);
+		}
 	// Chart data
 	const data = {
 		labels: ['101', '102', '103', '104', '201', '202', '203', '204', '205', '301', '302'],
