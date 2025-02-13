@@ -6,8 +6,6 @@ import { PiCloverFill } from "react-icons/pi";
 function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
 
-    console.log(schoolClass)
-
     // Assuming user has a classID field
     const isTeacherClass = !error && loaded && schoolClass.teacherID === user.id;
 

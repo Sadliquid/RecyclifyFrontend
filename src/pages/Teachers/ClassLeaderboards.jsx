@@ -68,26 +68,6 @@ function Leaderboards() {
 		await fetchTopContributors(updatedClasses);
 	};
 
-	// // Reusable function to fetch classes
-	// const fetchClasses = async () => {
-	// 	try {
-	// 		const response = await server.get(`/api/Teacher/get-classes/?teacherID=${user.id}`);
-	// 		if (response.status === 200) {
-	// 			setClasses(Array.isArray(response.data.data) ? response.data.data : []);
-	// 		}
-	// 	} catch (error) {
-	// 		console.error("Error fetching classes:", error);
-	// 		if (error.response.status === 400) {
-	// 			ShowToast("error", "Error fetching classes", error.response.data.message.split("UERROR: "));
-	// 			setClasses([]);
-	// 		} else {
-	// 			ShowToast("error", "Error fetching classes", "Please try again.");
-	// 			setClasses([]);
-	// 		}
-	// 		setClasses([]);
-	// 	}
-	// };
-
 	// Fetch students data from the backend
 	const fetchStudents = async (classID) => {
 		try {
@@ -130,11 +110,9 @@ function Leaderboards() {
 	};
 
 	const fetchTopContributors = async (classes) => {
-		console.log("Classes:", classes); // Debugging
 		const contributorsMap = {};
 	
 		classes.forEach((cls) => {
-			console.log("Class:", cls.classID, "Students:", cls.students); // Debugging
 	
 			const students = cls.students || []; 
 			if (students.length === 0) {
@@ -149,7 +127,6 @@ function Leaderboards() {
 			contributorsMap[cls.classID] = topStudent || null;
 		});
 	
-		console.log("Final Top Contributors Map:", contributorsMap);
 		setTopContributors(contributorsMap);
 	};
 	
@@ -182,8 +159,6 @@ function Leaderboards() {
 			fetchStudentsForClasses();
 		}
 	}, [user]);
-
-	console.log("School Classes Data:", schoolClassesData);
 
 	if (!error && loaded && user) {
 		return (
