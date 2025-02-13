@@ -3,12 +3,13 @@ import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@ch
 import EditPasswordDialog from "./EditPasswordDialog";
 import DeleteAccountDialog from "./DeleteAccountDialog";
 import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
+import { useNavigate } from "react-router-dom";
 
 function AccountActionButtons({ userDetails }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showEditPasswordDialog, setShowEditPasswordDialog] = useState(false);
     const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
-
+    const navigate = useNavigate()
     const userRole = userDetails.userRole
 
     return (
@@ -63,7 +64,7 @@ function AccountActionButtons({ userDetails }) {
                             </>
                         )}
                         {["parent", "student", "teacher"].includes(userRole) && (
-                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
+                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={() => navigate(`/identity/publicProfile/${userDetails.id}`)}>
                                 View Public Account
                             </Button>
                         )}
