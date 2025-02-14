@@ -11,22 +11,22 @@ import ClassQuest from './ClassQuest';
 
 function ClassTabs({ classData, students }) {
     const studentsList = students || [];
-    
+
     return (
         <>
             {/* Conditionally render tabs based on student count */}
             {studentsList.length === 0 ? (
-                <VStack textAlign="center" fontWeight="medium" mt={4}>
+                <VStack textAlign="center" fontWeight="medium" mt={4} mr={8}>
                     <LuBox />
                     <Text>No students found in this class.</Text>
                 </VStack>
             ) : (
                 <Tabs.Root defaultValue="Class" key="plain" variant="plain" align="center" mt={4}>
                     <Tabs.List gap={4} align="center">
-                        <Tabs.Trigger 
-                            value='Class' 
-                            bg="#AEC7ED" 
-                            color="black" 
+                        <Tabs.Trigger
+                            value='Class'
+                            bg="#AEC7ED"
+                            color="black"
                             align="center"
                             _selected={{
                                 bg: "#B9D4FF",
@@ -45,10 +45,10 @@ function ClassTabs({ classData, students }) {
                         >
                             <SiGoogleclassroom />Class Dashboard
                         </Tabs.Trigger>
-                        <Tabs.Trigger 
-                            value='Class Quests' 
-                            bg="#AEC7ED" 
-                            color="black" 
+                        <Tabs.Trigger
+                            value='Class Quests'
+                            bg="#AEC7ED"
+                            color="black"
                             align="center"
                             _selected={{
                                 bg: "#B9D4FF",
@@ -67,10 +67,10 @@ function ClassTabs({ classData, students }) {
                         >
                             <FaClipboardList />Class Quest
                         </Tabs.Trigger>
-                        <Tabs.Trigger 
-                            value='Students' 
-                            bg="#94E9B8" 
-                            color="black" 
+                        <Tabs.Trigger
+                            value='Students'
+                            bg="#94E9B8"
+                            color="black"
                             align="center"
                             _selected={{
                                 bg: "#96E2D6",

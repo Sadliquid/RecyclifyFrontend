@@ -8,8 +8,27 @@ import { InputGroup } from "@/components/ui/input-group"
 import { PasswordInput } from "@/components/ui/password-input"
 import server from "../../../networking"
 import ShowToast from '../../Extensions/ShowToast';
+import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 function StudentRegistrationForm({ goBack }) {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
+    return (
+        <GoogleReCaptchaProvider
+            reCaptchaKey={siteKey}
+            scriptProps={{
+                async: true,
+                defer: true,
+                appendTo: 'head',
+            }}
+        >
+            <InnerStudentForm goBack={goBack} />
+        </GoogleReCaptchaProvider>
+    );
+}
+
+function InnerStudentForm({ goBack }) {
+    const { executeRecaptcha } = useGoogleReCaptcha();
     const navigate = useNavigate();
 
     // Validation schema using Yup
@@ -40,7 +59,18 @@ function StudentRegistrationForm({ goBack }) {
     // Form submission handler
     const handleSubmit = async (values) => {
         try {
-            const response = await server.post("/api/Identity/createAccount", values);
+            if (!executeRecaptcha) {
+                ShowToast("error", "reCAPTCHA Error", "reCAPTCHA not loaded. Please refresh the page.");
+                return;
+            }
+        
+            // Execute reCAPTCHA and get token
+            const token = await executeRecaptcha('parent_signup');
+            
+            // Include the token in your submission data
+            const submissionData = { ...values, RecaptchaResponse: token };
+
+            const response = await server.post("/api/Identity/createAccount", submissionData);
             const rawResponseMessage = response.data.message;
             if (rawResponseMessage.startsWith("SUCCESS") && response.status === 200) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
