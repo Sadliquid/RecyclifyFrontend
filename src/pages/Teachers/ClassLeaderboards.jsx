@@ -215,8 +215,6 @@ function Leaderboards() {
 		}
 	}, [user]);
 
-	console.log(topContributor)
-
 	if (!error && loaded && user) {
 		return (
 			<Box>
