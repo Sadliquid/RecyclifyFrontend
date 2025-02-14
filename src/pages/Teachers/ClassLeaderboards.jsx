@@ -216,7 +216,10 @@ function Leaderboards() {
 		}
 	}, [user]);
 
-	console.log(teacherClasses)
+	console.log(selectedClass)
+	for (const schoolClass of schoolClassesData) {
+		console.log(schoolClass.classID)
+	}
 
 	if (!error && loaded && user) {
 		return (
@@ -433,7 +436,8 @@ function Leaderboards() {
 								.sort((a, b) => b.classPoints - a.classPoints)
 								.map((schoolClass, index) => (
 									<motion.div key={schoolClass.classID} whileHover={{ scale: 1.01 }} style={{ display: "block", width: "100%" }}>
-										<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null} />
+										<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null}
+										border={selectedClass?.classID == schoolClass.classID ? "2px solid #4DCBA4" : "none"} />
 									</motion.div>
 								))}
 						</Box>

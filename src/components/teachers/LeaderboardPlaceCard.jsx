@@ -3,11 +3,8 @@ import { Box, HStack, Text, Flex, Image } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { PiCloverFill } from "react-icons/pi";
 
-function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
+function LeaderboardPlaceCard({ rank, schoolClass, topContributor, border }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
-
-    // Assuming user has a classID field
-    const isTeacherClass = !error && loaded && schoolClass.teacherID === user.id;
 
     return (
         <HStack
@@ -19,7 +16,7 @@ function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
             padding="10px"
             backgroundColor={"#F4F7FF"}
             borderRadius={12}
-            border={isTeacherClass ? "2px solid #4DCBA4" : "none"}
+            border={border}
         >
             {/* Rank Column */}
             <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
