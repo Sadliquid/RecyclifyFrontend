@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { PiCloverFill } from "react-icons/pi";
 import { FaLeaf } from "react-icons/fa";
 import { toaster } from "@/components/ui/toaster";
+import { Tooltip } from "@/components/ui/tooltip"
 
 function Leaderboards() {
 	const navigate = useNavigate();
@@ -20,7 +21,7 @@ function Leaderboards() {
 	const [classes, setClasses] = useState([]);
 	const [topContributor, setTopContributor] = useState(null);
 	const [topContributors, setTopContributors] = useState({});
-	const [selectedClass, setSelectedClass] = useState(null); 
+	const [selectedClass, setSelectedClass] = useState(null);
 
 	const fetchSchoolClasses = async () => {
 		try {
@@ -143,8 +144,8 @@ function Leaderboards() {
 		console.log("Sending certificate to:", topContributor.user.email);
 		const sendCertificatePromise = new Promise(async (resolve, reject) => {
 			try {
-				const response = await server.post(`/api/Teacher/send-certificate?topContributorName=${topContributor.user.name}&topContributorEmail=${topContributor.user.email}`); 
-	
+				const response = await server.post(`/api/Teacher/send-certificate?topContributorName=${topContributor.user.name}&topContributorEmail=${topContributor.user.email}`);
+
 				if (response.status === 200) {
 					resolve();
 				}
@@ -157,7 +158,7 @@ function Leaderboards() {
 				}
 			}
 		});
-	
+
 		// Show toast with promise-based status
 		toaster.promise(sendCertificatePromise, {
 			loading: { title: "Sending Certificate...", description: "Please wait while the certificate is being sent." },
@@ -282,66 +283,69 @@ function Leaderboards() {
 							{topContributor ? (
 								<DialogRoot size="lg" >
 									<DialogTrigger asChild cursor="pointer">
-										<motion.div
-											whileHover={{ scale: 1.02 }}
-											transition={{ duration: 0.2 }}
-											width="100%"
-											height="70%"
-										>
-											<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
-												<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
-													Top Contributor
-												</Heading>
-												<Box
-													display="flex"
-													flexDir={"column"}
-													justifyContent={"space-around"}
-													alignItems={"center"}
-													backgroundColor="#FFFFFF"
-													borderRadius={20}
-													width="80%"
-													height="90%"
-													padding={4}
-													boxShadow="lg"
-												>
-													<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" />
-													<Heading fontSize={"24px"} mt={2} color="#2D3748">
-														{topContributor.user.name}
+										<Tooltip content="Show appreciation! Click to send a certificate to the class’s top contributor!" 
+										borderRadius={10} fontSize="md" fontWeight="bold" p={4} boxShadow="md" openDelay={200} closeDelay={100} showArrow>
+											<motion.div
+												whileHover={{ scale: 1.02 }}
+												transition={{ duration: 0.2 }}
+												width="100%"
+												height="70%"
+											>
+												<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
+													<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
+														Top Contributor
 													</Heading>
-													<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
-														<Heading>{topContributor.totalPoints}</Heading>
-														<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
-															<FaLeaf />
-														</Box>
-													</Flex>
 													<Box
 														display="flex"
-														justifyContent={"center"}
+														flexDir={"column"}
+														justifyContent={"space-around"}
 														alignItems={"center"}
-														border="3px solid"
-														borderColor={topContributor.league === "Gold" ? "gold" : topContributor.league === "Silver" ? "silver" : "#F6B191"}
+														backgroundColor="#FFFFFF"
 														borderRadius={20}
-														height="30%"
-														mt={2}
-														mb={4}
-														padding={5}
-														boxShadow="md"
+														width="80%"
+														height="90%"
+														padding={4}
+														boxShadow="lg"
 													>
-														<Image
-															src={
-																topContributor.league === "Bronze" ? "/bronze-medal.png" :
-																	topContributor.league === "Silver" ? "/silver-medal.png" :
-																		"/gold-medal.png"
-															}
-															boxSize={8}
-														/>
-														<Text fontSize={"md"} ml={2} color="#2D3748">
-															{topContributor.league} League
-														</Text>
+														<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" />
+														<Heading fontSize={"24px"} mt={2} color="#2D3748">
+															{topContributor.user.name}
+														</Heading>
+														<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
+															<Heading>{topContributor.totalPoints}</Heading>
+															<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
+																<FaLeaf />
+															</Box>
+														</Flex>
+														<Box
+															display="flex"
+															justifyContent={"center"}
+															alignItems={"center"}
+															border="3px solid"
+															borderColor={topContributor.league === "Gold" ? "gold" : topContributor.league === "Silver" ? "silver" : "#F6B191"}
+															borderRadius={20}
+															height="30%"
+															mt={2}
+															mb={4}
+															padding={5}
+															boxShadow="md"
+														>
+															<Image
+																src={
+																	topContributor.league === "Bronze" ? "/bronze-medal.png" :
+																		topContributor.league === "Silver" ? "/silver-medal.png" :
+																			"/gold-medal.png"
+																}
+																boxSize={8}
+															/>
+															<Text fontSize={"md"} ml={2} color="#2D3748">
+																{topContributor.league} League
+															</Text>
+														</Box>
 													</Box>
 												</Box>
-											</Box>
-										</motion.div>
+											</motion.div>
+										</Tooltip>
 									</DialogTrigger>
 
 									{/* Confirmation Dialog */}
