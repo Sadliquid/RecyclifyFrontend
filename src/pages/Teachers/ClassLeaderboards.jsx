@@ -11,6 +11,7 @@ import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHea
 import { motion } from "framer-motion";
 import { PiCloverFill } from "react-icons/pi";
 import { FaLeaf } from "react-icons/fa";
+import { toaster } from "@/components/ui/toaster";
 
 function Leaderboards() {
 	const navigate = useNavigate();
@@ -137,23 +138,35 @@ function Leaderboards() {
 	}
 
 	const sendCertificate = async (topContributor) => {
-		try {
-			const response = await server.post("/api/Teachers/send-certificate", {
-				topContributorName: topContributor.user.name,
-				topContributorEmail: topContributor.user.email,
-			});
-
-			if (response.status === 200) {
-				ShowToast("success", "Certificate sent", "Certificate has been sent to the top contributor.");
+		console.log("Sending certificate to:", topContributor);
+		console.log("Sending certificate to:", topContributor.user.name);
+		console.log("Sending certificate to:", topContributor.user.email);
+		const sendCertificatePromise = new Promise(async (resolve, reject) => {
+			try {
+				const response = await server.post(`/api/Teacher/send-certificate?topContributorName=${topContributor.user.name}&topContributorEmail=${topContributor.user.email}`); 
+	
+				if (response.status === 200) {
+					resolve();
+				}
+			} catch (error) {
+				console.error("Error sending certificate:", error);
+				if (error.response?.status === 400) {
+					reject(error.response.data.message.split("UERROR: ")[1] || "An error occurred.");
+				} else {
+					reject("Please try again.");
+				}
 			}
-		} catch (error) {
-			console.error("Error sending certificate:", error);
-			if (error.response.status === 400) {
-				ShowToast("error", "Error sending certificate", error.response.data.message.split("UERROR: "));
-			} else {
-				ShowToast("error", "Error sending certificate", "Please try again.");
-			}
-		}
+		});
+	
+		// Show toast with promise-based status
+		toaster.promise(sendCertificatePromise, {
+			loading: { title: "Sending Certificate...", description: "Please wait while the certificate is being sent." },
+			success: { title: "Certificate Sent!", description: "The certificate has been successfully sent to the top contributor." },
+			error: (errorMessage) => ({
+				title: "Error Sending Certificate",
+				description: errorMessage,
+			}),
+		});
 	};
 
 	const getPrevClass = () => {
@@ -199,6 +212,8 @@ function Leaderboards() {
 			fetchStudentsForClasses();
 		}
 	}, [user]);
+
+	console.log(topContributor)
 
 	if (!error && loaded && user) {
 		return (
@@ -346,7 +361,7 @@ function Leaderboards() {
 												</Button>
 											</DialogActionTrigger>
 											<DialogActionTrigger asChild>
-												<Button bg="#FF8080" color="white" onClick={sendCertificate}>
+												<Button bg="#FF8080" color="white" onClick={() => sendCertificate(topContributor)}>
 													Send Certificate
 												</Button>
 											</DialogActionTrigger>
