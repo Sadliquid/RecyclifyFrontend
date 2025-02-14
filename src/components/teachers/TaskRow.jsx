@@ -101,7 +101,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                 onOpenChange={(isOpen) => setOpen(isOpen.open)}
             >
                 <DialogTrigger asChild>
-                    <Flex direction="row" align="center" justify="space-between" w="100%" key={task.taskID} p={4} position="relative"
+                    <Flex direction="row" align="center" justify="space-between" w="100%" key={task.taskID} p={4} position="relative" cursor={task.taskVerified || task.taskRejected ? "default" : "pointer"}
                         borderRadius="md" mb={2} justifyContent="space-between" alignItems="center" bg={task.taskVerified ? "green.100" : task.taskRejected ? "red.100" : "blue.100"}>
                         {/* Left Section - Unread dot, student avatar, task details */}
                         <Box display="flex" alignItems="center" gap={2} width={"50%"} >
