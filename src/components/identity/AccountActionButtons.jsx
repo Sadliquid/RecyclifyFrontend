@@ -22,7 +22,6 @@ function AccountActionButtons({ userDetails }) {
                 if (userRole === "parent") {
                     const response = await server.get(`api/Identity/getChildsId?userId=${userDetails.id}`);
                     setChildId(response.data.studentId);
-                    console.log(response.data.studentId);
                 } else if (userRole === "student") {
                     const response = await server.get(`api/Identity/getParentsId?userId=${userDetails.id}`);
                     setParentId(response.data.parentId);

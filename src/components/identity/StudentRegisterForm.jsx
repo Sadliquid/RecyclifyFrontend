@@ -66,14 +66,11 @@ function InnerStudentForm({ goBack }) {
         
             // Execute reCAPTCHA and get token
             const token = await executeRecaptcha('parent_signup');
-            console.log(token)
             
             // Include the token in your submission data
             const submissionData = { ...values, RecaptchaResponse: token };
-            console.log(submissionData)
 
             const response = await server.post("/api/Identity/createAccount", submissionData);
-            console.log(response)
             const rawResponseMessage = response.data.message;
             if (rawResponseMessage.startsWith("SUCCESS") && response.status === 200) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
