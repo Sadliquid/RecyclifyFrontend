@@ -14,6 +14,15 @@ import ShowToast from '../../Extensions/ShowToast';
 
 function StudentDashboard({ classData, students }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
+    const [sortOrder, setSortOrder] = useState({
+        name: 'asc',
+        league: 'asc',
+        currentPoints: 'asc',
+        totalPoints: 'asc',
+        redemptions: 'asc',
+        studentEmail: 'asc',
+        parentEmail: 'asc',
+    });    
     const [studentsList, setStudentsList] = useState(students || []);
     const [editedStudent, setEditedStudent] = useState({
         name: '',
@@ -24,6 +33,47 @@ function StudentDashboard({ classData, students }) {
     });
     const [open, setOpen] = useState(false);
     const [selectedRecipients, setSelectedRecipients] = useState([]);
+
+    const handleSort = (column) => {
+        const newSortOrder = sortOrder[column] === 'asc' ? 'desc' : 'asc';
+        setSortOrder((prevSortOrder) => ({
+            ...prevSortOrder,
+            [column]: newSortOrder, // Toggle sort order for clicked column
+        }));
+    
+        const sortedStudents = [...studentsList].sort((a, b) => {
+            let valueA, valueB;
+    
+            if (column === 'name') {
+                valueA = a.user.name;
+                valueB = b.user.name;
+            } else if (column === 'studentEmail') {
+                valueA = a.user.email || 'N/A'; // Default to 'N/A' if null or empty
+                valueB = b.user.email || 'N/A';
+            } else if (column === 'parentEmail') {
+                valueA = a.parent?.parentEmail || 'N/A'; // Default to 'N/A' if null or empty
+                valueB = b.parent?.parentEmail || 'N/A';
+            } else {
+                valueA = a[column];
+                valueB = b[column];
+            }
+    
+            // Handle sorting based on string or numeric values
+            if (newSortOrder === 'asc') {
+                if (typeof valueA === 'string') {
+                    return valueA.toLowerCase().localeCompare(valueB.toLowerCase());
+                }
+                return valueA - valueB; // For numeric values
+            } else {
+                if (typeof valueA === 'string') {
+                    return valueB.toLowerCase().localeCompare(valueA.toLowerCase());
+                }
+                return valueB - valueA;
+            }
+        });
+    
+        setStudentsList(sortedStudents); // Update state with sorted list
+    };    
 
     const validateName = (name) => {
         const nameRegex = /^[a-zA-Z\s]+$/;
@@ -258,13 +308,13 @@ function StudentDashboard({ classData, students }) {
                     <Table.Root size="sm" stickyHeader>
                         <Table.Header>
                             <Table.Row bg="bg.subtle">
-                                <Table.ColumnHeader>Student Name</Table.ColumnHeader>
-                                <Table.ColumnHeader>League</Table.ColumnHeader>
-                                <Table.ColumnHeader>Current Points</Table.ColumnHeader>
-                                <Table.ColumnHeader>Total Points</Table.ColumnHeader>
-                                <Table.ColumnHeader>Redemptions</Table.ColumnHeader>
-                                <Table.ColumnHeader>Student Email</Table.ColumnHeader>
-                                <Table.ColumnHeader>Parent Email</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('name')}>Student Name</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('league')}>League</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('currentPoints')}>Current Points</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('totalPoints')}>Total Points</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('redemptions')}>Redemptions</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('studentEmail')}>Student Email</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('parentEmail')}>Parent Email</Table.ColumnHeader>
                                 <Table.ColumnHeader textAlign="end"></Table.ColumnHeader>
                             </Table.Row>
                         </Table.Header>
