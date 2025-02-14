@@ -291,18 +291,18 @@ function Leaderboards() {
 								{topContributor ? (
 									<DialogRoot size="lg" >
 										<DialogTrigger asChild cursor="pointer">
-											<Tooltip content="Show appreciation! Click to send a certificate to the class’s top contributor!"
-												borderRadius={10} fontSize="md" fontWeight="bold" p={4} boxShadow="md" openDelay={200} closeDelay={100} showArrow>
-												<motion.div
-													whileHover={{ scale: 1.02 }}
-													transition={{ duration: 0.2 }}
-													width="100%"
-													height="70%"
-												>
-													<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
-														<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
-															Top Contributor
-														</Heading>
+											<motion.div
+												whileHover={{ scale: 1.02 }}
+												transition={{ duration: 0.2 }}
+												width="100%"
+												height="70%"
+											>
+												<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
+													<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
+														Top Contributor
+													</Heading>
+													<Tooltip content="Show appreciation! Click to send a certificate to the class’s top contributor!"
+														borderRadius={10} fontSize="md" fontWeight="bold" p={4} boxShadow="md" openDelay={200} closeDelay={100} showArrow>
 														<Box
 															display="flex"
 															flexDir={"column"}
@@ -351,9 +351,9 @@ function Leaderboards() {
 																</Text>
 															</Box>
 														</Box>
-													</Box>
-												</motion.div>
-											</Tooltip>
+													</Tooltip>
+												</Box>
+											</motion.div>
 										</DialogTrigger>
 
 										{/* Confirmation Dialog */}
