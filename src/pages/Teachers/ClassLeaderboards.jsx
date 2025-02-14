@@ -216,11 +216,6 @@ function Leaderboards() {
 		}
 	}, [user]);
 
-	console.log(selectedClass)
-	for (const schoolClass of schoolClassesData) {
-		console.log(schoolClass.classID)
-	}
-
 	if (!error && loaded && user) {
 		return (
 			<Box>
