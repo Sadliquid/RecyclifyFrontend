@@ -250,7 +250,7 @@ function StudentDashboard({ classData, students }) {
     const sendEmail = async (student) => {
         if (selectedRecipients.length === 0) return;
 
-        const emailPromise = new Promise((resolve, reject) => {
+        const emailPromise = new Promise(async (resolve, reject) => {
             try {
                 const queryParams = new URLSearchParams({
                     recipients: selectedRecipients.join(","),
@@ -261,7 +261,7 @@ function StudentDashboard({ classData, students }) {
                     parentEmail: student.parent ? student.parent.parentEmail : "",
                 }).toString();
 
-                const response = server.post(`/api/Teacher/send-update-email?${queryParams}`);
+                const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
 
                 if (response.status === 200) {
                     console.log("Email sent successfully.");
@@ -290,7 +290,6 @@ function StudentDashboard({ classData, students }) {
             }),
         });
     };
-
 
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
