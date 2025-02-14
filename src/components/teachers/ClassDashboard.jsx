@@ -224,7 +224,7 @@ function ClassDashboard({ classData, students }) {
                                 _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                                 <Flex direction="column" textAlign="left" gap={2} w="90%" h="90%" p={2}>
                                     <Box w="100%" h="20%" fontWeight="bold" fontSize="sm">
-                                        Class Least 3 Contributors
+                                        Class Bottom 3 Contributors
                                     </Box>
 
                                     {/* Least 3 Students Contributor based on their totalPoints */}
