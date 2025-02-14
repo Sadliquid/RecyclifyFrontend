@@ -23,12 +23,13 @@ function Leaderboards() {
 	const [topContributor, setTopContributor] = useState(null);
 	const [topContributors, setTopContributors] = useState({});
 	const [selectedClass, setSelectedClass] = useState(null);
+	const [teacherClasses, setTeacherClasses] = useState([]);
 
 	const fetchSchoolClasses = async () => {
 		try {
 			const response = await server.get(`/api/Teacher/get-overall-classes-data/`);
 			if (response.status === 200) {
-				const sortedClasses = Array.isArray(response.data.data) ? sortSchoolClassesData(response.data.data) : [];
+				const sortedClasses = Array.isArray(response.data.data) ? sortSchoolClassesData(response.data.data) : [];	
 				setSchoolClassesData(sortedClasses);
 				await fetchStudentsForClasses(sortedClasses);
 			}
@@ -70,7 +71,10 @@ function Leaderboards() {
 			}
 		}));
 
+		const teacherClasses = updatedClasses.filter(cls => cls.teacherID === user.id);
+
 		setClasses(updatedClasses);
+		setTeacherClasses(teacherClasses);
 
 		await fetchTopContributors(updatedClasses);
 	};
@@ -140,9 +144,6 @@ function Leaderboards() {
 	}
 
 	const sendCertificate = async (topContributor) => {
-		console.log("Sending certificate to:", topContributor);
-		console.log("Sending certificate to:", topContributor.user.name);
-		console.log("Sending certificate to:", topContributor.user.email);
 		const sendCertificatePromise = new Promise(async (resolve, reject) => {
 			try {
 				const response = await server.post(`/api/Teacher/send-certificate?topContributorName=${topContributor.user.name}&topContributorEmail=${topContributor.user.email}`);
@@ -203,8 +204,8 @@ function Leaderboards() {
 
 	useEffect(() => {
 		if (classes.length > 0) {
-			setSelectedClass(classes[0]); // Automatically select the first class
-			fetchStudents(classes[0].classID); // Fetch students for the first class
+			setSelectedClass(teacherClasses? teacherClasses[0] : []); // Automatically select the first class
+			fetchStudents(teacherClasses? teacherClasses[0].classID: []); // Fetch students for the first class
 		}
 	}, [classes]);
 
@@ -246,7 +247,7 @@ function Leaderboards() {
 								{/* Class brief information card */}
 								<Box position="relative" display="flex" flexDir={"column"} mt={4} p={3} borderRadius={20} height={"30%"} justifyContent={"center"} alignItems={"center"}>
 									{/* Left Arrow & Previous Class Name */}
-									{classes.length > 1 && (
+									{teacherClasses.length > 1 && (
 										<Box position="absolute" left={14} top="50%" transform="translateY(-50%)" width="46px" >
 											<Text fontSize="sm" color="gray.600" mb={1} width="100%" textAlign="center" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
 												{getPrevClass()?.className}
@@ -271,7 +272,7 @@ function Leaderboards() {
 									</Box>
 
 									{/* Right Arrow & Next Class Name */}
-									{classes.length > 1 && (
+									{teacherClasses.length > 1 && (
 										<Box position="absolute" right={14} top="50%" transform="translateY(-50%)" width="46px">
 											<Text fontSize="sm" color="gray.600" mb={1} textAlign="center" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
 												{getNextClass()?.className}
