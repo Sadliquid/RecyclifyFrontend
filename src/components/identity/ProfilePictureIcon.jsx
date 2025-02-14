@@ -18,7 +18,6 @@ const ProfilePictureIcon = ({ onLogout }) => {
 
     useEffect(() => {
         const fetchAvatar = async () => {
-            console.log("fetching")
             try {
                 if (user?.avatar) {
                     const response = await server.get(`/api/Identity/getAvatar?userId=${user.id}`);

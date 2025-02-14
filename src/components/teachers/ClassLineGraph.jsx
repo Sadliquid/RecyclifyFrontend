@@ -18,26 +18,26 @@ const ClassLineGraph = ({ classPoints }) => {
     const gradientFill = (context) => {
         const ctx = context.chart.ctx;
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(54, 162, 235, 0.6)'); // Start color
-        gradient.addColorStop(1, 'rgba(54, 162, 235, 0)'); // End color
+        gradient.addColorStop(0, 'rgba(54, 162, 235, 0.6)');
+        gradient.addColorStop(1, 'rgba(54, 162, 235, 0)'); 
         return gradient;
     };
 
     const chartData = {
-        labels: sortedDates, // X-axis (Dates)
+        labels: sortedDates, 
         datasets: [
             {
                 label: 'Total Clovers Earned',
                 data: sortedDates.map(date => pointsByDate[date]),
                 borderColor: '#36A2EB',
-                backgroundColor: gradientFill, 
+                backgroundColor: gradientFill,
                 borderWidth: 3,
                 tension: 0.4,
-                pointRadius: 5, 
+                pointRadius: 5,
                 pointBackgroundColor: '#36A2EB',
                 pointBorderColor: '#fff',
                 pointHoverRadius: 8,
-                fill: true, 
+                fill: true,
             },
         ],
     };
@@ -53,7 +53,7 @@ const ClassLineGraph = ({ classPoints }) => {
                 labels: {
                     font: {
                         size: 12,
-                        family: 'Sora, sans-serif', 
+                        family: 'Sora, sans-serif',
                         weight: 'bold',
                     },
                     color: '#4A5568',
@@ -84,7 +84,7 @@ const ClassLineGraph = ({ classPoints }) => {
                 },
                 ticks: {
                     font: { size: 12, family: 'Sora, sans-serif' },
-                    color: '#718096', 
+                    color: '#718096',
                 },
             },
             y: {
@@ -96,7 +96,7 @@ const ClassLineGraph = ({ classPoints }) => {
                 },
                 grid: {
                     color: '#E2E8F0',
-                    borderDash: [5], 
+                    borderDash: [5],
                 },
                 ticks: {
                     font: { size: 12, family: 'Sora, sans-serif' },

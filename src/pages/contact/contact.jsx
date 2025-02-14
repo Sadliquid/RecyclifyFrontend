@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, VStack, Input, Button } from '@chakra-ui/react';
+import { Box, VStack, Input, Button, Heading } from '@chakra-ui/react';
 import Server from '../../../networking';
 import ShowToast  from '../../Extensions/ShowToast';
 
@@ -36,6 +36,9 @@ const ContactForm = () => {
 
     return (
         <Box as="form" onSubmit={handleSubmit} mt={10}>
+                    <Heading fontSize={"30px"} m={10}>
+                        Contact Us!
+                    </Heading>
             <VStack spacing={4} align="stretch">
                 <Box>
                     <Box as="label" htmlFor="name" mb={2} display="block" textAlign={"left"}>
@@ -81,7 +84,7 @@ const ContactForm = () => {
                         color={"black"}
                     />
                 </Box>
-                <Button type="submit" backgroundColor={'blue'} mt={3}>Send</Button>
+                <Button type="submit" bg={"#4DCBA4"} mt={3}>Send</Button>
             </VStack>
         </Box>
         

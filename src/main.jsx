@@ -1,11 +1,13 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Provider } from 'react-redux'; 
+import './index.css'
+import "@fontsource/sora";
+import "@fontsource/lilita-one";
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'; 
 import Layout from './Layout'
 import ReactDOM from 'react-dom/client'
 import authReducer from './slices/AuthState'
-import './index.css'
 import StudentsHomepage from './pages/Students/StudentsHomepage'
 import Homepage from './pages/main/Homepage'
 import ClassEnrolment from './pages/Students/ClassEnrolment'
@@ -27,17 +29,15 @@ import ContactForm from './pages/contact/contact'
 import EcoPilot from './pages/EcoPilot/EcoPilot'
 import TeachersLanding from './pages/Teachers/Landing'
 import Class from './pages/Teachers/Class'
-import StudentRedemption from './pages/Teachers/StudentRedemption'
 import TaskVerification from './pages/Teachers/TaskVerification'
 import ClassLeaderboards from './pages/Teachers/ClassLeaderboards'
 import EmailVerification from './pages/Identity/EmailVerification'
 import ContactVerification from './pages/Identity/ContactVerification'
 import MyAccount from './pages/Identity/MyAccount'
-import "@fontsource/sora";
-import "@fontsource/lilita-one";
 import ParentsHomepage from './pages/parents/ParentsHomepage';
 import EmailNewsletter from './pages/parents/EmailNewsletter';
 import Faq from './pages/parents/Faq';
+import PublicProfile from './pages/Identity/PublicProfile';
 
 const system = createSystem(defaultConfig, {
   theme: {
@@ -86,6 +86,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
                         <Route path={"identity"}>
                             <Route path={"myAccount"} element={<MyAccount />} />
+                            <Route path={"publicProfile/:id"} element={<PublicProfile />} />
                         </Route>
 
                         <Route path={"admin"} >
@@ -102,11 +103,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Route path={"teachers"}>
                             <Route index element={<TeachersLanding />} />
                             <Route path={"class/:id"} element={<Class />} />
-                            <Route path={"redemption"} element={<StudentRedemption />} />
-                            {/* Add task id afterward */}
                             <Route path={"tasks"} element={<TaskVerification />} /> 
-                            {/* Add class id afterward */}
-                            <Route path={"leaderboards"} element={<ClassLeaderboards />} />
+                            <Route path={"classLeaderboards"} element={<ClassLeaderboards />} />
                         </Route>
 
                         <Route path="parents">

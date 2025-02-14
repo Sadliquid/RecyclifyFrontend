@@ -4,20 +4,31 @@ import { useSelector } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from "react";
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function Dashboard() {
-	const { loaded } = useSelector((state) => state.auth);
-	
-	if (!loaded) {
-		return (
-			<Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" width="100%" height="100%">
-				<Spinner />
-			</Box>
-		)
-	}
+	const { user, loaded, error } = useSelector((state) => state.auth);
+		useEffect(() => {
+			if (!error && loaded && user && user.userRole == "admin") {
+			}
+		}, [loaded]);
+		if (!loaded) {
+			return (
+				<Box
+					display="flex"
+					flexDir={"column"}
+					justifyContent="center"
+					alignItems="center"
+					width="100%"
+					height="100%"
+				>
+					<Spinner />
+				</Box>
+			);
+		}
 	// Chart data
 	const data = {
 		labels: ['101', '102', '103', '104', '201', '202', '203', '204', '205', '301', '302'],
@@ -94,24 +105,24 @@ function Dashboard() {
 						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
 							<Heading size="md">User Management</Heading>
 							<Text mt={2}>View all users on the Recyclify system and be able to carry out functions to manage users</Text>
-							<Button mt={4} colorScheme="teal" background={"white"}>User Management Screen</Button>
+							<Button mt={4} bg={"#4DCBA4"}>User Management Screen</Button>
 						</Box>
 						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
 							<Heading size="md">Inventory Management</Heading>
 							<Text mt={2}>View all rewards offered in the Recyclify program.</Text>
-							<Button mt={4} colorScheme="teal" background={"white"}>Inventory Management Screen</Button>
+							<Button mt={4} bg={"#4DCBA4"}>Inventory Management Screen</Button>
 						</Box>
 
 						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
 							<Heading size="md">System Services</Heading>
 							<Text mt={2}>View all services Recyclify uses and toggle on and off the service.</Text>
-							<Button mt={4} colorScheme="teal" background={"white"}>System Services Screen</Button>
+							<Button mt={4} bg={"#4DCBA4"}>System Services Screen</Button>
 						</Box>
 
 						<Box borderWidth={1} borderRadius="lg" p={4} m={2}>
 							<Heading size="md">View Contact Questions</Heading>
 							<Text mt={2}>View the questions sent in via the contact form and reply to them</Text>
-							<Button mt={4} colorScheme="teal" background={"white"}>Answer Contact Queries</Button>
+							<Button mt={4} bg={"#4DCBA4"}>Answer Contact Queries</Button>
 						</Box>
 					</SimpleGrid>
 				</Box>
