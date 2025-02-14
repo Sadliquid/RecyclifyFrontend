@@ -11,9 +11,19 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { toaster } from "@/components/ui/toaster"
 import server from "../../../networking"
 import ShowToast from '../../Extensions/ShowToast';
+import { PiArrowLineDownFill, PiArrowLineUpFill } from "react-icons/pi";
 
 function StudentDashboard({ classData, students }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
+    const [sortOrder, setSortOrder] = useState({
+        name: '',
+        league: '',
+        currentPoints: '',
+        totalPoints: '',
+        redemptions: '',
+        studentEmail: '',
+        parentEmail: '',
+    });
     const [studentsList, setStudentsList] = useState(students || []);
     const [editedStudent, setEditedStudent] = useState({
         name: '',
@@ -24,6 +34,50 @@ function StudentDashboard({ classData, students }) {
     });
     const [open, setOpen] = useState(false);
     const [selectedRecipients, setSelectedRecipients] = useState([]);
+
+    const handleSort = (column) => {
+        const newSortOrder = sortOrder[column] === 'asc' ? 'desc' : 'asc';
+
+        // Update sort order only for the clicked column
+        setSortOrder({
+            [column]: newSortOrder,
+        });
+
+        // Sort the students list based on the selected column
+        const sortedStudents = [...studentsList].sort((a, b) => {
+            let valueA, valueB;
+
+            if (column === 'name') {
+                valueA = a.user.name;
+                valueB = b.user.name;
+            } else if (column === 'studentEmail') {
+                valueA = a.user.email || 'N/A';
+                valueB = b.user.email || 'N/A';
+            } else if (column === 'parentEmail') {
+                valueA = a.parent?.parentEmail || 'N/A';
+                valueB = b.parent?.parentEmail || 'N/A';
+            } else {
+                valueA = a[column];
+                valueB = b[column];
+            }
+
+            // Handle sorting based on string or numeric values
+            if (newSortOrder === 'asc') {
+                if (typeof valueA === 'string') {
+                    return valueA.toLowerCase().localeCompare(valueB.toLowerCase());
+                }
+                return valueA - valueB;
+            } else {
+                if (typeof valueA === 'string') {
+                    return valueB.toLowerCase().localeCompare(valueA.toLowerCase());
+                }
+                return valueB - valueA;
+            }
+        });
+
+        // Update the students list with the sorted list
+        setStudentsList(sortedStudents);
+    };
 
     const validateName = (name) => {
         const nameRegex = /^[a-zA-Z\s]+$/;
@@ -48,7 +102,6 @@ function StudentDashboard({ classData, students }) {
         return '';
     };
 
-    // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
     const floatingStyles = defineStyle({
@@ -133,7 +186,6 @@ function StudentDashboard({ classData, students }) {
 
     // Function to save the edited student details
     const handleSaveEdit = async () => {
-        // Ensure no validation errors exist
         if (validationError.name) {
             console.error('Validation error:', validationError.name);
             return;
@@ -151,7 +203,7 @@ function StudentDashboard({ classData, students }) {
             if (response.status === 200) {
                 console.log('Student successfully updated.');
                 ShowToast("success", "Student successfully updated.");
-                await fetchStudents(); 
+                await fetchStudents();
                 setOpen(false);
             }
         } catch (error) {
@@ -190,57 +242,82 @@ function StudentDashboard({ classData, students }) {
             const updatedRecipients = prevRecipients.includes(value)
                 ? prevRecipients.filter((recipient) => recipient !== value)
                 : [...prevRecipients, value];
-    
+
             return updatedRecipients;
         });
     };
 
     const sendEmail = async (student) => {
         if (selectedRecipients.length === 0) return;
-    
-        // Define the promise
+
+        // Build query string
+        const queryParams = new URLSearchParams({
+            recipients: selectedRecipients.join(","),
+            classID: classData.classID,
+            studentID: student.studentID,
+            studentEmail: student.user.email,
+            parentID: student.parentID ? student.parentID : "",
+            parentEmail: student.parent ? student.parent.parentEmail : "",
+        }).toString();
+
+        // Create the promise that sends the email
         const emailPromise = new Promise((resolve, reject) => {
-            try {
-                const queryParams = new URLSearchParams({
-                    recipients: selectedRecipients.join(","),
-                    classID: classData.classID,
-                    studentID: student.studentID,
-                    studentEmail: student.user.email,
-                    parentID: student.parentID ? student.parentID : "",
-                    parentEmail: student.parent ? student.parent.parentEmail : "",
-                }).toString();
-    
-                const response = server.post(`/api/Teacher/send-update-email?${queryParams}`);
-    
-                if (response.status === 200) {
-                    console.log("Email sent successfully.");
-                    setSelectedRecipients([]); 
-                    resolve();
-                }
-            } catch (error) {
-                console.error("Error sending email:", error.message);
-                setSelectedRecipients([]);
-    
-                if (error.response?.status === 400) {
-                    reject(error.response.data.message.split("UERROR: ")[1] || "An error occurred.");
-                } else {
-                    reject("Please try again.");
-                }
-            }
+            server
+                .post(`/api/Teacher/send-update-email?${queryParams}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log("Email sent successfully.");
+                        setSelectedRecipients([]);
+                        resolve();
+                    } else {
+                        reject(
+                            response.data.error
+                                ? response.data.error.substring("ERROR: ".length)
+                                : "Unexpected error occurred."
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error sending email:", error.message);
+                    setSelectedRecipients([]);
+                    if (
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error &&
+                        typeof error.response.data.error === "string"
+                    ) {
+                        if (error.response.data.error.startsWith("UERROR")) {
+                            reject(
+                                error.response.data.error.substring("UERROR: ".length)
+                            );
+                        } else {
+                            reject(
+                                error.response.data.error.substring("ERROR: ".length)
+                            );
+                        }
+                    } else {
+                        reject("An unexpected error occurred.");
+                    }
+                });
         });
-    
-        // Show toast with promise-based status
+
+        // Use toaster.promise to show notifications based on the promise outcome
         toaster.promise(emailPromise, {
-            loading: { title: "Sending email...", description: "Please wait and don't leave this page." },
-            success: { title: "Email sent successfully!", description: "The email has been delivered." },
+            loading: {
+                title: "Sending email...",
+                description: "Please wait and don't leave this page.",
+            },
+            success: {
+                title: "Email sent successfully!",
+                description: "The email has been delivered.",
+            },
             error: (errorMessage) => ({
                 title: "Error sending email",
                 description: errorMessage,
             }),
         });
     };
-    
-        
+
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
     useEffect(() => {
@@ -258,13 +335,48 @@ function StudentDashboard({ classData, students }) {
                     <Table.Root size="sm" stickyHeader>
                         <Table.Header>
                             <Table.Row bg="bg.subtle">
-                                <Table.ColumnHeader>Student Name</Table.ColumnHeader>
-                                <Table.ColumnHeader>League</Table.ColumnHeader>
-                                <Table.ColumnHeader>Current Points</Table.ColumnHeader>
-                                <Table.ColumnHeader>Total Points</Table.ColumnHeader>
-                                <Table.ColumnHeader>Redemptions</Table.ColumnHeader>
-                                <Table.ColumnHeader>Student Email</Table.ColumnHeader>
-                                <Table.ColumnHeader>Parent Email</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('name')}>
+                                    <Flex align="center" gap={2}>
+                                        Student Name
+                                        {sortOrder.name && (sortOrder.name === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('league')}>
+                                    <Flex align="center" gap={2}>
+                                        League
+                                        {sortOrder.league && (sortOrder.league === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('currentPoints')}>
+                                    <Flex align="center" gap={2}>
+                                        Current Points
+                                        {sortOrder.currentPoints && (sortOrder.currentPoints === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('totalPoints')}>
+                                    <Flex align="center" gap={2}>
+                                        Total Points
+                                        {sortOrder.totalPoints && (sortOrder.totalPoints === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('redemptions')}>
+                                    <Flex align="center" gap={2}>
+                                        Redemptions
+                                        {sortOrder.redemptions && (sortOrder.redemptions === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('studentEmail')}>
+                                    <Flex align="center" gap={2}>
+                                        Student Email
+                                        {sortOrder.studentEmail && (sortOrder.studentEmail === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('parentEmail')}>
+                                    <Flex align="center" gap={2}>
+                                        Parent Email
+                                        {sortOrder.parentEmail && (sortOrder.parentEmail === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
                                 <Table.ColumnHeader textAlign="end"></Table.ColumnHeader>
                             </Table.Row>
                         </Table.Header>
@@ -325,7 +437,7 @@ function StudentDashboard({ classData, students }) {
                                                                 value="edit-student-details"
                                                                 closeOnSelect={false}
                                                                 cursor="pointer"
-                                                                onClick={() => handleEditStudent(student)} // Pass the selected student's details
+                                                                onClick={() => handleEditStudent(student)}
                                                             >
                                                                 <MdEdit /> Edit Student
                                                             </MenuItem>
@@ -419,7 +531,7 @@ function StudentDashboard({ classData, students }) {
                                                                         </Button>
                                                                     </DialogActionTrigger>
                                                                     <DialogActionTrigger asChild>
-                                                                        <Button bg="#FF8080" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}> 
+                                                                        <Button bg="#FF8080" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}>
                                                                             Send
                                                                         </Button>
                                                                     </DialogActionTrigger>
