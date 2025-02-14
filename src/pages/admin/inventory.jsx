@@ -15,7 +15,6 @@ const InventoryManagement = () => {
     const [editingItem, setEditingItem] = useState(null); // Track the item being edited
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [addItem, setAddItem] = useState(null);
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "admin") {
@@ -218,16 +217,40 @@ const InventoryManagement = () => {
                                 <DialogFooter>
                                     <Button
                                         bg={"#4DCBA4"}
+										isLoading={isLoading}
+										isDisabled={isLoading}
                                         onClick={async () => {
+											setIsLoading(true);
                                                 const formData = new FormData();
-                                                formData.append("title", addItem.title);
-                                                formData.append("description", addItem.description);
-                                                formData.append("points", addItem.points);
-                                                formData.append("quantity", addItem.quantity);
-                                                formData.append("isAvailable", addItem.isAvailable);
-                                                formData.append("image", addItem.image);
+                                                formData.append("RewardTitle", addItem.title);
+                                                formData.append("RewardDescription", addItem.description);
+                                                formData.append("RequiredPoints", addItem.points);
+                                                formData.append("RewardQuantity", addItem.quantity);
+                                                formData.append("IsAvailable", addItem.isAvailable);
+												formData.append("ImageFile", addItem.image);
+
+												try {
+													const response = await Server.post(
+														"/api/RewardItem",
+														formData,
+														{
+															headers: {
+																"Content-Type": "multipart/form-data",
+															},
+															transformRequest: (formData) => formData,
+														}
+													);
+													if (response.status === 200) {
+														fetchRewardItems();
+														setAddItem(null);
+														onClose();
+														ShowToast("success", "Success", response.data.message);
+													}
+												} catch (error) {
+													ShowToast("error", "Error", error.response?.data?.error || error.message);
+												}
                                             }}
-                                    >Add Item </Button>
+                                    >{isLoading ? "Adding..." : "Add Item"} </Button>
                                 </DialogFooter>
                             </DialogContent>
 
@@ -327,6 +350,25 @@ const InventoryManagement = () => {
                                                 formData.append("quantity", addItem.quantity);
                                                 formData.append("isAvailable", addItem.isAvailable);
                                                 formData.append("image", addItem.image);
+
+												try {
+													const response = await Server.post(
+														"/api/RewardItem",
+														formData,
+														{
+															headers: {
+																"Content-Type": "multipart/form-data",
+															},
+															transformRequest: (formData) => formData,
+														}
+													);
+													if (response.status === 200) {
+														fetchRewardItems();
+														ShowToast("success", "Success", response.data.message);
+													}
+												} catch (error) {
+													ShowToast("error", "Error", error.response?.data?.error || error.message);
+												}
                                             }}
                                     >Add Item </Button>
                                 </DialogFooter>
