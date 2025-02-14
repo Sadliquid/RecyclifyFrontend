@@ -11,18 +11,19 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { toaster } from "@/components/ui/toaster"
 import server from "../../../networking"
 import ShowToast from '../../Extensions/ShowToast';
+import { PiArrowLineDownFill, PiArrowLineUpFill } from "react-icons/pi";
 
 function StudentDashboard({ classData, students }) {
     const { user, loaded, error } = useSelector((state) => state.auth);
     const [sortOrder, setSortOrder] = useState({
-        name: 'asc',
-        league: 'asc',
-        currentPoints: 'asc',
-        totalPoints: 'asc',
-        redemptions: 'asc',
-        studentEmail: 'asc',
-        parentEmail: 'asc',
-    });    
+        name: '',
+        league: '',
+        currentPoints: '',
+        totalPoints: '',
+        redemptions: '',
+        studentEmail: '',
+        parentEmail: '',
+    });
     const [studentsList, setStudentsList] = useState(students || []);
     const [editedStudent, setEditedStudent] = useState({
         name: '',
@@ -35,12 +36,15 @@ function StudentDashboard({ classData, students }) {
     const [selectedRecipients, setSelectedRecipients] = useState([]);
 
     const handleSort = (column) => {
+        // Toggle sort order for the clicked column
         const newSortOrder = sortOrder[column] === 'asc' ? 'desc' : 'asc';
-        setSortOrder((prevSortOrder) => ({
-            ...prevSortOrder,
-            [column]: newSortOrder, // Toggle sort order for clicked column
-        }));
     
+        // Update sort order only for the clicked column
+        setSortOrder({
+            [column]: newSortOrder, // Set the new sort order for the clicked column
+        });
+    
+        // Sort the students list based on the selected column
         const sortedStudents = [...studentsList].sort((a, b) => {
             let valueA, valueB;
     
@@ -48,10 +52,10 @@ function StudentDashboard({ classData, students }) {
                 valueA = a.user.name;
                 valueB = b.user.name;
             } else if (column === 'studentEmail') {
-                valueA = a.user.email || 'N/A'; // Default to 'N/A' if null or empty
+                valueA = a.user.email || 'N/A';
                 valueB = b.user.email || 'N/A';
             } else if (column === 'parentEmail') {
-                valueA = a.parent?.parentEmail || 'N/A'; // Default to 'N/A' if null or empty
+                valueA = a.parent?.parentEmail || 'N/A';
                 valueB = b.parent?.parentEmail || 'N/A';
             } else {
                 valueA = a[column];
@@ -72,7 +76,8 @@ function StudentDashboard({ classData, students }) {
             }
         });
     
-        setStudentsList(sortedStudents); // Update state with sorted list
+        // Update the students list with the sorted list
+        setStudentsList(sortedStudents);
     };    
 
     const validateName = (name) => {
@@ -201,7 +206,7 @@ function StudentDashboard({ classData, students }) {
             if (response.status === 200) {
                 console.log('Student successfully updated.');
                 ShowToast("success", "Student successfully updated.");
-                await fetchStudents(); 
+                await fetchStudents();
                 setOpen(false);
             }
         } catch (error) {
@@ -240,14 +245,14 @@ function StudentDashboard({ classData, students }) {
             const updatedRecipients = prevRecipients.includes(value)
                 ? prevRecipients.filter((recipient) => recipient !== value)
                 : [...prevRecipients, value];
-    
+
             return updatedRecipients;
         });
     };
 
     const sendEmail = async (student) => {
         if (selectedRecipients.length === 0) return;
-    
+
         // Define the promise
         const emailPromise = new Promise((resolve, reject) => {
             try {
@@ -259,18 +264,18 @@ function StudentDashboard({ classData, students }) {
                     parentID: student.parentID ? student.parentID : "",
                     parentEmail: student.parent ? student.parent.parentEmail : "",
                 }).toString();
-    
+
                 const response = server.post(`/api/Teacher/send-update-email?${queryParams}`);
-    
+
                 if (response.status === 200) {
                     console.log("Email sent successfully.");
-                    setSelectedRecipients([]); 
+                    setSelectedRecipients([]);
                     resolve();
                 }
             } catch (error) {
                 console.error("Error sending email:", error.message);
                 setSelectedRecipients([]);
-    
+
                 if (error.response?.status === 400) {
                     reject(error.response.data.message.split("UERROR: ")[1] || "An error occurred.");
                 } else {
@@ -278,7 +283,7 @@ function StudentDashboard({ classData, students }) {
                 }
             }
         });
-    
+
         // Show toast with promise-based status
         toaster.promise(emailPromise, {
             loading: { title: "Sending email...", description: "Please wait and don't leave this page." },
@@ -289,8 +294,8 @@ function StudentDashboard({ classData, students }) {
             }),
         });
     };
-    
-        
+
+
     const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
 
     useEffect(() => {
@@ -308,13 +313,48 @@ function StudentDashboard({ classData, students }) {
                     <Table.Root size="sm" stickyHeader>
                         <Table.Header>
                             <Table.Row bg="bg.subtle">
-                                <Table.ColumnHeader onClick={() => handleSort('name')}>Student Name</Table.ColumnHeader>
-                                <Table.ColumnHeader onClick={() => handleSort('league')}>League</Table.ColumnHeader>
-                                <Table.ColumnHeader onClick={() => handleSort('currentPoints')}>Current Points</Table.ColumnHeader>
-                                <Table.ColumnHeader onClick={() => handleSort('totalPoints')}>Total Points</Table.ColumnHeader>
-                                <Table.ColumnHeader onClick={() => handleSort('redemptions')}>Redemptions</Table.ColumnHeader>
-                                <Table.ColumnHeader onClick={() => handleSort('studentEmail')}>Student Email</Table.ColumnHeader>
-                                <Table.ColumnHeader onClick={() => handleSort('parentEmail')}>Parent Email</Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('name')}>
+                                    <Flex align="center" gap={2}>
+                                        Student Name
+                                        {sortOrder.name && (sortOrder.name === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('league')}>
+                                    <Flex align="center" gap={2}>
+                                        League
+                                        {sortOrder.league && (sortOrder.league === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('currentPoints')}>
+                                    <Flex align="center" gap={2}>
+                                        Current Points
+                                        {sortOrder.currentPoints && (sortOrder.currentPoints === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('totalPoints')}>
+                                    <Flex align="center" gap={2}>
+                                        Total Points
+                                        {sortOrder.totalPoints && (sortOrder.totalPoints === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('redemptions')}>
+                                    <Flex align="center" gap={2}>
+                                        Redemptions
+                                        {sortOrder.redemptions && (sortOrder.redemptions === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('studentEmail')}>
+                                    <Flex align="center" gap={2}>
+                                        Student Email
+                                        {sortOrder.studentEmail && (sortOrder.studentEmail === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
+                                <Table.ColumnHeader onClick={() => handleSort('parentEmail')}>
+                                    <Flex align="center" gap={2}>
+                                        Parent Email
+                                        {sortOrder.parentEmail && (sortOrder.parentEmail === 'asc' ? <PiArrowLineUpFill /> : <PiArrowLineDownFill />)}
+                                    </Flex>
+                                </Table.ColumnHeader>
                                 <Table.ColumnHeader textAlign="end"></Table.ColumnHeader>
                             </Table.Row>
                         </Table.Header>
@@ -469,7 +509,7 @@ function StudentDashboard({ classData, students }) {
                                                                         </Button>
                                                                     </DialogActionTrigger>
                                                                     <DialogActionTrigger asChild>
-                                                                        <Button bg="#FF8080" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}> 
+                                                                        <Button bg="#FF8080" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}>
                                                                             Send
                                                                         </Button>
                                                                     </DialogActionTrigger>
