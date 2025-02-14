@@ -11,8 +11,6 @@ function PublicAccountDetails({ userDetails }) {
         const fetchPublicProfile = async () => {
             try {
                 const response = await server.get(`/api/Identity/getPublicProfileDetails?userId=${userId}`);
-                console.log("Response: ",response.data.responseData)
-
                 setPublicData(response.data.responseData);
                 setLoading(false);
             } catch (err) {
