@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import { Stack, VStack, Text, useBreakpointValue, Show } from '@chakra-ui/react'
+import { Stack, VStack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { LuBox } from "react-icons/lu"
 import { useNavigate } from 'react-router-dom'
 import AddClassButton from "@/components/teachers/AddClassButton"
