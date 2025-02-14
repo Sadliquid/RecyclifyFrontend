@@ -15,7 +15,7 @@ function LeaderboardPlaceCard({ rank, schoolClass, topContributor }) {
             display="flex"
             justifyContent={"space-between"}
             alignItems="center"
-            width="98%"
+            width="100%"
             padding="10px"
             backgroundColor={"#F4F7FF"}
             borderRadius={12}
