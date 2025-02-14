@@ -54,7 +54,7 @@ function ClassQuest({ classData }) {
                         setClassQuests(response.data.data);
                         resolve();
                     } else {
-                        reject(`Unexpected response status: ${response.status}`);
+                        reject(error.response.data.error.substring("ERROR: ".length));
                     }
                 })
                 .catch(error => {
