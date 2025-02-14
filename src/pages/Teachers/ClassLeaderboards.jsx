@@ -241,13 +241,13 @@ function Leaderboards() {
 					/* Main Content */
 					<Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"} gap={5}>
 						{/* Leaderboard Panel */}
-						<Flex direction="column" justifyContent={"space-between"} width="28%" height={"100%"}>
+						<Flex direction="column" justifyContent={"space-between"} width="50%" height={"100%"}>
 							<Box display="flex" flexDir={"column"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} >
 								{/* Class brief information card */}
 								<Box position="relative" display="flex" flexDir={"column"} mt={4} p={3} borderRadius={20} height={"30%"} justifyContent={"center"} alignItems={"center"}>
 									{/* Left Arrow & Previous Class Name */}
 									{classes.length > 1 && (
-										<Box position="absolute" left={2} top="50%" transform="translateY(-50%)" width="46px" >
+										<Box position="absolute" left={14} top="50%" transform="translateY(-50%)" width="46px" >
 											<Text fontSize="sm" color="gray.600" mb={1} width="100%" textAlign="center" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
 												{getPrevClass()?.className}
 											</Text>
@@ -272,7 +272,7 @@ function Leaderboards() {
 
 									{/* Right Arrow & Next Class Name */}
 									{classes.length > 1 && (
-										<Box position="absolute" right={2} top="50%" transform="translateY(-50%)" width="46px">
+										<Box position="absolute" right={14} top="50%" transform="translateY(-50%)" width="46px">
 											<Text fontSize="sm" color="gray.600" mb={1} textAlign="center" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
 												{getNextClass()?.className}
 											</Text>
