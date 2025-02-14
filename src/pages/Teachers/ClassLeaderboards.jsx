@@ -134,35 +134,33 @@ function Leaderboards() {
 		setTopContributors(contributorsMap);
 	};
 
-	//Function to sort school classes data in descending order
-	function sortSchoolClassesData(schoolClassesData) {
-		if (!Array.isArray(schoolClassesData) || schoolClassesData.length === 0) {
-			return [];
-		}
-
-		return [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
-	}
-
 	const sendCertificate = async (topContributor) => {
-		const sendCertificatePromise = new Promise(async (resolve, reject) => {
-			try {
-				const response = await server.post(`/api/Teacher/send-certificate?topContributorName=${topContributor.user.name}&topContributorEmail=${topContributor.user.email}`);
-
-				if (response.status === 200) {
-					resolve();
-				}
-			} catch (error) {
-				console.error("Error sending certificate:", error);
-				if (error.response?.status === 400) {
-					reject(error.response.data.message.split("UERROR: ")[1] || "An error occurred.");
-				} else {
-					reject("Please try again.");
-				}
-			}
+		const promise = new Promise((resolve, reject) => {
+			server.post(`/api/Teacher/send-certificate`, null, {
+				params: {
+					topContributorName: topContributor.user.name,
+					topContributorEmail: topContributor.user.email,
+				},
+			})
+				.then((response) => {
+					if (response.status === 200) {
+						resolve();
+					} else {
+						reject(response.data.message?.split("UERROR: ")[1] || "An error occurred.");
+					}
+				})
+				.catch((error) => {
+					console.error("Error sending certificate:", error);
+					if (error.response?.status === 400) {
+						reject(error.response.data.message?.split("UERROR: ")[1] || "An error occurred.");
+					} else {
+						reject("Please try again.");
+					}
+				});
 		});
-
+	
 		// Show toast with promise-based status
-		toaster.promise(sendCertificatePromise, {
+		toaster.promise(promise, {
 			loading: { title: "Sending Certificate...", description: "Please wait while the certificate is being sent." },
 			success: { title: "Certificate Sent!", description: "The certificate has been successfully sent to the top contributor." },
 			error: (errorMessage) => ({
@@ -170,7 +168,7 @@ function Leaderboards() {
 				description: errorMessage,
 			}),
 		});
-	};
+	};	
 
 	const getPrevClass = () => {
 		if (!selectedClass || teacherClasses.length <= 1) return null;

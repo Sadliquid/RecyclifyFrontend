@@ -24,26 +24,33 @@ const TaskRow = ({ task, fetchTasks }) => {
     };
 
     const handleVerify = async () => {
-        const verifyPromise = new Promise(async (resolve, reject) => {
-            try {
-                const response = await server.put(
-                    `/api/Teacher/verify-student-task?teacherID=${user.id}&studentID=${task.student.studentID}&taskID=${task.taskID}`
-                );
+        const verifyPromise = new Promise((resolve, reject) => {
+            server.put(
+                `/api/Teacher/verify-student-task?teacherID=${user.id}&studentID=${task.student.studentID}&taskID=${task.taskID}`
+            )
+                .then((response) => {
+                    if (response.status === 200) {
+                        fetchTasks();
+                        setOpen(false);
+                        resolve();
+                    } else {
+                        reject("An unexpected error occurred.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error verifying task:", error);
+                    fetchTasks();
 
-                if (response.status === 200) {
-                    fetchTasks(); 
-                    setOpen(false);
-                    resolve();
-                }
-            } catch (error) {
-                console.error("Error verifying task:", error);
-                fetchTasks();
-                if (error.response?.status === 400) {
-                    reject(error.response.data.error.split("UERROR: ")[1] || "An error occurred.");
-                } else {
-                    reject("Please try again.");
-                }
-            }
+                    if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                        if (error.response.data.error.startsWith("UERROR")) {
+                            reject(error.response.data.error.substring("UERROR: ".length));
+                        } else {
+                            reject(error.response.data.error.substring("ERROR: ".length));
+                        }
+                    } else {
+                        reject("An unexpected error occurred.");
+                    }
+                });
         });
 
         // Show toast with promise-based status
@@ -58,26 +65,38 @@ const TaskRow = ({ task, fetchTasks }) => {
     };
 
     const handleReject = async (rejectionReason) => {
-        const rejectPromise = new Promise(async (resolve, reject) => {
-            try {
-                const response = await server.put(
-                    `/api/Teacher/reject-student-task?teacherID=${user.id}&studentID=${task.student.studentID}&taskID=${task.taskID}&rejectionReason=${rejectionReason}`
-                )
+        const rejectPromise = new Promise((resolve, reject) => {
+            server.put(
+                `/api/Teacher/reject-student-task`,
+                null,
+                {
+                    params: {
+                        teacherID: user.id,
+                        studentID: task.student.studentID,
+                        taskID: task.taskID,
+                        rejectionReason: rejectionReason,
+                    },
+                }
+            )
+                .then((response) => {
+                    if (response.status === 200) {
+                        fetchTasks();
+                        setOpen(false);
+                        resolve();
+                    } else {
+                        reject("Unexpected response status");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error rejecting task:", error);
+                    fetchTasks();
 
-                if (response.status === 200) {
-                    fetchTasks(); // Refresh tasks after rejecting
-                    setOpen(false);
-                    resolve();
-                }
-            } catch (error) {
-                console.error("Error rejecting task:", error);
-                fetchTasks();
-                if (error.response?.status === 400) {
-                    reject(error.response.data.error.split("UERROR: ")[1] || "An error occurred.");
-                } else {
-                    reject("Please try again.");
-                }
-            }
+                    if (error.response?.status === 400 && error.response.data?.error) {
+                        reject(error.response.data.error.split("UERROR: ")[1] || "An error occurred.");
+                    } else {
+                        reject("Please try again.");
+                    }
+                });
         });
 
         // Show toast with promise-based status

@@ -40,7 +40,7 @@ function StudentDashboard({ classData, students }) {
 
         // Update sort order only for the clicked column
         setSortOrder({
-            [column]: newSortOrder, 
+            [column]: newSortOrder,
         });
 
         // Sort the students list based on the selected column
@@ -250,40 +250,67 @@ function StudentDashboard({ classData, students }) {
     const sendEmail = async (student) => {
         if (selectedRecipients.length === 0) return;
 
-        const emailPromise = new Promise(async (resolve, reject) => {
-            try {
-                const queryParams = new URLSearchParams({
-                    recipients: selectedRecipients.join(","),
-                    classID: classData.classID,
-                    studentID: student.studentID,
-                    studentEmail: student.user.email,
-                    parentID: student.parentID ? student.parentID : "",
-                    parentEmail: student.parent ? student.parent.parentEmail : "",
-                }).toString();
+        // Build query string
+        const queryParams = new URLSearchParams({
+            recipients: selectedRecipients.join(","),
+            classID: classData.classID,
+            studentID: student.studentID,
+            studentEmail: student.user.email,
+            parentID: student.parentID ? student.parentID : "",
+            parentEmail: student.parent ? student.parent.parentEmail : "",
+        }).toString();
 
-                const response = await server.post(`/api/Teacher/send-update-email?${queryParams}`);
-
-                if (response.status === 200) {
-                    console.log("Email sent successfully.");
+        // Create the promise that sends the email
+        const emailPromise = new Promise((resolve, reject) => {
+            server
+                .post(`/api/Teacher/send-update-email?${queryParams}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log("Email sent successfully.");
+                        setSelectedRecipients([]);
+                        resolve();
+                    } else {
+                        reject(
+                            response.data.error
+                                ? response.data.error.substring("ERROR: ".length)
+                                : "Unexpected error occurred."
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error sending email:", error.message);
                     setSelectedRecipients([]);
-                    resolve();
-                }
-            } catch (error) {
-                console.error("Error sending email:", error.message);
-                setSelectedRecipients([]);
-
-                if (error.response?.status === 400) {
-                    reject(error.response.data.message.split("UERROR: ")[1] || "An error occurred.");
-                } else {
-                    reject("Please try again.");
-                }
-            }
+                    if (
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error &&
+                        typeof error.response.data.error === "string"
+                    ) {
+                        if (error.response.data.error.startsWith("UERROR")) {
+                            reject(
+                                error.response.data.error.substring("UERROR: ".length)
+                            );
+                        } else {
+                            reject(
+                                error.response.data.error.substring("ERROR: ".length)
+                            );
+                        }
+                    } else {
+                        reject("An unexpected error occurred.");
+                    }
+                });
         });
 
-        // Show toast with promise-based status
+        // Use toaster.promise to show notifications based on the promise outcome
         toaster.promise(emailPromise, {
-            loading: { title: "Sending email...", description: "Please wait and don't leave this page." },
-            success: { title: "Email sent successfully!", description: "The email has been delivered." },
+            loading: {
+                title: "Sending email...",
+                description: "Please wait and don't leave this page.",
+            },
+            success: {
+                title: "Email sent successfully!",
+                description: "The email has been delivered.",
+            },
             error: (errorMessage) => ({
                 title: "Error sending email",
                 description: errorMessage,
