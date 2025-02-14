@@ -225,13 +225,6 @@ function Navbar({ onLogout }) {
                     <DrawerBody display={"flex"} flexDirection={"column"}>
                         <Box display="flex" flexDirection="column" height="100%">
                             <DrawerActionTrigger asChild>
-                                <Button color={"#515F7C"} mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/redemption")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                    <MdOutlineRedeem ml={1} />
-                                    <Text ml={2}>Student Redemption</Text>
-                                </Button>
-                            </DrawerActionTrigger>
-
-                            <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/tasks")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <FaTasks ml={1} />
                                     <Text ml={3}>Task Verification</Text>
