@@ -75,10 +75,10 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                     title: "",
                     description: "Verification request sent successfully!",
                 },
-                error: {
+                error: (err) => ({
                     title: "",
-                    description: err => `${err}`,
-                },
+                    description: `${err}`,
+                }),
             });
         }
     }
