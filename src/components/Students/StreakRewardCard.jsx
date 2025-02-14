@@ -53,10 +53,10 @@ function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentP
                 title: "",
                 description: `${points} leafs awarded successfully!`,
             }),
-            error: {
+            error: (err) => ({
                 title: "",
-                description: err => `${err}`,
-            },
+                description: `${err}`,
+            }),
         });
     };
     

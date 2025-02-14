@@ -10,7 +10,7 @@ import { logout } from "../../slices/AuthState";
 import { useDispatch } from 'react-redux';
 
 function DeleteAccountDialog({ isOpen, onClose }) {
-    const dispatch = useDispatch
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [password, setPassword] = useState("");
 
