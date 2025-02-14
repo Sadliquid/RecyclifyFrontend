@@ -239,7 +239,7 @@ function Navbar({ onLogout }) {
                             </DrawerActionTrigger>
 
                             <DrawerActionTrigger asChild>
-                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/leaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/teachers/classLeaderboards")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <Box ml={0.5}>
                                         <MdOutlineLeaderboard fontSize={"20px"} />
                                     </Box>

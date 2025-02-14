@@ -106,7 +106,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             {/* Add task id afterward */}
                             <Route path={"tasks"} element={<TaskVerification />} /> 
                             {/* Add class id afterward */}
-                            <Route path={"leaderboards"} element={<ClassLeaderboards />} />
+                            <Route path={"classLeaderboards"} element={<ClassLeaderboards />} />
                         </Route>
 
                         <Route path="parents">

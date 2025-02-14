@@ -253,7 +253,7 @@ function ClassDashboard({ classData, students }) {
                         </Flex>
                     </Flex>
                     {/* Leaderboards */}
-                    <Box w="20%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center" onClick={() => navigate(`/teachers/leaderboards`)}
+                    <Box w="20%" h="100%" bg="white" borderRadius="xl" boxShadow="md" color="black" textAlign="center" display="flex" alignItems="center" justifyContent="center" onClick={() => navigate(`/teachers/classLeaderboards`)}
                         _hover={{ transform: "scale(1.01)", boxShadow: "xl", transition: "all 0.3s ease" }}>
                         <Flex direction="column" textAlign="left" gap={2} w="90%" h="100%" p={2}>
                             <Box w="100%" h="5%" fontWeight="bold" fontSize="sm" mt={3}>
