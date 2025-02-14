@@ -3,7 +3,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import server from "../../../networking";
-import { FaStar } from "react-icons/fa";
+import { FaLeaf, FaStar } from "react-icons/fa";
 import { BsFillInfoSquareFill } from "react-icons/bs";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { Input } from "@chakra-ui/react"
@@ -179,7 +179,12 @@ const TaskRow = ({ task, fetchTasks }) => {
                                 {/* Task Points */}
                                 <Stack direction="row" align="center" mt={2}>
                                     <FaStar color="#FFD54B" />
-                                    <Text fontSize="md">{task.task.taskPoints} points</Text>
+                                    <Flex align="center">
+                                        <Text fontSize="md">{task.task.taskPoints}</Text>
+                                        <Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center" ml={1}>
+                                            <FaLeaf />
+                                        </Box>
+                                    </Flex>
                                 </Stack>
 
                                 {/* Uploaded Images Carousel */}
@@ -189,20 +194,14 @@ const TaskRow = ({ task, fetchTasks }) => {
 
                                 {images.length > 0 && (
                                     <Box position="relative" mt={2} p={3} borderRadius="lg" bg="blue.100">
-                                        <Box bg="#96E2D6" borderRadius="full" position="absolute" left={2} top="50%" transform="translateY(-50%)" p={2}>
-                                            <IoArrowBack size={30} color="black" cursor="pointer" onClick={handlePrev} />
-                                        </Box>
                                         <Image
                                             src={images[currentImage]}
                                             alt={`Uploaded by ${task.student.name}`}
                                             borderRadius="md"
                                             mx="auto"
-                                            boxSize="250px"
+                                            boxSize="320px"
                                             objectFit="cover"
                                         />
-                                        <Box bg="#96E2D6" borderRadius="full" position="absolute" right={2} top="50%" transform="translateY(-50%)" p={2}>
-                                            <IoArrowForward size={30} color="black" cursor="pointer" onClick={handleNext} />
-                                        </Box>
                                     </Box>
                                 )}
 
@@ -210,13 +209,13 @@ const TaskRow = ({ task, fetchTasks }) => {
                                 {!task.taskVerified && !task.taskRejected && (
                                     <>
                                         <Text fontSize="sm" color="gray.600" mt={4} textAlign="center">
-                                            Please visit the recycling spot to ensure the student recycles the correct items and quantity.
+                                            Please visit the recycling location to verify recycling items and the quantity is correct, if the task pertains to recycling.
                                         </Text>
 
                                         <Box mt={4}>
                                             <Field label="Task Reject Description" required>
                                                 <Input
-                                                    placeholder="Enter reason for rejection..."
+                                                    placeholder="Enter rejection reason..."
                                                     value={rejectDescription}
                                                     onChange={handleRejectInput}
                                                     maxLength={80}
