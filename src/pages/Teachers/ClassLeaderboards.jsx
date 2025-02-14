@@ -234,7 +234,7 @@ function Leaderboards() {
 					<Box textAlign="center" mt={20}>
 						<VStack textAlign="center" fontWeight="medium" mt={4} mr={6} >
 							<LuBox />
-							<Text>No task is waiting for verification.</Text>
+							<Text>Class leaderboard is nto available at this moment.</Text>
 						</VStack>
 					</Box>
 				) : (
@@ -297,7 +297,7 @@ function Leaderboards() {
 												width="100%"
 												height="70%"
 											>
-												<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
+												<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"90%"}>
 													<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
 														Top Contributor
 													</Heading>
@@ -395,7 +395,6 @@ function Leaderboards() {
 							borderRadius={20}
 							overflowY="auto"
 							padding={4}
-							boxShadow="lg"
 						>
 							<HStack
 								mt={2}
