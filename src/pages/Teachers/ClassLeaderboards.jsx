@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import server from "../../../networking";
 import ShowToast from "../../Extensions/ShowToast";
 import LeaderboardPlaceCard from "../../components/teachers/LeaderboardPlaceCard";
+import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { motion } from "framer-motion";
 import { PiCloverFill } from "react-icons/pi";
 import { FaLeaf } from "react-icons/fa";
@@ -16,10 +17,9 @@ function Leaderboards() {
 	const { user, loaded, error } = useSelector((state) => state.auth);
 	const [schoolClassesData, setSchoolClassesData] = useState([]);
 	const [classes, setClasses] = useState([]);
-	const [students, setStudents] = useState([]);
 	const [topContributor, setTopContributor] = useState(null);
 	const [topContributors, setTopContributors] = useState({});
-	const [selectedClass, setSelectedClass] = useState(null); // Start as null
+	const [selectedClass, setSelectedClass] = useState(null); 
 
 	const fetchSchoolClasses = async () => {
 		try {
@@ -45,6 +45,10 @@ function Leaderboards() {
 	// Fetch the students for each class
 	const fetchStudentsForClasses = async (classes) => {
 		// Create a mapping of classID to students
+		if (!classes || classes.length === 0) {
+			setClasses([]);
+			return;
+		}
 		const updatedClasses = await Promise.all(classes.map(async (cls) => {
 			try {
 				const response = await server.get(`/api/Teacher/get-students/?classId=${cls.classID}`);
@@ -63,10 +67,8 @@ function Leaderboards() {
 			}
 		}));
 
-		// Once all students are fetched, update the state
 		setClasses(updatedClasses);
 
-		// Set top contributors after students are fetched for all classes
 		await fetchTopContributors(updatedClasses);
 	};
 
@@ -75,19 +77,15 @@ function Leaderboards() {
 		try {
 			const response = await server.get(`/api/Teacher/get-students/?classId=${classID}`);
 			if (response.status === 200) {
-				setStudents(response.data.data);
 				findTopContributor(response.data.data);
 			}
 		} catch (error) {
 			console.error("Error fetching students:", error);
 			if (error.response.status === 400) {
 				ShowToast("error", "Error fetching students", error.response.data.message.split("UERROR: "));
-				setStudents([]);
 			} else {
 				ShowToast("error", "Error fetching students", "Please try again.");
-				setStudents([]);
 			}
-			setStudents([]);
 		}
 	};
 
@@ -117,9 +115,6 @@ function Leaderboards() {
 		classes.forEach((cls) => {
 
 			const students = cls.students || [];
-			if (students.length === 0) {
-				console.warn(`No students found for class ${cls.classID}`);
-			}
 
 			const topStudent = students.reduce((max, student) =>
 				student.totalPoints > max.totalPoints ? student : max,
@@ -132,13 +127,6 @@ function Leaderboards() {
 		setTopContributors(contributorsMap);
 	};
 
-	const handleClassSelection = (classID) => {
-		const foundClass = classes.find((cls) => cls.classID === classID);
-		setSelectedClass(foundClass);
-		fetchStudents(classID);
-		findTopContributor(students);
-	};
-
 	//Function to sort school classes data in descending order
 	function sortSchoolClassesData(schoolClassesData) {
 		if (!Array.isArray(schoolClassesData) || schoolClassesData.length === 0) {
@@ -147,6 +135,26 @@ function Leaderboards() {
 
 		return [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
 	}
+
+	const sendCertificate = async (topContributor) => {
+		try {
+			const response = await server.post("/api/Teachers/send-certificate", {
+				topContributorName: topContributor.user.name,
+				topContributorEmail: topContributor.user.email,
+			});
+
+			if (response.status === 200) {
+				ShowToast("success", "Certificate sent", "Certificate has been sent to the top contributor.");
+			}
+		} catch (error) {
+			console.error("Error sending certificate:", error);
+			if (error.response.status === 400) {
+				ShowToast("error", "Error sending certificate", error.response.data.message.split("UERROR: "));
+			} else {
+				ShowToast("error", "Error sending certificate", "Please try again.");
+			}
+		}
+	};
 
 	const getPrevClass = () => {
 		if (!selectedClass || classes.length <= 1) return null;
@@ -256,69 +264,98 @@ function Leaderboards() {
 							</Box>
 
 							{/* Top Contributor Panel */}
-							<motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }} width="100%" height="70%">
-								<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
-									{topContributor ? (
-										<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
-											Top Contributor
-										</Heading>
-									) : (
-										<></>
-									)}
-									<Box
-										display="flex"
-										flexDir={"column"}
-										justifyContent={"space-around"}
-										alignItems={"center"}
-										backgroundColor="#FFFFFF"
-										borderRadius={20}
-										width="80%"
-										height="90%"
-										padding={4}
-										boxShadow="lg"
-									>
-										{topContributor ? (
-											<>
-												{topContributor && topContributor.user && (
-													<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" />
-												)}
-												<Heading fontSize={"24px"} mt={2} color="#2D3748">{topContributor.user.name}</Heading>
-												<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
-													<Heading >{topContributor.totalPoints}</Heading>
-													<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
-														<FaLeaf />
-													</Box>
-												</Flex>
+							{topContributor ? (
+								<DialogRoot size="lg" >
+									<DialogTrigger asChild cursor="pointer">
+										<motion.div
+											whileHover={{ scale: 1.02 }}
+											transition={{ duration: 0.2 }}
+											width="100%"
+											height="70%"
+										>
+											<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"100%"}>
+												<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
+													Top Contributor
+												</Heading>
 												<Box
 													display="flex"
-													justifyContent={"center"}
+													flexDir={"column"}
+													justifyContent={"space-around"}
 													alignItems={"center"}
-													border="3px solid"
-													borderColor={topContributor.league === "Gold" ? "gold" : topContributor.league == "Silver" ? "silver" : "#F6B191"}
+													backgroundColor="#FFFFFF"
 													borderRadius={20}
-													height="30%"
-													mt={2}
-													mb={4}
-													padding={5}
-													boxShadow="md"
+													width="80%"
+													height="90%"
+													padding={4}
+													boxShadow="lg"
 												>
-													<Image
-														src={
-															topContributor.league === "Bronze" ? "/bronze-medal.png" :
-																topContributor.league === "Silver" ? "/silver-medal.png" :
-																	"/gold-medal.png"
-														}
-														boxSize={8}
-													/>
-													<Text fontSize={"md"} ml={2} color="#2D3748">{topContributor.league} League</Text>
+													<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" />
+													<Heading fontSize={"24px"} mt={2} color="#2D3748">
+														{topContributor.user.name}
+													</Heading>
+													<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
+														<Heading>{topContributor.totalPoints}</Heading>
+														<Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center">
+															<FaLeaf />
+														</Box>
+													</Flex>
+													<Box
+														display="flex"
+														justifyContent={"center"}
+														alignItems={"center"}
+														border="3px solid"
+														borderColor={topContributor.league === "Gold" ? "gold" : topContributor.league === "Silver" ? "silver" : "#F6B191"}
+														borderRadius={20}
+														height="30%"
+														mt={2}
+														mb={4}
+														padding={5}
+														boxShadow="md"
+													>
+														<Image
+															src={
+																topContributor.league === "Bronze" ? "/bronze-medal.png" :
+																	topContributor.league === "Silver" ? "/silver-medal.png" :
+																		"/gold-medal.png"
+															}
+															boxSize={8}
+														/>
+														<Text fontSize={"md"} ml={2} color="#2D3748">
+															{topContributor.league} League
+														</Text>
+													</Box>
 												</Box>
-											</>
-										) : (
-											<Text color="#718096" mb={3}>No top contributor.</Text>
-										)}
-									</Box>
-								</Box>
-							</motion.div>
+											</Box>
+										</motion.div>
+									</DialogTrigger>
+
+									{/* Confirmation Dialog */}
+									<DialogContent>
+										<DialogHeader>
+											<DialogTitle color="black" fontWeight="bold" textAlign="center">
+												Are you sure you want to send a certificate to {topContributor.user.name}?
+											</DialogTitle>
+										</DialogHeader>
+										<DialogBody color="#FF0000" textAlign="center">
+											<Text>This action cannot be undone.</Text>
+										</DialogBody>
+										<DialogFooter display="flex" gap={10} justifyContent="center">
+											<DialogActionTrigger asChild>
+												<Button variant="outline" bg="#2D65FF" color="white" >
+													Cancel
+												</Button>
+											</DialogActionTrigger>
+											<DialogActionTrigger asChild>
+												<Button bg="#FF8080" color="white" onClick={sendCertificate}>
+													Send Certificate
+												</Button>
+											</DialogActionTrigger>
+										</DialogFooter>
+									</DialogContent>
+								</DialogRoot>
+							) : (
+								<Heading color="#718096" fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>No top contributor.</Heading>
+							)}
 						</Box>
 					</Flex>
 
