@@ -36,18 +36,17 @@ function StudentDashboard({ classData, students }) {
     const [selectedRecipients, setSelectedRecipients] = useState([]);
 
     const handleSort = (column) => {
-        // Toggle sort order for the clicked column
         const newSortOrder = sortOrder[column] === 'asc' ? 'desc' : 'asc';
-    
+
         // Update sort order only for the clicked column
         setSortOrder({
-            [column]: newSortOrder, // Set the new sort order for the clicked column
+            [column]: newSortOrder, 
         });
-    
+
         // Sort the students list based on the selected column
         const sortedStudents = [...studentsList].sort((a, b) => {
             let valueA, valueB;
-    
+
             if (column === 'name') {
                 valueA = a.user.name;
                 valueB = b.user.name;
@@ -61,13 +60,13 @@ function StudentDashboard({ classData, students }) {
                 valueA = a[column];
                 valueB = b[column];
             }
-    
+
             // Handle sorting based on string or numeric values
             if (newSortOrder === 'asc') {
                 if (typeof valueA === 'string') {
                     return valueA.toLowerCase().localeCompare(valueB.toLowerCase());
                 }
-                return valueA - valueB; // For numeric values
+                return valueA - valueB;
             } else {
                 if (typeof valueA === 'string') {
                     return valueB.toLowerCase().localeCompare(valueA.toLowerCase());
@@ -75,10 +74,10 @@ function StudentDashboard({ classData, students }) {
                 return valueB - valueA;
             }
         });
-    
+
         // Update the students list with the sorted list
         setStudentsList(sortedStudents);
-    };    
+    };
 
     const validateName = (name) => {
         const nameRegex = /^[a-zA-Z\s]+$/;
@@ -103,7 +102,6 @@ function StudentDashboard({ classData, students }) {
         return '';
     };
 
-    // Table cell color list
     const tableCellColorList = ["#EDEEFC", "#E6F1FD"];
 
     const floatingStyles = defineStyle({
@@ -188,7 +186,6 @@ function StudentDashboard({ classData, students }) {
 
     // Function to save the edited student details
     const handleSaveEdit = async () => {
-        // Ensure no validation errors exist
         if (validationError.name) {
             console.error('Validation error:', validationError.name);
             return;
@@ -253,7 +250,6 @@ function StudentDashboard({ classData, students }) {
     const sendEmail = async (student) => {
         if (selectedRecipients.length === 0) return;
 
-        // Define the promise
         const emailPromise = new Promise((resolve, reject) => {
             try {
                 const queryParams = new URLSearchParams({
@@ -415,7 +411,7 @@ function StudentDashboard({ classData, students }) {
                                                                 value="edit-student-details"
                                                                 closeOnSelect={false}
                                                                 cursor="pointer"
-                                                                onClick={() => handleEditStudent(student)} // Pass the selected student's details
+                                                                onClick={() => handleEditStudent(student)}
                                                             >
                                                                 <MdEdit /> Edit Student
                                                             </MenuItem>

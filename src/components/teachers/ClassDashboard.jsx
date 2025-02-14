@@ -26,7 +26,7 @@ function ClassDashboard({ classData, students }) {
     // Sort the students by TotalPoints in accending order and get the least contributed top 3
     var lowest3Students = studentsList.sort((a, b) => a.totalPoints - b.totalPoints).slice(0, 3);
 
-    // Check for any conflicts
+    // Check for any conflics students between top3Students and lowest3Students
     const conflictStudents = lowest3Students.filter(student => top3Students.includes(student));
 
     // If there's any conflict, filter them out from the lowest3Students\
@@ -116,8 +116,6 @@ function ClassDashboard({ classData, students }) {
         if (targetIndex === -1) {
             return "Class not found.";
         }
-
-        // Rank is 1-based, so add 1 to the index
         return targetIndex + 1;
     }
 
@@ -228,7 +226,7 @@ function ClassDashboard({ classData, students }) {
                                     </Box>
 
                                     {/* Least 3 Students Contributor based on their totalPoints */}
-                                    <Flex direction="column" w="100%" h="80%"  gap={4}>
+                                    <Flex direction="column" w="100%" h="80%" gap={4}>
                                         {lowest3Students.map((student, index) => (
                                             <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="flex-start" justifyContent="flex-start" >
                                                 {/* Student Avatar */}

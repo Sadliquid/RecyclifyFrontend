@@ -72,7 +72,7 @@ function Class() {
                     <Box bg="#96E2D6" borderRadius="full" p={2}>
                         <IoArrowBack size={50} color="black" cursor="pointer" onClick={() => navigate(`/teachers`)} />
                     </Box>
-                    <Box  fontSize="2xl" textAlign="center" flex="1" mr={24} mb={4}>
+                    <Box fontSize="2xl" textAlign="center" flex="1" mr={24} mb={4}>
                         <Heading fontSize={40} fontWeight="bold" mt={8} mb={4}>
                             {classData.className}
                         </Heading>

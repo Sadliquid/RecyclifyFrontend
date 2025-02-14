@@ -48,7 +48,7 @@ function Leaderboards() {
 
 	// Fetch the students for each class
 	const fetchStudentsForClasses = async (classes) => {
-		// Create a mapping of classID to students
+		// Mapping of classID to students
 		if (!classes || classes.length === 0) {
 			setClasses([]);
 			return;
@@ -58,7 +58,7 @@ function Leaderboards() {
 				const response = await server.get(`/api/Teacher/get-students/?classId=${cls.classID}`);
 				if (response.status === 200) {
 					const studentsData = response.data.data || [];
-					cls.students = studentsData; // Link the students with their class
+					cls.students = studentsData; 
 					return cls;
 				} else {
 					cls.students = [];
@@ -204,8 +204,8 @@ function Leaderboards() {
 
 	useEffect(() => {
 		if (classes.length > 0) {
-			setSelectedClass(teacherClasses ? teacherClasses[0] : []); // Automatically select the first class
-			fetchStudents(teacherClasses ? teacherClasses[0].classID : []); // Fetch students for the first class
+			setSelectedClass(teacherClasses ? teacherClasses[0] : []); 
+			fetchStudents(teacherClasses ? teacherClasses[0].classID : []); 
 		}
 	}, [classes]);
 
@@ -244,7 +244,6 @@ function Leaderboards() {
 						</VStack>
 					</Box>
 				) : (
-					/* Main Content */
 					<Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"} gap={5}>
 						{/* Leaderboard Panel */}
 						<Flex direction="column" justifyContent={"space-between"} width="50%" height={"100%"}>
@@ -364,8 +363,6 @@ function Leaderboards() {
 												</Box>
 											</motion.div>
 										</DialogTrigger>
-
-										{/* Confirmation Dialog */}
 										<DialogContent>
 											<DialogHeader>
 												<DialogTitle color="black" fontWeight="bold" textAlign="center">

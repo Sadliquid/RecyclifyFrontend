@@ -1,36 +1,25 @@
-import { Box, Text, Badge, Button, Stack, Image, IconButton, Flex } from "@chakra-ui/react";
+import { Box, Text, Badge, Button, Stack, Image, Flex } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import server from "../../../networking";
 import { FaLeaf, FaStar } from "react-icons/fa";
 import { BsFillInfoSquareFill } from "react-icons/bs";
-import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { Input } from "@chakra-ui/react"
 import { toaster } from "@/components/ui/toaster"
 import { Field } from "@/components/ui/field"
 import { useSelector } from "react-redux";
 
 const TaskRow = ({ task, fetchTasks }) => {
-    if (!task) return null; // Prevent errors if task is undefined
+    if (!task) return null;
     const [open, setOpen] = useState(false);
-    // const [verificationNote, setVerificationNote] = useState("");
     const { user, loaded, error } = useSelector((state) => state.auth);
-    const [currentImage, setCurrentImage] = useState(0);
     const [rejectDescription, setRejectDescription] = useState("");
-    const images = task.imageUrls ? task.imageUrls.split(",") : [];
-
-    const handlePrev = () => {
-        setCurrentImage((prev) => (prev > 0 ? prev - 1 : images.length - 1));
-    };
-
-    const handleNext = () => {
-        setCurrentImage((prev) => (prev < images.length - 1 ? prev + 1 : 0));
-    };
+    const image = task.imageUrls ? task.imageUrls.split(",") : [];
 
     const handleRejectInput = (e) => {
         let value = e.target.value;
-        if (value.length > 100) return; // Limit to 100 characters
+        if (value.length > 80) return;
         setRejectDescription(value);
     };
 
@@ -42,7 +31,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                 );
 
                 if (response.status === 200) {
-                    fetchTasks(); // Refresh tasks after verifying
+                    fetchTasks(); 
                     setOpen(false);
                     resolve();
                 }
@@ -192,10 +181,10 @@ const TaskRow = ({ task, fetchTasks }) => {
                                     Image(s) Uploaded by {task.student.name} from Class {task.class.className}:
                                 </Text>
 
-                                {images.length > 0 && (
+                                {image && (
                                     <Box position="relative" mt={2} p={3} borderRadius="lg" bg="blue.100">
                                         <Image
-                                            src={images[currentImage]}
+                                            src={image}
                                             alt={`Uploaded by ${task.student.name}`}
                                             borderRadius="md"
                                             mx="auto"

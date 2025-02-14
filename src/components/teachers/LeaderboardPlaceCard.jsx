@@ -23,7 +23,7 @@ function LeaderboardPlaceCard({ rank, schoolClass, topContributor, border }) {
                         src={rank === 1 ? "/gold-medal.png" : rank === 2 ? "/silver-medal.png" : "/bronze-medal.png"}
                         alt={`Rank ${rank}`} w="30%" h="auto"
                     />
-                )}  
+                )}
                 <Text fontSize="lg" fontWeight="bold">{rank > 3 ? rank : ""}</Text>
             </Box>
 

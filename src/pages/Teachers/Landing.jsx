@@ -14,8 +14,6 @@ function Landing() {
     const navigate = useNavigate();
     const { user, loaded, error } = useSelector((state) => state.auth)
     const [teacherID, setTeacherID] = useState(null)
-
-    // Class Data
     const [classes, setClasses] = useState([]);
 
     // Reusable function to fetch classes
@@ -24,7 +22,7 @@ function Landing() {
             const response = await server.get(`/api/Teacher/get-classes/?teacherID=${teacherID}`);
             if (response.status === 200) {
                 setClasses(Array.isArray(response.data.data) ? response.data.data : []);
-            } 
+            }
         } catch (error) {
             console.error("Error fetching classes:", error);
             if (error.response.status === 400) {
@@ -69,7 +67,7 @@ function Landing() {
                 console.log("Class deleted successfully.");
                 ShowToast("success", "Class deleted successfully.");
                 fetchClasses(user.id);
-            } 
+            }
         } catch (error) {
             console.error("Error deleting class:", error);
             if (error.response.status === 400) {
@@ -120,7 +118,7 @@ function Landing() {
                 console.log("Class added successfully.");
                 ShowToast("success", "Class added successfully.");
                 fetchClasses(user.id);
-            } 
+            }
         } catch (error) {
             console.error("Error adding class:", error);
             if (error.response.status === 400) {
@@ -160,7 +158,7 @@ function Landing() {
                             </VStack>
                         )}
                     </Stack>
-        
+
                 </motion.div>
 
                 {/* Add new class button */}

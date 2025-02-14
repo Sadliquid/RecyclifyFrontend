@@ -41,7 +41,7 @@ function ClassQuest({ classData }) {
         const formData = new FormData();
         formData.append("classID", classID);
         formData.append("teacherID", teacherID);
-    
+
         const promise = new Promise((resolve, reject) => {
             server.post(`/api/Teacher/regenerate-class-quests`, formData, {
                 headers: {
@@ -49,27 +49,27 @@ function ClassQuest({ classData }) {
                 },
                 transformRequest: (formData) => formData,
             })
-            .then((response) => {
-                if (response.status === 200) {
-                    setClassQuests(response.data.data);
-                    resolve();
-                } else {
-                    reject(`Unexpected response status: ${response.status}`);
-                }
-            })
-            .catch(error => {
-                if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
-                    if (error.response.data.error.startsWith("UERROR")) {
-                        reject(error.response.data.error.substring("UERROR: ".length));
+                .then((response) => {
+                    if (response.status === 200) {
+                        setClassQuests(response.data.data);
+                        resolve();
                     } else {
-                        reject(error.response.data.error.substring("ERROR: ".length));
+                        reject(`Unexpected response status: ${response.status}`);
                     }
-                } else {
-                    reject("An unexpected error occurred");
-                }
-            });
+                })
+                .catch(error => {
+                    if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                        if (error.response.data.error.startsWith("UERROR")) {
+                            reject(error.response.data.error.substring("UERROR: ".length));
+                        } else {
+                            reject(error.response.data.error.substring("ERROR: ".length));
+                        }
+                    } else {
+                        reject("An unexpected error occurred");
+                    }
+                });
         });
-    
+
         toaster.promise(promise, {
             loading: { title: "Our AI Model is generating...", description: "Please wait" },
             success: {
@@ -81,7 +81,7 @@ function ClassQuest({ classData }) {
                 description: `${err}`,
             }),
         });
-    };    
+    };
 
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "teacher") {
