@@ -173,17 +173,17 @@ function Leaderboards() {
 	};
 
 	const getPrevClass = () => {
-		if (!selectedClass || classes.length <= 1) return null;
-		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass.classID);
-		const prevIndex = (currentIndex - 1 + classes.length) % classes.length;
-		return classes[prevIndex];
+		if (!selectedClass || teacherClasses.length <= 1) return null;
+		const currentIndex = teacherClasses.findIndex(cls => cls.classID === selectedClass.classID);
+		const prevIndex = (currentIndex - 1 + teacherClasses.length) % teacherClasses.length;
+		return teacherClasses[prevIndex];
 	};
 
 	const getNextClass = () => {
-		if (!selectedClass || classes.length <= 1) return null;
-		const currentIndex = classes.findIndex(cls => cls.classID === selectedClass.classID);
-		const nextIndex = (currentIndex + 1) % classes.length;
-		return classes[nextIndex];
+		if (!selectedClass || teacherClasses.length <= 1) return null;
+		const currentIndex = teacherClasses.findIndex(cls => cls.classID === selectedClass.classID);
+		const nextIndex = (currentIndex + 1) % teacherClasses.length;
+		return teacherClasses[nextIndex];
 	};
 
 	const handlePrev = () => {
@@ -215,6 +215,8 @@ function Leaderboards() {
 			fetchStudentsForClasses();
 		}
 	}, [user]);
+
+	console.log(teacherClasses)
 
 	if (!error && loaded && user) {
 		return (
