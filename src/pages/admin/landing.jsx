@@ -13,7 +13,6 @@ function Dashboard() {
 	const { user, loaded, error } = useSelector((state) => state.auth);
 		useEffect(() => {
 			if (!error && loaded && user && user.userRole == "admin") {
-				console.log("User is an admin");
 			}
 		}, [loaded]);
 		if (!loaded) {

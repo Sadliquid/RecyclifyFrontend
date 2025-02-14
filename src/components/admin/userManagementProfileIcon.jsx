@@ -14,7 +14,6 @@ const UserManagamentProfilePictureIcon = ({ userId }) => {
             try {
                 if (userId) {
                     const response = await server.get(`/api/Identity/getAvatar?userId=${userId}`);
-                    console.log(response.data.avatarUrl);
                     if (response.data.avatarUrl) {
                         setAvatarUrl(response.data.avatarUrl);
                     } else {

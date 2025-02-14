@@ -7,6 +7,7 @@ import ShowToast from "../../Extensions/ShowToast";
 import { Field } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox"
 import Server from "../../../networking";
+import RewardItemImage from "../../components/admin/inventoryManagementImageIcon";
 const InventoryManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [rewardItems, setRewardItems] = useState([]);
@@ -25,7 +26,6 @@ const InventoryManagement = () => {
     const fetchRewardItems = async () => {
         try {
             const response = await Server.get(`/api/RewardItem`);
-            console.log("Response:", response);
 
             if (response.status === 200) {
                 // Access nested data property
@@ -397,13 +397,12 @@ const InventoryManagement = () => {
                                                 borderRadius="full"
                                                 width="40px"
                                                 height="40px"
-                                                bg="pink.200"
                                                 display="flex"
                                                 alignItems="center"
                                                 justifyContent="center"
                                                 mr="2"
                                             >
-                                                {item.icon}
+                                               <RewardItemImage rewardId={item.rewardID} />
                                             </Box>
                                             {editingItem?.rewardID === item.rewardID ? (
                                                 <Input
