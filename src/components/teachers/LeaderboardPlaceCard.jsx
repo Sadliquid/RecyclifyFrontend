@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Box, HStack, Text, Flex, Image } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
 import { PiCloverFill } from "react-icons/pi";
 
 function LeaderboardPlaceCard({ rank, schoolClass, topContributor, border }) {
-    const { user, loaded, error } = useSelector((state) => state.auth);
-
     return (
         <HStack
             mt={3}
@@ -24,7 +21,7 @@ function LeaderboardPlaceCard({ rank, schoolClass, topContributor, border }) {
                 {(rank === 1 || rank === 2 || rank === 3) && (
                     <Image
                         src={rank === 1 ? "/gold-medal.png" : rank === 2 ? "/silver-medal.png" : "/bronze-medal.png"}
-                        alt={`Rank ${rank}`} w="20%" h="auto"
+                        alt={`Rank ${rank}`} w="30%" h="auto"
                     />
                 )}  
                 <Text fontSize="lg" fontWeight="bold">{rank > 3 ? rank : ""}</Text>

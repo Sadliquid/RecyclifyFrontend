@@ -29,7 +29,7 @@ function Leaderboards() {
 		try {
 			const response = await server.get(`/api/Teacher/get-overall-classes-data/`);
 			if (response.status === 200) {
-				const sortedClasses = Array.isArray(response.data.data) ? sortSchoolClassesData(response.data.data) : [];	
+				const sortedClasses = Array.isArray(response.data.data) ? sortSchoolClassesData(response.data.data) : [];
 				setSchoolClassesData(sortedClasses);
 				await fetchStudentsForClasses(sortedClasses);
 			}
@@ -204,8 +204,8 @@ function Leaderboards() {
 
 	useEffect(() => {
 		if (classes.length > 0) {
-			setSelectedClass(teacherClasses? teacherClasses[0] : []); // Automatically select the first class
-			fetchStudents(teacherClasses? teacherClasses[0].classID: []); // Fetch students for the first class
+			setSelectedClass(teacherClasses ? teacherClasses[0] : []); // Automatically select the first class
+			fetchStudents(teacherClasses ? teacherClasses[0].classID : []); // Fetch students for the first class
 		}
 	}, [classes]);
 
@@ -250,7 +250,10 @@ function Leaderboards() {
 						<Flex direction="column" justifyContent={"space-between"} width="50%" height={"100%"}>
 							<Box display="flex" flexDir={"column"} width="100%" height="100%" backgroundColor="#E5ECFF" borderRadius={20} >
 								{/* Class brief information card */}
-								<Box position="relative" display="flex" flexDir={"column"} mt={4} p={3} borderRadius={20} height={"30%"} justifyContent={"center"} alignItems={"center"}>
+								<Heading fontSize="30px" textAlign="center" mt={8}>
+									Your Classes
+								</Heading>
+								<Box position="relative" display="flex" flexDir={"column"} p={3} borderRadius={20} height={"30%"} justifyContent={"center"} alignItems={"center"}>
 									{/* Left Arrow & Previous Class Name */}
 									{teacherClasses.length > 1 && (
 										<Box position="absolute" left={14} top="50%" transform="translateY(-50%)" width="46px" >
@@ -303,7 +306,7 @@ function Leaderboards() {
 												width="100%"
 												height="70%"
 											>
-												<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mt={4} mb={4} height={"90%"}>
+												<Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"center"} mb={4} height={"90%"}>
 													<Heading fontWeight={"bold"} textAlign="center" fontSize={"30px"} mt={4} mb={4} height={"10%"}>
 														Top Contributor
 													</Heading>
@@ -437,7 +440,7 @@ function Leaderboards() {
 								.map((schoolClass, index) => (
 									<motion.div key={schoolClass.classID} whileHover={{ scale: 1.01 }} style={{ display: "block", width: "100%" }}>
 										<LeaderboardPlaceCard key={schoolClass.classID} rank={index + 1} schoolClass={schoolClass} topContributor={topContributors[schoolClass.classID] || null}
-										border={selectedClass?.classID == schoolClass.classID ? "2px solid #4DCBA4" : "none"} />
+											border={selectedClass?.classID == schoolClass.classID ? "2px solid #4DCBA4" : "none"} />
 									</motion.div>
 								))}
 						</Box>
