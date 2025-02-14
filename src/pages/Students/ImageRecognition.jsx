@@ -58,6 +58,7 @@ function ImageRecognition() {
                     }
                 })
                 .catch(error => {
+                    console.log(error.response.data.error);
                     if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                         if (error.response.data.error.startsWith("UERROR")) {
                             reject(error.response.data.error.substring("UERROR: ".length));
@@ -73,7 +74,10 @@ function ImageRecognition() {
         toaster.promise(uploadPromise, {
             loading: { title: "Uploading...", description: "Please wait while your file is being processed." },
             success: { title: "", description: "Upload successful!" },
-            error: { title: "", description: (err) => `${err}` },
+            error: (err) => ({
+                title: "",
+                description: `${err}`,
+            }),
         });
     };
 
