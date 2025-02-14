@@ -3,13 +3,44 @@ import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@ch
 import EditPasswordDialog from "./EditPasswordDialog";
 import DeleteAccountDialog from "./DeleteAccountDialog";
 import RedemptionHistoryDialog from "./RedemptionHistoryDialog";
+import { useNavigate } from "react-router-dom";
+import server from "../../../networking";
+import ShowToast from "../../Extensions/ShowToast";
 
 function AccountActionButtons({ userDetails }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showEditPasswordDialog, setShowEditPasswordDialog] = useState(false);
     const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
+    const [childId, setChildId] = useState(null);
+    const [parentId, setParentId] = useState(null);
+    const navigate = useNavigate();
+    const userRole = userDetails.userRole;
 
-    const userRole = userDetails.userRole
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                if (userRole === "parent") {
+                    const response = await server.get(`api/Identity/getChildsId?userId=${userDetails.id}`);
+                    setChildId(response.data.studentId);
+                } else if (userRole === "student") {
+                    const response = await server.get(`api/Identity/getParentsId?userId=${userDetails.id}`);
+                    setParentId(response.data.parentId);
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        };
+
+        fetchUserDetails();
+    }, [userDetails.id, userRole]);
+
+    const handleNavigateToParent = () => {
+        if (!parentId) {
+            ShowToast("error", "No parent account linked", "Please create a parent account and link it first.")
+            return;
+        }
+        navigate(`/identity/publicProfile/${parentId}`);
+    };
 
     return (
         <Box w="70%" mx="auto">
@@ -40,45 +71,47 @@ function AccountActionButtons({ userDetails }) {
             </VStack>
 
             {/* More Actions */}
-            <VStack align="start" spacing={4} mb={6}>
-                <Heading size="md" mb={2}>More Actions</Heading>
-                <HStack gap={8} w="100%">
-                    {userRole === "parent" && (
-                        <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
-                            Child's Account
-                        </Button>
-                    )}
-                    {userRole === "student" && (
-                        <>
-                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
-                                Parent's Account
+            {userRole !== "admin" && (
+                <VStack align="start" spacing={4} mb={6}>
+                    <Heading size="md" mb={2}>More Actions</Heading>
+                    <HStack gap={8} w="100%">
+                        {userRole === "parent" && (
+                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={() => navigate(`/identity/publicProfile/${childId}`)}>
+                                Child's Account
                             </Button>
-                            <Button 
-                                borderRadius={30} variant="solid" background="#2D65FF" color="white"
-                                onClick={() => setShowRedemptionDialog(true)}
+                        )}
+                        {userRole === "student" && (
+                            <>
+                                <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={handleNavigateToParent}> 
+                                    Parent's Account
+                                </Button>
+                                <Button 
+                                    borderRadius={30} variant="solid" background="#2D65FF" color="white"
+                                    onClick={() => setShowRedemptionDialog(true)}
+                                >
+                                    Redemption History
+                                </Button>
+                            </>
+                        )}
+                        {["parent", "student", "teacher"].includes(userRole) && (
+                            <Button borderRadius={30} variant="solid" background="#2D65FF" color="white" onClick={() => navigate(`/identity/publicProfile/${userDetails.id}`)}>
+                                View Public Account
+                            </Button>
+                        )}
+                        {["parent", "student"].includes(userRole) && (
+                            <Button
+                                borderRadius={30}
+                                variant="solid"
+                                background="red"
+                                color="white"
+                                onClick={() => setShowDeleteDialog(true)}
                             >
-                                Redemption History
+                                Delete Account
                             </Button>
-                        </>
-                    )}
-                    {["parent", "student", "teacher"].includes(userRole) && (
-                        <Button borderRadius={30} variant="solid" background="#2D65FF" color="white">
-                            View Public Account
-                        </Button>
-                    )}
-                    {["parent", "student"].includes(userRole) && (
-                        <Button
-                            borderRadius={30}
-                            variant="solid"
-                            background="red"
-                            color="white"
-                            onClick={() => setShowDeleteDialog(true)}
-                        >
-                            Delete Account
-                        </Button>
-                    )}
-                </HStack>
-            </VStack>
+                        )}
+                    </HStack>
+                </VStack>
+            )}
 
             <DeleteAccountDialog isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} />
             <EditPasswordDialog isOpen={showEditPasswordDialog} onClose={() => setShowEditPasswordDialog(false)} />

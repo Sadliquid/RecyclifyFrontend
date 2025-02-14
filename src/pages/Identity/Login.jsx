@@ -62,7 +62,6 @@ function Login() {
                 if (!error && loaded) {
                     if (location.pathname === "/auth/login") {
                         if (user.userRole === "student") {
-                            console.log("This line ran")
                             navigate("/student/home");
                             ShowToast("success", "You're already logged in!");
                         } else if (user.userRole === "teacher") {

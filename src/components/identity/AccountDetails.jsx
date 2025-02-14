@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@chakra-ui/react";
+import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea, Flex } from "@chakra-ui/react";
 import { LuCheck, LuX } from "react-icons/lu"
 import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator,
 } from "@/components/ui/action-bar";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
+import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/join-code-clipboard"
 
 function AccountDetails({ userDetails, setUserDetails }) {
     const dispatch = useDispatch();
@@ -101,10 +102,16 @@ function AccountDetails({ userDetails, setUserDetails }) {
                     <Text
                         fontWeight={"bold"}
                         fontSize={20}
-                        mb={4}
                     >
                         {userDetails.userRole.charAt(0).toUpperCase() + userDetails.userRole.slice(1).toLowerCase()}
                     </Text>
+
+                    <Flex align="center" mb={4}>
+                        <Text fontSize={12} mr={2}>UserId: {userDetails.id}</Text>
+                        <ClipboardRoot value={userDetails.id}>
+                            <ClipboardIconButton />
+                        </ClipboardRoot>
+                    </Flex>
 
                     <Heading size="md">About Me</Heading>
                     <Box position="relative" width="100%">

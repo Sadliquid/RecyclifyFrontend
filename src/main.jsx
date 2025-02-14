@@ -38,6 +38,7 @@ import "@fontsource/lilita-one";
 import ParentsHomepage from './pages/parents/ParentsHomepage';
 import EmailNewsletter from './pages/parents/EmailNewsletter';
 import Faq from './pages/parents/Faq';
+import PublicProfile from './pages/Identity/PublicProfile';
 
 const system = createSystem(defaultConfig, {
   theme: {
@@ -86,6 +87,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
                         <Route path={"identity"}>
                             <Route path={"myAccount"} element={<MyAccount />} />
+                            <Route path={"publicProfile/:id"} element={<PublicProfile />} />
                         </Route>
 
                         <Route path={"admin"} >
