@@ -139,6 +139,8 @@ const InventoryManagement = () => {
                             align={"center"}
                             color={"black"}
                         />
+                        <DialogRoot isOpen={isOpen} onClose={onClose}>
+                        <DialogTrigger asChild>
                         <Button
                             leftIcon={<MdAdd />} // Add icon
                             bg={"#4DCBA4"}
@@ -146,7 +148,90 @@ const InventoryManagement = () => {
                         >
                             Add Item
                         </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Add a new item for redemption</DialogTitle>
+                                </DialogHeader>
+                                <DialogBody pb="4">
+                                    <Stack gap="4">
+                                        <Field label ="Reward Title">
+                                            <Input value={addItem?.title || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                title: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Reward Title"/>
+                                        </Field>
+                                        <Field label ="Reward Description">
+                                            <Input value={addItem?.description || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                description: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Reward Description"/>
+                                        </Field>
+                                        <Field label ="Required Points">
+                                            <Input value={addItem?.points || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                points: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Required Points"/>
+                                        </Field>
+                                        <Field label ="Quantity">
+                                            <Input value={addItem?.quantity || ""}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                quantity: e.target.value
+                                            })
+                                            }
+                                            placeholder="Enter Quantity"/>
+                                        </Field>
+                                        <Field label ="Is Available">
+                                            <Checkbox
+                                            isChecked={addItem?.isAvailable || false}
+                                            onChange={(e) => setAddItem({
+                                                ...addItem,
+                                                isAvailable: e.target.checked
+                                            })
+                                            }
+                                            >
+                                                Is Available
+                                            </Checkbox>
+                                        </Field>
+                                        <Field label="Item Image">
+                                            <Input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => setAddItem({
+                                                    ...addItem,
+                                                    image: e.target.files[0]
+                                                })}
+                                            />
+                                        </Field>
+                                    </Stack>
+                                </DialogBody>
+                                <DialogFooter>
+                                    <Button
+                                        bg={"#4DCBA4"}
+                                        onClick={async () => {
+                                                const formData = new FormData();
+                                                formData.append("title", addItem.title);
+                                                formData.append("description", addItem.description);
+                                                formData.append("points", addItem.points);
+                                                formData.append("quantity", addItem.quantity);
+                                                formData.append("isAvailable", addItem.isAvailable);
+                                                formData.append("image", addItem.image);
+                                            }}
+                                    >Add Item </Button>
+                                </DialogFooter>
+                            </DialogContent>
 
+                        </DialogRoot>
                     </HStack>
                 </Box>
                 {filteredItems.length === 0 ? (
