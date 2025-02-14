@@ -69,7 +69,7 @@ function TaskVerification() {
                 </Flex>
                 {tasks.unverified.length === 0 && tasks.verified.length === 0 && tasks.rejected.length === 0 ? (
                     <Box textAlign="center" mt={20}>
-                        <VStack textAlign="center" fontWeight="medium" mt={4}>
+                        <VStack textAlign="center" fontWeight="medium" mt={4} mr={6} >
                             <LuBox />
                             <Text>No task is waiting for verification.</Text>
                         </VStack>

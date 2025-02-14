@@ -16,7 +16,7 @@ function ClassTabs({ classData, students }) {
         <>
             {/* Conditionally render tabs based on student count */}
             {studentsList.length === 0 ? (
-                <VStack textAlign="center" fontWeight="medium" mt={4}>
+                <VStack textAlign="center" fontWeight="medium" mt={4} mr={8}>
                     <LuBox />
                     <Text>No students found in this class.</Text>
                 </VStack>
