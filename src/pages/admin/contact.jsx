@@ -176,7 +176,7 @@ const ContactFormManagement = () => {
                                                 </Stack>
                                             </DialogBody>
                                             <DialogFooter>
-                                                <Button onClick={() => {
+                                                <Button bg={"#4DCBA4"} onClick={() => {
                                                     const subject = subjectRef.current.value;
                                                     const body = document.querySelector("textarea").value;
                                                     handleSendReply(subject, body);
