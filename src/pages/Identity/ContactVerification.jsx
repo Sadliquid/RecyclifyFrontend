@@ -35,8 +35,12 @@ function ContactVerification() {
             navigate("/student/home");
         } else if (user?.userRole === "teacher") {
             navigate("/teachers");
-        } else {
+        } else if (user?.userRole === "admin") {
             navigate("/admin/dashboard");
+        } else if (user?.userRole === "parent") {
+            navigate("/parents");
+        } else {
+            navigate("/auth/login");
         }
     };
 
@@ -53,21 +57,19 @@ function ContactVerification() {
 
             if (response.data.message.startsWith("SUCCESS") && response.status === 200) {
                 ShowToast("success", "Contact Verified!", "Your contact has been successfully verified.");
-                if (user) {
-                    if (user.userRole === "student") {
+                if (response.data.userRole) {
+                    if (response.data.userRole === "student") {
                         navigate("/student/home");
-                    } else if (user.userRole === "teacher") {
+                    } else if (response.data.userRole === "teacher") {
                         navigate("/teachers");
-                    } else if (user.userRole === "admin") {
+                    } else if (response.data.userRole === "admin") {
                         navigate("/admin/dashboard");
-                    } else if (user.userRole === "parent") {
-                        navigate("/identity/myAccount"); // Temporary
+                    } else if (response.data.userRole === "parent") {
+                        navigate("/parents");
                     } else {
-                        navigate("/identity/myAccount");
+                        navigate("/auth/login");
                     }
-                } else {
-                    navigate("/identity/myAccount");
-                }
+                }                
             }
         } catch (err) {
             const rawErrorMessage = err.response?.data?.error;
@@ -123,7 +125,7 @@ function ContactVerification() {
                                 value.every(digit => digit.length === 1) || "Please enter all 6 digits"
                         }}
                         render={({ field }) => (
-                            <Box>
+                            <Box mt={10}>
                                 <PinInput
                                     value={field.value}
                                     onValueChange={(values) => field.onChange(values.value)}

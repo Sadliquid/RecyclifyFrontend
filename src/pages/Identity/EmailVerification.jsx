@@ -36,8 +36,12 @@ function EmailVerification() {
             navigate("/student/home");
         } else if (user?.userRole === "teacher") {
             navigate("/teachers");
-        } else {
+        } else if (user?.userRole === "admin") {
             navigate("/admin/dashboard");
+        } else if (user?.userRole === "parent") {
+            navigate("/parents");
+        } else {
+            navigate("/auth/login");
         }
     };
 

@@ -13,6 +13,7 @@ import { fetchUser } from '../../slices/AuthState';
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import MsAuthLoginDialog from '../../components/identity/MsAuthLoginDialog';
 
 function Login() {
     const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
@@ -41,6 +42,8 @@ function InnerLoginForm() {
     const [invalidIdentifier, setInvalidIdentifier] = useState(false)
     const [invalidPassword, setInvalidPassword] = useState(false)
     const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [userId, setUserId] = useState('');
 
     const handleSubmit = async (e) => {
         setInvalidIdentifier(false)
@@ -72,14 +75,24 @@ function InnerLoginForm() {
                 Password: password,
                 RecaptchaResponse: token 
             });
-            localStorage.setItem('jwt', response.data.token);
-            await dispatch(fetchUser());
-            ShowToast("success", "Welcome Back!", "Successfully logged in.");
-            navigate("/identity/myAccount");
+
+            if (response.status === 200) {
+                if (response.data.message.substring("SUCCESS: ".length).trim() === "Account credentials valid.") {
+                    setUserId(response.data.userId);
+                    setIsDialogOpen(true);
+                } else {
+                    localStorage.setItem('jwt', response.data.token);
+                    await dispatch(fetchUser());
+                    ShowToast("success", "Welcome Back!", "Successfully logged in.");
+                    navigate("/identity/myAccount");
+                }
+            }
         } catch (error) {
             setIsLoading(false);
             ShowToast("error", "Invalid Login Credentials", "Please try again.");
             console.log(error)
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -186,7 +199,7 @@ function InnerLoginForm() {
                             mb={5}
                         >
                             <Text as='u'>
-                                Forgot username or password?
+                                Forgot login credentials?
                             </Text>
                         </Link>
                     </Box>
@@ -217,10 +230,12 @@ function InnerLoginForm() {
                             href="/auth/createAccount" 
                             color="teal.500"
                         >
-                        Sign Up
+                            Sign Up
                         </Link>
                     </Text>
                 </VStack>
+
+                <MsAuthLoginDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} userId={userId} />
             </Box>
         </Box>
     );
