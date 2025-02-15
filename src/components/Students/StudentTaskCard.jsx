@@ -164,7 +164,7 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                                     borderRadius="full"
                                 >
                                     <FaCamera style={{ marginRight: "5px" }} />
-                                    Verify
+                                    Upload Image to Verify
                                 </Badge>
                             </DialogTrigger>
                         ) : (
