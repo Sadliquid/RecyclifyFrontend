@@ -200,6 +200,15 @@ function Leaderboards() {
 		}
 	};
 
+	//Function to sort school classes data in descending order
+	function sortSchoolClassesData(schoolClassesData) {
+		if (!Array.isArray(schoolClassesData) || schoolClassesData.length === 0) {
+			return [];
+		}
+
+		return [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
+	}
+
 	useEffect(() => {
 		if (classes.length > 0) {
 			setSelectedClass(teacherClasses ? teacherClasses[0] : []); 
@@ -233,7 +242,7 @@ function Leaderboards() {
 					<Box textAlign="center" mt={20}>
 						<VStack textAlign="center" fontWeight="medium" mt={4} mr={6} >
 							<LuBox />
-							<Text>Class leaderboard is nto available at this moment.</Text>
+							<Text>Class leaderboard is not available at this moment.</Text>
 						</VStack>
 					</Box>
 				) : (
