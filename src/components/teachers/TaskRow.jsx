@@ -9,6 +9,7 @@ import { Input } from "@chakra-ui/react"
 import { toaster } from "@/components/ui/toaster"
 import { Field } from "@/components/ui/field"
 import { useSelector } from "react-redux";
+import StudentAvatar from "./StudentAvatar";
 
 const TaskRow = ({ task, fetchTasks }) => {
     if (!task) return null;
@@ -131,7 +132,7 @@ const TaskRow = ({ task, fetchTasks }) => {
 
                             {/* Student Avatar */}
                             <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
-                                <Avatar name={task.student.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+                                <StudentAvatar student={task.student} />
                             </Box>
 
                             {/* Task details */}

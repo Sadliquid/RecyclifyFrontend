@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { Box, Button, Input, Field, Stack, defineStyle } from '@chakra-ui/react';
+import { Box, Button, Input, Field, Stack, defineStyle, Flex, Text} from '@chakra-ui/react';
 import { IoAddOutline } from 'react-icons/io5';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
@@ -120,8 +120,8 @@ function AddClassButton({ onCreate }) {
                 onOpenChange={(isOpen) => setOpen(isOpen.open)}
             >
                 <DialogTrigger asChild>
-                    <Box
-                        p={1}
+                    <Flex
+                        p={2}
                         bg="#92BFFF"
                         position="fixed"
                         aria-label="Add Class"
@@ -134,8 +134,11 @@ function AddClassButton({ onCreate }) {
                             zIndex: 1000,
                         }}
                     >
-                        <IoAddOutline size={34} color="black" />
-                    </Box>
+                        <IoAddOutline size={28} color="black" />
+                        <Text color="black" fontSize="lg" fontWeight="bold" mr={2}>  
+                            Create Class
+                        </Text>
+                    </Flex>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>

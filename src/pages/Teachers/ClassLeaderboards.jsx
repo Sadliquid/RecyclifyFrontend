@@ -14,6 +14,7 @@ import { FaLeaf } from "react-icons/fa";
 import { toaster } from "@/components/ui/toaster";
 import { Tooltip } from "@/components/ui/tooltip"
 import { LuBox } from "react-icons/lu";
+import StudentAvatar from "../../components/teachers/StudentAvatar";
 
 function Leaderboards() {
 	const navigate = useNavigate();
@@ -200,6 +201,15 @@ function Leaderboards() {
 		}
 	};
 
+	//Function to sort school classes data in descending order
+	function sortSchoolClassesData(schoolClassesData) {
+		if (!Array.isArray(schoolClassesData) || schoolClassesData.length === 0) {
+			return [];
+		}
+
+		return [...schoolClassesData].sort((a, b) => b.classPoints - a.classPoints);
+	}
+
 	useEffect(() => {
 		if (classes.length > 0) {
 			setSelectedClass(teacherClasses ? teacherClasses[0] : []); 
@@ -233,7 +243,7 @@ function Leaderboards() {
 					<Box textAlign="center" mt={20}>
 						<VStack textAlign="center" fontWeight="medium" mt={4} mr={6} >
 							<LuBox />
-							<Text>Class leaderboard is nto available at this moment.</Text>
+							<Text>Class leaderboard is not available at this moment.</Text>
 						</VStack>
 					</Box>
 				) : (
@@ -316,7 +326,7 @@ function Leaderboards() {
 															padding={4}
 															boxShadow="lg"
 														>
-															<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" />
+															<StudentAvatar student={topContributor} size="70px"/>
 															<Heading fontSize={"24px"} mt={2} color="#2D3748">
 																{topContributor.user.name}
 															</Heading>
