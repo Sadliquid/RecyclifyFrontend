@@ -1,28 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import {
-    Stack,
-    Table,
-    Heading,
-    Input,
-    HStack,
-    Button,
-    Box,
-    Spinner,
-    Text,
-    useDisclosure,
-} from "@chakra-ui/react";
+import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text, VStack, useDisclosure } from "@chakra-ui/react";
 import { MdEdit, MdAdd } from "react-icons/md";
-import {
-    DialogActionTrigger,
-    DialogBody,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogRoot,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import ShowToast from "../../Extensions/ShowToast";
 import Server from "../../../networking";
@@ -37,9 +18,8 @@ const UserManagement = () => {
     const [userToDelete, setUserToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const { user, loaded, error } = useSelector((state) => state.auth);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const subjectRef = useRef(null);
+    
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "admin") {
             fetchUsers();
@@ -177,7 +157,7 @@ const UserManagement = () => {
                     <Heading fontSize={"30px"} m={10}>
                         User Management
                     </Heading>
-                    <HStack justifyContent="center" mb="4">
+                    <VStack justifyContent="center" mb="4">
                         <Input
                             placeholder="Search for users..."
                             value={searchTerm}
@@ -333,141 +313,13 @@ const UserManagement = () => {
                                 </DialogFooter>
                             </DialogContent>
                         </DialogRoot>
-                    </HStack>
+                    </VStack>
                 </Box>
                 {filteredUsers.length === 0 ? (
                     <Box textAlign="center" py={10}>
                         <Text fontSize="lg" color="gray.500">
                             No users found.
                         </Text>
-                        <DialogRoot isOpen={isOpen} onClose={onClose}>
-                            <DialogTrigger asChild>
-                                <Button
-                                    mt={4}
-                                    leftIcon={<MdAdd />}
-                                    colorScheme="teal"
-                                    onClick={() => openAddTeacherAccount()}
-                                >
-                                    Add a New Teacher Account
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Add Teacher Account</DialogTitle>
-                                </DialogHeader>
-                                <DialogBody pb="4">
-                                    <Stack gap="4">
-                                        <Field label="Name">
-                                            <Input
-                                                value={editingUser?.name || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        name: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter full name"
-                                            />
-                                        </Field>
-                                        <Field label="First Name">
-                                            <Input
-                                                value={editingUser?.fName || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        fName: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter first name"
-                                            />
-                                        </Field>
-                                        <Field label="Last Name">
-                                            <Input
-                                                value={editingUser?.LName || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        LName: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter last name"
-                                            />
-                                        </Field>
-                                        <Field label="Email">
-                                            <Input
-                                                type="email"
-                                                value={editingUser?.email || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        email: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter email address"
-                                            />
-                                        </Field>
-                                        <Field label="Password">
-                                            <Input
-                                                type="password"
-                                                value={editingUser?.password || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        password: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter password"
-                                            />
-                                        </Field>
-                                        <Field label="Contact Number">
-                                            <Input
-                                                type="tel"
-                                                value={editingUser?.contactNumber || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        contactNumber: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter contact number"
-                                            />
-                                        </Field>
-                                        <Field label="User Role">
-                                            <Text>teacher</Text>
-                                        </Field>
-                                        <Field Label="Class Number">
-                                            <Input
-                                                type="number"
-                                                value={editingUser?.classNumber || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        classNumber: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter class number"
-                                            />
-                                        </Field>
-                                        <Field Label ="Class Description">
-                                            <Input
-                                                type="text"
-                                                value={editingUser?.classDescription || ""}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        classDescription: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter class description"
-                                            />
-                                        </Field>
-                                    </Stack>
-                                </DialogBody>
-                                <DialogFooter>
-                                    <Button onClick={() => { }}>Add Teacher Account</Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </DialogRoot>
                     </Box>
                 ) : (
                     <Table.Root size="sm" showColumnBorder>
