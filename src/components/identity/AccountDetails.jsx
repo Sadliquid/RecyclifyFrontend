@@ -37,11 +37,18 @@ function AccountDetails({ userDetails, setUserDetails }) {
         const phoneRegex = /^\d{8}$/;
         const nameRegex = /^[A-Za-z\s]+$/;
     
+        // Validate email format
         if (!emailRegex.test(editedDetails.email)) {
             ShowToast("error", "Invalid Email", "Please enter a valid email address.");
             return;
         }
-    
+
+        // Validate student email domain
+        if (userDetails.userRole.toLowerCase() === 'student' && !editedDetails.email.trim().endsWith('@mymail.nyp.edu.sg')) {
+            ShowToast("error", "Invalid Email", "Student email must end with @mymail.nyp.edu.sg");
+            return;
+        }
+
         if (!phoneRegex.test(editedDetails.contactNumber)) {
             ShowToast("error", "Invalid Phone Number", "Phone number must be exactly 8 digits.");
             return;
