@@ -12,6 +12,7 @@ import { LuBox } from 'react-icons/lu';
 import ClassLineChart from './ClassLineGraph';
 import ShowToast from '../../Extensions/ShowToast';
 import { useNavigate } from 'react-router-dom';
+import StudentAvatar from '@/components/teachers/StudentAvatar';
 
 function ClassDashboard({ classData, students }) {
     const navigate = useNavigate();
@@ -149,18 +150,18 @@ function ClassDashboard({ classData, students }) {
                                     {/* Top 3 Students Contributor based on their totalPoints */}
                                     <Flex direction="column" w="100%" h="80%" gap={4}>
                                         {top3Students.map((student, index) => (
-                                            <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="flex-start" justifyContent="flex-start" >
+                                            <Flex key={index} direction="row" w="100%" h="30%" gap={1} alignItems="flex-start" justifyContent="flex-start" >
                                                 {/* Rank Icon or Badge */}
                                                 <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
                                                     <Image src={index === 0 ? "/gold-medal.png" : index === 1 ? "/silver-medal.png" : "/bronze-medal.png"}
                                                         alt={`Rank ${index + 1}`} w="100%" h="auto" />
                                                 </Box>
                                                 {/* Student Avatar */}
-                                                <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
-                                                    <Avatar name={student.user.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+                                                <Box w="20%" h="100%" display="flex" justifyContent="center" alignItems="center">
+                                                    <StudentAvatar student={student} />
                                                 </Box>
                                                 {/* Student's Info */}
-                                                <Box w="80%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
+                                                <Box w="70%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
                                                     <Box w="60%" fontSize="sm" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{student.user.name}</Box>
                                                     <Box w="30%" fontSize="2xl" fontWeight="bold" display="flex" justifyContent="flex-end">
                                                         {student.totalPoints}
@@ -231,7 +232,7 @@ function ClassDashboard({ classData, students }) {
                                             <Flex key={index} direction="row" w="100%" h="30%" gap={2} alignItems="flex-start" justifyContent="flex-start" >
                                                 {/* Student Avatar */}
                                                 <Box w="20%" h="100%" display="flex" justifyContent="center" alignItems="center">
-                                                    <Avatar name={student.user.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+                                                    <StudentAvatar student={student} />
                                                 </Box>
                                                 {/* Student's Info */}
                                                 <Box w="80%" h="100%" display="flex" justifyContent="space-between" alignItems="center">

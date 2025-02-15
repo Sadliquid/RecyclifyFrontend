@@ -14,6 +14,7 @@ import { FaLeaf } from "react-icons/fa";
 import { toaster } from "@/components/ui/toaster";
 import { Tooltip } from "@/components/ui/tooltip"
 import { LuBox } from "react-icons/lu";
+import StudentAvatar from "../../components/teachers/StudentAvatar";
 
 function Leaderboards() {
 	const navigate = useNavigate();
@@ -325,7 +326,7 @@ function Leaderboards() {
 															padding={4}
 															boxShadow="lg"
 														>
-															<Avatar name={topContributor.user.name} src={"https://bit.ly/dan-abramov"} size="sm" />
+															<StudentAvatar student={topContributor} size="70px"/>
 															<Heading fontSize={"24px"} mt={2} color="#2D3748">
 																{topContributor.user.name}
 															</Heading>
