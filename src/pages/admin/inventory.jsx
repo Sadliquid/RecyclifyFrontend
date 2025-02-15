@@ -280,8 +280,8 @@ const InventoryManagement = () => {
                         </Table.Header>
                         <Table.Body>
                             {filteredItems.map((item) => (
-                                <Table.Row key={item.rewardID} opacity={item.isAvailable ? 1 : 0.5}>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                <Table.Row key={item.rewardID}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         <Box display="flex" alignItems="center">
                                             <Box
                                                 borderRadius="full"
@@ -309,7 +309,7 @@ const InventoryManagement = () => {
                                             )}
                                         </Box>
                                     </Table.Cell>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
                                                 value={editingItem.rewardDescription}
@@ -324,7 +324,7 @@ const InventoryManagement = () => {
                                             item.rewardDescription
                                         )}
                                     </Table.Cell>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
                                                 type="number"
@@ -340,7 +340,7 @@ const InventoryManagement = () => {
                                             item.requiredPoints
                                         )}
                                     </Table.Cell>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
                                                 type="number"
@@ -371,6 +371,7 @@ const InventoryManagement = () => {
                                                     <MdEdit size={20} />
                                                 </Button>
                                                 <Button
+                                                    
                                                     variant="link"
                                                     color={item.isAvailable ? "red.500" : "green.500"}
                                                     onClick={() => handleToggleAvailability(item.rewardID)}
