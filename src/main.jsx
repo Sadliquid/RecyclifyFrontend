@@ -39,6 +39,7 @@ import ParentsHomepage from './pages/parents/ParentsHomepage';
 import EmailNewsletter from './pages/parents/EmailNewsletter';
 import Faq from './pages/parents/Faq';
 import PublicProfile from './pages/Identity/PublicProfile';
+import MsAuth from './pages/Identity/MsAuth';
 
 const system = createSystem(defaultConfig, {
   theme: {
@@ -80,6 +81,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Route path={"auth"}>
                             <Route path={"login"} element={<Login />} />
                             <Route path={"createAccount"} element={<CreateAccount />} />
+                            <Route path={"msAuth"} element={<MsAuth />} />
                             <Route path={"accountRecovery"} element={<AccountRecovery />} />
                             <Route path={"emailVerification"} element={<EmailVerification />} />
                             <Route path={"contactVerification"} element={<ContactVerification />} />

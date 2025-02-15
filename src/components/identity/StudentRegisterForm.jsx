@@ -31,7 +31,6 @@ function InnerStudentForm({ goBack }) {
     const { executeRecaptcha } = useGoogleReCaptcha();
     const navigate = useNavigate();
 
-    // Validation schema using Yup
     const validationSchema = Yup.object().shape({
         fname: Yup.string()
             .matches(/^[a-zA-Z\s]*$/, 'First Name cannot contain numbers')
@@ -56,7 +55,6 @@ function InnerStudentForm({ goBack }) {
             .required("Confirm Password is required"),
     });
 
-    // Form submission handler
     const handleSubmit = async (values) => {
         try {
             if (!executeRecaptcha) {
@@ -64,10 +62,8 @@ function InnerStudentForm({ goBack }) {
                 return;
             }
         
-            // Execute reCAPTCHA and get token
-            const token = await executeRecaptcha('parent_signup');
+            const token = await executeRecaptcha('student_signup');
             
-            // Include the token in your submission data
             const submissionData = { ...values, RecaptchaResponse: token };
 
             const response = await server.post("/api/Identity/createAccount", submissionData);
@@ -76,8 +72,8 @@ function InnerStudentForm({ goBack }) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
                 if (responseMessage === "Account created successfully.") {
                     localStorage.setItem('jwt', response.data.token);
-                    ShowToast("success", "Account Created!", "Please verify your email.")
-                    navigate("/auth/emailVerification")
+                    ShowToast("success", "Account Created!", "Please set up your Multi-Factor Authentication.")
+                    navigate("/auth/msAuth", { state: { qrCodeUrl: response.data.qrCodeUrl } })
                 }
             }
         } catch (err) {

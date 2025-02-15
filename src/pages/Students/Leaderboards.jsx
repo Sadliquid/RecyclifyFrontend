@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Heading, Text, Image, HStack, Spinner, Button } from '@chakra-ui/react';
-import { Avatar } from "@/components/ui/avatar";
 import LeaderboardPlaceCard from '../../components/Students/LeaderboardPlaceCard';
+import LeaderboardProfileIcon from '../../components/Students/LeaderboardProfileIcon';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,6 @@ function Leaderboards() {
     const [allStudents, setAllStudents] = useState([]);
     const [studentsFetched, setStudentsFetched] = useState(false)
     const [sessionStudent, setSessionStudent] = useState(null);
-    const [timeLeft, setTimeLeft] = useState("");
     const [available, setAvailable] = useState(false);
     const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
@@ -48,36 +47,6 @@ function Leaderboards() {
             setChecked(true);
         }
     }
-
-    const calculateTimeLeft = () => {
-        const now = new Date();
-        const daysUntilMonday = (8 - now.getDay()) % 7;
-        
-        const endOfWeek = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate() + daysUntilMonday, 0, 0, 0
-        );
-    
-        const difference = endOfWeek - now;
-    
-        if (difference > 0) {
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((difference / (1000 * 60)) % 60);
-            setTimeLeft(`${days} Days, ${hours} Hours, ${minutes} Minutes`);
-        } else {
-            setTimeLeft("0 Days, 0 Hours, 0 Minutes");
-        }
-    };
-    
-
-    useEffect(() => {
-        calculateTimeLeft();
-        const timer = setInterval(calculateTimeLeft, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
     
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "student") {
@@ -122,11 +91,11 @@ function Leaderboards() {
 
                 <Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"}>
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="28%">
-                        <Box display="flex" flexDir={"column"} justifyContent={"space-around"} alignItems={"center"} backgroundColor="#E5ECFF" borderRadius={20} height="85%" padding={2}>
-                            <Avatar boxSize="150px" src="https://bit.ly/dan-abramov" />
+                        <Box display="flex" flexDir={"column"} justifyContent={"space-around"} alignItems={"center"} backgroundColor="#E5ECFF" borderRadius={20} height="100%" padding={2}>
+                            <LeaderboardProfileIcon userId={user.id} boxSize={"150px"} />
                             <Heading fontSize={"30px"} mt={2}>{user.name}</Heading>
                             <Heading color="#2CD776">{sessionStudent.totalPoints} Leafs</Heading>
-                            <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} height="20%" mt={2} padding={5}>
+                            <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} height="20%" mt={2} padding={5} width={"90%"}>
                                 <Box mr={2}>
                                     <Image src={sessionStudent.league === "Bronze" ? "/bronze-medal.png" : sessionStudent.league === "Silver" ? "/silver-medal.png" : "/gold-medal.png"} boxSize={10} mt={2}/>
                                 </Box>
@@ -138,11 +107,6 @@ function Leaderboards() {
                             </Box>
 
                             <Text fontFamily={"Lilita One"} color={"#BFA428"} padding={1} fontSize={18}>Top 3 finalists at the end of this league {sessionStudent.league == "Bronze" ? "advance to the Silver" : sessionStudent.league == "Silver" ? "advance to the Gold" : "keep their places in the Gold"} league!</Text>
-                        </Box>
-
-                        <Box display="flex" justifyContent={"center"} flexDir={"column"} alignItems={"center"} backgroundColor="#4DCBA4" borderRadius={20} height="13%">
-                            <Text fontFamily={"Lilita One"} color="white">League ends in</Text>
-                            <Heading fontSize={"18px"} color="white" ml={2}>{timeLeft}</Heading>
                         </Box>
                     </Box>
 

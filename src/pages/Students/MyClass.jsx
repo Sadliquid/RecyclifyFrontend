@@ -92,9 +92,11 @@ function MyClass() {
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "student") {
             fetchStudents(user.id);
-            fetchStudentClassID(user.id);
+            if (studentsList != null) {
+                fetchStudentClassID(user.id);
+            }
         }
-    }, [error, loaded, user]);
+    }, [error, loaded, user, studentsList]);
 
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "student") {

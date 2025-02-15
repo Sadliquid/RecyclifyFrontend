@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text, useDisclosure } from "@chakra-ui/react";
+import { Stack, Table, Heading, Input, HStack, Button, Box, Spinner, Text, VStack, useDisclosure } from "@chakra-ui/react";
 import { MdEdit, MdAdd } from "react-icons/md";
-import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import ShowToast from "../../Extensions/ShowToast";
 import { Field } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox"
@@ -125,10 +126,8 @@ const InventoryManagement = () => {
         <>
             <Stack gap="10">
                 <Box textAlign="center">
-                    <Heading fontSize={"30px"} m={10}>
-                        Reward Items Management
-                    </Heading>
-                    <HStack justifyContent="center" mb="4">
+                    <Heading fontSize="30px" mt={10} mb={10}>Manage Rewards</Heading>
+                    <VStack justifyContent="center" mb="4">
                         <Input
                             placeholder="Search for reward items..."
                             value={searchTerm}
@@ -140,13 +139,14 @@ const InventoryManagement = () => {
                         />
                         <DialogRoot isOpen={isOpen} onClose={onClose}>
                         <DialogTrigger asChild>
-                        <Button
-                            leftIcon={<MdAdd />} // Add icon
-                            bg={"#4DCBA4"}
-                            onClick={() => handleAddItem()}
-                        >
-                            Add Item
-                        </Button>
+                            <Button
+                                leftIcon={<MdAdd />} // Add icon
+                                bg={"#4DCBA4"}
+                                onClick={() => handleAddItem()}
+                                mt={5}
+                            >
+                                Add Reward
+                            </Button>
                         </DialogTrigger>
                         <DialogContent>
                                 <DialogHeader>
@@ -173,21 +173,29 @@ const InventoryManagement = () => {
                                             placeholder="Enter Reward Description"/>
                                         </Field>
                                         <Field label ="Required Points">
-                                            <Input value={addItem?.points || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                points: e.target.value
-                                            })
-                                            }
+                                            <Input 
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
+                                                value={addItem?.points || ""}
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+                                                    setAddItem({...addItem,points: sanitizedValue})
+                                                }
+                                                }
                                             placeholder="Enter Required Points"/>
                                         </Field>
                                         <Field label ="Quantity">
-                                            <Input value={addItem?.quantity || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                quantity: e.target.value
-                                            })
-                                            }
+                                            <Input 
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
+                                                value={addItem?.quantity || ""}
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+                                                    setAddItem({...addItem, quantity: sanitizedValue});
+                                                }
+                                                }
                                             placeholder="Enter Quantity"/>
                                         </Field>
                                         <Field label ="Is Available">
@@ -215,6 +223,9 @@ const InventoryManagement = () => {
                                     </Stack>
                                 </DialogBody>
                                 <DialogFooter>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" onClick={onClose}>Cancel</Button>
+                                    </DialogTrigger>
                                     <Button
                                         bg={"#4DCBA4"}
 										isLoading={isLoading}
@@ -250,131 +261,18 @@ const InventoryManagement = () => {
 													ShowToast("error", "Error", error.response?.data?.error || error.message);
 												}
                                             }}
-                                    >{isLoading ? "Adding..." : "Add Item"} </Button>
+                                    >{isLoading ? "Adding..." : "Submit"} </Button>
                                 </DialogFooter>
                             </DialogContent>
 
                         </DialogRoot>
-                    </HStack>
+                    </VStack>
                 </Box>
                 {filteredItems.length === 0 ? (
                     <Box textAlign="center" py={10}>
                         <Text fontSize="lg" color="gray.500">
                             No reward items found.
                         </Text>
-                        <DialogRoot isOpen={isOpen} onClose={onClose}>
-                            <DialogTrigger asChild>
-                                <Button
-                                    mt={4}
-                                    leftIcon={<MdAdd />}
-                                    colorScheme="teal"
-                                    onClick={() => handleAddItem()}
-                                >
-                                    Add a New Item
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Add a new item for redemption</DialogTitle>
-                                </DialogHeader>
-                                <DialogBody pb="4">
-                                    <Stack gap="4">
-                                        <Field label ="Reward Title">
-                                            <Input value={addItem?.title || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                title: e.target.value
-                                            })
-                                            }
-                                            placeholder="Enter Reward Title"/>
-                                        </Field>
-                                        <Field label ="Reward Description">
-                                            <Input value={addItem?.description || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                description: e.target.value
-                                            })
-                                            }
-                                            placeholder="Enter Reward Description"/>
-                                        </Field>
-                                        <Field label ="Required Points">
-                                            <Input value={addItem?.points || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                points: e.target.value
-                                            })
-                                            }
-                                            placeholder="Enter Required Points"/>
-                                        </Field>
-                                        <Field label ="Quantity">
-                                            <Input value={addItem?.quantity || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                quantity: e.target.value
-                                            })
-                                            }
-                                            placeholder="Enter Quantity"/>
-                                        </Field>
-                                        <Field label ="Is Available">
-                                            <Checkbox
-                                            isChecked={addItem?.isAvailable || false}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                isAvailable: e.target.checked
-                                            })
-                                            }
-                                            >
-                                                Is Available
-                                            </Checkbox>
-                                        </Field>
-                                        <Field label="Item Image">
-                                            <Input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => setAddItem({
-                                                    ...addItem,
-                                                    image: e.target.files[0]
-                                                })}
-                                            />
-                                        </Field>
-                                    </Stack>
-                                </DialogBody>
-                                <DialogFooter>
-                                    <Button
-                                        bg={"#4DCBA4"}
-                                        onClick={async () => {
-                                                const formData = new FormData();
-                                                formData.append("title", addItem.title);
-                                                formData.append("description", addItem.description);
-                                                formData.append("points", addItem.points);
-                                                formData.append("quantity", addItem.quantity);
-                                                formData.append("isAvailable", addItem.isAvailable);
-                                                formData.append("image", addItem.image);
-
-												try {
-													const response = await Server.post(
-														"/api/RewardItem",
-														formData,
-														{
-															headers: {
-																"Content-Type": "multipart/form-data",
-															},
-															transformRequest: (formData) => formData,
-														}
-													);
-													if (response.status === 200) {
-														fetchRewardItems();
-														ShowToast("success", "Success", response.data.message);
-													}
-												} catch (error) {
-													ShowToast("error", "Error", error.response?.data?.error || error.message);
-												}
-                                            }}
-                                    >Add Item </Button>
-                                </DialogFooter>
-                            </DialogContent>
-
-                        </DialogRoot>
                     </Box>
 
                 ) : (
@@ -390,8 +288,8 @@ const InventoryManagement = () => {
                         </Table.Header>
                         <Table.Body>
                             {filteredItems.map((item) => (
-                                <Table.Row key={item.rewardID} opacity={item.isAvailable ? 1 : 0.5}>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                <Table.Row key={item.rewardID}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         <Box display="flex" alignItems="center">
                                             <Box
                                                 borderRadius="full"
@@ -419,7 +317,7 @@ const InventoryManagement = () => {
                                             )}
                                         </Box>
                                     </Table.Cell>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
                                                 value={editingItem.rewardDescription}
@@ -434,32 +332,40 @@ const InventoryManagement = () => {
                                             item.rewardDescription
                                         )}
                                     </Table.Cell>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
-                                                type="number"
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
                                                 value={editingItem.requiredPoints}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        requiredPoints: parseInt(e.target.value),
+                                                        requiredPoints: parseInt(sanitizedValue),
                                                     })
+                                                    }
                                                 }
                                             />
                                         ) : (
                                             item.requiredPoints
                                         )}
                                     </Table.Cell>
-                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"}>
+                                    <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
-                                                type="number"
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
                                                 value={editingItem.rewardQuantity}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        rewardQuantity: parseInt(e.target.value),
+                                                        rewardQuantity: parseInt(sanitizedValue),
                                                     })
+                                                }
                                                 }
                                             />
                                         ) : (
@@ -481,6 +387,7 @@ const InventoryManagement = () => {
                                                     <MdEdit size={20} />
                                                 </Button>
                                                 <Button
+                                                    
                                                     variant="link"
                                                     color={item.isAvailable ? "red.500" : "green.500"}
                                                     onClick={() => handleToggleAvailability(item.rewardID)}

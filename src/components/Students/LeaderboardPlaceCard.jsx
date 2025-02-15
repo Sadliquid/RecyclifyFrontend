@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Box, HStack, Text } from "@chakra-ui/react";
-import { Avatar } from "@/components/ui/avatar";
+import LeaderboardProfileIcon from "./LeaderboardProfileIcon"
 import { useSelector } from "react-redux";
 
 function LeaderboardPlaceCard({ rank, student }) {
@@ -23,7 +23,9 @@ function LeaderboardPlaceCard({ rank, student }) {
             </Box>
 
             <Box display="flex" alignItems="center" justifyContent="flex-start" width="30%">
-                <Avatar src={"https://bit.ly/dan-abramov"} boxSize="40px" mr={2} />
+                <Box mr={2}>
+                    <LeaderboardProfileIcon userId={student.studentID} boxSize={"40px"} />
+                </Box>
                 <Text fontSize="md" fontWeight="bold" textAlign="left">
                     {student.name}
                 </Text>

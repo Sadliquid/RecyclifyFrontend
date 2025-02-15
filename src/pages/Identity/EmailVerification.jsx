@@ -36,11 +36,14 @@ function EmailVerification() {
             navigate("/student/home");
         } else if (user?.userRole === "teacher") {
             navigate("/teachers");
-        } else {
+        } else if (user?.userRole === "admin") {
             navigate("/admin/dashboard");
+        } else if (user?.userRole === "parent") {
+            navigate("/parents");
+        } else {
+            navigate("/auth/login");
         }
     };
-
 
     const verifyEmail = async (data) => {
         const isComplete = data.pin.every(digit => digit.length === 1);
@@ -108,16 +111,17 @@ function EmailVerification() {
 
                     {/* Progress bar */}
                     <StepsRoot 
-                        defaultStep={1} 
+                        defaultStep={2} 
                         count={3} 
                         linear="true" 
                         size="lg" 
-                        width={900}
+                        width={1000}
                     >
                         <StepsList>
                             <StepsItem index={0} title="Step 1" description="Account Details" />
-                            <StepsItem index={1} title="Step 2" description="Verify Email" />
-                            <StepsItem index={2} title="Step 3" description="Verify Contact" />
+                            <StepsItem index={1} title="Step 2" description="Setup MFA" />
+                            <StepsItem index={2} title="Step 3" description="Verify Email" />
+                            <StepsItem index={3} title="Step 4" description="Verify Contact" />
                         </StepsList>
                     </StepsRoot>
 

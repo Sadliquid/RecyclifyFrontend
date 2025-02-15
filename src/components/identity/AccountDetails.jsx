@@ -1,22 +1,25 @@
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea, Flex } from "@chakra-ui/react";
+import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea, Flex, Alert } from "@chakra-ui/react";
 import { LuCheck, LuX } from "react-icons/lu"
-import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator,
-} from "@/components/ui/action-bar";
+import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator } from "@/components/ui/action-bar";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
-import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/join-code-clipboard"
+import { ClipboardIconButton, ClipboardRoot } from "@/components/ui/join-code-clipboard"
+import EmailVerificationDialog from "../../components/identity/EmailVerificationDialog";
+import ContactVerificationDialog from "../../components/identity/ContactVerificationDialog";
 
 function AccountDetails({ userDetails, setUserDetails }) {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [height, setHeight] = useState('auto');
     const hiddenDivRef = useRef(null);
     const textareaRef = useRef(null);
     const [editedDetails, setEditedDetails] = useState(userDetails);
     const [isEditing, setIsEditing] = useState(false);
+    const [isEmailDialogOpen, setEmailDialogOpen] = useState(false);
+    const [isContactDialogOpen, setContactDialogOpen] = useState(false);
+    const [isSendingVerificationEmail, setIsSendingVerificationEmail] = useState(false);
+    const [isSendingVerificationSMS, setIsSendingVerificationSMS] = useState(false);
 
     useEffect(() => {
         if (hiddenDivRef.current && textareaRef.current) {
@@ -36,12 +39,18 @@ function AccountDetails({ userDetails, setUserDetails }) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{8}$/;
         const nameRegex = /^[A-Za-z\s]+$/;
+        const studentEmailRegex = /^\d{6}[a-zA-Z]@mymail\.nyp\.edu\.sg$/;
     
         if (!emailRegex.test(editedDetails.email)) {
             ShowToast("error", "Invalid Email", "Please enter a valid email address.");
             return;
         }
-    
+
+        if (userDetails.userRole.toLowerCase() === "student" && !studentEmailRegex.test(editedDetails.email.trim())) {
+            ShowToast("error", "Invalid Email", "Student email must follow the format: admin number followed by @mymail.nyp.edu.sg");
+            return;
+        }
+
         if (!phoneRegex.test(editedDetails.contactNumber)) {
             ShowToast("error", "Invalid Phone Number", "Phone number must be exactly 8 digits.");
             return;
@@ -93,6 +102,33 @@ function AccountDetails({ userDetails, setUserDetails }) {
         setIsEditing(false); 
         ShowToast("warning", "Changes reverted", "Your changes have been reverted.");
     };
+
+    const sendVerificationEmail = async () => {
+        setIsSendingVerificationEmail(true);
+        try {
+            await server.post('/api/identity/emailVerification');
+            setEmailDialogOpen(true);
+            ShowToast("success", "Code Sent!", "A new verification code has been sent to your email.");
+        } catch (error) {
+            ShowToast("error", "Sending Failed", error.response?.data?.error || "Failed to send code");
+        } finally {
+            setIsSendingVerificationEmail(false);
+        }
+    };
+
+    const sendVerificationSMS = async () => {
+        setIsSendingVerificationSMS(true);
+        try {
+            await server.post('/api/Identity/contactVerification');
+            setContactDialogOpen(true);
+            ShowToast("success", "Code Sent!", "A new verification code has been sent via SMS.");
+        } catch {
+            ShowToast("error", "Sending Failed", "Failed to send code to your contact number.");
+        } finally {
+            setIsSendingVerificationSMS(false);
+        }
+    };
+
 
     return (
         <Box w="70%" mx="auto">
@@ -208,6 +244,56 @@ function AccountDetails({ userDetails, setUserDetails }) {
                 </HStack>
             </VStack>
 
+            {/* Unverified contact alerts */}
+            {(!userDetails.emailVerified || !userDetails.phoneVerified) && (
+                <HStack spacing={4} mb={6}>
+                    {!userDetails.emailVerified && (
+                    <Alert.Root status="warning" w="100%">
+                        <Alert.Indicator />
+                        <Flex justify="space-between" align="center" w="100%">
+                            <VStack align="start" flex={1}>
+                                <Alert.Title>Email Not Verified</Alert.Title>
+                                <Text fontSize="sm">Please verify your email to access all features.</Text>
+                            </VStack>
+                            <Button
+                                backgroundColor={"#4DCBA4"}
+                                size="sm"
+                                loading={isSendingVerificationEmail}
+                                loadingText="Sending..."
+                                onClick={sendVerificationEmail}
+                            >
+                                Verify Email
+                            </Button>
+                        </Flex>
+                    </Alert.Root>
+                    )}
+
+                    {!userDetails.phoneVerified && (
+                    <Alert.Root status="warning" w="100%">
+                        <Alert.Indicator />
+                        <Flex justify="space-between" align="center" w="100%">
+                            <VStack align="start" flex={1}>
+                                <Alert.Title>Phone Number Not Verified</Alert.Title>
+                                <Text fontSize="sm">Please verify your phone number for security.</Text>
+                            </VStack>
+                            <Button
+                                backgroundColor={"#4DCBA4"}
+                                size="sm" 
+                                loading={isSendingVerificationSMS}
+                                loadingText="Sending..."
+                                onClick={sendVerificationSMS}
+                            >
+                                Verify SMS
+                            </Button>
+                        </Flex>
+                    </Alert.Root>
+                    )}
+                </HStack>
+            )}
+            <EmailVerificationDialog isOpen={isEmailDialogOpen} onClose={() => setEmailDialogOpen(false)} />
+            <ContactVerificationDialog isOpen={isContactDialogOpen} onClose={() => setContactDialogOpen(false)} />
+
+            {/* Action Bar */}
             <ActionBarRoot open={isEditing}>
                 <ActionBarContent>
                     <ActionBarSelectionTrigger>You Have Unsaved Changes!</ActionBarSelectionTrigger>

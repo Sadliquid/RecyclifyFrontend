@@ -5,7 +5,7 @@ import { Flex, Heading, Button, Image, Text, Box, VStack, DrawerActionTrigger } 
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { BsGift, BsMailbox, BsNewspaper, BsPeople, BsQuestionCircle } from "react-icons/bs";
-import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
+import { MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
 import { FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
@@ -13,7 +13,6 @@ import { BiLeaf, BiLogIn } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
 import { LuClipboardList } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
-import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -286,13 +285,13 @@ function Navbar({ onLogout }) {
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/inventoryManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <FaTasks ml={1} />
-                                    <Text ml={2.5}>Inventory Managament</Text>
+                                    <Text ml={2.5}>Manage Rewards</Text>
                                 </Button>
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/eventsManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <LuClipboardList />
-                                    <Text ml={2.5}>Event Managament</Text>
+                                    <Text ml={2.5}>Manage Events</Text>
                                 </Button>
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>

@@ -1,12 +1,41 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { Box, VStack, Heading, Link, Text, HStack, Image } from '@chakra-ui/react'
 import { StepsItem, StepsList, StepsRoot, } from "@/components/ui/steps"
 import ParentRegistrationForm from '../../components/identity/ParentRegisterForm'
 import StudentRegistrationForm from '../../components/identity/StudentRegisterForm'
+import { useNavigate } from 'react-router-dom'
+import ShowToast from '../../Extensions/ShowToast'
 
 function CreateAccount() {
+    const navigate = useNavigate();
     const [selectedAccountType, setSelectedAccountType] = useState(null);
+    const { user, loaded, error, authToken } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (user && authToken) {   
+            if (localStorage.getItem('jwt')) {
+                if (!error && loaded) {
+                    if (location.pathname === "/auth/createAccount") {
+                        if (user.userRole === "student") {
+                            navigate("/student/home");
+                            ShowToast("success", "You're already logged in!");
+                        } else if (user.userRole === "teacher") {
+                            navigate("/teachers");
+                            ShowToast("success", "You're already logged in!");
+                        } else if (user.userRole === "parent") {
+                            navigate("/parents");
+                            ShowToast("success", "You're already logged in!");
+                        } else if (user.userRole === "admin") {
+                            navigate("/admin/dashboard");
+                            ShowToast("success", "You're already logged in!");
+                        }
+                    }
+                }
+            }
+        }
+    }, [user, error, loaded, authToken]);
 
     const renderForm = () => {
         switch (selectedAccountType) {
@@ -47,12 +76,13 @@ function CreateAccount() {
                             count={3} 
                             linear="true" 
                             size="lg" 
-                            width={900}
+                            width={1000}
                         >
                             <StepsList>
                                 <StepsItem index={0} title="Step 1" description="Account Details" />
-                                <StepsItem index={1} title="Step 2" description="Verify Email" />
-                                <StepsItem index={2} title="Step 3" description="Verify Contact" />
+                                <StepsItem index={1} title="Step 2" description="Setup MFA" />
+                                <StepsItem index={2} title="Step 3" description="Verify Email" />
+                                <StepsItem index={3} title="Step 4" description="Verify Contact" />
                             </StepsList>
                         </StepsRoot>
 

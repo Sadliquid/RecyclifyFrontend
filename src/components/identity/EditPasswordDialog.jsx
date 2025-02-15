@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
-import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot,
-} from "@/components/ui/dialog";
+import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot } from "@/components/ui/dialog";
 import { Button, Text, VStack } from "@chakra-ui/react";
 import { PasswordInput } from "@/components/ui/password-input"
 import ShowToast from '../../Extensions/ShowToast';

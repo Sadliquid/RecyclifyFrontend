@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { Box, Text, Badge, Button, Stack, Image, Flex } from "@chakra-ui/react";
-import { Avatar } from "@/components/ui/avatar";
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import server from "../../../networking";
@@ -9,11 +9,11 @@ import { Input } from "@chakra-ui/react"
 import { toaster } from "@/components/ui/toaster"
 import { Field } from "@/components/ui/field"
 import { useSelector } from "react-redux";
+import StudentAvatar from "./StudentAvatar";
 
 const TaskRow = ({ task, fetchTasks }) => {
-    if (!task) return null;
     const [open, setOpen] = useState(false);
-    const { user, loaded, error } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
     const [rejectDescription, setRejectDescription] = useState("");
     const image = task.imageUrls ? task.imageUrls.split(",") : [];
 
@@ -110,6 +110,8 @@ const TaskRow = ({ task, fetchTasks }) => {
         });
     };
 
+    if (!task) return null;
+
     return (
         <>
             {/* Task Verification Dialog */}
@@ -131,7 +133,7 @@ const TaskRow = ({ task, fetchTasks }) => {
 
                             {/* Student Avatar */}
                             <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
-                                <Avatar name={task.student.name} src={"https://bit.ly/dan-abramov"} size="sm" cursor="pointer" />
+                                <StudentAvatar student={task.student} />
                             </Box>
 
                             {/* Task details */}
@@ -243,7 +245,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                     {!task.taskVerified && !task.taskRejected && (
                         <DialogFooter display="flex" gap={10} justifyContent="center">
                             <DialogActionTrigger asChild>
-                                <Button bg="#FF8080" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}>
+                                <Button bg="#FF0000" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}>
                                     Reject
                                 </Button>
                             </DialogActionTrigger>
