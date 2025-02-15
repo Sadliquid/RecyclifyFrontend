@@ -247,25 +247,32 @@ const UserManagement = () => {
                                         <Field label="Contact Number">
                                             <Input
                                                 type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
                                                 value={editingUser?.contactNumber || ""}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingUser({
                                                         ...editingUser,
-                                                        contactNumber: e.target.value,
-                                                    })
-                                                }
+                                                        contactNumber: sanitizedValue
+                                                    });
+                                                }}
                                                 placeholder="Enter contact number"
                                             />
                                         </Field>
                                         <Field label="Class Number">
                                             <Input
-                                                type="number"
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
                                                 value={editingUser?.classNumber || ""}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingUser({
                                                         ...editingUser,
-                                                        classNumber: e.target.value,
+                                                        classNumber: sanitizedValue,
                                                     })
+                                                    }
                                                 }
                                                 placeholder="Enter class number"
                                             />
