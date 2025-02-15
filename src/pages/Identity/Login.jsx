@@ -84,7 +84,19 @@ function InnerLoginForm() {
                     localStorage.setItem('jwt', response.data.token);
                     await dispatch(fetchUser());
                     ShowToast("success", "Welcome Back!", "Successfully logged in.");
-                    navigate("/identity/myAccount");
+                    if (response.data.user.userRole) {
+                        if (response.data.user.userRole === "student") {
+                            navigate("/student/home");
+                        } else if (response.data.user.userRole === "teacher") {
+                            navigate("/teachers");
+                        } else if (response.data.user.userRole === "admin") {
+                            navigate("/admin/dashboard");
+                        } else if (response.data.user.userRole === "parent") {
+                            navigate("/parents");
+                        } else {
+                            navigate("/auth/login");
+                        }
+                    }           
                 }
             }
         } catch (error) {
