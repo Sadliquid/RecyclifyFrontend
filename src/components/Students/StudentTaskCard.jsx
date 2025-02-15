@@ -135,9 +135,8 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                             display="flex"
                             justifyContent="center"
                             alignItems="center"
-                            color="#4DCBA4"
+                            color="#3BA684"
                             fontSize="12px"
-                            fontStyle={"italic"}
                             fontWeight="bold"
                             px={3}
                         >
@@ -175,9 +174,8 @@ function StudentTaskCard({ studentID, TaskID, TaskTitle, TaskDescription, TaskPo
                                 display="flex"
                                 justifyContent="center"
                                 alignItems="center"
-                                color="#4DCBA4"
+                                color="#3BA684"
                                 fontSize="12px"
-                                fontStyle={"italic"}
                                 fontWeight="bold"
                                 px={3}
                             >
