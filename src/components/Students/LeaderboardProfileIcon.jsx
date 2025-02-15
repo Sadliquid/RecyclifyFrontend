@@ -4,7 +4,7 @@ import { Box, Image } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
 import server from "../../../networking";
 
-const UserManagamentProfilePictureIcon = ({ userId }) => {
+const UserManagamentProfilePictureIcon = ({ userId, boxSize }) => {
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [renderReady, setRenderReady] = useState(false);
 
@@ -38,12 +38,12 @@ const UserManagamentProfilePictureIcon = ({ userId }) => {
             {avatarUrl ? (
                 <Image
                     src={avatarUrl}
-                    boxSize="150px"
+                    boxSize={boxSize}
                     borderRadius="full"
                     alt="User Avatar"
                 />
             ) : (
-                <Box as={CgProfile} boxSize="150px" />
+                <Box as={CgProfile} boxSize={boxSize} />
             )}
         </Box>
     );
