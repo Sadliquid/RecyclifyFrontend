@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Heading, Text, Image, HStack, Spinner, Button } from '@chakra-ui/react';
-import { Avatar } from "@/components/ui/avatar";
 import LeaderboardPlaceCard from '../../components/Students/LeaderboardPlaceCard';
+import LeaderboardProfileIcon from '../../components/Students/LeaderboardProfileIcon';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -92,7 +92,7 @@ function Leaderboards() {
                 <Box display="flex" justifyContent={"space-between"} width="100%" height={"67vh"} mt={10} boxSizing={"border-box"}>
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="28%">
                         <Box display="flex" flexDir={"column"} justifyContent={"space-around"} alignItems={"center"} backgroundColor="#E5ECFF" borderRadius={20} height="100%" padding={2}>
-                            <Avatar boxSize="150px" src="https://bit.ly/dan-abramov" />
+                            <LeaderboardProfileIcon userId={user.id} />
                             <Heading fontSize={"30px"} mt={2}>{user.name}</Heading>
                             <Heading color="#2CD776">{sessionStudent.totalPoints} Leafs</Heading>
                             <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} height="20%" mt={2} padding={5} width={"90%"}>
