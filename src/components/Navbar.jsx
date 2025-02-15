@@ -285,13 +285,13 @@ function Navbar({ onLogout }) {
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/inventoryManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <FaTasks ml={1} />
-                                    <Text ml={2.5}>Inventory Managament</Text>
+                                    <Text ml={2.5}>Manage Rewards</Text>
                                 </Button>
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/eventsManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <LuClipboardList />
-                                    <Text ml={2.5}>Event Managament</Text>
+                                    <Text ml={2.5}>Manage Events</Text>
                                 </Button>
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>

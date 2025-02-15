@@ -154,9 +154,7 @@ const UserManagement = () => {
         <>
             <Stack gap="10">
                 <Box textAlign="center">
-                    <Heading fontSize={"30px"} m={10}>
-                        User Management
-                    </Heading>
+                    <Heading fontSize="30px" mt={10} mb={10}>User Management</Heading>
                     <VStack justifyContent="center" mb="4">
                         <Input
                             placeholder="Search for users..."
@@ -173,6 +171,7 @@ const UserManagement = () => {
                                     leftIcon={<MdAdd />} // Add icon
                                     onClick={() => openAddTeacherAccount()}
                                     bg={"#4DCBA4"}
+                                    mt={5}
                                 >
                                     Add Teacher Account
                                 </Button>
@@ -257,9 +256,6 @@ const UserManagement = () => {
                                                 }
                                                 placeholder="Enter contact number"
                                             />
-                                        </Field>
-                                        <Field label="User Role">
-                                            <Text>teacher</Text>
                                         </Field>
                                         <Field label="Class Number">
                                             <Input
@@ -445,7 +441,16 @@ const UserManagement = () => {
                                                             </Text>
                                                         </DialogBody>
                                                         <DialogFooter>
+                                                            <DialogTrigger asChild>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    onClick={onClose}
+                                                                >
+                                                                    Cancel
+                                                                </Button>
+                                                            </DialogTrigger> 
                                                             <Button
+                                                                backgroundColor={"red"}
                                                                 colorScheme="red"
                                                                 onClick={confirmDelete}
                                                                 isLoading={isDeleting}
