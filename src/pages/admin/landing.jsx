@@ -21,6 +21,7 @@ import {
   import { motion } from "framer-motion";
   import { useEffect, useState } from "react";
   import server from "../../../networking";
+  import { useNavigate } from "react-router-dom";
   
   // Register ChartJS components
   ChartJS.register(
@@ -36,6 +37,7 @@ import {
     const { user, loaded, error } = useSelector((state) => state.auth);
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
   
     useEffect(() => {
       if (!error && loaded && user && user.userRole === "admin") {
@@ -152,10 +154,10 @@ import {
               </Button>
             </Box>
             <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
-              <Heading size="md">Bulletin Board Management</Heading>
+              <Heading size="md">Events Management</Heading>
               <Text mt={2}>View and manage information on the Bulletin Board for parents in Recyclify.</Text>
-              <Button mt={4} bg={"#4DCBA4"}>
-                Bulletin Board Management Screen
+              <Button mt={4} bg={"#4DCBA4"} onClick={() => navigate("/admin/eventsManagement")}>
+                Events Management Screen
               </Button>
             </Box>
             <Box borderWidth={1} borderRadius="lg" p={4} m={2}>

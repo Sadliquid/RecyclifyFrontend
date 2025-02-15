@@ -290,9 +290,9 @@ function Navbar({ onLogout }) {
                                 </Button>
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>
-                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/eventsManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <LuClipboardList />
-                                    <Text ml={2.5}>Bulletin Board Managament</Text>
+                                    <Text ml={2.5}>Event Managament</Text>
                                 </Button>
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>
