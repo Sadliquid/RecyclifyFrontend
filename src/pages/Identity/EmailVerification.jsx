@@ -41,7 +41,6 @@ function EmailVerification() {
         }
     };
 
-
     const verifyEmail = async (data) => {
         const isComplete = data.pin.every(digit => digit.length === 1);
         if (!isComplete) {
