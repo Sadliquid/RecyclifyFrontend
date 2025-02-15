@@ -25,6 +25,7 @@ import Dashboard from './pages/admin/landing'
 import UserManagement from './pages/admin/user'
 import InventoryManagement from './pages/admin/inventory'
 import ContactFormManagement from './pages/admin/contact'
+import EventsManagement from './pages/admin/events'
 import ContactForm from './pages/contact/contact'
 import EcoPilot from './pages/EcoPilot/EcoPilot'
 import TeachersLanding from './pages/Teachers/Landing'
@@ -94,6 +95,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route path={"userManagement"} element={<UserManagement />} />
                             <Route path={"inventoryManagement"} element={<InventoryManagement />} />
                             <Route path={"contactManagement"} element={<ContactFormManagement />} />
+                            <Route path={"eventsManagement"} element={<EventsManagement />} />
                         </Route>
 
                         <Route path={"ecoPilot"} element={<EcoPilot />} />

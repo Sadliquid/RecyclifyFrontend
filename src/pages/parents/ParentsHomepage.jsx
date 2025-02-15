@@ -2,55 +2,51 @@
 import { Box, Grid, Heading } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import BulletinCard from '../../components/parents/BulletinCard';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import server from "../../../networking"
 
 function ParentsHomepage() {
     const { user, loaded, error } = useSelector((state) => state.auth);
+    
+    // State to hold events
+    const [events, setEvents] = useState([]);
+    
+    // State for loading and error
+    const [loading, setLoading] = useState(true);
+    const [fetchError, setFetchError] = useState(null);
 
-    const events = [
-        {
-            title: 'School Play',
-            date: '2022-10-10',
-            description: 'The school play is a great opportunity for your child to showcase their talents.',
-            image: 'https://picsum.photos/id/11/200/300',
-        },
-        {
-            title: 'Science Fair',
-            date: '2022-10-15',
-            description: 'The science fair is a great opportunity for your child to showcase their talents.',
-            image: 'https://picsum.photos/id/11/200/300',
-        },
-        {
-            title: 'Sports Day',
-            date: '2022-10-20',
-            description: 'The sports day is a great opportunity for your child to showcase their talents.',
-            image: 'https://picsum.photos/id/11/200/300',
-        },
-        {
-            title: 'School Trip',
-            date: '2022-10-25',
-            description: 'The school trip is a great opportunity for your child to showcase their talents.',
-            image: 'https://picsum.photos/id/11/200/300',
-        },
-        {
-            title: 'School Assembly',
-            date: '2022-10-30',
-            description: 'The school assembly is a great opportunity for your child to showcase their talents.',
-            image: 'https://picsum.photos/id/11/200/300',
-        },
-        {
-            title: 'School Play',
-            date: '2022-10-10',
-            description: 'The school play is a great opportunity for your child to showcase their talents.',
-            image: 'https://picsum.photos/id/11/200/300',
-        }
-    ];
-
+    // Fetch events from API
     useEffect(() => {
-        if (!error && loaded && user && user.userRole == "parent") {
-            console.log("User logged in as parent with ID:", user.id);
+        if (!error && loaded && user && user.userRole === "parent") {
+            const fetchEvents = async () => {
+                try {
+                    const response = await server.get("/api/events");
+
+                    // Check the status and fetch the events
+                    if (response.status !== 200) {
+                        throw new Error('Failed to fetch events');
+                    }
+                    // Directly use response.data to get events
+                    setEvents(response.data.events);
+                } catch (err) {
+                    setFetchError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            
+            fetchEvents();
         }
-    }, [loaded]);
+    }, [loaded, user, error]);
+
+    // Check if it's still loading or if there's an error
+    if (loading) {
+        return <Box textAlign="center">Loading events...</Box>;
+    }
+
+    if (fetchError) {
+        return <Box textAlign="center">Error: {fetchError}</Box>;
+    }
 
     return (
         <Box textAlign="center" fontSize="xl">
@@ -58,11 +54,11 @@ function ParentsHomepage() {
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={6} mt={2}>
                 {events.map((event, index) => (
                     <BulletinCard
-                        key={index}
+                        key={event.id} // Use event.id for a more unique key
                         title={event.title}
-                        date={new Date(event.date).toLocaleDateString()}
+                        date={new Date(event.eventDateTime).toLocaleDateString()}
                         description={event.description}
-                        image={event.image}
+                        image={event.imageUrl || 'https://picsum.photos/id/11/200/300'} // Default image if no URL
                     />
                 ))}
             </Grid>
