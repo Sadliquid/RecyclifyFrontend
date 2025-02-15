@@ -5,7 +5,7 @@ import { Flex, Heading, Button, Image, Text, Box, VStack, DrawerActionTrigger } 
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { BsGift, BsMailbox, BsNewspaper, BsPeople, BsQuestionCircle } from "react-icons/bs";
-import { MdOutlineRedeem, MdOutlineLeaderboard } from "react-icons/md";
+import { MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
 import { FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
@@ -13,7 +13,6 @@ import { BiLeaf, BiLogIn } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
 import { LuClipboardList } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
-import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";

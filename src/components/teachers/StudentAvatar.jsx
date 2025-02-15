@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Box, Image } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
@@ -8,7 +10,7 @@ const StudentAvatar = ({ student, size}) => {
 
     useEffect(() => {
         const fetchAvatar = async () => {
-            if (!student?.studentID || !student.user.avatar) return;
+            if (!student?.studentID || !(student?.user?.avatar || student?.avatar)) return;
             try {
                     const response = await server.get(`/api/Identity/getAvatar?userId=${student.studentID}`);
                     if (response.data.avatarUrl) {

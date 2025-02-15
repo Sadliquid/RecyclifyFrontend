@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea, Flex, Alert } from "@chakra-ui/react";
 import { LuCheck, LuX } from "react-icons/lu"
@@ -120,7 +122,7 @@ function AccountDetails({ userDetails, setUserDetails }) {
             await server.post('/api/Identity/contactVerification');
             setContactDialogOpen(true);
             ShowToast("success", "Code Sent!", "A new verification code has been sent via SMS.");
-        } catch (error) {
+        } catch {
             ShowToast("error", "Sending Failed", "Failed to send code to your contact number.");
         } finally {
             setIsSendingVerificationSMS(false);
@@ -253,7 +255,8 @@ function AccountDetails({ userDetails, setUserDetails }) {
                                 <Alert.Title>Email Not Verified</Alert.Title>
                                 <Text fontSize="sm">Please verify your email to access all features.</Text>
                             </VStack>
-                            <Button 
+                            <Button
+                                backgroundColor={"#4DCBA4"}
                                 size="sm"
                                 loading={isSendingVerificationEmail}
                                 loadingText="Sending..."
@@ -273,7 +276,8 @@ function AccountDetails({ userDetails, setUserDetails }) {
                                 <Alert.Title>Phone Number Not Verified</Alert.Title>
                                 <Text fontSize="sm">Please verify your phone number for security.</Text>
                             </VStack>
-                            <Button 
+                            <Button
+                                backgroundColor={"#4DCBA4"}
                                 size="sm" 
                                 loading={isSendingVerificationSMS}
                                 loadingText="Sending..."

@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { Box, Text, Badge, Button, Stack, Image, Flex } from "@chakra-ui/react";
-import { Avatar } from "@/components/ui/avatar";
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import server from "../../../networking";
@@ -12,9 +12,8 @@ import { useSelector } from "react-redux";
 import StudentAvatar from "./StudentAvatar";
 
 const TaskRow = ({ task, fetchTasks }) => {
-    if (!task) return null;
     const [open, setOpen] = useState(false);
-    const { user, loaded, error } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
     const [rejectDescription, setRejectDescription] = useState("");
     const image = task.imageUrls ? task.imageUrls.split(",") : [];
 
@@ -110,6 +109,8 @@ const TaskRow = ({ task, fetchTasks }) => {
             }),
         });
     };
+
+    if (!task) return null;
 
     return (
         <>
@@ -244,7 +245,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                     {!task.taskVerified && !task.taskRejected && (
                         <DialogFooter display="flex" gap={10} justifyContent="center">
                             <DialogActionTrigger asChild>
-                                <Button bg="#FF8080" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}>
+                                <Button bg="#FF0000" color="white" disabled={rejectDescription.trim().length === 0} onClick={() => handleReject(rejectDescription.trim())}>
                                     Reject
                                 </Button>
                             </DialogActionTrigger>
