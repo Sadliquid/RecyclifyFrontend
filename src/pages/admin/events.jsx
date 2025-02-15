@@ -1,6 +1,6 @@
 import { useState } from "react";
 import server from "../../../networking";
-import { Button, Stack, Input, Textarea, useDisclosure, Box, Heading, Dialog } from "@chakra-ui/react";
+import { Button, Stack, Input, Textarea, useDisclosure, Box, Heading } from "@chakra-ui/react";
 import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MdAdd } from "react-icons/md"; // Add icon
 import { Field } from "@/components/ui/field";
