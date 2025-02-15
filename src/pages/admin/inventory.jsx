@@ -173,21 +173,29 @@ const InventoryManagement = () => {
                                             placeholder="Enter Reward Description"/>
                                         </Field>
                                         <Field label ="Required Points">
-                                            <Input value={addItem?.points || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                points: e.target.value
-                                            })
-                                            }
+                                            <Input 
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
+                                                value={addItem?.points || ""}
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+                                                    setAddItem({...addItem,points: sanitizedValue})
+                                                }
+                                                }
                                             placeholder="Enter Required Points"/>
                                         </Field>
                                         <Field label ="Quantity">
-                                            <Input value={addItem?.quantity || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                quantity: e.target.value
-                                            })
-                                            }
+                                            <Input 
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
+                                                value={addItem?.quantity || ""}
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+                                                    setAddItem({...addItem, quantity: sanitizedValue});
+                                                }
+                                                }
                                             placeholder="Enter Quantity"/>
                                         </Field>
                                         <Field label ="Is Available">
@@ -327,13 +335,17 @@ const InventoryManagement = () => {
                                     <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
-                                                type="number"
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
                                                 value={editingItem.requiredPoints}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        requiredPoints: parseInt(e.target.value),
+                                                        requiredPoints: parseInt(sanitizedValue),
                                                     })
+                                                    }
                                                 }
                                             />
                                         ) : (
@@ -343,13 +355,17 @@ const InventoryManagement = () => {
                                     <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
-                                                type="number"
+                                                type="tel"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
                                                 value={editingItem.rewardQuantity}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        rewardQuantity: parseInt(e.target.value),
+                                                        rewardQuantity: parseInt(sanitizedValue),
                                                     })
+                                                }
                                                 }
                                             />
                                         ) : (
