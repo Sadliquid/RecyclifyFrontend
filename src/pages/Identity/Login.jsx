@@ -12,8 +12,27 @@ import { useDispatch } from 'react-redux';
 import { fetchUser } from '../../slices/AuthState';
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking"
+import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 function Login() {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
+    return (
+        <GoogleReCaptchaProvider
+            reCaptchaKey={siteKey}
+            scriptProps={{
+                async: true,
+                defer: true,
+                appendTo: 'head',
+            }}
+        >
+            <InnerLoginForm />
+        </GoogleReCaptchaProvider>
+    );
+}
+
+function InnerLoginForm() {
+    const { executeRecaptcha } = useGoogleReCaptcha();
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -40,9 +59,18 @@ function Login() {
         }
 
         try {
+            if (!executeRecaptcha) {
+                ShowToast("error", "reCAPTCHA Error", "reCAPTCHA not loaded. Please refresh the page.");
+                return;
+            }
+        
+            // Execute reCAPTCHA and get token
+            const token = await executeRecaptcha('login');
+
             const response = await server.post(`/api/Identity/login`, {
                 Identifier: identifier,
                 Password: password,
+                RecaptchaResponse: token 
             });
             localStorage.setItem('jwt', response.data.token);
             await dispatch(fetchUser());

@@ -65,7 +65,7 @@ function InnerStudentForm({ goBack }) {
             }
         
             // Execute reCAPTCHA and get token
-            const token = await executeRecaptcha('parent_signup');
+            const token = await executeRecaptcha('student_signup');
             
             // Include the token in your submission data
             const submissionData = { ...values, RecaptchaResponse: token };
