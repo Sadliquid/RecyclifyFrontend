@@ -8,7 +8,7 @@ const StudentAvatar = ({ student, size}) => {
 
     useEffect(() => {
         const fetchAvatar = async () => {
-            if (!student?.studentID && student.user.avatar) return;
+            if (!student?.studentID || !student.user.avatar) return;
             try {
                     const response = await server.get(`/api/Identity/getAvatar?userId=${student.studentID}`);
                     if (response.data.avatarUrl) {
