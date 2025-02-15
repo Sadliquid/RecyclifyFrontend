@@ -152,10 +152,10 @@ import {
               </Button>
             </Box>
             <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
-              <Heading size="md">System Services</Heading>
-              <Text mt={2}>View and manage system services in Recyclify.</Text>
+              <Heading size="md">Bulletin Board Management</Heading>
+              <Text mt={2}>View and manage information on the Bulletin Board for parents in Recyclify.</Text>
               <Button mt={4} bg={"#4DCBA4"}>
-                System Services Screen
+                Bulletin Board Management Screen
               </Button>
             </Box>
             <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
