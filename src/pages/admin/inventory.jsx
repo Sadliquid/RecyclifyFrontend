@@ -215,6 +215,9 @@ const InventoryManagement = () => {
                                     </Stack>
                                 </DialogBody>
                                 <DialogFooter>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" onClick={onClose}>Cancel</Button>
+                                    </DialogTrigger>
                                     <Button
                                         bg={"#4DCBA4"}
 										isLoading={isLoading}
@@ -250,7 +253,7 @@ const InventoryManagement = () => {
 													ShowToast("error", "Error", error.response?.data?.error || error.message);
 												}
                                             }}
-                                    >{isLoading ? "Adding..." : "Add Item"} </Button>
+                                    >{isLoading ? "Adding..." : "Submit"} </Button>
                                 </DialogFooter>
                             </DialogContent>
 

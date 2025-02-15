@@ -1,6 +1,6 @@
 import { useState } from "react";
 import server from "../../../networking";
-import { Button, Stack, Input, Textarea, useDisclosure, Box, Heading } from "@chakra-ui/react";
+import { Button, Stack, Input, Textarea, useDisclosure, Box, Heading, Dialog } from "@chakra-ui/react";
 import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MdAdd } from "react-icons/md"; // Add icon
 import { Field } from "@/components/ui/field";
@@ -140,13 +140,21 @@ const EventsManagement = () => {
 
 					{/* Dialog Footer */}
 					<DialogFooter>
+						<DialogTrigger asChild>
+							<Button
+								variant="outline"
+								onClick={onClose}
+							>
+								Cancel
+							</Button>
+						</DialogTrigger>
 						<Button
 							bg="#4DCBA4"
 							isLoading={loading}
 							isDisabled={loading}
 							onClick={handleSubmit}
 						>
-							{loading ? "Creating..." : "Create Event"}
+							{loading ? "Creating..." : "Submit"}
 						</Button>
 					</DialogFooter>
 				</DialogContent>

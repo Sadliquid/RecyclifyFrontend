@@ -287,6 +287,11 @@ const UserManagement = () => {
                                 </DialogBody>
 
                                 <DialogFooter>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" onClick={onClose}>
+                                            Cancel
+                                        </Button>
+                                    </DialogTrigger>
                                     <Button
                                     bg={"#4DCBA4"}
                                         onClick={() => {
@@ -304,7 +309,7 @@ const UserManagement = () => {
                                             addTeacherAccount(formData);
                                         }}
                                     >
-                                        Add Account
+                                        Submit
                                     </Button>
                                 </DialogFooter>
                             </DialogContent>
