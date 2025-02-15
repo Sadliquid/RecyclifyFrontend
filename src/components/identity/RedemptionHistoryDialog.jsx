@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot,
-} from "@/components/ui/dialog";
+import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot } from "@/components/ui/dialog";
 import { Button, Spinner, VStack, Text, Image } from "@chakra-ui/react";
 import server from "../../../networking"
 
