@@ -36,6 +36,7 @@ function AccountDetails({ userDetails, setUserDetails }) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{8}$/;
         const nameRegex = /^[A-Za-z\s]+$/;
+        const studentEmailRegex = /^\d{6}[a-zA-Z]@mymail\.nyp\.edu\.sg$/;
     
         // Validate email format
         if (!emailRegex.test(editedDetails.email)) {
@@ -43,9 +44,9 @@ function AccountDetails({ userDetails, setUserDetails }) {
             return;
         }
 
-        // Validate student email domain
-        if (userDetails.userRole.toLowerCase() === 'student' && !editedDetails.email.trim().endsWith('@mymail.nyp.edu.sg')) {
-            ShowToast("error", "Invalid Email", "Student email must end with @mymail.nyp.edu.sg");
+        // Validate student email format
+        if (userDetails.userRole.toLowerCase() === "student" && !studentEmailRegex.test(editedDetails.email.trim())) {
+            ShowToast("error", "Invalid Email", "Student email must follow the format: admin number followed by @mymail.nyp.edu.sg");
             return;
         }
 
