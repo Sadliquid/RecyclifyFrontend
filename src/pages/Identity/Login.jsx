@@ -21,7 +21,6 @@ function Login() {
     const dispatch = useDispatch();
     const [invalidIdentifier, setInvalidIdentifier] = useState(false)
     const [invalidPassword, setInvalidPassword] = useState(false)
-
     const { user, loaded, error, authToken } = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
