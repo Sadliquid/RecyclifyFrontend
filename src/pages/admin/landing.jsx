@@ -138,7 +138,7 @@ import {
               <Text mt={2}>
                 View and manage all users in the Recyclify system.
               </Text>
-              <Button mt={4} bg={"#4DCBA4"}>
+              <Button mt={4} bg={"#4DCBA4"} onClick={() => navigate("/admin/userManagement")}>
                 User Management Screen
               </Button>
             </Box>
@@ -147,7 +147,7 @@ import {
               <Text mt={2}>
                 View all rewards offered in the Recyclify program.
               </Text>
-              <Button mt={4} bg={"#4DCBA4"}>
+              <Button mt={4} bg={"#4DCBA4"} onClick={() =>navigate("/admin/inventoryManagement")}>
                 Inventory Management Screen
               </Button>
             </Box>
@@ -161,7 +161,7 @@ import {
             <Box borderWidth={1} borderRadius="lg" p={4} m={2}>
               <Heading size="md">View Contact Questions</Heading>
               <Text mt={2}>Review and respond to user inquiries.</Text>
-              <Button mt={4} bg={"#4DCBA4"}>
+              <Button mt={4} bg={"#4DCBA4"} onClick={() => navigate("/admin/contactManagement")}>
                 Answer Contact Queries
               </Button>
             </Box>

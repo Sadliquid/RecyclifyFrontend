@@ -11,6 +11,7 @@ import { FcStatistics } from "react-icons/fc";
 import { FaTasks } from "react-icons/fa";
 import { BiLeaf, BiLogIn } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
+import { LuClipboardList } from "react-icons/lu";
 import { CgUserList } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { TbMessageShare } from "react-icons/tb";
@@ -290,8 +291,8 @@ function Navbar({ onLogout }) {
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
-                                    <CiSettings />
-                                    <Text ml={2.5}>System Services</Text>
+                                    <LuClipboardList />
+                                    <Text ml={2.5}>Bulletin Board Managament</Text>
                                 </Button>
                             </DrawerActionTrigger>
                             <DrawerActionTrigger asChild>
