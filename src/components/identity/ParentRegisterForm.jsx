@@ -68,10 +68,8 @@ function InnerParentForm({ goBack }) {
                 return;
             }
         
-            // Execute reCAPTCHA and get token
             const token = await executeRecaptcha('parent_signup');
             
-            // Include the token in your submission data
             const submissionData = { ...values, RecaptchaResponse: token };
 
             const response = await server.post("/api/Identity/createAccount", submissionData);
@@ -80,8 +78,8 @@ function InnerParentForm({ goBack }) {
                 const responseMessage = rawResponseMessage.substring("SUCCESS: ".length).trim()
                 if (responseMessage === "Account created successfully.") {
                     localStorage.setItem('jwt', response.data.token);
-                    ShowToast( "success", "Account Created!", "Please verify your email.")
-                    navigate("/auth/emailVerification")
+                    ShowToast( "success", "Account Created!", "Please set up your Multi-Factor Authentication.")
+                    navigate("/auth/msAuth", { state: { qrCodeUrl: response.data.qrCodeUrl } })
                 }
             }
         } catch (err) {

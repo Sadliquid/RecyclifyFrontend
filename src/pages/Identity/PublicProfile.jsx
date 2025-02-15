@@ -20,7 +20,6 @@ function PublicProfile() {
                 const userData = response.data;
                 setUserDetails(userData);
 
-                // Fetch Avatar if it exists
                 if (userData.avatar) {
                     const avatarResponse = await server.get(`/api/Identity/getAvatar?userId=${id}`);
                     setAvatarUrl(avatarResponse.data.avatarUrl || null);
@@ -28,7 +27,6 @@ function PublicProfile() {
                     setAvatarUrl(null);
                 }
 
-                // Fetch Banner if it exists
                 if (userData.banner) {
                     const bannerResponse = await server.get(`/api/Identity/getBanner?userId=${id}`);
                     setBannerUrl(bannerResponse.data.bannerUrl || null);
