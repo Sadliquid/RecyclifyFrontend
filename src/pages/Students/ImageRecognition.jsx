@@ -15,6 +15,7 @@ function ImageRecognition() {
     const [itemCategory, setItemCategory] = useState(null);
     const [itemRecyclable, setItemRecyclable] = useState(false);
     const [submissionReady, setSubmissionReady] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     const clearFile = () => {
         setSelectedFile(null);
@@ -37,6 +38,8 @@ function ImageRecognition() {
             });
             return;
         }
+
+        setIsAnalyzing(true);
     
         const formData = new FormData();
         formData.append("file", selectedFile);
@@ -70,17 +73,32 @@ function ImageRecognition() {
                     } else {
                         reject("An unexpected error occurred");
                     }
+                })
+                .finally(() => {
+                    setIsAnalyzing(false);
                 });
         });
     
         toaster.promise(uploadPromise, {
-            loading: { title: "Uploading...", description: "Please wait while your file is being processed." },
-            success: { title: "", description: "Upload successful!" },
+            loading: { title: "Analysing...", description: "Please wait while your image is being analysed." },
+            success: { title: "", description: "Analysis successful!" },
             error: (err) => ({
                 title: "",
                 description: `${err}`,
             }),
         });
+    };
+
+    const rocketVariants = {
+        initial: { y: 0 },
+        analyzing: {
+            y: [-7, 7, -7],
+            rotate: [0, 5, -5, 0],
+            transition: {
+                duration: 1.5,
+                repeat: Infinity
+            }
+        }
     };
 
     return (
@@ -167,23 +185,31 @@ function ImageRecognition() {
                                     <Button
                                         size="lg"
                                         colorScheme="blue"
-                                        backgroundColor={"#4DCBA4"}
+                                        backgroundColor={isAnalyzing ? "#3BA684" : "#4DCBA4"}
                                         borderRadius="full"
                                         height="60px"
                                         mt={10}
                                         onClick={handleUploadItem}
-                                        disabled={!submissionReady}
+                                        disabled={!submissionReady || isAnalyzing}
                                         fontSize="lg"
                                         fontWeight="bold"
                                         boxShadow="md"
                                         _disabled={{
-                                            opacity: 0.5,
+                                            opacity: 0.7,
                                             cursor: 'not-allowed',
                                             boxShadow: 'none'
                                         }}
+                                        _hover={{
+                                            backgroundColor: isAnalyzing ? "#3BA684" : "#4DCBA4",
+                                        }}
                                     >
-                                        <Icon as={RxRocket} w={6} h={6} mr={2} />
-                                        Analyze My Item
+                                        <motion.div
+                                            variants={rocketVariants}
+                                            animate={isAnalyzing ? "analyzing" : "initial"}
+                                        >
+                                            <Icon as={RxRocket} w={6} h={6} mr={2} />
+                                        </motion.div>
+                                        {isAnalyzing ? "Analysing..." : "Analyze My Item"}
                                     </Button>
                                 </motion.div>
                             </Flex>
