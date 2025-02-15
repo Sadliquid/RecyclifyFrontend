@@ -206,7 +206,7 @@ function InnerLoginForm() {
                         justifyContent="start"
                     >
                         <Link
-                            href='/accountRecovery'
+                            href='/auth/accountRecovery'
                             fontSize='12px'
                             mb={5}
                         >
