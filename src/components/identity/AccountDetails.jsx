@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea, Flex, Alert, Spinner } from "@chakra-ui/react";
+import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea, Flex, Alert } from "@chakra-ui/react";
 import { LuCheck, LuX } from "react-icons/lu"
-import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator,
-} from "@/components/ui/action-bar";
+import { ActionBarContent, ActionBarRoot, ActionBarSelectionTrigger, ActionBarSeparator } from "@/components/ui/action-bar";
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
 import { ClipboardIconButton, ClipboardRoot } from "@/components/ui/join-code-clipboard"
@@ -40,13 +39,11 @@ function AccountDetails({ userDetails, setUserDetails }) {
         const nameRegex = /^[A-Za-z\s]+$/;
         const studentEmailRegex = /^\d{6}[a-zA-Z]@mymail\.nyp\.edu\.sg$/;
     
-        // Validate email format
         if (!emailRegex.test(editedDetails.email)) {
             ShowToast("error", "Invalid Email", "Please enter a valid email address.");
             return;
         }
 
-        // Validate student email format
         if (userDetails.userRole.toLowerCase() === "student" && !studentEmailRegex.test(editedDetails.email.trim())) {
             ShowToast("error", "Invalid Email", "Student email must follow the format: admin number followed by @mymail.nyp.edu.sg");
             return;

@@ -68,10 +68,8 @@ function InnerParentForm({ goBack }) {
                 return;
             }
         
-            // Execute reCAPTCHA and get token
             const token = await executeRecaptcha('parent_signup');
             
-            // Include the token in your submission data
             const submissionData = { ...values, RecaptchaResponse: token };
 
             const response = await server.post("/api/Identity/createAccount", submissionData);

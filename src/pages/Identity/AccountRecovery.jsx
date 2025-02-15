@@ -28,7 +28,6 @@ function AccountRecovery() {
         setSendingReset(true);
         try {
             const response = await server.post('/api/Identity/sendResetKey', { Identifier: identifier });
-            console.log(response);
 			if (response.status === 200) {
 				ShowToast("success", "Reset key sent successfully.");
 				setResetSent(true);
@@ -75,7 +74,6 @@ function AccountRecovery() {
         setResettingPassword(false);
     };
 
-	// Prevent the default form submission
 	const handleSubmit = (e) => {
 		e.preventDefault();
 	};

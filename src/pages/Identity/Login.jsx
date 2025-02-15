@@ -67,7 +67,6 @@ function InnerLoginForm() {
                 return;
             }
         
-            // Execute reCAPTCHA and get token
             const token = await executeRecaptcha('login');
 
             const response = await server.post(`/api/Identity/login`, {

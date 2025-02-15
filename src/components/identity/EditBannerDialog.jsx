@@ -6,7 +6,6 @@ import { InputGroup } from "@/components/ui/input-group";
 import { LuFileUp } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import server from "../../../networking";
-import { CgProfile } from "react-icons/cg";
 import ShowToast from "../../Extensions/ShowToast";
 
 function EditBannerDialog({ userDetails, isOpen, onClose }) {

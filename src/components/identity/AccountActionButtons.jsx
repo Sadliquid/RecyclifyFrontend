@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Box, Button, HStack, Input, VStack, Heading, Text, Textarea } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Box, Button, HStack, Input, VStack, Heading, Text } from "@chakra-ui/react";
 import EditPasswordDialog from "./EditPasswordDialog";
 import DeleteAccountDialog from "./DeleteAccountDialog";
 import RedemptionHistoryDialog from "./RedemptionHistoryDialog";

@@ -62,7 +62,7 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
             if (response.data.avatarUrl) {
                 setAvatarUrl(response.data.avatarUrl);
                 onClose();
-                setTimeout(() => window.location.reload(), 1000); // Refresh page after closing
+                setTimeout(() => window.location.reload(), 1000);
                 ShowToast("success", "Avatar Uploaded Successfully", "Enjoy your new look!")
             } else {
                 console.error("Failed to update avatar:", response.data);
@@ -87,7 +87,7 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
             if (response.data.message === "SUCCESS: Avatar removed successfully.") {
                 setAvatarUrl(null);
                 onClose();
-                setTimeout(() => window.location.reload(), 1000); // Refresh page after closing
+                setTimeout(() => window.location.reload(), 1000);
                 ShowToast("success", "Avatar Removed Successfully", "Back to the default...")
             } else {
                 console.error("Failed to remove avatar:", response.data);
@@ -115,8 +115,8 @@ function EditAvatarDialog({ userDetails, isOpen, onClose }) {
                         {avatarUrl ? (
                             <Image
                                 src={avatarUrl}
-                                boxSize="150px"  // Ensuring equal width and height for a circular shape
-                                borderRadius="full"  // Making it a circle
+                                boxSize="150px"  
+                                borderRadius="full"  
                                 alt="User Avatar"
                             />
                         ) : (

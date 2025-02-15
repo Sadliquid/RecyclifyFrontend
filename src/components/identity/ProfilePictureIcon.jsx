@@ -57,7 +57,6 @@ const ProfilePictureIcon = ({ onLogout }) => {
                 alignItems="center"
                 justifyContent="center"
             >
-                {/* Added boxSize and padding for better control */}
                 <Box 
                     as={CgProfile} 
                     boxSize="35px" 

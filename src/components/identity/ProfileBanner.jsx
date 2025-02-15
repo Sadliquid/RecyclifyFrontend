@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, HStack, Button, VStack, Text, Image } from '@chakra-ui/react';
+import { Box, HStack, Button, VStack, Image } from '@chakra-ui/react';
 import EditAvatarDialog from './EditAvatarDialog';
 import EditBannerDialog from './EditBannerDialog';
 import { CgProfile } from 'react-icons/cg';
@@ -8,48 +8,46 @@ import server from '../../../networking';
 function ProfileBanner({ userDetails }) {
     const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
     const [isBannerDialogOpen, setIsBannerDialogOpen] = useState(false);
-    const [avatarUrl, setAvatarUrl] = useState(null); // State to hold avatar URL
-    const [bannerUrl, setBannerUrl] = useState(null); // State to hold banner URL
+    const [avatarUrl, setAvatarUrl] = useState(null);
+    const [bannerUrl, setBannerUrl] = useState(null);
 
-    // Fetch Avatar
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
                 if (userDetails.avatar) {
                     const response = await server.get(`/api/Identity/getAvatar?userId=${userDetails.id}`);
                     if (response.data.avatarUrl) {
-                        setAvatarUrl(response.data.avatarUrl); // Set avatar URL to state
+                        setAvatarUrl(response.data.avatarUrl);
                     }
                 } else {
-                    setAvatarUrl(null); // No avatar, set to null to fallback to default icon
+                    setAvatarUrl(null);
                 }
             } catch (error) {
                 console.error('Error fetching avatar:', error);
-                setAvatarUrl(null); // In case of error, set to default icon
+                setAvatarUrl(null); 
             }
         };
         fetchAvatar();
-    }, [userDetails.id, userDetails.avatar]); // Fetch avatar on userDetails change
+    }, [userDetails.id, userDetails.avatar]);
 
-    // Fetch Banner
     useEffect(() => {
         const fetchBanner = async () => {
             try {
                 if (userDetails.banner) {
                     const response = await server.get(`/api/Identity/getBanner?userId=${userDetails.id}`);
                     if (response.data.bannerUrl) {
-                        setBannerUrl(response.data.bannerUrl); // Set banner URL to state
+                        setBannerUrl(response.data.bannerUrl);
                     }
                 } else {
-                    setBannerUrl(null); // No banner, set to null to fallback to default banner
+                    setBannerUrl(null);
                 }
             } catch (error) {
                 console.error("Error fetching banner:", error);
-                setBannerUrl(null); // In case of error, set to default banner
+                setBannerUrl(null);
             }
         };
         fetchBanner();
-    }, [userDetails.id, userDetails.banner]); // Fetch banner on userDetails change
+    }, [userDetails.id, userDetails.banner]);
 
     return (
         <HStack

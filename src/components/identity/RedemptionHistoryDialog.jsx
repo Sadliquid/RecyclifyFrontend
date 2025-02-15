@@ -16,7 +16,6 @@ function RedemptionHistoryDialog({ isOpen, onClose, userId }) {
     }, [isOpen, userId]);
 
     const fetchStudentRewards = async (userId) => {
-        console.log("Fetching student rewards for student ID:", userId);
         setLoading(true);
         try {
             const response = await server.get(`/api/student/get-student-rewards?studentID=${userId}`, {
@@ -27,10 +26,6 @@ function RedemptionHistoryDialog({ isOpen, onClose, userId }) {
                 const allRewards = response.data.data;
                 const receivedActiveRewards = allRewards.filter(reward => reward.redemptionStatus === "Pending");
                 const receivedClaimedRewards = allRewards.filter(reward => reward.redemptionStatus === "Claimed");
-
-                console.log("All rewards:", allRewards);
-                console.log("Pending rewards:", receivedActiveRewards);
-                console.log("Claimed rewards:", receivedClaimedRewards);
 
                 setActiveRewards(receivedActiveRewards);
                 setClaimedRewards(receivedClaimedRewards);
