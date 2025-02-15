@@ -53,7 +53,21 @@ function ContactVerification() {
 
             if (response.data.message.startsWith("SUCCESS") && response.status === 200) {
                 ShowToast("success", "Contact Verified!", "Your contact has been successfully verified.");
-                navigateBasedOnRole();
+                if (user) {
+                    if (user.userRole === "student") {
+                        navigate("/student/home");
+                    } else if (user.userRole === "teacher") {
+                        navigate("/teachers");
+                    } else if (user.userRole === "admin") {
+                        navigate("/admin/dashboard");
+                    } else if (user.userRole === "parent") {
+                        navigate("/identity/myAccount"); // Temporary
+                    } else {
+                        navigate("/identity/myAccount");
+                    }
+                } else {
+                    navigate("/identity/myAccount");
+                }
             }
         } catch (err) {
             const rawErrorMessage = err.response?.data?.error;
