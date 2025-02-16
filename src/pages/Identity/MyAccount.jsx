@@ -1,10 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Text, Box, Heading, Input, Button, Image, Spinner, HStack, VStack, Textarea } from '@chakra-ui/react';
-import { Avatar, AvatarGroup } from "@/components/ui/avatar"
-import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
+import { Box, Heading, Spinner } from '@chakra-ui/react';
 import { motion } from "framer-motion";
 import ShowToast from '../../Extensions/ShowToast';
 import { logout } from '../../slices/AuthState';
@@ -17,7 +14,7 @@ function MyAccount() {
     const [userDetails, setUserDetails] = useState(null);
     const [editableDetails, setEditableDetails] = useState(null);
     const [error, setError] = useState(null);
-    const { user, loaded, authToken } = useSelector((state) => state.auth);
+    const { user, loaded } = useSelector((state) => state.auth);
     const [accountInfo,  setAccountInfo] = useState(null);
     const dispatch = useDispatch()
     const [renderReady, setRenderReady] = useState(false);

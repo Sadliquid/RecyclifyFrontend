@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Box, Button, HStack, Input, VStack, Heading, Text } from "@chakra-ui/react";
 import EditPasswordDialog from "./EditPasswordDialog";

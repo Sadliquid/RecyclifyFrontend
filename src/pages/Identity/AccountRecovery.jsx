@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, Input, VStack, Heading, } from '@chakra-ui/react';
 import { PasswordInput } from "@/components/ui/password-input"
 import { InputGroup } from "@/components/ui/input-group";

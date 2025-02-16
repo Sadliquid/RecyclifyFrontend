@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import { Box, Flex, Image, Tabs, Text } from '@chakra-ui/react';
 import { FaLeaf } from "react-icons/fa";
-import { Avatar } from "@/components/ui/avatar";
 import ClassPieChart from './ClassPieChart';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';

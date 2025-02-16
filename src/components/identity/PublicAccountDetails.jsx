@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, Flex, Heading, Text, VStack, Spinner } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import server from "../../../networking";
@@ -13,7 +14,7 @@ function PublicAccountDetails({ userDetails }) {
                 const response = await server.get(`/api/Identity/getPublicProfileDetails?userId=${userId}`);
                 setPublicData(response.data.responseData);
                 setLoading(false);
-            } catch (err) {
+            } catch {
                 setLoading(false);
             }
         };

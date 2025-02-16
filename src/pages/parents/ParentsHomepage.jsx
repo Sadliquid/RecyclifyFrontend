@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Grid, Heading } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import BulletinCard from '../../components/parents/BulletinCard';
@@ -54,6 +53,7 @@ function ParentsHomepage() {
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={6} mt={2}>
                 {events.map((event, index) => (
                     <BulletinCard
+                        index={index}
                         key={event.id} // Use event.id for a more unique key
                         title={event.title}
                         date={new Date(event.eventDateTime).toLocaleDateString()}

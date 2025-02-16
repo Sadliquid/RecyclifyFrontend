@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Button, Box, Text } from "@chakra-ui/react";
 import { PinInput } from "@/components/ui/pin-input";
