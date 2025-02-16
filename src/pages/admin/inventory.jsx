@@ -303,7 +303,7 @@ const InventoryManagement = () => {
                                     <Button
                                         bg={"#4DCBA4"}
 										isLoading={isLoading}
-										isDisabled={isLoading}
+										isDisabled={isLoading || !addItem?.title || !addItem?.description || !addItem?.points || !addItem?.quantity}
                                         onClick={async () => {
 											setIsLoading(true);
                                             submitRewardItem(addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage);
