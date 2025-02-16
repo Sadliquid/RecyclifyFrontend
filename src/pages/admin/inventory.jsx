@@ -17,7 +17,7 @@ const InventoryManagement = () => {
     const [editingItem, setEditingItem] = useState(null); // Track the item being edited
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [addItem, setAddItem] = useState(null);
+    const [addItem, setAddItem] = useState({isAvailable: false});
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "admin") {
             fetchRewardItems();
@@ -36,7 +36,13 @@ const InventoryManagement = () => {
                 throw new Error(response.data.error || `Failed to fetch reward items`);
             }
         } catch (error) {
-            setErrorMessage(error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
             setIsLoading(false);
         }
     };
@@ -78,42 +84,97 @@ const InventoryManagement = () => {
                 editingItem,
                 { headers: { "Content-Type": "application/json" } }
             );
-
+    
             if (response.status >= 200 && response.status < 300) {
                 setRewardItems(rewardItems.map(item =>
                     item.rewardID === response.data.data.rewardID ? response.data.data : item
                 ));
                 setEditingItem(null);
-                ShowToast("success", "Success", response.data.message);
+    
+            if (response.data.message.startsWith("SUCCESS:")) {
+                let message = response.data.message.substring("SUCCESS: ".length);
+                ShowToast("success", "Success", message);
+            }
             } else {
                 throw new Error(response.data.error || "Failed to update reward item");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         }
     };
 
     const handleToggleAvailability = async (rewardID) => {
         try {
-            const response = await Server.put(
-                `/api/RewardItem/${rewardID}/toggle-availability`
-            );
-
+            const response = await Server.put(`/api/RewardItem/${rewardID}/toggle-availability`);
+    
             if (response.status === 200) {
                 setRewardItems(prevItems =>
                     prevItems.map(item =>
                         item.rewardID === rewardID ? response.data.data : item
                     )
                 );
-                ShowToast("success", "Success", response.data.message);
+    
+            if (response.data.message.startsWith("SUCCESS:")) {
+                let message = response.data.message.substring("SUCCESS: ".length);
+                ShowToast("success", "Success", message);
+            }
             } else {
                 throw new Error(response.data.error || "Failed to toggle availability");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         }
     };
 
+    const submitRewardItem = async (addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage) => {
+        const formData = new FormData();
+        formData.append("RewardTitle", addItem.title);
+        formData.append("RewardDescription", addItem.description);
+        formData.append("RequiredPoints", addItem.points);
+        formData.append("RewardQuantity", addItem.quantity);
+        formData.append("IsAvailable", addItem.isAvailable);
+        formData.append("ImageFile", addItem.image);
+      
+        try {
+          const response = await Server.post("/api/RewardItem", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            transformRequest: (formData) => formData,
+          });
+      
+          if (response.status === 200) {
+            fetchRewardItems();
+            setAddItem(null);
+            onClose();
+            if (response.data.message.startsWith("SUCCESS:")) {
+                let message = response.data.message.substring("SUCCESS: ".length);
+                ShowToast("success", "Success", message);
+            }
+          }
+        } catch (error) {
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
+        }
+      };
+      
     if (isLoading) {
         return <Spinner />;
     }
@@ -199,15 +260,16 @@ const InventoryManagement = () => {
                                             placeholder="Enter Quantity"/>
                                         </Field>
                                         <Field label ="Is Available">
-                                            <Checkbox
+                                        <Checkbox
                                             isChecked={addItem?.isAvailable || false}
-                                            onChange={(e) => setAddItem({
+                                            onChange={(e) =>
+                                                setAddItem({
                                                 ...addItem,
-                                                isAvailable: e.target.checked
-                                            })
+                                                isAvailable: e.target.checked,
+                                                })
                                             }
                                             >
-                                                Is Available
+                                            Is Available
                                             </Checkbox>
                                         </Field>
                                         <Field label="Item Image">
@@ -228,38 +290,11 @@ const InventoryManagement = () => {
                                     </DialogTrigger>
                                     <Button
                                         bg={"#4DCBA4"}
-										isLoading={isLoading}
-										isDisabled={isLoading}
+										loading={isLoading}
+										disabled={isLoading || !addItem?.title?.trim() || !addItem?.description?.trim() || !addItem?.points?.trim() || !addItem?.quantity?.trim() || !addItem?.image}
                                         onClick={async () => {
 											setIsLoading(true);
-                                                const formData = new FormData();
-                                                formData.append("RewardTitle", addItem.title);
-                                                formData.append("RewardDescription", addItem.description);
-                                                formData.append("RequiredPoints", addItem.points);
-                                                formData.append("RewardQuantity", addItem.quantity);
-                                                formData.append("IsAvailable", addItem.isAvailable);
-												formData.append("ImageFile", addItem.image);
-
-												try {
-													const response = await Server.post(
-														"/api/RewardItem",
-														formData,
-														{
-															headers: {
-																"Content-Type": "multipart/form-data",
-															},
-															transformRequest: (formData) => formData,
-														}
-													);
-													if (response.status === 200) {
-														fetchRewardItems();
-														setAddItem(null);
-														onClose();
-														ShowToast("success", "Success", response.data.message);
-													}
-												} catch (error) {
-													ShowToast("error", "Error", error.response?.data?.error || error.message);
-												}
+                                            submitRewardItem(addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage);
                                             }}
                                     >{isLoading ? "Adding..." : "Submit"} </Button>
                                 </DialogFooter>

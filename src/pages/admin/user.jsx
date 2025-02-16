@@ -25,6 +25,7 @@ const UserManagement = () => {
             fetchUsers();
         }
     }, [loaded]);
+        // Reset the form to its initial state (undo changes)
     // Fetch users from the backend
     const fetchUsers = async () => {
         try {
@@ -90,12 +91,21 @@ const UserManagement = () => {
 
             if (response.status === 200) {
                 setUsers(users.filter((user) => user.id !== userToDelete));
-                ShowToast("success", "Success", response.data.message);
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             } else {
                 throw new Error(response.data.error || "Failed to delete user");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         } finally {
             setIsDeleting(false);
             onClose();
@@ -116,10 +126,19 @@ const UserManagement = () => {
                 await fetchUsers();
                 setEditingUser(null);
                 onClose();
-                ShowToast("success", "Success", response.data.message);
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -140,12 +159,21 @@ const UserManagement = () => {
                     )
                 );
                 setEditingUser(null);
-                ShowToast("success", "Success", response.data.message);
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             } else {
                 throw new Error(response.data.error || "Failed to update user");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         }
     };
     
@@ -301,6 +329,19 @@ const UserManagement = () => {
                                     </DialogTrigger>
                                     <Button
                                     bg={"#4DCBA4"}
+                                    disabled={
+                                        !editingUser ||
+                                        !editingUser.name ||
+                                        !editingUser.fName ||
+                                        !editingUser.LName ||
+                                        !editingUser.email ||
+                                        !editingUser.password ||
+                                        !editingUser.contactNumber ||
+                                        !editingUser.classNumber ||
+                                        !editingUser.classDescription ||
+                                        editingUser.password.length < 8 || // Optional: add minimum password length check
+                                        !/\S+@\S+\.\S+/.test(editingUser.email) // Optional: simple email validation regex
+                                    }
                                         onClick={() => {
                                             const formData = {
                                                 name: editingUser.name,
@@ -390,12 +431,14 @@ const UserManagement = () => {
                                         {editingUser?.id === user.id ? (
                                             <Input
                                                 value={editingUser.contactNumber}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    // Only allow numbers (sanitize input)
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingUser({
                                                         ...editingUser,
-                                                        contactNumber: e.target.value,
-                                                    })
-                                                }
+                                                        contactNumber: sanitizedValue,
+                                                    });
+                                                }}
                                             />
                                         ) : (
                                             user.contactNumber
