@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import server from "../../../networking";
-import { Button, Stack, Input, useDisclosure, Box, Heading, Spinner } from "@chakra-ui/react";
+import { Button, Stack, Input, useDisclosure, Box, Heading, Spinner, Table, IconButton } from "@chakra-ui/react";
 import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MdAdd } from "react-icons/md";
 import { Field } from "@/components/ui/field";
 import ShowToast from "../../Extensions/ShowToast";
+import { FaTrashAlt, FaEdit } from "react-icons/fa"; // For edit and delete icons
 
 const EventsManagement = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -14,7 +15,6 @@ const EventsManagement = () => {
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(false); // For fetching state
-    const [error, setError] = useState("");
     const [events, setEvents] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false); // Track the submission state
 
@@ -26,7 +26,7 @@ const EventsManagement = () => {
         setFetching(true); // Set fetching state to true while loading events
         try {
             const response = await server.get("/api/events");
-            setEvents(response.data);
+            setEvents(response.data.events);
         } catch {
             ShowToast("error", "Error", "Failed to fetch events.");
         } finally {
@@ -55,7 +55,6 @@ const EventsManagement = () => {
     
         setLoading(true); // Start loading
         setIsSubmitting(true); // Start submission
-        setError(""); // Clear any previous error
     
         try {
             const response = await server.post("/api/events", formData, {
@@ -161,6 +160,26 @@ const EventsManagement = () => {
                             </DialogFooter>
                         </DialogContent>
                     </DialogRoot>
+
+                    {/* Table displaying events */}
+                    <Table.Root size="sm" showColumnBorder>
+						<Table.Header>
+                            <Table.Row>
+                                <Table.ColumnHeader>Title</Table.ColumnHeader>
+                                <Table.ColumnHeader>Description</Table.ColumnHeader>
+                                <Table.ColumnHeader>Event Date</Table.ColumnHeader>
+                            </Table.Row>
+							</Table.Header>
+                        <Table.Body>
+                            {events.map((event) => (
+                                <Table.Row key={event.id}>
+                                    <Table.Cell>{event.title}</Table.Cell>
+                                    <Table.Cell>{event.description}</Table.Cell>
+                                    <Table.Cell>{event.eventDateTime}</Table.Cell>
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table.Root>
                 </>
             )}
         </Box>
