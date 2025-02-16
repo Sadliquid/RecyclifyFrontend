@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { useState } from "react";
 import Server from "../../../networking";
 import { Box, Heading, List, ListItem, CardBody, Input, Button, Stack, Text, Flex, Spacer, Icon, Spinner, CardRoot } from "@chakra-ui/react";
@@ -79,7 +80,7 @@ const EcoPilot = () => {
                             <Spacer />
                             <Text color="gray.500" fontSize="sm">Having doubts? EcoPilot is here to help.</Text>
                         </Flex>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} netlify>
                             <Stack spacing={6}>
                                 <Input
                                     type="text"
