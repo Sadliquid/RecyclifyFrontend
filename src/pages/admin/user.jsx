@@ -25,6 +25,12 @@ const UserManagement = () => {
             fetchUsers();
         }
     }, [loaded]);
+        // Reset the form to its initial state (undo changes)
+    const handleCancel = () => {
+        setEditingUser(null); // Reset the form state
+        onClose(); // Close the modal
+    };
+
     // Fetch users from the backend
     const fetchUsers = async () => {
         try {
@@ -390,12 +396,14 @@ const UserManagement = () => {
                                         {editingUser?.id === user.id ? (
                                             <Input
                                                 value={editingUser.contactNumber}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    // Only allow numbers (sanitize input)
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
                                                     setEditingUser({
                                                         ...editingUser,
-                                                        contactNumber: e.target.value,
-                                                    })
-                                                }
+                                                        contactNumber: sanitizedValue,
+                                                    });
+                                                }}
                                             />
                                         ) : (
                                             user.contactNumber
