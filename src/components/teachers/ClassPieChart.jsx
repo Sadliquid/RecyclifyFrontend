@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useState } from 'react';
@@ -7,6 +7,17 @@ import { useState } from 'react';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ClassPieChart = ({ students }) => {
+    // Check if all students have zero points and for percentage calculation
+    const totalPoints = students.reduce((total, student) => total + student.totalPoints, 0);
+    if (totalPoints === 0) {
+        return (
+            <Flex w="100%" h="100%" align="center" justify="center">
+                <Text fontSize="lg" fontWeight="bold" color="gray.500" fontFamily="Sora, sans-serif" mb={10}>
+                    There are no contributions yet...
+                </Text>
+            </Flex>
+        );
+    }
     // Sort students by total points in descending order
     const sortedStudents = [...students].sort((a, b) => b.totalPoints - a.totalPoints);
 
@@ -15,9 +26,6 @@ const ClassPieChart = ({ students }) => {
 
     // Calculate the total points of the remaining students
     const othersTotalPoints = sortedStudents.slice(5).reduce((total, student) => total + student.totalPoints, 0);
-
-    // Calculate the total points for percentage calculation
-    const totalPoints = students.reduce((total, student) => total + student.totalPoints, 0);
 
     // Initial dataset visibility state
     const [visibility, setVisibility] = useState(Array(top5Students.length + 1).fill(true));

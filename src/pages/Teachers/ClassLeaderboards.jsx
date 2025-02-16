@@ -145,6 +145,7 @@ function Leaderboards() {
 			})
 				.then((response) => {
 					if (response.status === 200) {
+						fetchStudents(selectedClass.classID);
 						resolve();
 					} else {
 						reject(response.data.message?.split("UERROR: ")[1] || "An error occurred.");
@@ -372,17 +373,20 @@ function Leaderboards() {
 													Are you sure you want to send a certificate to {topContributor.user.name}?
 												</DialogTitle>
 											</DialogHeader>
-											<DialogBody color="#FF0000" textAlign="center">
-												<Text>This action cannot be undone.</Text>
+											<DialogBody textAlign="center">
+												<Text>The certificate will be send to this email: 
+													 <Text fontWeight="bold">{topContributor.user.email}</Text>
+												</Text>
+												<Text color="#FF0000" mt={2}>This action cannot be undone.</Text>
 											</DialogBody>
 											<DialogFooter display="flex" gap={10} justifyContent="center">
 												<DialogActionTrigger asChild>
-													<Button variant="outline" bg="#2D65FF" color="white" >
+													<Button variant="outline" bg="#FF8080" color="white" >
 														Cancel
 													</Button>
 												</DialogActionTrigger>
 												<DialogActionTrigger asChild>
-													<Button bg="#FF8080" color="white" onClick={() => sendCertificate(topContributor)}>
+													<Button bg="#2D65FF" color="white" onClick={() => sendCertificate(topContributor)}>
 														Send Certificate
 													</Button>
 												</DialogActionTrigger>

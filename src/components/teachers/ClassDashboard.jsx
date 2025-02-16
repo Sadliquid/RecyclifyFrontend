@@ -21,11 +21,15 @@ function ClassDashboard({ classData, students }) {
     const [classPoints, setClassPoints] = useState([]);
     const [lastWeekPoints, setLastWeekPoints] = useState(0);
 
-    // Sort the students by totalPoints in descending order and get the top 3
-    const top3Students = studentsList.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
+    // Filter out students with totalPoints > 0 first, then sort and get top 3
+    const top3Students = studentsList
+        .filter(student => student.totalPoints > 0)
+        .sort((a, b) => b.totalPoints - a.totalPoints)
+        .slice(0, 3);
 
     // Sort the students by TotalPoints in accending order and get the least contributed top 3
     var lowest3Students = studentsList.sort((a, b) => a.totalPoints - b.totalPoints).slice(0, 3);
+    console.log("Lowest 3 Students:", lowest3Students);
 
     // Check for any conflics students between top3Students and lowest3Students
     const conflictStudents = lowest3Students.filter(student => top3Students.includes(student));
@@ -149,29 +153,43 @@ function ClassDashboard({ classData, students }) {
 
                                     {/* Top 3 Students Contributor based on their totalPoints */}
                                     <Flex direction="column" w="100%" h="80%" gap={4}>
-                                        {top3Students.map((student, index) => (
-                                            <Flex key={index} direction="row" w="100%" h="30%" gap={1} alignItems="flex-start" justifyContent="flex-start" >
-                                                {/* Rank Icon or Badge */}
-                                                <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
-                                                    <Image src={index === 0 ? "/gold-medal.png" : index === 1 ? "/silver-medal.png" : "/bronze-medal.png"}
-                                                        alt={`Rank ${index + 1}`} w="100%" h="auto" />
-                                                </Box>
-                                                {/* Student Avatar */}
-                                                <Box w="20%" h="100%" display="flex" justifyContent="center" alignItems="center">
-                                                    <StudentAvatar student={student} />
-                                                </Box>
-                                                {/* Student's Info */}
-                                                <Box w="70%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
-                                                    <Box w="60%" fontSize="sm" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{student.user.name}</Box>
-                                                    <Box w="30%" fontSize="2xl" fontWeight="bold" display="flex" justifyContent="flex-end">
-                                                        {student.totalPoints}
+                                        {top3Students.length > 0 ? (
+                                            top3Students.map((student, index) => (
+                                                <Flex key={index} direction="row" w="100%" h="30%" gap={1} alignItems="flex-start" justifyContent="flex-start">
+                                                    {/* Rank Icon or Badge */}
+                                                    <Box w="10%" h="100%" display="flex" justifyContent="center" alignItems="center">
+                                                        <Image
+                                                            src={index === 0 ? "/gold-medal.png" : index === 1 ? "/silver-medal.png" : "/bronze-medal.png"}
+                                                            alt={`Rank ${index + 1}`}
+                                                            w="100%"
+                                                            h="auto"
+                                                        />
                                                     </Box>
-                                                    <Box w="10%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center" ml={1}>
-                                                        <FaLeaf />
+                                                    {/* Student Avatar */}
+                                                    <Box w="20%" h="100%" display="flex" justifyContent="center" alignItems="center">
+                                                        <StudentAvatar student={student} />
                                                     </Box>
-                                                </Box>
-                                            </Flex>
-                                        ))}
+                                                    {/* Student's Info */}
+                                                    <Box w="70%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
+                                                        <Box w="60%" fontSize="sm" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                            {student.user.name}
+                                                        </Box>
+                                                        <Box w="30%" fontSize="2xl" fontWeight="bold" display="flex" justifyContent="flex-end">
+                                                            {student.totalPoints}
+                                                        </Box>
+                                                        <Box w="10%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center" ml={1}>
+                                                            <FaLeaf />
+                                                        </Box>
+                                                    </Box>
+                                                </Flex>
+                                            ))
+                                        ) : (
+                                            <Box textAlign="center" w="100%" h="100%" display="flex" alignItems="center" justifyContent="center">
+                                                <Text fontSize="lg" fontWeight="bold" color="gray.500" fontFamily="Sora, sans-serif" mb={8}>
+                                                    There are no contributions yet...
+                                                </Text>
+                                            </Box>
+                                        )}
                                     </Flex>
                                 </Flex>
                             </Box>
