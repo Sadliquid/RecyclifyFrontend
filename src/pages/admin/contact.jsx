@@ -3,7 +3,7 @@ import { Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner, useDisclo
 import { useSelector } from "react-redux";
 import { MdReply } from "react-icons/md";
 import { Button } from "@/components/ui/button";
-import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import Server from "../../../networking";
 import ShowToast from "../../Extensions/ShowToast";
@@ -13,9 +13,7 @@ const ContactFormManagement = () => {
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [errorMessage, setErrorMessage] = useState(null);
     const [isSendingEmail, setIsSendingEmail] = useState(false); // New state for email sending
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const subjectRef = useRef(null);
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI dialog state
@@ -82,12 +80,10 @@ const ContactFormManagement = () => {
                         message.id === selectedMessage.id ? { ...message, hasReplied: true } : message
                     )
                 );
-				console.log(response.data.message);
 				if (response.data.message.startsWith("SUCCESS:")) {
 					let message = response.data.message.substring("SUCCESS: ".length);
 					ShowToast("success", "Success", message);
 				}
-                setIsDialogOpen(false); // ✅ Close dialog AFTER sending succeeds
             } else {
                 throw new Error(markRepliedResponse.data.error || "Failed to mark as replied");
             }
@@ -107,12 +103,6 @@ const ContactFormManagement = () => {
     if (isLoading) {
         return <Spinner />;
     }
-
-    if (errorMessage) {
-        const substringErrorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
-        return <div>Error: {substringErrorMessage}</div>;
-    }
-
     return (
         <Stack gap="10">
             <Box textAlign="center">
