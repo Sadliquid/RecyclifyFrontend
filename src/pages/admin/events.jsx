@@ -169,8 +169,8 @@ const EventsManagement = () => {
                                 </DialogTrigger>
                                 <Button
                                     bg="#4DCBA4"
-                                    isDisabled={isSubmitting || loading || !title || !description || !eventDateTime || !imageFile} // Disable the button if submitting, loading, or fields are incomplete
-                                    isLoading={loading}
+                                    disabled={isSubmitting || loading || !title || !description || !eventDateTime || !imageFile} // Disable the button if submitting, loading, or fields are incomplete
+                                    loading={loading}
                                     onClick={handleSubmit}
                                 >
                                     {loading ? "Creating..." : "Submit"}

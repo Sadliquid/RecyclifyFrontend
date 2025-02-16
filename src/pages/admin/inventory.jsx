@@ -302,8 +302,8 @@ const InventoryManagement = () => {
                                     </DialogTrigger>
                                     <Button
                                         bg={"#4DCBA4"}
-										isLoading={isLoading}
-										isDisabled={isLoading || !addItem?.title || !addItem?.description || !addItem?.points || !addItem?.quantity}
+										loading={isLoading}
+										disabled={isLoading || !addItem?.title?.trim() || !addItem?.description?.trim() || !addItem?.points?.trim() || !addItem?.quantity?.trim() || !addItem?.image}
                                         onClick={async () => {
 											setIsLoading(true);
                                             submitRewardItem(addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage);

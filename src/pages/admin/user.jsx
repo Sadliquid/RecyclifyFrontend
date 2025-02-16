@@ -25,6 +25,11 @@ const UserManagement = () => {
             fetchUsers();
         }
     }, [loaded]);
+        // Reset the form to its initial state (undo changes)
+    const handleCancel = () => {
+        setEditingUser(null); // Reset the form state
+        onClose(); // Close the modal
+    };
 
     // Fetch users from the backend
     const fetchUsers = async () => {
@@ -302,6 +307,19 @@ const UserManagement = () => {
                                     </DialogTrigger>
                                     <Button
                                     bg={"#4DCBA4"}
+                                    disabled={
+                                        !editingUser ||
+                                        !editingUser.name ||
+                                        !editingUser.fName ||
+                                        !editingUser.LName ||
+                                        !editingUser.email ||
+                                        !editingUser.password ||
+                                        !editingUser.contactNumber ||
+                                        !editingUser.classNumber ||
+                                        !editingUser.classDescription ||
+                                        editingUser.password.length < 8 || // Optional: add minimum password length check
+                                        !/\S+@\S+\.\S+/.test(editingUser.email) // Optional: simple email validation regex
+                                    }
                                         onClick={() => {
                                             const formData = {
                                                 name: editingUser.name,
