@@ -17,7 +17,7 @@ const InventoryManagement = () => {
     const [editingItem, setEditingItem] = useState(null); // Track the item being edited
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [addItem, setAddItem] = useState(null);
+    const [addItem, setAddItem] = useState({isAvailable: false});
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "admin") {
             fetchRewardItems();
@@ -199,15 +199,16 @@ const InventoryManagement = () => {
                                             placeholder="Enter Quantity"/>
                                         </Field>
                                         <Field label ="Is Available">
-                                            <Checkbox
+                                        <Checkbox
                                             isChecked={addItem?.isAvailable || false}
-                                            onChange={(e) => setAddItem({
+                                            onChange={(e) =>
+                                                setAddItem({
                                                 ...addItem,
-                                                isAvailable: e.target.checked
-                                            })
+                                                isAvailable: e.target.checked,
+                                                })
                                             }
                                             >
-                                                Is Available
+                                            Is Available
                                             </Checkbox>
                                         </Field>
                                         <Field label="Item Image">
