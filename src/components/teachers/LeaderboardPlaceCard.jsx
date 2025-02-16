@@ -38,7 +38,7 @@ function LeaderboardPlaceCard({ rank, schoolClass, topContributor, border }) {
             <Box width="50%" textAlign="center">
                 {topContributor ? (
                     <Flex alignItems="center" justifyContent="center">
-                        <Text fontSize="md" fontWeight="bold" >{topContributor.user?.name}</Text>
+                        <Text fontSize="md" fontWeight="bold" >{topContributor.user?.fName} {topContributor.user?.lName}</Text>
                     </Flex>
                 ) : (
                     <Text fontSize="sm" color="gray.500">No Top Contributor</Text>

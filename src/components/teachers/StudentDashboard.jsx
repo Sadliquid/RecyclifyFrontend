@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Table, Tabs, Box, Flex, Button, Text, Stack, Field, Input, Image, defineStyle } from '@chakra-ui/react';
 import { MdDelete, MdEdit, MdOutlineMoreVert, MdOutlineEmail } from 'react-icons/md';
-import { LuDiamond } from 'react-icons/lu';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -26,11 +25,15 @@ function StudentDashboard({ classData, students }) {
     });
     const [studentsList, setStudentsList] = useState(students || []);
     const [editedStudent, setEditedStudent] = useState({
-        name: '',
-        studentEmail: ''
-    })
+        fName: '',
+        lName: '',
+        studentEmail: '',
+    });
+
     const [validationError, setValidationError] = useState({
-        name: '',
+        fName: '',
+        lName: '',
+        studentEmail: '',
     });
     const [open, setOpen] = useState(false);
     const [selectedRecipients, setSelectedRecipients] = useState([]);
@@ -84,8 +87,8 @@ function StudentDashboard({ classData, students }) {
         if (!nameRegex.test(name)) {
             return 'Name can only contain letters and spaces.';
         }
-        if (name.length > 60) {
-            return 'Name cannot be more than 60 character.';
+        if (name.length > 40) {
+            return 'Name cannot be more than 40 character.';
         }
         return '';
     };
@@ -129,7 +132,8 @@ function StudentDashboard({ classData, students }) {
     const handleEditStudent = (student) => {
         setEditedStudent({
             studentID: student.studentID,
-            name: student.user.name,
+            fName: student.user.fName || '',
+            lName: student.user.lName || '',
             studentEmail: student.user.email,
         });
         setOpen(true);
@@ -138,7 +142,8 @@ function StudentDashboard({ classData, students }) {
     // Function to reset the edited student state
     const resetEditedStudent = () => {
         setEditedStudent({
-            name: '',
+            fName: '',
+            lName: '',
             studentEmail: '',
         });
         setOpen(false);
@@ -147,7 +152,7 @@ function StudentDashboard({ classData, students }) {
     // Function to handle changes in the edit dialog fields
     const handleChange = (field, value) => {
         let error = '';
-        if (field === 'name') {
+        if (field === 'fName' || field === 'lName') {
             error = validateName(value);
         } else if (field === 'studentEmail') {
             error = validateEmail(value);
@@ -186,8 +191,8 @@ function StudentDashboard({ classData, students }) {
 
     // Function to save the edited student details
     const handleSaveEdit = async () => {
-        if (validationError.name) {
-            console.error('Validation error:', validationError.name);
+        if (validationError.fName || validationError.lName || validationError.studentEmail) {
+            console.error('Validation errors:', validationError);
             return;
         }
 
@@ -195,7 +200,8 @@ function StudentDashboard({ classData, students }) {
             const response = await server.put(`/api/Teacher/update-student`, null, {
                 params: {
                     studentID: editedStudent.studentID,
-                    studentName: editedStudent.name,
+                    fName: editedStudent.fName,
+                    lName: editedStudent.lName,
                     studentEmail: editedStudent.studentEmail,
                 },
             });
@@ -318,7 +324,7 @@ function StudentDashboard({ classData, students }) {
         });
     };
 
-    const isFormInvalid = !!validationError.name || !!validationError.studentEmail || !editedStudent.name.trim() || !editedStudent.studentEmail.trim();
+    const isFormInvalid = !!validationError.fName || !!validationError.lName || !!validationError.studentEmail || !editedStudent.fName.trim() || !editedStudent.lName.trim() || !editedStudent.studentEmail.trim();
 
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "teacher") {
@@ -396,8 +402,7 @@ function StudentDashboard({ classData, students }) {
                                     <Table.Row key={student.studentID} bg={index % 2 === 0 ? tableCellColorList[0] : tableCellColorList[1]}>
                                         <Table.Cell color="black">
                                             <Flex gap={2} align="center">
-                                                <LuDiamond />
-                                                {student.user.name}
+                                                {student.user.fName} {student.user.lName}
                                             </Flex>
                                         </Table.Cell>
                                         <Table.Cell color="black">
@@ -453,15 +458,33 @@ function StudentDashboard({ classData, students }) {
                                                                     <Field.Root>
                                                                         <Box pos="relative" w="full">
                                                                             <Input
-                                                                                className="student-name"
-                                                                                value={editedStudent.name}
-                                                                                onChange={(e) => handleChange('name', e.target.value)}
-                                                                                borderColor={validationError.name ? 'red.500' : 'gray.300'}
+                                                                                className="student-fname"
+                                                                                value={editedStudent.fName}
+                                                                                onChange={(e) => handleChange('fName', e.target.value)}
+                                                                                borderColor={validationError.fName ? 'red.500' : 'gray.300'}
                                                                             />
-                                                                            <Field.Label css={floatingStyles}>Student Name</Field.Label>
-                                                                            {validationError.name && (
+                                                                            <Field.Label css={floatingStyles}>First Name</Field.Label>
+                                                                            {validationError.fName && (
                                                                                 <Text color="red.500" fontSize="sm" mt={1}>
-                                                                                    * {validationError.name}
+                                                                                    * {validationError.fName}
+                                                                                </Text>
+                                                                            )}
+                                                                        </Box>
+                                                                    </Field.Root>
+
+                                                                    {/* Last Name Field */}
+                                                                    <Field.Root>
+                                                                        <Box pos="relative" w="full">
+                                                                            <Input
+                                                                                className="student-lname"
+                                                                                value={editedStudent.lName}
+                                                                                onChange={(e) => handleChange('lName', e.target.value)}
+                                                                                borderColor={validationError.lName ? 'red.500' : 'gray.300'}
+                                                                            />
+                                                                            <Field.Label css={floatingStyles}>Last Name</Field.Label>
+                                                                            {validationError.lName && (
+                                                                                <Text color="red.500" fontSize="sm" mt={1}>
+                                                                                    * {validationError.lName}
                                                                                 </Text>
                                                                             )}
                                                                         </Box>

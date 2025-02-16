@@ -139,7 +139,7 @@ function Leaderboards() {
 		const promise = new Promise((resolve, reject) => {
 			server.post(`/api/Teacher/send-certificate`, null, {
 				params: {
-					topContributorName: topContributor.user.name,
+					topContributorName: topContributor.user.fName + " " + topContributor.user.lName,
 					topContributorEmail: topContributor.user.email,
 				},
 			})
@@ -329,7 +329,7 @@ function Leaderboards() {
 														>
 															<StudentAvatar student={topContributor} size="70px"/>
 															<Heading fontSize={"24px"} mt={2} color="#2D3748">
-																{topContributor.user.name}
+																{topContributor.user.fName} {topContributor.user.lName}
 															</Heading>
 															<Flex justifyContent={"center"} alignItems={"center"} mt={2} gap={2}>
 																<Heading>{topContributor.totalPoints}</Heading>
@@ -370,7 +370,7 @@ function Leaderboards() {
 										<DialogContent>
 											<DialogHeader>
 												<DialogTitle color="black" fontWeight="bold" textAlign="center">
-													Are you sure you want to send a certificate to {topContributor.user.name}?
+													Are you sure you want to send a certificate to {topContributor.user.fName} {topContributor.user.lName}?
 												</DialogTitle>
 											</DialogHeader>
 											<DialogBody textAlign="center">

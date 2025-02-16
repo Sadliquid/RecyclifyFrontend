@@ -32,7 +32,7 @@ const ClassPieChart = ({ students }) => {
 
     // Data for the pie chart
     const chartData = {
-        labels: [...top5Students.map((student) => student.user.name), 'Others'],
+        labels: [...top5Students.map((student) => student.user.fName + " "+ student.user.lName), 'Others'],
         datasets: [
             {
                 label: 'Contribution Percentage',

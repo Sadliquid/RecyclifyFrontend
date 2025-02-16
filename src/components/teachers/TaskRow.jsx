@@ -139,7 +139,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                             {/* Task details */}
                             <Text noOfLines={1} isTruncated>
                                 <Text as="span" fontWeight="bold">
-                                    {task.student?.name}
+                                    {task.student?.fName} {task.student?.lName}
                                 </Text>
                                 {" from "}
                                 <Text as="span" fontWeight="bold">

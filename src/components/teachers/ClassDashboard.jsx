@@ -29,7 +29,6 @@ function ClassDashboard({ classData, students }) {
 
     // Sort the students by TotalPoints in accending order and get the least contributed top 3
     var lowest3Students = studentsList.sort((a, b) => a.totalPoints - b.totalPoints).slice(0, 3);
-    console.log("Lowest 3 Students:", lowest3Students);
 
     // Check for any conflics students between top3Students and lowest3Students
     const conflictStudents = lowest3Students.filter(student => top3Students.includes(student));
@@ -172,7 +171,7 @@ function ClassDashboard({ classData, students }) {
                                                     {/* Student's Info */}
                                                     <Box w="70%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
                                                         <Box w="60%" fontSize="sm" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                                            {student.user.name}
+                                                            {student.user.fName} {student.user.lName}
                                                         </Box>
                                                         <Box w="30%" fontSize="2xl" fontWeight="bold" display="flex" justifyContent="flex-end">
                                                             {student.totalPoints}
@@ -254,7 +253,7 @@ function ClassDashboard({ classData, students }) {
                                                 </Box>
                                                 {/* Student's Info */}
                                                 <Box w="80%" h="100%" display="flex" justifyContent="space-between" alignItems="center">
-                                                    <Box w="60%" fontSize="sm" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{student.user.name}</Box>
+                                                    <Box w="60%" fontSize="sm" fontWeight="bold" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{student.user.fName} {student.user.lName}</Box>
                                                     <Box w="30%" fontSize="2xl" fontWeight="bold" display="flex" justifyContent="flex-end">
                                                         {student.totalPoints}
                                                     </Box>
