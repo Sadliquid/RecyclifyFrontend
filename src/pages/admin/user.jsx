@@ -99,12 +99,14 @@ const UserManagement = () => {
                 throw new Error(response.data.error || "Failed to delete user");
             }
         } catch (error) {
-            if (response.data.message.startsWith("ERROR:")) {
-                let message = response.data.message.substring("ERROR: ".length);
-                ShowToast("error", "Error", message);
-            } else if (response.data.message.startsWith("UERROR:")) {
-                let message = response.data.message.substring("UERROR: ".length);
-                ShowToast("error", "Error", message);
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
             }
         } finally {
             setIsDeleting(false);
@@ -132,12 +134,14 @@ const UserManagement = () => {
                 }
             }
         } catch (error) {
-            if (response.data.message.startsWith("ERROR:")) {
-                let message = response.data.message.substring("ERROR: ".length);
-                ShowToast("error", "Error", message);
-            } else if (response.data.message.startsWith("UERROR:")) {
-                let message = response.data.message.substring("UERROR: ".length);
-                ShowToast("error", "Error", message);
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
             }
         } finally {
             setIsLoading(false);
@@ -167,12 +171,14 @@ const UserManagement = () => {
                 throw new Error(response.data.error || "Failed to update user");
             }
         } catch (error) {
-            if (response.data.message.startsWith("ERROR:")) {
-                let message = response.data.message.substring("ERROR: ".length);
-                ShowToast("error", "Error", message);
-            } else if (response.data.message.startsWith("UERROR:")) {
-                let message = response.data.message.substring("UERROR: ".length);
-                ShowToast("error", "Error", message);
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
             }
         }
     };

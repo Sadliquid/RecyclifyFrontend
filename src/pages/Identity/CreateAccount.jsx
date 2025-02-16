@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'

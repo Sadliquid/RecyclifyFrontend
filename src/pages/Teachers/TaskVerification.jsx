@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Flex, Heading, Tabs, Badge, Text, VStack } from "@chakra-ui/react";
 import { IoArrowBack } from "react-icons/io5";
 import { useSelector } from "react-redux";

@@ -27,13 +27,15 @@ const EventsManagement = () => {
             const response = await server.get("/api/events");
             setEvents(response.data.events);
         } catch (error) {
-			if (response.data.message.startsWith("ERROR:")) {
-				let message = response.data.message.substring("ERROR: ".length);
-				ShowToast("error", "Error", message);
-			} else if (response.data.message.startsWith("UERROR:")) {
-				let message = response.data.message.substring("UERROR: ".length);
-				ShowToast("error", "Error", message);
-			}
+			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
+            }
         } finally {
             setFetching(false); // Set fetching state to false after loading
         }
@@ -82,13 +84,15 @@ const EventsManagement = () => {
 			// Close modal after short delay
 			setTimeout(() => onClose(), 100);
 		} catch (error) {
-			if (response.data.message.startsWith("ERROR:")) {
-				let message = response.data.message.substring("ERROR: ".length);
-				ShowToast("error", "Error", message);
-			} else if (response.data.message.startsWith("UERROR:")) {
-				let message = response.data.message.substring("UERROR: ".length);
-				ShowToast("error", "Error", message);
-			}
+			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
+            }
 		} finally {
 			setLoading(false); // Stop loading
 			setIsSubmitting(false); // Stop submission

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -90,7 +91,15 @@ function ContactVerification() {
             await server.post('/api/Identity/contactVerification');
             ShowToast("success", "Code Sent!", "A new verification code has been sent via SMS.");
         } catch (error) {
-            ShowToast("error", "Sending Failed", "Failed to send code to your contact number.");
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
+            }
         } finally {
             setIsResending(false);
         }

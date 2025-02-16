@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { Box, HStack, Button, VStack, Image } from '@chakra-ui/react';
 import EditAvatarDialog from './EditAvatarDialog';

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot } from "@/components/ui/dialog";

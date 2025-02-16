@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Box, Image } from "@chakra-ui/react";
 import { MdCardGiftcard } from "react-icons/md";

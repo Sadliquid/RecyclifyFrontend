@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot } from "@/components/ui/dialog";
 import { Button, Box, Image } from "@chakra-ui/react";
 import { FileInput, FileUploadClearTrigger, FileUploadLabel, FileUploadRoot } from "@/components/ui/file-upload";

@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogRoot } from "@/components/ui/dialog";
 import { Button, Spinner, VStack, Text, Image } from "@chakra-ui/react";
+import ShowToast from "../../Extensions/ShowToast";
 import server from "../../../networking"
 
 function RedemptionHistoryDialog({ isOpen, onClose, userId }) {

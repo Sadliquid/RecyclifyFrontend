@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Flex, Heading, HStack, Image, Text, Button, VStack } from "@chakra-ui/react";
-import { Avatar } from "@/components/ui/avatar";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
