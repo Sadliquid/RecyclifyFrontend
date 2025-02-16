@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect } from "react";
 import { Stack, Table, Heading, Input, HStack, Box, Textarea, Spinner, useDisclosure } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
@@ -35,13 +36,15 @@ const ContactFormManagement = () => {
                 throw new Error(response.data.error || "Failed to fetch messages");
             }
         } catch (error) {
-			if (response.data.message.startsWith("ERROR:")) {
-				let message = response.data.message.substring("ERROR: ".length);
-				ShowToast("error", "Error", message);
-			} else if (response.data.message.startsWith("UERROR:")) {
-				let message = response.data.message.substring("UERROR: ".length);
-				ShowToast("error", "Error", message);
-			}
+			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
+            }
         }
     };
 
@@ -80,21 +83,23 @@ const ContactFormManagement = () => {
                         message.id === selectedMessage.id ? { ...message, hasReplied: true } : message
                     )
                 );
-				if (response.data.message.startsWith("SUCCESS:")) {
-					let message = response.data.message.substring("SUCCESS: ".length);
+				if (markRepliedResponse.data.message.startsWith("SUCCESS:")) {
+					let message = markRepliedResponse.data.message.substring("SUCCESS: ".length);
 					ShowToast("success", "Success", message);
 				}
             } else {
                 throw new Error(markRepliedResponse.data.error || "Failed to mark as replied");
             }
         } catch (error) {
-			if (response.data.message.startsWith("ERROR:")) {
-				let message = response.data.message.substring("ERROR: ".length);
-				ShowToast("error", "Error", message);
-			} else if (response.data.message.startsWith("UERROR:")) {
-				let message = response.data.message.substring("UERROR: ".length);
-				ShowToast("error", "Error", message);
-			}
+			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+                if (error.response.data.error.startsWith("UERROR")) {
+                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                } else {
+                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                }
+            } else {
+                ShowToast("An unexpected error occurred");
+            }
         } finally {
             setIsSendingEmail(false); // End loading state
         }
