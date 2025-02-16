@@ -111,10 +111,7 @@ function ImageRecognition() {
                     transition={{ duration: 0.6 }}
                 >
                     <Flex direction="column" align="center" textAlign="center" mb={3}>
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
+                        <motion.div>
                             <Text
                                 backgroundColor={"#3BA684"}
                                 bgClip="text"
