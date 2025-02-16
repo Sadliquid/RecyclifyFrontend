@@ -1,166 +1,170 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import server from "../../../networking";
-import { Button, Stack, Input, Textarea, useDisclosure, Box, Heading } from "@chakra-ui/react";
+import { Button, Stack, Input, useDisclosure, Box, Heading, Spinner } from "@chakra-ui/react";
 import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { MdAdd } from "react-icons/md"; // Add icon
+import { MdAdd } from "react-icons/md";
 import { Field } from "@/components/ui/field";
+import ShowToast from "../../Extensions/ShowToast";
 
 const EventsManagement = () => {
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [eventDateTime, setEventDateTime] = useState("");
-	const [imageFile, setImageFile] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
-	const [successMessage, setSuccessMessage] = useState("");
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [eventDateTime, setEventDateTime] = useState(new Date().toISOString().slice(0, 16));
+    const [imageFile, setImageFile] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [fetching, setFetching] = useState(false); // For fetching state
+    const [error, setError] = useState("");
+    const [events, setEvents] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false); // Track the submission state
 
-	const handleFileChange = (e) => {
-		setImageFile(e.target.files[0]);
-	};
+    useEffect(() => {
+        fetchEvents();
+    }, []);
 
-	const handleAdd = async () => {
-		onOpen();
-	};
+    const fetchEvents = async () => {
+        setFetching(true); // Set fetching state to true while loading events
+        try {
+            const response = await server.get("/api/events");
+            setEvents(response.data);
+        } catch {
+            ShowToast("error", "Error", "Failed to fetch events.");
+        } finally {
+            setFetching(false); // Set fetching state to false after loading
+        }
+    };
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+    const handleFileChange = (e) => {
+        setImageFile(e.target.files[0]);
+    };
 
-		// Validate input fields
-		if (!title || !description || !eventDateTime || !imageFile) {
-			setError("All fields are required.");
-			return;
-		}
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        // Check if fields are filled
+        if (!title || !description || !eventDateTime || !imageFile) {
+            ShowToast("error", "Error", "All fields are required.");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append("Title", title);
+        formData.append("Description", description);
+        formData.append("EventDateTime", eventDateTime);
+        formData.append("ImageFile", imageFile);
+    
+        setLoading(true); // Start loading
+        setIsSubmitting(true); // Start submission
+        setError(""); // Clear any previous error
+    
+        try {
+            const response = await server.post("/api/events", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                transformRequest: (formData) => formData,
+            });
+    
+            ShowToast("success", "Success", response.data.message);
+            fetchEvents(); // Refresh events
+    
+            // Reset form fields
+            setTitle("");
+            setDescription("");
+            setEventDateTime(new Date().toISOString().slice(0, 16));
+            setImageFile(null);
+    
+            // Close modal after short delay
+            setTimeout(() => onClose(), 100);
+        } catch (error) {
+            ShowToast("error", "Error", "Failed to create event. Please try again.");
+        } finally {
+            setLoading(false); // Stop loading
+            setIsSubmitting(false); // Stop submission
+        }
+    };
 
-		const formData = new FormData();
-		formData.append("Title", title);
-		formData.append("Description", description);
-		formData.append("EventDateTime", eventDateTime);
-		formData.append("ImageFile", imageFile);
+    return (
+        <Box p={6}>
+            <Heading fontSize="30px" mt={10} mb={10}>Manage Events</Heading>
 
-		setLoading(true);
-		setError("");
-		setSuccessMessage("");
+            {/* Show spinner when fetching events */}
+            {fetching ? (
+                <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                    <Spinner size="xl" />
+                </Box>
+            ) : (
+                <>
+                    <DialogRoot isOpen={isOpen} onClose={onClose}>
+                        <DialogTrigger asChild>
+                            <Button leftIcon={<MdAdd />} bg="#4DCBA4" onClick={onOpen} mb={6} size="lg" _hover={{ bg: "#3db28a" }}>Create Event</Button>
+                        </DialogTrigger>
 
-		try {
-			const response = await server.post("/api/events", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-				transformRequest: (formData) => formData,
-			});
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Create New Event</DialogTitle>
+                            </DialogHeader>
 
-			setSuccessMessage(response.data.message);
-			setTitle("");
-			setDescription("");
-			setEventDateTime("");
-			setImageFile(null);
-		} catch {
-			setError("Failed to create event. Please try again.");
-		} finally {
-			setLoading(false);
-			onClose(); // Close dialog after submission
-		}
-	};
+                            {/* Modal content */}
+                            <DialogBody pb="4">
+                                {/* Show the spinner on the main screen if loading */}
+                                {loading ? (
+                                    <Box
+                                        position="fixed"
+                                        top="0"
+                                        left="0"
+                                        right="0"
+                                        bottom="0"
+                                        display="flex"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        backgroundColor="rgba(255, 255, 255, 0.7)"
+                                        zIndex="1000"
+                                    >
+                                        <Spinner size="xl" />
+                                    </Box>
+                                ) : (
+                                    <Stack spacing={4}>
+                                        <div>
+                                            <Field>Title:</Field>
+                                            <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Enter Event Title" />
+                                        </div>
 
-	return (
-		<Box p={6}>
-			{/* Page Title */}
-			<Heading fontSize="30px" mt={10} mb={10}>Manage Events</Heading>
+                                        <div>
+                                            <Field>Description:</Field>
+                                            <Input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required placeholder="Enter Event Description" />
+                                        </div>
 
-			{/* Open Dialog Button */}
-			<DialogRoot isOpen={isOpen} onClose={onClose}>
-				<DialogTrigger asChild>
-					<Button
-						leftIcon={<MdAdd />}
-						bg="#4DCBA4"
-						onClick={() => handleAdd()}
-						mb={6} // Adding margin for spacing
-						size="lg"
-						_hover={{ bg: "#3db28a" }} // Hover effect
-					>
-						Create Event
-					</Button>
-				</DialogTrigger>
+                                        <div>
+                                            <Field>Event Date and Time:</Field>
+                                            <Input type="datetime-local" value={eventDateTime} onChange={(e) => setEventDateTime(e.target.value)} required />
+                                        </div>
 
-				{/* Dialog Content */}
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>Create New Event</DialogTitle>
-					</DialogHeader>
-					<DialogBody pb="4">
-						<Stack spacing={4}>
-							{/* Title Input */}
-							<div>
-								<Field>Title:</Field>
-								<Input
-									type="text"
-									value={title}
-									onChange={(e) => setTitle(e.target.value)}
-									required
-									placeholder="Enter Event Title"
-								/>
-							</div>
+                                        <div>
+                                            <Field>Upload Image:</Field>
+                                            <Input type="file" onChange={handleFileChange} required />
+                                        </div>
+                                    </Stack>
+                                )}
+                            </DialogBody>
 
-							{/* Description Input */}
-							<div>
-								<Field>Description:</Field>
-								<Textarea
-									value={description}
-									onChange={(e) => setDescription(e.target.value)}
-									required
-									placeholder="Enter Event Description"
-								/>
-							</div>
-
-							{/* Event Date and Time Input */}
-							<div>
-								<Field>Event Date and Time:</Field>
-								<Input
-									type="datetime-local"
-									value={eventDateTime}
-									onChange={(e) => setEventDateTime(e.target.value)}
-									required
-								/>
-							</div>
-
-							{/* Image Upload */}
-							<div>
-								<Field>Upload Image:</Field>
-								<Input type="file" onChange={handleFileChange} required />
-							</div>
-
-							{/* Error and Success Message */}
-							{error && <p style={{ color: "red" }}>{error}</p>}
-							{successMessage && (
-								<p style={{ color: "green" }}>{successMessage}</p>
-							)}
-						</Stack>
-					</DialogBody>
-
-					{/* Dialog Footer */}
-					<DialogFooter>
-						<DialogTrigger asChild>
-							<Button
-								variant="outline"
-								onClick={onClose}
-							>
-								Cancel
-							</Button>
-						</DialogTrigger>
-						<Button
-							bg="#4DCBA4"
-							isLoading={loading}
-							isDisabled={loading}
-							onClick={handleSubmit}
-						>
-							{loading ? "Creating..." : "Submit"}
-						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</DialogRoot>
-		</Box>
-	);
+                            <DialogFooter>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" onClick={onClose}>Cancel</Button>
+                                </DialogTrigger>
+                                <Button
+                                    bg="#4DCBA4"
+                                    isDisabled={isSubmitting || loading || !title || !description || !eventDateTime || !imageFile} // Disable the button if submitting, loading, or fields are incomplete
+                                    isLoading={loading}
+                                    onClick={handleSubmit}
+                                >
+                                    {loading ? "Creating..." : "Submit"}
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </DialogRoot>
+                </>
+            )}
+        </Box>
+    );
 };
 
 export default EventsManagement;
