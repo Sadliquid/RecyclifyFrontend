@@ -78,39 +78,63 @@ const InventoryManagement = () => {
                 editingItem,
                 { headers: { "Content-Type": "application/json" } }
             );
-
+    
             if (response.status >= 200 && response.status < 300) {
                 setRewardItems(rewardItems.map(item =>
                     item.rewardID === response.data.data.rewardID ? response.data.data : item
                 ));
                 setEditingItem(null);
-                ShowToast("success", "Success", response.data.message);
+    
+                const successMessage = response.data.message?.substring(0, 50) || "Reward item updated successfully!";
+                ShowToast("success", "Success", successMessage);
             } else {
                 throw new Error(response.data.error || "Failed to update reward item");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            let errorMessage = "Failed to update reward item.";
+    
+            if (error.response) {
+                errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
+            } else if (error.request) {
+                errorMessage = "No response from the server. Please check your internet connection.";
+            } else {
+                errorMessage = `Unexpected error: ${error.message}`;
+            }
+    
+            errorMessage = errorMessage.length > 50 ? `${errorMessage.substring(0, 50)}...` : errorMessage;
+            ShowToast("error", "Error", errorMessage);
         }
     };
 
     const handleToggleAvailability = async (rewardID) => {
         try {
-            const response = await Server.put(
-                `/api/RewardItem/${rewardID}/toggle-availability`
-            );
-
+            const response = await Server.put(`/api/RewardItem/${rewardID}/toggle-availability`);
+    
             if (response.status === 200) {
                 setRewardItems(prevItems =>
                     prevItems.map(item =>
                         item.rewardID === rewardID ? response.data.data : item
                     )
                 );
-                ShowToast("success", "Success", response.data.message);
+    
+                const successMessage = response.data.message?.substring(0, 50) || "Reward availability updated!";
+                ShowToast("success", "Success", successMessage);
             } else {
                 throw new Error(response.data.error || "Failed to toggle availability");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            let errorMessage = "Failed to toggle reward availability.";
+    
+            if (error.response) {
+                errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
+            } else if (error.request) {
+                errorMessage = "No response from the server. Please check your internet connection.";
+            } else {
+                errorMessage = `Unexpected error: ${error.message}`;
+            }
+    
+            errorMessage = errorMessage.length > 50 ? `${errorMessage.substring(0, 50)}...` : errorMessage;
+            ShowToast("error", "Error", errorMessage);
         }
     };
 
@@ -256,10 +280,27 @@ const InventoryManagement = () => {
 														fetchRewardItems();
 														setAddItem(null);
 														onClose();
-														ShowToast("success", "Success", response.data.message);
+                                                        const successMessage = response.data.message?.substring(0, 50) || "Item added successfully!";
+                                                        ShowToast("success", "Success", successMessage);
 													}
 												} catch (error) {
-													ShowToast("error", "Error", error.response?.data?.error || error.message);
+										            if (error.response) {
+                                                        // Server-side error
+                                                        if (error.response.status === 400) {
+                                                            errorMessage = "Validation error: Please check the data you submitted.";
+                                                        } else if (error.response.status === 500) {
+                                                            errorMessage = "Server error: Something went wrong on our end.";
+                                                        } else {
+                                                            errorMessage = error.response.data.message || errorMessage;
+                                                        }
+                                                    } else {
+                                                        // Other errors
+                                                        errorMessage = `Unexpected error: ${error.message}`;
+                                                    }
+                                                    // Substring the error message if it's too long
+                                                    errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
+                                            
+                                                    ShowToast("error", "Error", errorMessage);
 												}
                                             }}
                                     >{isLoading ? "Adding..." : "Submit"} </Button>

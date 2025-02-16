@@ -1,5 +1,5 @@
 
-import { Box, Heading, Text, Button, SimpleGrid, Spinner } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, SimpleGrid, Spinner, Show } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
@@ -50,7 +50,7 @@ function Dashboard() {
 				],
 			});
 		} catch (error) {
-			console.error("Error fetching data:", error);
+			ShowToast("error", "Error", "Failed to fetch recycling data.");
 		} finally {
 			setLoading(false);
 		}

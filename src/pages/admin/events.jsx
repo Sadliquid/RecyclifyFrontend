@@ -38,49 +38,68 @@ const EventsManagement = () => {
         setImageFile(e.target.files[0]);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        // Check if fields are filled
-        if (!title || !description || !eventDateTime || !imageFile) {
-            ShowToast("error", "Error", "All fields are required.");
-            return;
-        }
-    
-        const formData = new FormData();
-        formData.append("Title", title);
-        formData.append("Description", description);
-        formData.append("EventDateTime", eventDateTime);
-        formData.append("ImageFile", imageFile);
-    
-        setLoading(true); // Start loading
-        setIsSubmitting(true); // Start submission
-    
-        try {
-            const response = await server.post("/api/events", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-                transformRequest: (formData) => formData,
-            });
-    
-            ShowToast("success", "Success", response.data.message);
-            fetchEvents(); // Refresh events
-    
-            // Reset form fields
-            setTitle("");
-            setDescription("");
-            setEventDateTime(new Date().toISOString().slice(0, 16));
-            setImageFile(null);
-    
-            // Close modal after short delay
-            setTimeout(() => onClose(), 100);
-        } catch (error) {
-            ShowToast("error", "Error", "Failed to create event. Please try again.");
-        } finally {
-            setLoading(false); // Stop loading
-            setIsSubmitting(false); // Stop submission
-        }
-    };
-
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+	
+		// Check if fields are filled
+		if (!title || !description || !eventDateTime || !imageFile) {
+			ShowToast("error", "Error", "All fields are required.");
+			return;
+		}
+	
+		const formData = new FormData();
+		formData.append("Title", title);
+		formData.append("Description", description);
+		formData.append("EventDateTime", eventDateTime);
+		formData.append("ImageFile", imageFile);
+	
+		setLoading(true); // Start loading
+		setIsSubmitting(true); // Start submission
+	
+		try {
+			const response = await server.post("/api/events", formData, {
+				headers: { "Content-Type": "multipart/form-data" },
+				transformRequest: (formData) => formData,
+			});
+	
+			const message = response.data.message.length > 100 ? `${response.data.message.substring(0, 100)}...` : response.data.message;
+			ShowToast("success", "Success", message);
+			fetchEvents(); // Refresh events
+	
+			// Reset form fields
+			setTitle("");
+			setDescription("");
+			setEventDateTime(new Date().toISOString().slice(0, 16));
+			setImageFile(null);
+	
+			// Close modal after short delay
+			setTimeout(() => onClose(), 100);
+		} catch (error) {
+			let errorMessage = "Failed to create event. Please try again.";
+	
+			if (error.response) {
+				// Server-side error
+				if (error.response.status === 400) {
+					errorMessage = "Validation error: Please check the data you submitted.";
+				} else if (error.response.status === 500) {
+					errorMessage = "Server error: Something went wrong on our end.";
+				} else {
+					errorMessage = error.response.data.message || errorMessage;
+				}
+			} else {
+				// Other errors
+				errorMessage = `Unexpected error: ${error.message}`;
+			}
+			// Substring the error message if it's too long
+			errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
+	
+			ShowToast("error", "Error", errorMessage);
+		} finally {
+			setLoading(false); // Stop loading
+			setIsSubmitting(false); // Stop submission
+		}
+	};
+	
     return (
         <Box p={6}>
             <Heading fontSize="30px" mt={10} mb={10}>Manage Events</Heading>
