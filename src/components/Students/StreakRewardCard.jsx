@@ -8,15 +8,19 @@ import server from "../../../networking";
 function StreakRewardCard({ studentID, streak, lastClaimedStreak, updateStudentPoints }) {
     const [giftClaimed, setGiftClaimed] = useState(false);
 
-    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Singapore' });;
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Singapore' });
 
-    var lastClaimedStreakDate = null;
-    if (lastClaimedStreak !== null && lastClaimedStreak !== undefined) {
+    let lastClaimedStreakDate = null;
+    if (lastClaimedStreak) {
         lastClaimedStreakDate = new Date(lastClaimedStreak).toISOString().split('T')[0];
     }
 
-    const remainingStreaks = (7 - (streak % 7)) % 7;
-    const isClaimable = (remainingStreaks === 0) && (lastClaimedStreakDate !== today);
+    let remainingStreaks = (7 - (streak % 7)) % 7;
+    if (streak === 0) {
+        remainingStreaks = 7;
+    }
+
+    const isClaimable = remainingStreaks === 0 && lastClaimedStreakDate !== today && streak > 0;
 
     const handleAwardGift = () => {
         const promise = new Promise((resolve, reject) => {

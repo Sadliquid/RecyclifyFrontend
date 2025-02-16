@@ -31,6 +31,8 @@ const CustomPickersDay = styled(PickersDay, {
 }));
 
 function isHighlighted(day, streak) {
+    if (streak <= 0) return false;
+    
     const today = dayjs();
     const streakStart = today.subtract(streak - 1, 'day');
     return day.isBetween(streakStart, today, 'day', '[]');
