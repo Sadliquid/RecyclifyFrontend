@@ -26,8 +26,14 @@ const EventsManagement = () => {
         try {
             const response = await server.get("/api/events");
             setEvents(response.data.events);
-        } catch {
-            ShowToast("error", "Error", "Failed to fetch events.");
+        } catch (error) {
+			if (response.data.message.startsWith("ERROR:")) {
+				let message = response.data.message.substring("ERROR: ".length);
+				ShowToast("error", "Error", message);
+			} else if (response.data.message.startsWith("UERROR:")) {
+				let message = response.data.message.substring("UERROR: ".length);
+				ShowToast("error", "Error", message);
+			}
         } finally {
             setFetching(false); // Set fetching state to false after loading
         }
@@ -61,8 +67,10 @@ const EventsManagement = () => {
 				transformRequest: (formData) => formData,
 			});
 	
-			const message = response.data.message.length > 100 ? `${response.data.message.substring(0, 100)}...` : response.data.message;
-			ShowToast("success", "Success", message);
+			if (response.data.message.startsWith("SUCCESS:")) {
+				let message = response.data.message.substring("SUCCESS: ".length);
+				ShowToast("success", "Success", message);
+			}
 			fetchEvents(); // Refresh events
 	
 			// Reset form fields
@@ -74,25 +82,13 @@ const EventsManagement = () => {
 			// Close modal after short delay
 			setTimeout(() => onClose(), 100);
 		} catch (error) {
-			let errorMessage = "Failed to create event. Please try again.";
-	
-			if (error.response) {
-				// Server-side error
-				if (error.response.status === 400) {
-					errorMessage = "Validation error: Please check the data you submitted.";
-				} else if (error.response.status === 500) {
-					errorMessage = "Server error: Something went wrong on our end.";
-				} else {
-					errorMessage = error.response.data.message || errorMessage;
-				}
-			} else {
-				// Other errors
-				errorMessage = `Unexpected error: ${error.message}`;
+			if (response.data.message.startsWith("ERROR:")) {
+				let message = response.data.message.substring("ERROR: ".length);
+				ShowToast("error", "Error", message);
+			} else if (response.data.message.startsWith("UERROR:")) {
+				let message = response.data.message.substring("UERROR: ".length);
+				ShowToast("error", "Error", message);
 			}
-			// Substring the error message if it's too long
-			errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
-	
-			ShowToast("error", "Error", errorMessage);
 		} finally {
 			setLoading(false); // Stop loading
 			setIsSubmitting(false); // Stop submission

@@ -37,8 +37,13 @@ const ContactFormManagement = () => {
                 throw new Error(response.data.error || "Failed to fetch messages");
             }
         } catch (error) {
-            setErrorMessage(error.response?.data?.error || error.message);
-            setIsLoading(false);
+			if (response.data.message.startsWith("ERROR:")) {
+				let message = response.data.message.substring("ERROR: ".length);
+				ShowToast("error", "Error", message);
+			} else if (response.data.message.startsWith("UERROR:")) {
+				let message = response.data.message.substring("UERROR: ".length);
+				ShowToast("error", "Error", message);
+			}
         }
     };
 
@@ -77,30 +82,23 @@ const ContactFormManagement = () => {
                         message.id === selectedMessage.id ? { ...message, hasReplied: true } : message
                     )
                 );
-                const successMessage = "Reply sent and marked as replied.";
-                ShowToast("success", "Success", successMessage.length > 100 ? `${successMessage.substring(0, 100)}...` : successMessage);
+				console.log(response.data.message);
+				if (response.data.message.startsWith("SUCCESS:")) {
+					let message = response.data.message.substring("SUCCESS: ".length);
+					ShowToast("success", "Success", message);
+				}
                 setIsDialogOpen(false); // ✅ Close dialog AFTER sending succeeds
             } else {
                 throw new Error(markRepliedResponse.data.error || "Failed to mark as replied");
             }
         } catch (error) {
-			if (error.response) {
-				// Server-side error
-				if (error.response.status === 400) {
-					errorMessage = "Validation error: Please check the data you submitted.";
-				} else if (error.response.status === 500) {
-					errorMessage = "Server error: Something went wrong on our end.";
-				} else {
-					errorMessage = error.response.data.message || errorMessage;
-				}
-			} else {
-				// Other errors
-				errorMessage = `Unexpected error: ${error.message}`;
+			if (response.data.message.startsWith("ERROR:")) {
+				let message = response.data.message.substring("ERROR: ".length);
+				ShowToast("error", "Error", message);
+			} else if (response.data.message.startsWith("UERROR:")) {
+				let message = response.data.message.substring("UERROR: ".length);
+				ShowToast("error", "Error", message);
 			}
-			// Substring the error message if it's too long
-			errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
-	
-			ShowToast("error", "Error", errorMessage);
         } finally {
             setIsSendingEmail(false); // End loading state
         }

@@ -36,7 +36,13 @@ const InventoryManagement = () => {
                 throw new Error(response.data.error || `Failed to fetch reward items`);
             }
         } catch (error) {
-            setErrorMessage(error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
             setIsLoading(false);
         }
     };
@@ -85,24 +91,21 @@ const InventoryManagement = () => {
                 ));
                 setEditingItem(null);
     
-                const successMessage = response.data.message?.substring(0, 50) || "Reward item updated successfully!";
-                ShowToast("success", "Success", successMessage);
+            if (response.data.message.startsWith("SUCCESS:")) {
+                let message = response.data.message.substring("SUCCESS: ".length);
+                ShowToast("success", "Success", message);
+            }
             } else {
                 throw new Error(response.data.error || "Failed to update reward item");
             }
         } catch (error) {
-            let errorMessage = "Failed to update reward item.";
-    
-            if (error.response) {
-                errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
-            } else if (error.request) {
-                errorMessage = "No response from the server. Please check your internet connection.";
-            } else {
-                errorMessage = `Unexpected error: ${error.message}`;
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
             }
-    
-            errorMessage = errorMessage.length > 50 ? `${errorMessage.substring(0, 50)}...` : errorMessage;
-            ShowToast("error", "Error", errorMessage);
         }
     };
 
@@ -117,27 +120,23 @@ const InventoryManagement = () => {
                     )
                 );
     
-                const successMessage = response.data.message?.substring(0, 50) || "Reward availability updated!";
-                ShowToast("success", "Success", successMessage);
+            if (response.data.message.startsWith("SUCCESS:")) {
+                let message = response.data.message.substring("SUCCESS: ".length);
+                ShowToast("success", "Success", message);
+            }
             } else {
                 throw new Error(response.data.error || "Failed to toggle availability");
             }
         } catch (error) {
-            let errorMessage = "Failed to toggle reward availability.";
-    
-            if (error.response) {
-                errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
-            } else if (error.request) {
-                errorMessage = "No response from the server. Please check your internet connection.";
-            } else {
-                errorMessage = `Unexpected error: ${error.message}`;
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
             }
-    
-            errorMessage = errorMessage.length > 50 ? `${errorMessage.substring(0, 50)}...` : errorMessage;
-            ShowToast("error", "Error", errorMessage);
         }
     };
-
 
     const submitRewardItem = async (addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage) => {
         const formData = new FormData();
@@ -160,30 +159,19 @@ const InventoryManagement = () => {
             fetchRewardItems();
             setAddItem(null);
             onClose();
-            const successMessage = response.data.message?.substring(0, 50) || "Item added successfully!";
-            ShowToast("success", "Success", successMessage);
+            if (response.data.message.startsWith("SUCCESS:")) {
+                let message = response.data.message.substring("SUCCESS: ".length);
+                ShowToast("success", "Success", message);
+            }
           }
         } catch (error) {
-          let errorMessage = "";
-      
-          if (error.response) {
-            // Server-side error
-            if (error.response.status === 400) {
-              errorMessage = "Validation error: Please check the data you submitted.";
-            } else if (error.response.status === 500) {
-              errorMessage = "Server error: Something went wrong on our end.";
-            } else {
-              errorMessage = error.response.data.message;
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
             }
-          } else {
-            // Other errors
-            errorMessage = `Unexpected error: ${error.message}`;
-          }
-      
-          // Substring the error message if it's too long
-          errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
-          setErrorMessage(errorMessage);
-          ShowToast("error", "Error", errorMessage);
         }
       };
       

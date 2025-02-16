@@ -26,11 +26,6 @@ const UserManagement = () => {
         }
     }, [loaded]);
         // Reset the form to its initial state (undo changes)
-    const handleCancel = () => {
-        setEditingUser(null); // Reset the form state
-        onClose(); // Close the modal
-    };
-
     // Fetch users from the backend
     const fetchUsers = async () => {
         try {
@@ -96,12 +91,21 @@ const UserManagement = () => {
 
             if (response.status === 200) {
                 setUsers(users.filter((user) => user.id !== userToDelete));
-                ShowToast("success", "Success", response.data.message);
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             } else {
                 throw new Error(response.data.error || "Failed to delete user");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         } finally {
             setIsDeleting(false);
             onClose();
@@ -122,10 +126,19 @@ const UserManagement = () => {
                 await fetchUsers();
                 setEditingUser(null);
                 onClose();
-                ShowToast("success", "Success", response.data.message);
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -146,12 +159,21 @@ const UserManagement = () => {
                     )
                 );
                 setEditingUser(null);
-                ShowToast("success", "Success", response.data.message);
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             } else {
                 throw new Error(response.data.error || "Failed to update user");
             }
         } catch (error) {
-            ShowToast("error", "Error", error.response?.data?.error || error.message);
+            if (response.data.message.startsWith("ERROR:")) {
+                let message = response.data.message.substring("ERROR: ".length);
+                ShowToast("error", "Error", message);
+            } else if (response.data.message.startsWith("UERROR:")) {
+                let message = response.data.message.substring("UERROR: ".length);
+                ShowToast("error", "Error", message);
+            }
         }
     };
     
