@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react';
 import { Box, Button, Text, Flex, Icon } from '@chakra-ui/react';
 import { toaster } from "@/components/ui/toaster";
@@ -242,7 +243,7 @@ function ImageRecognition() {
                             <DialogBody>
                                 <Flex direction="column" align="center" textAlign="center" py={4}>
                                     <Text fontSize="2xl" fontFamily={"Lilita One"} fontWeight="bold" mb={5} backgroundColor={"#4DCBA4"} bgClip="text">
-                                        Detected material: {itemCategory}
+                                        {itemCategory == "No match" ? "No match found" : itemCategory}
                                     </Text>
                                     <Box
                                         px={4}
@@ -252,9 +253,15 @@ function ImageRecognition() {
                                         display="inline-flex"
                                         alignItems="center"
                                     >
-                                        <Text fontSize="lg" color={itemRecyclable ? 'green.600' : 'red.600'}>
-                                            {itemRecyclable ? `♻️ ${itemCategory} is Recyclable!` : `🚫 ${itemCategory} is NOT Recyclable`}
-                                        </Text>
+                                        {itemCategory == "No match" ? (
+                                            <Text fontSize="lg" color={itemRecyclable ? 'green.600' : 'red.600'}>
+                                                ❌ We couldn't find a match for this item.
+                                            </Text>
+                                        ) : (
+                                            <Text fontSize="lg" color={itemRecyclable ? 'green.600' : 'red.600'}>
+                                                {itemRecyclable ? `♻️ ${itemCategory} is Recyclable!` : `🚫 ${itemCategory} is NOT Recyclable`}
+                                            </Text>
+                                        )}
                                     </Box>
                                     
                                     <Box mt={8} w="full">
