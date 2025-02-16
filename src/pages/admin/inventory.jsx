@@ -138,6 +138,55 @@ const InventoryManagement = () => {
         }
     };
 
+
+    const submitRewardItem = async (addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage) => {
+        const formData = new FormData();
+        formData.append("RewardTitle", addItem.title);
+        formData.append("RewardDescription", addItem.description);
+        formData.append("RequiredPoints", addItem.points);
+        formData.append("RewardQuantity", addItem.quantity);
+        formData.append("IsAvailable", addItem.isAvailable);
+        formData.append("ImageFile", addItem.image);
+      
+        try {
+          const response = await Server.post("/api/RewardItem", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            transformRequest: (formData) => formData,
+          });
+      
+          if (response.status === 200) {
+            fetchRewardItems();
+            setAddItem(null);
+            onClose();
+            const successMessage = response.data.message?.substring(0, 50) || "Item added successfully!";
+            ShowToast("success", "Success", successMessage);
+          }
+        } catch (error) {
+          let errorMessage = "";
+      
+          if (error.response) {
+            // Server-side error
+            if (error.response.status === 400) {
+              errorMessage = "Validation error: Please check the data you submitted.";
+            } else if (error.response.status === 500) {
+              errorMessage = "Server error: Something went wrong on our end.";
+            } else {
+              errorMessage = error.response.data.message;
+            }
+          } else {
+            // Other errors
+            errorMessage = `Unexpected error: ${error.message}`;
+          }
+      
+          // Substring the error message if it's too long
+          errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
+          setErrorMessage(errorMessage);
+          ShowToast("error", "Error", errorMessage);
+        }
+      };
+      
     if (isLoading) {
         return <Spinner />;
     }
@@ -257,51 +306,7 @@ const InventoryManagement = () => {
 										isDisabled={isLoading}
                                         onClick={async () => {
 											setIsLoading(true);
-                                                const formData = new FormData();
-                                                formData.append("RewardTitle", addItem.title);
-                                                formData.append("RewardDescription", addItem.description);
-                                                formData.append("RequiredPoints", addItem.points);
-                                                formData.append("RewardQuantity", addItem.quantity);
-                                                formData.append("IsAvailable", addItem.isAvailable);
-												formData.append("ImageFile", addItem.image);
-
-												try {
-													const response = await Server.post(
-														"/api/RewardItem",
-														formData,
-														{
-															headers: {
-																"Content-Type": "multipart/form-data",
-															},
-															transformRequest: (formData) => formData,
-														}
-													);
-													if (response.status === 200) {
-														fetchRewardItems();
-														setAddItem(null);
-														onClose();
-                                                        const successMessage = response.data.message?.substring(0, 50) || "Item added successfully!";
-                                                        ShowToast("success", "Success", successMessage);
-													}
-												} catch (error) {
-										            if (error.response) {
-                                                        // Server-side error
-                                                        if (error.response.status === 400) {
-                                                            setErrorMessage("Validation error: Please check the data you submitted.");
-                                                        } else if (error.response.status === 500) {
-                                                            setErrorMessage("Server error: Something went wrong on our end.");
-                                                        } else {
-                                                            setErrorMessage(error.response.data.message);
-                                                        }
-                                                    } else {
-                                                        // Other errors
-                                                        setErrorMessage(`Unexpected error: ${error.message}`);
-                                                    }
-                                                    // Substring the error message if it's too long
-                                                    errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
-                                            
-                                                    ShowToast("error", "Error", errorMessage);
-												}
+                                            submitRewardItem(addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage);
                                             }}
                                     >{isLoading ? "Adding..." : "Submit"} </Button>
                                 </DialogFooter>
