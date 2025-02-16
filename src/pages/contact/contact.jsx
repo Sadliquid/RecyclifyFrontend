@@ -18,7 +18,10 @@ const ContactForm = () => {
             });
     
             if (response.status === 200) {
-                ShowToast('success', 'Success', response.data.message);
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
                 setName('');
                 setEmail('');
                 setMessage('');

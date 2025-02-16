@@ -67,7 +67,7 @@ const ContactFormManagement = () => {
             );
 
             if (emailResponse.status !== 200) {
-                throw new Error(emailResponse.data.error || "Failed to send email");
+				ShowToast("error", "Error", "Failed to send email");
             }
 
             const markRepliedResponse = await Server.put(
@@ -85,7 +85,7 @@ const ContactFormManagement = () => {
 					ShowToast("success", "Success", message);
 				}
             } else {
-                throw new Error(markRepliedResponse.data.error || "Failed to mark as replied");
+				ShowToast("error", "Error", markRepliedResponse.data.error || "Failed to mark as replied");
             }
         } catch (error) {
 			if (response.data.message.startsWith("ERROR:")) {
