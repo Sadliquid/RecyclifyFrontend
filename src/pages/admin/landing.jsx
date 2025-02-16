@@ -1,5 +1,5 @@
 
-import { Box, Heading, Text, Button, SimpleGrid, Spinner, Show } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import server from "../../../networking";
 import { useNavigate } from "react-router-dom";
+import ShowToast from "../../Extensions/ShowToast";
 
 // Register ChartJS components
 ChartJS.register(
@@ -49,7 +50,7 @@ function Dashboard() {
 					},
 				],
 			});
-		} catch (error) {
+		} catch {
 			ShowToast("error", "Error", "Failed to fetch recycling data.");
 		} finally {
 			setLoading(false);

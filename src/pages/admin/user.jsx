@@ -25,11 +25,6 @@ const UserManagement = () => {
             fetchUsers();
         }
     }, [loaded]);
-        // Reset the form to its initial state (undo changes)
-    const handleCancel = () => {
-        setEditingUser(null); // Reset the form state
-        onClose(); // Close the modal
-    };
 
     // Fetch users from the backend
     const fetchUsers = async () => {

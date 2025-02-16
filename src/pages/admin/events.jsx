@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import server from "../../../networking";
-import { Button, Stack, Input, useDisclosure, Box, Heading, Spinner, Table, IconButton } from "@chakra-ui/react";
+import { Button, Stack, Input, useDisclosure, Box, Heading, Spinner, Table } from "@chakra-ui/react";
 import { DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MdAdd } from "react-icons/md";
 import { Field } from "@/components/ui/field";
 import ShowToast from "../../Extensions/ShowToast";
-import { FaTrashAlt, FaEdit } from "react-icons/fa"; // For edit and delete icons
 
 const EventsManagement = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();

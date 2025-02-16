@@ -287,15 +287,15 @@ const InventoryManagement = () => {
 										            if (error.response) {
                                                         // Server-side error
                                                         if (error.response.status === 400) {
-                                                            errorMessage = "Validation error: Please check the data you submitted.";
+                                                            setErrorMessage("Validation error: Please check the data you submitted.");
                                                         } else if (error.response.status === 500) {
-                                                            errorMessage = "Server error: Something went wrong on our end.";
+                                                            setErrorMessage("Server error: Something went wrong on our end.");
                                                         } else {
-                                                            errorMessage = error.response.data.message || errorMessage;
+                                                            setErrorMessage(error.response.data.message);
                                                         }
                                                     } else {
                                                         // Other errors
-                                                        errorMessage = `Unexpected error: ${error.message}`;
+                                                        setErrorMessage(`Unexpected error: ${error.message}`);
                                                     }
                                                     // Substring the error message if it's too long
                                                     errorMessage = errorMessage.length > 100 ? `${errorMessage.substring(0, 100)}...` : errorMessage;
