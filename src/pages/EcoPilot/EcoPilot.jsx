@@ -1,7 +1,8 @@
+/* eslint-disable react/no-unknown-property */
 import { useState } from "react";
 import Server from "../../../networking";
-import { Box, Heading, List, ListItem, CardBody, Input, Button, Stack, Text, Flex, Icon, Spinner, CardRoot } from "@chakra-ui/react";
-import { FaRobot, FaArrowRight } from "react-icons/fa";
+import { Box, Heading, List, ListItem, CardBody, Input, Button, Stack, Text, Flex, Spacer, Icon, Spinner, CardRoot } from "@chakra-ui/react";
+import { FaRobot, FaQuestionCircle, FaArrowRight } from "react-icons/fa";
 import ShowToast from "../../Extensions/ShowToast";
 const EcoPilot = () => {
     const [inputValue, setInputValue] = useState("");
@@ -40,8 +41,8 @@ const EcoPilot = () => {
 
     const suggestedTopics = [
         "How does recycling work?",
-        "Sustainable living tips",
-        "Understanding eco-points",
+        "What does a student need to do to earn leafs?",
+        "Understanding leafs",
         "Leaderboard system explained",
         "Contact support team"
     ];
@@ -56,35 +57,36 @@ const EcoPilot = () => {
                 </Flex>
 
                 <Heading as="h3" size="md" mb={4} color="teal.800">Quick Questions</Heading>
-                <List.Root spacing={3}>
-                    {suggestedTopics.map((topic, index) => (
-                        <ListItem
-                            key={index}
-                            bg="white"
-                            borderRadius="lg"
-                            p={4}
-                            cursor="pointer"
-                            _hover={{ bg: "teal.100", transform: "translateX(8px)" }}
-                            transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
-                            onClick={() => handleSuggestionClick(topic)}
-                            boxShadow="sm"
-                        >
-                            <Flex align="center" justify="space-between">
-                                <Text fontSize="md" color="teal.800" fontWeight="500">{topic}</Text>
-                                <Icon as={FaArrowRight} color="teal.600" />
-                            </Flex>
-                        </ListItem>
-                    ))}
-                </List.Root>
+                <List.Root spacing={3} style={{ listStyleType: "none" }}>
+                {suggestedTopics.map((topic, index) => (
+                    <ListItem
+                        key={index}
+                        bg="white"
+                        borderRadius="lg"
+                        p={4}
+                        m={2}
+                        cursor="pointer"
+                        _hover={{ bg: "teal.100", transform: "translateX(8px)" }}
+                        transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+                        onClick={() => handleSuggestionClick(topic)}
+                        boxShadow="sm"
+                    >
+                        <Text fontSize="md" color="teal.800" fontWeight="500">{topic}</Text>
+                    </ListItem>
+                ))}
+            </List.Root>
+
             </Box>
 
             {/* Main Chat Area */}
-            <Box flex={1} bg="white" borderRadius="2xl" boxShadow="xl">
+            <Box flex={1} bg="white" borderRadius="2xl" >
                 <CardRoot borderRadius="2xl">
                     <CardBody p={8}>
-                        <Flex align="center" mb={8}>
+                    <Flex align="center" justify="center" mb={8}>
                             <Icon as={FaRobot} boxSize={8} color="teal.600" mr={3} />
-                            <Heading as="h2" size="xl" color="teal.800">Ask EcoPilot</Heading>
+                            <Heading as="h2" size="xl" color="teal.800" textAlign="center">
+                                Ask EcoPilot
+                            </Heading>
                         </Flex>
 
                         <form onSubmit={handleSubmit}>
@@ -110,7 +112,7 @@ const EcoPilot = () => {
                                 <Flex justify="flex-end">
                                     <Button
                                         type="submit"
-                                        colorScheme="teal"
+                                        bg={"#4DCBA4"}
                                         size="lg"
                                         px={10}
                                         isLoading={loading}
