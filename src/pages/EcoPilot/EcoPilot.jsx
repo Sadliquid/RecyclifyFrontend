@@ -2,8 +2,8 @@
 import { useState } from "react";
 import Server from "../../../networking";
 import { Box, Heading, List, ListItem, CardBody, Input, Button, Stack, Text, Flex, Spacer, Icon, Spinner, CardRoot } from "@chakra-ui/react";
-import { FaRobot, FaQuestionCircle } from "react-icons/fa";
-
+import { FaRobot, FaQuestionCircle, FaArrowRight } from "react-icons/fa";
+import ShowToast from "../../Extensions/ShowToast";
 const EcoPilot = () => {
     const [inputValue, setInputValue] = useState("");
     const [response, setResponse] = useState("");
@@ -13,112 +13,138 @@ const EcoPilot = () => {
         setInputValue(event.target.value);
     };
 
+    const handleSuggestionClick = (topic) => {
+        setInputValue(`${topic}? `);
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!inputValue.trim()) {
-            alert("Please enter a valid prompt.");
+            ShowToast("Please enter a question", "error");
             return;
         }
         setLoading(true);
-        setResponse(""); // Clear previous response while loading
+        setResponse("");
 
         try {
             const result = await Server.post(`/api/chat-completion/prompt`, {
                 userPrompt: inputValue
-            }, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
             });
             setResponse(result.data);
         } catch (error) {
             console.error("Error fetching response:", error);
-            setResponse("Failed to get a response from the server.");
+            ShowToast("An error occurred while fetching response", "error");
         } finally {
             setLoading(false);
         }
     };
 
     const suggestedTopics = [
-        "Recycling", "Sustainability", "Points", "Leaderboard", "Contact"
+        "How does recycling work?",
+        "Sustainable living tips",
+        "Understanding eco-points",
+        "Leaderboard system explained",
+        "Contact support team"
     ];
 
     return (
-        <Flex p={8} maxW="1200px" mx="auto" gap={8} alignItems="flex-start" direction={{ base: "column", md: "row" }}>
-            <Box w={{ base: "100%", md: "25%" }}>
-                <Flex direction="column" alignItems="center" mt={8} mb={5}>
-                    <Icon as={FaRobot} boxSize={8} color="teal.500" />
-                    <Text fontSize="xl" fontWeight="bold" color="teal.700" mt={2}>EcoPilot</Text>
+        <Flex p={8} maxW="1400px" mx="auto" gap={8} direction={{ base: "column", md: "row" }} minH="80vh">
+            {/* Left Sidebar */}
+            <Box w={{ base: "100%", md: "30%" }} bg="teal.50" borderRadius="xl" p={6} boxShadow="md">
+                <Flex direction="column" alignItems="center" mb={8}>
+                    <Icon as={FaRobot} boxSize={10} color="teal.600" />
+                    <Text fontSize="2xl" fontWeight="bold" color="teal.800" mt={3}>EcoPilot Guide</Text>
                 </Flex>
 
-                <Heading as="h1" size="lg" mb={6} color="teal.700">Suggested Topics</Heading>
-                <List.Root spacing={3} style={{ listStyleType: "none" }}>
+                <Heading as="h3" size="md" mb={4} color="teal.800">Quick Questions</Heading>
+                <List.Root spacing={3}>
                     {suggestedTopics.map((topic, index) => (
                         <ListItem
                             key={index}
                             bg="white"
-                            borderRadius="md"
-                            p={3}
+                            borderRadius="lg"
+                            p={4}
                             cursor="pointer"
-                            _hover={{ bg: "teal.50", transform: "translateX(5px)" }}
-                            transition="all 0.2s"
+                            _hover={{ bg: "teal.100", transform: "translateX(8px)" }}
+                            transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+                            onClick={() => handleSuggestionClick(topic)}
+                            boxShadow="sm"
                         >
-                            <Flex align="center">
-                                <Icon as={FaQuestionCircle} color="teal.500" mr={2} />
-                                <Text fontSize="md" color="gray.700">{topic}</Text>
+                            <Flex align="center" justify="space-between">
+                                <Text fontSize="md" color="teal.800" fontWeight="500">{topic}</Text>
+                                <Icon as={FaArrowRight} color="teal.600" />
                             </Flex>
                         </ListItem>
                     ))}
                 </List.Root>
             </Box>
 
-            <Box w={{ base: "100%", md: "75%" }}>
-                <CardRoot borderRadius="lg" boxShadow="lg">
+            {/* Main Chat Area */}
+            <Box flex={1} bg="white" borderRadius="2xl" boxShadow="xl">
+                <CardRoot borderRadius="2xl">
                     <CardBody p={8}>
-                        <Flex justify="space-between" alignItems="center" mb={6}>
-                            <Heading as="h2" size="lg" color="teal.700">EcoPilot</Heading>
-                            <Spacer />
-                            <Text color="gray.500" fontSize="sm">Having doubts? EcoPilot is here to help.</Text>
+                        <Flex align="center" mb={8}>
+                            <Icon as={FaRobot} boxSize={8} color="teal.600" mr={3} />
+                            <Heading as="h2" size="xl" color="teal.800">Ask EcoPilot</Heading>
                         </Flex>
-                        <form onSubmit={handleSubmit} netlify>
+
+                        <form onSubmit={handleSubmit}>
                             <Stack spacing={6}>
                                 <Input
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                    placeholder="Enter a prompt here"
-                                    bg="white"
-                                    borderRadius="md"
-                                    _focus={{ borderColor: "teal.500", boxShadow: "0 0 0 1px teal.500" }}
+                                    placeholder="Ask me anything about sustainability, recycling, or your eco-points..."
+                                    bg="gray.50"
+                                    borderRadius="lg"
+                                    size="lg"
+                                    _focus={{
+                                        borderColor: "teal.500",
+                                        boxShadow: "0 0 0 2px rgba(72, 187, 120, 0.2)",
+                                        bg: "white"
+                                    }}
                                     isDisabled={loading}
+                                    height="60px"
+                                    fontSize="lg"
                                 />
+                                
                                 <Flex justify="flex-end">
                                     <Button
                                         type="submit"
-                                        backgroundColor="#3DA287"
+                                        colorScheme="teal"
                                         size="lg"
-                                        px={8}
+                                        px={10}
                                         isLoading={loading}
-                                        loadingText="Thinking..."
+                                        loadingText="Analyzing..."
+                                        rightIcon={<FaArrowRight />}
                                         isDisabled={loading || !inputValue.trim()}
+                                        borderRadius="xl"
+                                        fontWeight="bold"
+                                        bgGradient="linear(to-r, teal.400, teal.600)"
+                                        _hover={{ bgGradient: "linear(to-r, teal.500, teal.700)" }}
                                     >
-                                        Submit
+                                        Ask Now
                                     </Button>
                                 </Flex>
                             </Stack>
                         </form>
 
-                        {/* Show loading spinner while fetching response */}
                         {loading && (
-                            <Flex justify="center" align="center" mt={6}>
-                                <Spinner size="lg" color="teal.500" />
+                            <Flex justify="center" align="center" mt={10} mb={6}>
+                                <Spinner size="xl" color="teal.500" thickness="3px" />
+                                <Text ml={4} color="teal.600" fontWeight="500">EcoPilot is thinking...</Text>
                             </Flex>
                         )}
 
-                        {/* Show response once available */}
                         {response && !loading && (
-                            <Box mt={6} p={4} bg="teal.50" borderRadius="md">
-                                <Text fontSize="md" color="teal.700">{response}</Text>
+                            <Box mt={8} p={6} bg="teal.50" borderRadius="xl" borderLeft="4px solid" borderColor="teal.500">
+                                <Flex align="center" mb={3}>
+                                    <Icon as={FaRobot} color="teal.600" mr={2} />
+                                    <Text fontSize="lg" fontWeight="600" color="teal.800">EcoPilot Response:</Text>
+                                </Flex>
+                                <Text fontSize="md" color="teal.700" lineHeight="tall">
+                                    {response}
+                                </Text>
                             </Box>
                         )}
                     </CardBody>
