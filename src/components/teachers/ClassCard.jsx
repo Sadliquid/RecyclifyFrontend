@@ -7,7 +7,6 @@ import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/me
 import { DialogActionTrigger, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/join-code-clipboard"
 
-
 function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, onDelete, onEdit }) {
     const [editedClass, setEditedClass] = useState({
         className: classItem.className,
