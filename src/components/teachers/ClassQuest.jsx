@@ -167,10 +167,10 @@ function ClassQuest({ classData }) {
                         ))}
 
                         {/* Refresh Button */}
-                        <Button color="black" bg="#9F9FF8" borderRadius="xl" boxShadow="md" _hover={{ bg: '#6A6AFF' }} onClick={() => handleRefreshQuests(classData.classID, user.id)}>
+                        <Button color="black" bg="#4DCBA4" borderRadius="xl" boxShadow="md" _hover={{ bg: '#6A6AFF' }} onClick={() => handleRefreshQuests(classData.classID, user.id)}>
                             <Stack direction="row" align="center" justify="center">
-                                <FiRefreshCw />
-                                <Text>Re-generate Quests</Text>
+                                <FiRefreshCw color="white" fontWeight={"bold"} />
+                                <Text color="white" fontWeight={"bold"}>Re-generate Quests</Text>
                             </Stack>
                         </Button>
                     </Stack>
