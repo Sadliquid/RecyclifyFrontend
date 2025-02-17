@@ -111,7 +111,10 @@ function ImageRecognition() {
                     transition={{ duration: 0.6 }}
                 >
                     <Flex direction="column" align="center" textAlign="center" mb={3}>
-                        <motion.div>
+                        <motion.div
+                            animate={{ y: [-5, 5, -5] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        >
                             <Text
                                 backgroundColor={"#3BA684"}
                                 bgClip="text"
