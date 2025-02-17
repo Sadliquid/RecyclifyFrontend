@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../../slices/AuthState";
-import { Button, Box, Image } from "@chakra-ui/react";
+import { Button, Box, Image, Text } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu";
 import server from "../../../networking";
@@ -103,7 +103,7 @@ const ProfilePictureIcon = ({ onLogout }) => {
                     <MenuItem value="view-profile" onClick={handleViewProfile}>
                         View Profile
                     </MenuItem>
-                    <MenuItem value="logout" onClick={handleLogout}>
+                    <MenuItem value="logout" onClick={handleLogout} color="red">
                         Logout
                     </MenuItem>
                 </MenuContent>
