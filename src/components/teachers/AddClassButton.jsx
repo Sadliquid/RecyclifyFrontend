@@ -192,7 +192,7 @@ function AddClassButton({ onCreate }) {
                         <DialogActionTrigger asChild>
                             <Button
                                 variant="outline"
-                                bg="#FF8080"
+                                bg="red"
                                 color="white"
                                 onClick={handleCloseDialog}
                             >
