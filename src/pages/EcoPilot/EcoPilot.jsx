@@ -1,8 +1,7 @@
-/* eslint-disable react/no-unknown-property */
 import { useState } from "react";
 import Server from "../../../networking";
-import { Box, Heading, List, ListItem, CardBody, Input, Button, Stack, Text, Flex, Spacer, Icon, Spinner, CardRoot } from "@chakra-ui/react";
-import { FaRobot, FaQuestionCircle, FaArrowRight } from "react-icons/fa";
+import { Box, Heading, List, ListItem, CardBody, Input, Button, Stack, Text, Flex, Icon, Spinner, CardRoot } from "@chakra-ui/react";
+import { FaRobot, FaArrowRight } from "react-icons/fa";
 import ShowToast from "../../Extensions/ShowToast";
 const EcoPilot = () => {
     const [inputValue, setInputValue] = useState("");

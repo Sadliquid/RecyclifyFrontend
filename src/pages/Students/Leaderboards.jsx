@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Heading, Text, Image, HStack, Spinner, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Image, HStack, Button } from '@chakra-ui/react';
 import LeaderboardPlaceCard from '../../components/Students/LeaderboardPlaceCard';
 import LeaderboardProfileIcon from '../../components/Students/LeaderboardProfileIcon';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,10 @@ import { useSelector } from 'react-redux';
 import server from "../../../networking";
 import ShowToast from '../../Extensions/ShowToast';
 import { motion } from 'framer-motion';
+import { FiArrowRight, FiTrendingUp } from 'react-icons/fi';
+
+const MotionBox = motion(Box);
+const MotionButton = motion(Button);
 
 function Leaderboards() {
     const [allStudents, setAllStudents] = useState([]);
@@ -54,30 +58,65 @@ function Leaderboards() {
         }
     }, [loaded]);
 
-    if (checked == true && available == false) {
+    if (checked && !available) {
         return (
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+            <MotionBox
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minH="80vh"
+                bgGradient="linear(to-br, #6366f1 0%, #a855f7 50%, #ec4899 100%)"
             >
-                <Box 
-                    display="flex" 
-                    justifyContent="center" 
-                    alignItems="center" 
-                    flexDir="column" 
-                    height="80vh"
+                <MotionBox
+                    bg="whiteAlpha.900"
+                    p={8}
+                    borderRadius="2xl"
+                    boxShadow="2xl"
+                    textAlign="center"
                 >
-                    <Spinner 
-                        color="#3A9F83" 
-                        animationDuration="0.5s" 
-                        css={{ "--spinner-track-color": "colors.gray.200" }} 
-                    />
-                    <Text mt={4}>Leaderboard details not available. Please try again later.</Text>
-                    <Button backgroundColor={"#4DCBA4"} borderRadius={10} mt={5} onClick={() => navigate("/student/joinClass")}>Join a Class</Button>
-                </Box>
-            </motion.div>
-        )
+                    <MotionBox
+                        animate={{ y: [-5, 5, -5] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        display="inline-block"
+                        mb={6}
+                    >
+                        <FiTrendingUp size="48px" color="#4F46E5" />
+                    </MotionBox>
+                    <Heading
+                        backgroundColor="#4F46E5"
+                        bgClip="text"
+                        fontSize="4xl"
+                        fontWeight="extrabold"
+                        mb={4}
+                    >
+                        Leaderboard Unavailable
+                    </Heading>
+                    <Text color="gray.600" fontSize="lg" mb={6}>
+                        Leaderboard details not available. Please try again later.
+                    </Text>
+                    <MotionButton
+                        w="100%"
+                        size="lg"
+                        colorScheme="purple"
+                        backgroundColor="#4F46E5"
+                        _hover={{ bgGradient: 'linear(to-r, #6366f1, #a855f7)', transform: 'scale(1.02)' }}
+                        _active={{ transform: 'scale(0.98)' }}
+                        onClick={() => navigate("/student/joinClass")}
+                        rightIcon={<FiArrowRight />}
+                        fontWeight="bold"
+                        borderRadius="xl"
+                        py={6}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        Join a Class
+                    </MotionButton>
+                </MotionBox>
+            </MotionBox>
+        );
     }
 
     if (studentsFetched && user != null && sessionStudent != null) return (

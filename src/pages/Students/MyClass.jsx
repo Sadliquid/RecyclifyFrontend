@@ -1,4 +1,4 @@
-import { Box, Heading, Table, Flex, Image, Spinner, Text, Button, Tabs, Stack, Badge, Progress } from '@chakra-ui/react';
+import { Box, Heading, Table, Flex, Image, Text, Button, Tabs, Stack, Badge, Progress } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,10 @@ import { motion } from 'framer-motion';
 import { PiCloverFill } from 'react-icons/pi';
 import ShowToast from '../../Extensions/ShowToast';
 import server from '../../../networking';
+import { FiArrowRight, FiBookOpen } from 'react-icons/fi';
+
+const MotionBox = motion(Box);
+const MotionButton = motion(Button);
 
 function MyClass() {
     const { user, loaded, error } = useSelector((state) => state.auth);
@@ -106,30 +110,65 @@ function MyClass() {
         }
     }, [error, loaded, user, classID]);
 
-    if (checked == true && available == false) {
+    if (checked && !available) {
         return (
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+            <MotionBox
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minH="80vh"
+                bgGradient="linear(to-br, #6366f1 0%, #a855f7 50%, #ec4899 100%)"
             >
-                <Box 
-                    display="flex" 
-                    justifyContent="center" 
-                    alignItems="center" 
-                    flexDir="column" 
-                    height="80vh"
+                <MotionBox
+                    bg="whiteAlpha.900"
+                    p={8}
+                    borderRadius="2xl"
+                    boxShadow="2xl"
+                    textAlign="center"
                 >
-                    <Spinner 
-                        color="#3A9F83" 
-                        animationDuration="0.5s" 
-                        css={{ "--spinner-track-color": "colors.gray.200" }} 
-                    />
-                    <Text mt={4}>Class details not available. Please try again later.</Text>
-                    <Button backgroundColor={"#4DCBA4"} borderRadius={10} mt={5} onClick={() => navigate("/student/joinClass")}>Join a Class</Button>
-                </Box>
-            </motion.div>
-        )
+                    <MotionBox
+                        animate={{ y: [-5, 5, -5] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        display="inline-block"
+                        mb={6}
+                    >
+                        <FiBookOpen size="48px" color="#4F46E5" />
+                    </MotionBox>
+                    <Heading
+                        backgroundColor="#4F46E5"
+                        bgClip="text"
+                        fontSize="4xl"
+                        fontWeight="extrabold"
+                        mb={4}
+                    >
+                        No Class Found
+                    </Heading>
+                    <Text color="gray.600" fontSize="lg" mb={6}>
+                        Class details not available. Please try again later.
+                    </Text>
+                    <MotionButton
+                        w="100%"
+                        size="lg"
+                        colorScheme="purple"
+                        backgroundColor="#4F46E5"
+                        _hover={{ bgGradient: 'linear(to-r, #6366f1, #a855f7)', transform: 'scale(1.02)' }}
+                        _active={{ transform: 'scale(0.98)' }}
+                        onClick={() => navigate("/student/joinClass")}
+                        rightIcon={<FiArrowRight />}
+                        fontWeight="bold"
+                        borderRadius="xl"
+                        py={6}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        Join a Class
+                    </MotionButton>
+                </MotionBox>
+            </MotionBox>
+        );
     }
 
     if (available && !error && loaded && user && studentsList != null) return (
