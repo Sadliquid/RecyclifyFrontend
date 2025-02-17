@@ -213,7 +213,7 @@ const InventoryManagement = () => {
                     <Heading fontSize="30px" mt={10} mb={10}>Manage Rewards</Heading>
                     <VStack justifyContent="center" mb="4">
                         <Input
-                            placeholder="Search for reward items..."
+                            placeholder="Search for reward items by their title..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             width="400px"
