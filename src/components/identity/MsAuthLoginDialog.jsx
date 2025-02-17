@@ -116,7 +116,7 @@ const MsAuthLoginDialog = ({ isOpen, onClose, userId }) => {
                         loading={isLoading}
                         bg="#2D65FF"
                     >
-                        Save
+                        Verify
                     </Button>
                 </DialogFooter>
                 <DialogCloseTrigger />
