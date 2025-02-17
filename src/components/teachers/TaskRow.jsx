@@ -199,7 +199,7 @@ const TaskRow = ({ task, fetchTasks }) => {
 
                                 {/* Uploaded Images Carousel */}
                                 <Text fontSize="md" mt={4} fontWeight="bold">
-                                    Image(s) Uploaded by {task.student.name} from Class {task.class.className}:
+                                    Image(s) Uploaded by {task.student?.fName} {task.student?.lName} from Class {task.class.className}:
                                 </Text>
 
                                 {image && (
