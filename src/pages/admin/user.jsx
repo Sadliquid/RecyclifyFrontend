@@ -311,17 +311,18 @@ const UserManagement = () => {
                                                 placeholder="Enter class number"
                                             />
                                         </Field>
-                                        <Field label ="Class Description">
+                                        <Field label="Class Description">
                                             <Input
                                                 type="text"
                                                 value={editingUser?.classDescription || ""}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const value = e.target.value.slice(0, 60); // Limit to 60 characters
                                                     setEditingUser({
                                                         ...editingUser,
-                                                        classDescription: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Enter class description"
+                                                        classDescription: value,
+                                                    });
+                                                }}
+                                                placeholder="Enter class description (max 60 characters)"
                                             />
                                         </Field>
                                     </Stack>
