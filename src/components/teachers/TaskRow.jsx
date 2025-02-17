@@ -228,7 +228,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                                         </Text>
 
                                         <Box mt={4}>
-                                            <Field label="Task Reject Description" required>
+                                            <Field label="Task Reject Description (Provide a reason for rejection)">
                                                 <Input
                                                     placeholder="Enter rejection reason..."
                                                     value={rejectDescription}
