@@ -149,7 +149,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                                 <Text as="span" fontWeight="bold">
                                     {task.imageUrls?.split(",").length || 0}
                                 </Text>
-                                {" image(s) for verification."}
+                                {" image for verification."}
                             </Text>
 
                             {/* Status Badges */}
@@ -199,7 +199,7 @@ const TaskRow = ({ task, fetchTasks }) => {
 
                                 {/* Uploaded Images Carousel */}
                                 <Text fontSize="md" mt={4} fontWeight="bold">
-                                    Image(s) Uploaded by {task.student?.fName} {task.student?.lName} from Class {task.class.className}:
+                                    Image Uploaded by {task.student?.fName} {task.student?.lName} from Class {task.class.className}:
                                 </Text>
 
                                 {image && (
