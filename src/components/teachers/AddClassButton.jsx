@@ -24,7 +24,7 @@ function AddClassButton({ onCreate }) {
             } else if (!/^\d+$/.test(value)) {
                 error = "* Class name must contain only numbers.";
             } else if (value.length > 8) {
-                error = "* Class name cannot be more than 8 characters.";
+                error = "* Class name cannot be more than 8 digits.";
             }
         } else if (field === "classDescription") {
             if (!value) {
