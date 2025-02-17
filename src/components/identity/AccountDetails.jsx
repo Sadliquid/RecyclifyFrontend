@@ -90,9 +90,8 @@ function AccountDetails({ userDetails, setUserDetails }) {
                     formik.setFieldError('contactNumber', 'Contact number already exists');
                 }
                 ShowToast("error", "Invalid Input.", errorMessage);
-            } else {
-                console.log(err);
-                ShowToast("error", "Something went wrong.", "Please try again later.");
+            } else if (rawErrorMessage.startsWith("ERROR")) {
+                ShowToast("error", rawErrorMessage.substring("ERROR: ".length).trim());
             }
         }
     };
