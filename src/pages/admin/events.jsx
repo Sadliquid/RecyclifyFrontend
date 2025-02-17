@@ -101,7 +101,7 @@ const EventsManagement = () => {
 
     return (
         <Box p={6}>
-            <Heading fontSize="30px" mt={10} mb={10}>Manage Events</Heading>
+            <Heading fontSize="30px" mt={10} mb={10}>Create Events</Heading>
 
             {/* Show spinner when fetching events */}
             {fetching ? (
