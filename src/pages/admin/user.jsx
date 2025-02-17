@@ -17,15 +17,16 @@ const UserManagement = () => {
     const [editingUser, setEditingUser] = useState(null); // Track the user being edited
     const [userToDelete, setUserToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [emailError, setEmailError] = useState(false);
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    
+
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "admin") {
             fetchUsers();
         }
     }, [loaded]);
-        // Reset the form to its initial state (undo changes)
+    // Reset the form to its initial state (undo changes)
     // Fetch users from the backend
     const fetchUsers = async () => {
         try {
@@ -41,6 +42,14 @@ const UserManagement = () => {
         } catch (error) {
             setErrorMessage(error.response?.data?.error || error.message);
             setIsLoading(false);
+        }
+    };
+
+    const validateRole = (value) => {
+        const validRoles = ["teacher", "student"];
+        if (!validRoles.includes(value.toLowerCase())) {
+            ShowToast("error", "Error", "User role not accepted")
+        } else {
         }
     };
 
@@ -150,6 +159,10 @@ const UserManagement = () => {
 
     // Handle save button click (update user)
     const handleSave = async () => {
+        if (emailError) {
+            ShowToast("error", "Error", "Please enter a valid email address");
+            return;
+        }
         try {
             const response = await Server.put(
                 `/api/UserManagement/${editingUser.id}`,
@@ -182,7 +195,7 @@ const UserManagement = () => {
             }
         }
     };
-    
+
 
     return (
         <>
@@ -306,7 +319,7 @@ const UserManagement = () => {
                                                         ...editingUser,
                                                         classNumber: sanitizedValue,
                                                     })
-                                                    }
+                                                }
                                                 }
                                                 placeholder="Enter class number"
                                             />
@@ -335,20 +348,20 @@ const UserManagement = () => {
                                         </Button>
                                     </DialogTrigger>
                                     <Button
-                                    bg={"#4DCBA4"}
-                                    disabled={
-                                        !editingUser ||
-                                        !editingUser.name ||
-                                        !editingUser.fName ||
-                                        !editingUser.LName ||
-                                        !editingUser.email ||
-                                        !editingUser.password ||
-                                        !editingUser.contactNumber ||
-                                        !editingUser.classNumber ||
-                                        !editingUser.classDescription ||
-                                        editingUser.password.length < 8 || // Optional: add minimum password length check
-                                        !/\S+@\S+\.\S+/.test(editingUser.email) // Optional: simple email validation regex
-                                    }
+                                        bg={"#4DCBA4"}
+                                        disabled={
+                                            !editingUser ||
+                                            !editingUser.name ||
+                                            !editingUser.fName ||
+                                            !editingUser.LName ||
+                                            !editingUser.email ||
+                                            !editingUser.password ||
+                                            !editingUser.contactNumber ||
+                                            !editingUser.classNumber ||
+                                            !editingUser.classDescription ||
+                                            editingUser.password.length < 8 || // Optional: add minimum password length check
+                                            !/\S+@\S+\.\S+/.test(editingUser.email) // Optional: simple email validation regex
+                                        }
                                         onClick={() => {
                                             const formData = {
                                                 name: editingUser.name,
@@ -423,48 +436,54 @@ const UserManagement = () => {
                                         {editingUser?.id === user.id ? (
                                             <Input
                                                 value={editingUser.email}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        email: e.target.value,
-                                                    })
-                                                }
+                                                onChange={(e) => {
+                                                    setEditingUser({ ...editingUser, email: e.target.value });
+                                                }}
+                                                onBlur={(e) => {
+                                                    const emailValue = e.target.value;
+                                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                                    if (!emailRegex.test(emailValue) && emailValue !== "") {
+                                                        setEmailError(true);
+                                                        setEditingUser({ ...editingUser, email: "" }); // Clear invalid email if needed
+                                                    }
+                                                    else {
+                                                        setEmailError(false);
+                                                    }
+                                                }}
+                                                placeholder="Enter valid email"
                                             />
                                         ) : (
                                             user.email
                                         )}
                                     </Table.Cell>
+
                                     <Table.Cell color={"black"}>
                                         {editingUser?.id === user.id ? (
                                             <Input
                                                 value={editingUser.contactNumber}
                                                 onChange={(e) => {
-                                                    // Only allow numbers (sanitize input)
-                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        contactNumber: sanitizedValue,
-                                                    });
+                                                    // Allow only digits and ensure max 8 characters
+                                                    const sanitizedValue = e.target.value.replace(/\D/g, '');
+                                                    if (sanitizedValue.length <= 8) {
+                                                        setEditingUser({ ...editingUser, contactNumber: sanitizedValue });
+                                                    }
                                                 }}
+                                                onBlur={(e) => {
+                                                    if (e.target.value.length !== 8) {
+                                                        ShowToast("error", "Error", "Contact number must be exactly 8 digits");
+                                                        setEditingUser({ ...editingUser, contactNumber: "" }); // Clear if invalid
+                                                    }
+                                                }}
+                                                maxLength={8}
+                                                placeholder="Enter 8-digit number"
                                             />
                                         ) : (
                                             user.contactNumber
                                         )}
                                     </Table.Cell>
+
                                     <Table.Cell color={"black"}>
-                                        {editingUser?.id === user.id ? (
-                                            <Input
-                                                value={editingUser.userRole}
-                                                onChange={(e) =>
-                                                    setEditingUser({
-                                                        ...editingUser,
-                                                        userRole: e.target.value,
-                                                    })
-                                                }
-                                            />
-                                        ) : (
-                                            user.userRole
-                                        )}
+                                        {user.userRole}
                                     </Table.Cell>
                                     <Table.Cell>
                                         {editingUser?.id === user.id ? (
@@ -480,10 +499,7 @@ const UserManagement = () => {
                                                 >
                                                     <MdEdit size={20} />
                                                 </Button>
-                                                <DialogRoot
-                                                    isOpen={isOpen}
-                                                    isClose={onClose}
-                                                >
+                                                <DialogRoot isOpen={isOpen} isClose={onClose}>
                                                     <DialogTrigger asChild>
                                                         <Button
                                                             variant="link"
@@ -504,13 +520,10 @@ const UserManagement = () => {
                                                         </DialogBody>
                                                         <DialogFooter>
                                                             <DialogTrigger asChild>
-                                                                <Button
-                                                                    variant="outline"
-                                                                    onClick={onClose}
-                                                                >
+                                                                <Button variant="outline" onClick={onClose}>
                                                                     Cancel
                                                                 </Button>
-                                                            </DialogTrigger> 
+                                                            </DialogTrigger>
                                                             <Button
                                                                 backgroundColor={"red"}
                                                                 colorScheme="red"
@@ -528,6 +541,7 @@ const UserManagement = () => {
                                 </Table.Row>
                             ))}
                         </Table.Body>
+
                     </Table.Root>
                 )}
             </Stack>
