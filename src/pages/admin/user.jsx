@@ -110,12 +110,12 @@ const UserManagement = () => {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
         } finally {
             setIsDeleting(false);
@@ -145,12 +145,12 @@ const UserManagement = () => {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
         } finally {
             setIsLoading(false);
@@ -186,12 +186,12 @@ const UserManagement = () => {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
         }
     };

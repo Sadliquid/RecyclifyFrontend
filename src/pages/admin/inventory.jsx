@@ -39,12 +39,12 @@ const InventoryManagement = () => {
             setIsLoading(false);
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "User Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
         }
     };
@@ -103,9 +103,9 @@ const InventoryManagement = () => {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "User Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
                 ShowToast("An unexpected error occurred");
@@ -134,9 +134,9 @@ const InventoryManagement = () => {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "User Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
                 ShowToast("An unexpected error occurred");
@@ -173,12 +173,12 @@ const InventoryManagement = () => {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "User Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
         }
       };

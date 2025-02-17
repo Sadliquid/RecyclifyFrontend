@@ -29,12 +29,12 @@ const EventsManagement = () => {
         } catch (error) {
 			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
         } finally {
             setFetching(false); // Set fetching state to false after loading
@@ -86,12 +86,12 @@ const EventsManagement = () => {
 		} catch (error) {
 			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
-                    ShowToast(error.response.data.error.substring("UERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
-                    ShowToast(error.response.data.error.substring("ERROR: ".length));
+                    ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
 		} finally {
 			setLoading(false); // Stop loading
