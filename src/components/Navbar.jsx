@@ -36,6 +36,8 @@ function Navbar({ onLogout }) {
             } else if (user.userRole === "parent") {
                 setSidebar(<ParentSidebar />);
             }
+        } else {
+            setSidebar(<LoginSidebar />);
         }
     }
 
