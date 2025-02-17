@@ -159,7 +159,7 @@ function ClassQuest({ classData }) {
                                                     <Progress.Range bg="#6A6AFF" />
                                                 )}
                                             </Progress.Track>
-                                            <Progress.ValueText>{quest.amountCompleted / quest.totalAmountToComplete}%</Progress.ValueText>
+                                            <Progress.ValueText>{((quest.amountCompleted / quest.totalAmountToComplete) * 100).toFixed(1)}%</Progress.ValueText>
                                         </Stack>
                                     </Progress.Root>
                                 </Box>
