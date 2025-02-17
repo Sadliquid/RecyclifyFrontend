@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "@/components/ui/accordion";
-import { Heading, Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Heading, Box, Button, Text, VStack } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

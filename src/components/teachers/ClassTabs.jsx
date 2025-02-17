@@ -8,7 +8,7 @@ import { Text, VStack } from '@chakra-ui/react';
 import { LuBox } from "react-icons/lu"
 import { FaClipboardList } from "react-icons/fa6";
 import ClassQuest from './ClassQuest';
-import { ClipboardIconButton, ClipboardRoot, ClipboardButton } from "@/components/ui/join-code-clipboard"
+import { ClipboardIconButton, ClipboardRoot } from "@/components/ui/join-code-clipboard"
 
 function ClassTabs({ classData, students }) {
     const studentsList = students || [];
