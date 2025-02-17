@@ -282,7 +282,7 @@ const InventoryManagement = () => {
                                                 }
                                                 placeholder="Enter Quantity" />
                                         </Field>
-                                        <Field label="Is Available">
+                                        <Field>
                                             <Checkbox
                                                 isChecked={addItem?.isAvailable || false}
                                                 onChange={(e) =>
@@ -292,7 +292,7 @@ const InventoryManagement = () => {
                                                     })
                                                 }
                                             >
-                                                Is Available
+                                                Mark this Reward as Available
                                             </Checkbox>
                                         </Field>
                                         <Field label="Item Image">
