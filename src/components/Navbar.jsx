@@ -36,6 +36,8 @@ function Navbar({ onLogout }) {
             } else if (user.userRole === "parent") {
                 setSidebar(<ParentSidebar />);
             }
+        } else {
+            setSidebar(<LoginSidebar />);
         }
     }
 
@@ -64,6 +66,8 @@ function Navbar({ onLogout }) {
             if (loaded) {
                 if (user) {
                     conditionallyRenderSidebar();
+                } else {
+                    setSidebar(<LoginSidebar />);
                 }
             }
         } else {
