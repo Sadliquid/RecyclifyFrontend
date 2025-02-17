@@ -20,6 +20,8 @@ function AccountDetails({ userDetails, setUserDetails }) {
     const [isContactDialogOpen, setContactDialogOpen] = useState(false);
     const [isSendingVerificationEmail, setIsSendingVerificationEmail] = useState(false);
     const [isSendingVerificationSMS, setIsSendingVerificationSMS] = useState(false);
+    const [emailVerified, setEmailVerified] = useState(userDetails.emailVerified);
+    const [contactVerified, setContactVerified] = useState(userDetails.phoneVerified);
 
     useEffect(() => {
         if (hiddenDivRef.current && textareaRef.current) {
@@ -34,6 +36,14 @@ function AccountDetails({ userDetails, setUserDetails }) {
             setIsEditing(false);
         }
     }, [editedDetails, userDetails]);
+
+    const toggleEmailVerified = (value) => {
+        setEmailVerified(value);
+    };
+
+    const toggleContactVerified = (value) => {
+        setContactVerified(value);
+    };
 
     const handleSave = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -246,7 +256,7 @@ function AccountDetails({ userDetails, setUserDetails }) {
             {/* Unverified contact alerts */}
             {(!userDetails.emailVerified || !userDetails.phoneVerified) && (
                 <HStack spacing={4} mb={6}>
-                    {!userDetails.emailVerified && (
+                    {!emailVerified && (
                     <Alert.Root status="warning" w="100%">
                         <Alert.Indicator />
                         <Flex justify="space-between" align="center" w="100%">
@@ -267,7 +277,7 @@ function AccountDetails({ userDetails, setUserDetails }) {
                     </Alert.Root>
                     )}
 
-                    {!userDetails.phoneVerified && (
+                    {!contactVerified && (
                     <Alert.Root status="warning" w="100%">
                         <Alert.Indicator />
                         <Flex justify="space-between" align="center" w="100%">
@@ -289,8 +299,8 @@ function AccountDetails({ userDetails, setUserDetails }) {
                     )}
                 </HStack>
             )}
-            <EmailVerificationDialog isOpen={isEmailDialogOpen} onClose={() => setEmailDialogOpen(false)} />
-            <ContactVerificationDialog isOpen={isContactDialogOpen} onClose={() => setContactDialogOpen(false)} />
+            <EmailVerificationDialog isOpen={isEmailDialogOpen} onClose={() => setEmailDialogOpen(false)} toggleEmailVerified={toggleEmailVerified} />
+            <ContactVerificationDialog isOpen={isContactDialogOpen} onClose={() => setContactDialogOpen(false)} toggleContactVerified={toggleContactVerified} />
 
             {/* Action Bar */}
             <ActionBarRoot open={isEditing}>

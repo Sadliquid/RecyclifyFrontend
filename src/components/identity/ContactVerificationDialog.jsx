@@ -7,7 +7,7 @@ import server from "../../../networking";
 import ShowToast from "../../Extensions/ShowToast";
 import { Controller, useForm } from "react-hook-form";
 
-const ContactVerificationDialog = ({ isOpen, onClose }) => {
+const ContactVerificationDialog = ({ isOpen, onClose, toggleContactVerified }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const { handleSubmit, control, formState: { errors } } = useForm({
@@ -27,6 +27,7 @@ const ContactVerificationDialog = ({ isOpen, onClose }) => {
             const verificationCode = data.pin.join('');
             const response = await server.post('/api/Identity/verifyContact', { code: verificationCode });
             if (response.data.message.startsWith("SUCCESS") && response.status === 200) {
+                toggleContactVerified(true);
                 ShowToast("success", "Contact Verified!", "Your contact has been successfully verified.");
                 onClose();
             }

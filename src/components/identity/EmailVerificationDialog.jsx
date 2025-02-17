@@ -7,7 +7,7 @@ import server from "../../../networking";
 import ShowToast from "../../Extensions/ShowToast";
 import { Controller, useForm } from "react-hook-form"
 
-const EmailVerificationDialog = ({ isOpen, onClose }) => {
+const EmailVerificationDialog = ({ isOpen, onClose, toggleEmailVerified }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const { handleSubmit, control, formState: { errors } } = useForm({
@@ -27,6 +27,7 @@ const EmailVerificationDialog = ({ isOpen, onClose }) => {
             const verificationCode = data.pin.join('');
             const response = await server.post('/api/identity/verifyEmail', { code: verificationCode });
             if (response.data.message.startsWith("SUCCESS") && response.status === 200) {
+                toggleEmailVerified(true);
                 ShowToast("success", "Email Verified!", "Your email has been successfully verified.");
                 onClose()
             }
