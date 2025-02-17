@@ -18,7 +18,6 @@ const UserManagement = () => {
     const [userToDelete, setUserToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [emailError, setEmailError] = useState(false);
-    const [numberError, setNumberError] = useState(false);
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
