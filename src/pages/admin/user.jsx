@@ -162,6 +162,10 @@ const UserManagement = () => {
             ShowToast("error", "Error", "Contact number must be exactly 8 digits");
             return;
         }
+        if (editingUser.name === "" || editingUser.email === "" || editingUser.contactNumber === "") {
+            ShowToast("error", "Error", "Please fill in all fields");
+            return;
+        }
         try {
             const response = await Server.put(
                 `/api/UserManagement/${editingUser.id}`,
@@ -203,7 +207,7 @@ const UserManagement = () => {
                     <Heading fontSize="30px" mt={10} mb={10}>User Management</Heading>
                     <VStack justifyContent="center" mb="4">
                         <Input
-                            placeholder="Search for users..."
+                            placeholder="Search for users by their username..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             width="400px"
