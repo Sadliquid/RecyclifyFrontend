@@ -178,7 +178,7 @@ function Navbar({ onLogout }) {
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/student/scanItem")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <IoSparklesOutline ml={4} />
-                                    <Text ml={2}>Scan my item</Text>
+                                    <Text ml={2}>Recyclable Item Detector</Text>
                                 </Button>
                             </DrawerActionTrigger>
 

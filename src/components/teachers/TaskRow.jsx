@@ -119,7 +119,12 @@ const TaskRow = ({ task, fetchTasks }) => {
                 size="lg"
                 placement="center"
                 open={open}
-                onOpenChange={(isOpen) => setOpen(isOpen.open)}
+                onOpenChange={(isOpen) => {
+                    setOpen(isOpen.open);
+                    if (!isOpen.open) {
+                        setRejectDescription("");
+                    }
+                }}
             >
                 <DialogTrigger asChild>
                     <Flex direction="row" align="center" justify="space-between" w="100%" key={task.taskID} p={4} position="relative" cursor={task.taskVerified || task.taskRejected ? "default" : "pointer"}
@@ -190,7 +195,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                                 <Stack direction="row" align="center" mt={2}>
                                     <FaStar color="#FFD54B" />
                                     <Flex align="center">
-                                        <Text fontSize="md">{task.task.taskPoints}</Text>
+                                        <Text fontSize="md" fontWeight="bold">{task.task.taskPoints}</Text>
                                         <Box w="100%" h="100%" size={30} color="#2CD776" display="flex" justifyContent="center" alignItems="center" ml={1}>
                                             <FaLeaf />
                                         </Box>
@@ -198,8 +203,13 @@ const TaskRow = ({ task, fetchTasks }) => {
                                 </Stack>
 
                                 {/* Uploaded Images Carousel */}
-                                <Text fontSize="md" mt={4} fontWeight="bold">
-                                    Image Uploaded by {task.student?.fName} {task.student?.lName} from Class {task.class.className}:
+                                <Text fontSize="md" mt={4} fontWeight="normal">
+                                    Image Uploaded by{" "}
+                                    <Text as="span" fontWeight="bold">
+                                        {task.student?.fName} {task.student?.lName}
+                                    </Text>{" "}
+                                    from {" "}
+                                    <Text as="span" fontWeight="bold">Class {task.class.className}</Text>:
                                 </Text>
 
                                 {image && (
@@ -223,7 +233,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                                         </Text>
 
                                         <Box mt={4}>
-                                            <Field label="Task Reject Description" required>
+                                            <Field label="Task Reject Description (Provide a reason for rejection)">
                                                 <Input
                                                     placeholder="Enter rejection reason..."
                                                     value={rejectDescription}
