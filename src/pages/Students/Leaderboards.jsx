@@ -95,7 +95,7 @@ function Leaderboards() {
                             <LeaderboardProfileIcon userId={user.id} boxSize={"150px"} />
                             <Heading fontSize={"30px"} mt={2}>{user.name}</Heading>
                             <Heading color="#2CD776">{sessionStudent.totalPoints} Leafs</Heading>
-                            <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid #4DCBA4" borderRadius={20} height="20%" mt={2} padding={5} width={"90%"}>
+                            <Box display="flex" justifyContent={"center"} alignItems={"center"} border="3px solid" borderColor={sessionStudent.league === "Gold" ? "gold" : sessionStudent.league === "Silver" ? "silver" : "#F6B191"} borderRadius={20} height="20%" mt={2} padding={5} width={"90%"}>
                                 <Box mr={2}>
                                     <Image src={sessionStudent.league === "Bronze" ? "/bronze-medal.png" : sessionStudent.league === "Silver" ? "/silver-medal.png" : "/gold-medal.png"} boxSize={10} mt={2}/>
                                 </Box>
