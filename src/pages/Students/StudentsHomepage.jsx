@@ -121,7 +121,7 @@ function StudentsHomepage() {
                     </Box>
 
                     <Box display="flex" flexDir={"column"} justifyContent={"space-between"} width="29%" height={"100%"} borderRadius={20} boxSizing={"border-box"}>
-                        <Box height="22%" border="3px solid" borderColor={studentProfile.league === "Gold" ? "gold" : studentProfile.league === "Silver" ? "silver" : "#F6B191"} borderRadius={20} display={"flex"} backgroundColor={"white"} boxSizing={"border-box"}>
+                        <Box height="22%" border="3px solid" borderColor={studentProfile.league === "Gold" ? "gold" : studentProfile.league === "Silver" ? "silver" : "white"} borderRadius={20} display={"flex"} backgroundColor={"white"} boxSizing={"border-box"}>
                             <StudentProfileCard user={user} studentProfile={studentProfile} />
                         </Box>
 
