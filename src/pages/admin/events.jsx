@@ -10,7 +10,7 @@ const EventsManagement = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [eventDateTime, setEventDateTime] = useState(new Date().toISOString().slice(0, 16));
+    const [eventDateTime, setEventDateTime] = useState(new Date().toISOString().slice(0, 10));
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(false); // For fetching state
@@ -27,7 +27,7 @@ const EventsManagement = () => {
             const response = await server.get("/api/events");
             setEvents(response.data.events);
         } catch (error) {
-			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
                     ShowToast("error", "Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
@@ -45,46 +45,46 @@ const EventsManagement = () => {
         setImageFile(e.target.files[0]);
     };
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-	
-		// Check if fields are filled
-		if (!title || !description || !eventDateTime || !imageFile) {
-			ShowToast("error", "Error", "All fields are required.");
-			return;
-		}
-	
-		const formData = new FormData();
-		formData.append("Title", title);
-		formData.append("Description", description);
-		formData.append("EventDateTime", eventDateTime);
-		formData.append("ImageFile", imageFile);
-	
-		setLoading(true); // Start loading
-		setIsSubmitting(true); // Start submission
-	
-		try {
-			const response = await server.post("/api/events", formData, {
-				headers: { "Content-Type": "multipart/form-data" },
-				transformRequest: (formData) => formData,
-			});
-	
-			if (response.data.message.startsWith("SUCCESS:")) {
-				let message = response.data.message.substring("SUCCESS: ".length);
-				ShowToast("success", "Success", message);
-			}
-			fetchEvents(); // Refresh events
-	
-			// Reset form fields
-			setTitle("");
-			setDescription("");
-			setEventDateTime(new Date().toISOString().slice(0, 16));
-			setImageFile(null);
-	
-			// Close modal after short delay
-			setTimeout(() => onClose(), 100);
-		} catch (error) {
-			if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Check if fields are filled
+        if (!title || !description || !eventDateTime || !imageFile) {
+            ShowToast("error", "Error", "All fields are required.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("Title", title);
+        formData.append("Description", description);
+        formData.append("EventDateTime", eventDateTime);
+        formData.append("ImageFile", imageFile);
+
+        setLoading(true); // Start loading
+        setIsSubmitting(true); // Start submission
+
+        try {
+            const response = await server.post("/api/events", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                transformRequest: (formData) => formData,
+            });
+
+            if (response.data.message.startsWith("SUCCESS:")) {
+                let message = response.data.message.substring("SUCCESS: ".length);
+                ShowToast("success", "Success", message);
+            }
+            fetchEvents(); // Refresh events
+
+            // Reset form fields
+            setTitle("");
+            setDescription("");
+            setEventDateTime(new Date().toISOString().slice(0, 16));
+            setImageFile(null);
+
+            // Close modal after short delay
+            setTimeout(() => onClose(), 100);
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
                     ShowToast("error", "Error", error.response.data.error.substring("UERROR: ".length));
                 } else {
@@ -93,12 +93,12 @@ const EventsManagement = () => {
             } else {
                 ShowToast("error", "Error", "An unexpected error occurred");
             }
-		} finally {
-			setLoading(false); // Stop loading
-			setIsSubmitting(false); // Stop submission
-		}
-	};
-	
+        } finally {
+            setLoading(false); // Stop loading
+            setIsSubmitting(false); // Stop submission
+        }
+    };
+
     return (
         <Box p={6}>
             <Heading fontSize="30px" mt={10} mb={10}>Manage Events</Heading>
@@ -151,8 +151,8 @@ const EventsManagement = () => {
                                         </div>
 
                                         <div>
-                                            <Field>Event Date and Time:</Field>
-                                            <Input type="datetime-local" value={eventDateTime} onChange={(e) => setEventDateTime(e.target.value)} required />
+                                            <Field>Event Date:</Field>
+                                            <Input type="date" value={eventDateTime} onChange={(e) => setEventDateTime(e.target.value)} required />
                                         </div>
 
                                         <div>
@@ -181,13 +181,13 @@ const EventsManagement = () => {
 
                     {/* Table displaying events */}
                     <Table.Root size="sm" showColumnBorder>
-						<Table.Header>
+                        <Table.Header>
                             <Table.Row>
                                 <Table.ColumnHeader>Title</Table.ColumnHeader>
                                 <Table.ColumnHeader>Description</Table.ColumnHeader>
                                 <Table.ColumnHeader>Event Date</Table.ColumnHeader>
                             </Table.Row>
-							</Table.Header>
+                        </Table.Header>
                         <Table.Body>
                             {events.map((event) => (
                                 <Table.Row key={event.id}>
