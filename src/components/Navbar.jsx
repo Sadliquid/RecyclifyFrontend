@@ -26,14 +26,16 @@ function Navbar({ onLogout }) {
     const [sidebar, setSidebar] = useState(<LoginSidebar />);
 
     function conditionallyRenderSidebar() {
-        if (user.userRole === "student") {
-            setSidebar(<StudentsSidebar />);
-        } else if (user.userRole === "teacher") {
-            setSidebar(<TeachersSidebar />);
-        } else if (user.userRole === "admin") {
-            setSidebar(<AdminSidebar />);
-        } else if (user.userRole === "parent") {
-            setSidebar(<ParentSidebar />);
+        if (localStorage.getItem('jwt')) {
+            if (user.userRole === "student") {
+                setSidebar(<StudentsSidebar />);
+            } else if (user.userRole === "teacher") {
+                setSidebar(<TeachersSidebar />);
+            } else if (user.userRole === "admin") {
+                setSidebar(<AdminSidebar />);
+            } else if (user.userRole === "parent") {
+                setSidebar(<ParentSidebar />);
+            }
         }
     }
 
@@ -67,7 +69,7 @@ function Navbar({ onLogout }) {
         } else {
             console.log("Error", "An error occured while fetching user state");
         }
-    }, [loaded]);
+    }, [loaded, error, user]);
 
     // Login Sidebar
     function LoginSidebar() {
