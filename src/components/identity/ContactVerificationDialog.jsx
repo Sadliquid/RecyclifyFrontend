@@ -52,7 +52,7 @@ const ContactVerificationDialog = ({ isOpen, onClose }) => {
         >
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Change Password</DialogTitle>
+                    <DialogTitle>Verify your Mobile Number</DialogTitle>
                 </DialogHeader>
                 <DialogBody>
                     <Text mb={4}>A verification code has been sent to your phone via SMS.</Text>
