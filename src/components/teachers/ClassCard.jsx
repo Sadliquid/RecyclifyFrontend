@@ -17,7 +17,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
         className: '',
         classDescription: '',
     });
-    
+
     const [randomImage, setRandomImage] = useState("");
 
     useEffect(() => {
@@ -217,7 +217,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                 </DialogBody>
                                 <DialogFooter display="flex" gap={10} justifyContent="center">
                                     <DialogActionTrigger asChild>
-                                        <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
+                                        <Button bg="red" color="white" onClick={resetEditedClass}>Cancel</Button>
                                     </DialogActionTrigger>
                                     <DialogActionTrigger asChild>
                                         <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={errors.className || errors.classDescription || !editedClass.className || !editedClass.classDescription}>
@@ -244,10 +244,10 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                 </DialogBody>
                                 <DialogFooter display="flex" gap={10} justifyContent="center">
                                     <DialogActionTrigger asChild>
-                                        <Button variant="outline" bg="#2D65FF" color="white">Cancel</Button>
+                                        <Button bg="blue" color="white">Cancel</Button>
                                     </DialogActionTrigger>
                                     <DialogActionTrigger asChild>
-                                        <Button bg="#FF8080" color="white" onClick={onDelete}>Delete</Button>
+                                        <Button bg="red" color="white" onClick={onDelete}>Delete</Button>
                                     </DialogActionTrigger>
                                 </DialogFooter>
                             </DialogContent>

@@ -191,7 +191,6 @@ function AddClassButton({ onCreate }) {
                     <DialogFooter display="flex" gap={10} justifyContent="center">
                         <DialogActionTrigger asChild>
                             <Button
-                                variant="outline"
                                 bg="red"
                                 color="white"
                                 onClick={handleCloseDialog}
