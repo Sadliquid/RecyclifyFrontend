@@ -66,6 +66,8 @@ function Navbar({ onLogout }) {
             if (loaded) {
                 if (user) {
                     conditionallyRenderSidebar();
+                } else {
+                    setSidebar(<LoginSidebar />);
                 }
             }
         } else {
