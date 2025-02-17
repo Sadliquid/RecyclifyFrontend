@@ -66,13 +66,11 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
     const handleSaveEdit = () => {
         if (errors.className || errors.classDescription) return;
         onEdit(editedClass);
-        setOpen(false);
     };
 
     const resetEditedClass = () => {
         setEditedClass({ ...classItem });
         setErrors('');
-        setOpen(false);
     };
 
     const floatingStyles = defineStyle({
@@ -161,9 +159,9 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                 <ClipboardButton />
                             </ClipboardRoot>
                         </Box>
-                        <DialogRoot size="lg" open={open} onOpenChange={(isOpen) => setOpen(isOpen.open)}>
+                        <DialogRoot size="lg">
                             <DialogTrigger asChild>
-                                <MenuItem value="edit-class" borderRadius="xl" cursor="pointer" mt={2}>
+                                <MenuItem value="edit-class" borderRadius="xl" cursor="pointer" mt={2} closeOnSelect={false}>
                                     <MdEdit /> Edit
                                 </MenuItem>
                             </DialogTrigger>
@@ -221,9 +219,11 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
                                     <DialogActionTrigger asChild>
                                         <Button variant="outline" bg="#FF8080" color="white" onClick={resetEditedClass}>Cancel</Button>
                                     </DialogActionTrigger>
-                                    <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={errors.className || errors.classDescription || !editedClass.className || !editedClass.classDescription}>
-                                        Save
-                                    </Button>
+                                    <DialogActionTrigger asChild>
+                                        <Button bg="#2D65FF" color="white" onClick={handleSaveEdit} disabled={errors.className || errors.classDescription || !editedClass.className || !editedClass.classDescription}>
+                                            Save
+                                        </Button>
+                                    </DialogActionTrigger>
                                 </DialogFooter>
                             </DialogContent>
                         </DialogRoot>
