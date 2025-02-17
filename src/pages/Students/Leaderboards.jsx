@@ -106,7 +106,7 @@ function Leaderboards() {
                                 </Box>
                             </Box>
 
-                            <Text fontFamily={"Lilita One"} color={"#BFA428"} padding={1} fontSize={18}>Top 3 finalists at the end of this league {sessionStudent.league == "Bronze" ? "advance to the Silver" : sessionStudent.league == "Silver" ? "advance to the Gold" : "keep their places in the Gold"} league!</Text>
+                            <Text fontFamily={"Lilita One"} color={sessionStudent.league === "Gold" ? "#BFA428" : sessionStudent.league === "Silver" ? "#BFA428" : "#F6B191"} padding={1} fontSize={18}>Top 3 finalists at the end of this league {sessionStudent.league == "Bronze" ? "advance to the Silver" : sessionStudent.league == "Silver" ? "advance to the Gold" : "keep their places in the Gold"} league!</Text>
                         </Box>
                     </Box>
 
