@@ -89,10 +89,14 @@ function ClassDashboard({ classData, students }) {
     // Fetch school classes data on component mount
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "teacher") {
-            fetchSchoolClasses();
-            fetchClassPoints();
+            if (classData !== null && classData !== undefined) {
+                if (classData.classID) {
+                    fetchSchoolClasses();
+                    fetchClassPoints();
+                }
+            }
         }
-    }, [classData && students]);
+    }, [loaded, classData && students]);
 
     //Function to sort school classes data in descending order
     function sortSchoolClassesData(schoolClassesData) {

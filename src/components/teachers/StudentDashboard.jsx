@@ -328,11 +328,13 @@ function StudentDashboard({ classData, students }) {
 
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "teacher") {
-            if (classData && students) {
-                fetchStudents();
+            if (classData !== null && classData !== undefined) {
+                if (classData.classID) {
+                    fetchStudents();
+                }
             }
         }
-    }, [classData && students]);
+    }, [loaded, classData && students]);
 
     if (classData != null && classData != undefined && students != null && students != null) {
         return (
