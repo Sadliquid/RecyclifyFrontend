@@ -568,7 +568,7 @@ function StudentDashboard({ classData, students }) {
                                                         <DialogRoot size="lg">
                                                             <DialogTrigger asChild>
                                                                 <MenuItem value="delete-class" bg="#FF8080" borderRadius="xl" closeOnSelect={false} mt={2} cursor="pointer">
-                                                                    <MdDelete /> Delete
+                                                                    <MdDelete /> Remove
                                                                 </MenuItem>
                                                             </DialogTrigger>
                                                             <DialogContent>
@@ -590,7 +590,7 @@ function StudentDashboard({ classData, students }) {
                                                                     </DialogActionTrigger>
                                                                     <DialogActionTrigger asChild>
                                                                         <Button bg="#FF8080" color="white" onClick={() => handleDeleteStudent(student.studentID)}>
-                                                                            Delete
+                                                                            Remove
                                                                         </Button>
                                                                     </DialogActionTrigger>
                                                                 </DialogFooter>
