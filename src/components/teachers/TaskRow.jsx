@@ -119,7 +119,12 @@ const TaskRow = ({ task, fetchTasks }) => {
                 size="lg"
                 placement="center"
                 open={open}
-                onOpenChange={(isOpen) => setOpen(isOpen.open)}
+                onOpenChange={(isOpen) => {
+                    setOpen(isOpen.open);
+                    if (!isOpen.open) {
+                        setRejectDescription("");
+                    }
+                }}
             >
                 <DialogTrigger asChild>
                     <Flex direction="row" align="center" justify="space-between" w="100%" key={task.taskID} p={4} position="relative" cursor={task.taskVerified || task.taskRejected ? "default" : "pointer"}
