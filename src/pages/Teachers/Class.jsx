@@ -65,7 +65,7 @@ function Class() {
         }
     }, [loaded && id]);
 
-    if (!error && loaded && user) {
+    if (!error && loaded && user && classData && students) {
         return (
             <Box>
                 <Flex direction="row" align="center" justify="space-between" h="12vh">
