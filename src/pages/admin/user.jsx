@@ -18,6 +18,7 @@ const UserManagement = () => {
     const [userToDelete, setUserToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [emailError, setEmailError] = useState(false);
+    const [numberError, setNumberError] = useState(false);
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -152,6 +153,10 @@ const UserManagement = () => {
     const handleSave = async () => {
         if (emailError) {
             ShowToast("error", "Error", "Please enter a valid email address");
+            return;
+        }
+        if (editingUser.contactNumber.length !== 8) {
+            ShowToast("error", "Error", "Contact number must be exactly 8 digits");
             return;
         }
         try {
@@ -453,7 +458,6 @@ const UserManagement = () => {
                                             <Input
                                                 value={editingUser.contactNumber}
                                                 onChange={(e) => {
-                                                    // Allow only digits and ensure max 8 characters
                                                     const sanitizedValue = e.target.value.replace(/\D/g, '');
                                                     if (sanitizedValue.length <= 8) {
                                                         setEditingUser({ ...editingUser, contactNumber: sanitizedValue });
@@ -462,7 +466,7 @@ const UserManagement = () => {
                                                 onBlur={(e) => {
                                                     if (e.target.value.length !== 8) {
                                                         ShowToast("error", "Error", "Contact number must be exactly 8 digits");
-                                                        setEditingUser({ ...editingUser, contactNumber: "" }); // Clear if invalid
+                                                        // Optionally highlight the field or show an error state without clearing
                                                     }
                                                 }}
                                                 maxLength={8}
