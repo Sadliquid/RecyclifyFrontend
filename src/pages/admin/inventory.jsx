@@ -17,7 +17,7 @@ const InventoryManagement = () => {
     const [editingItem, setEditingItem] = useState(null); // Track the item being edited
     const { user, loaded, error } = useSelector((state) => state.auth);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [addItem, setAddItem] = useState({isAvailable: false});
+    const [addItem, setAddItem] = useState({ isAvailable: false });
     useEffect(() => {
         if (!error && loaded && user && user.userRole == "admin") {
             fetchRewardItems();
@@ -74,6 +74,10 @@ const InventoryManagement = () => {
         setEditingItem(item); // Set the item to be edited
     };
 
+    const handleCancel = () => {
+        setEditingItem(null); // Reset the editing item
+    };
+
     const handleAddItem = () => {
         onOpen();
     };
@@ -86,17 +90,17 @@ const InventoryManagement = () => {
                 editingItem,
                 { headers: { "Content-Type": "application/json" } }
             );
-    
+
             if (response.status >= 200 && response.status < 300) {
                 setRewardItems(rewardItems.map(item =>
                     item.rewardID === response.data.data.rewardID ? response.data.data : item
                 ));
                 setEditingItem(null);
-    
-            if (response.data.message.startsWith("SUCCESS:")) {
-                let message = response.data.message.substring("SUCCESS: ".length);
-                ShowToast("success", "Success", message);
-            }
+
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             } else {
                 throw new Error(response.data.error || "Failed to update reward item");
             }
@@ -116,18 +120,18 @@ const InventoryManagement = () => {
     const handleToggleAvailability = async (rewardID) => {
         try {
             const response = await Server.put(`/api/RewardItem/${rewardID}/toggle-availability`);
-    
+
             if (response.status === 200) {
                 setRewardItems(prevItems =>
                     prevItems.map(item =>
                         item.rewardID === rewardID ? response.data.data : item
                     )
                 );
-    
-            if (response.data.message.startsWith("SUCCESS:")) {
-                let message = response.data.message.substring("SUCCESS: ".length);
-                ShowToast("success", "Success", message);
-            }
+
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             } else {
                 throw new Error(response.data.error || "Failed to toggle availability");
             }
@@ -152,24 +156,24 @@ const InventoryManagement = () => {
         formData.append("RewardQuantity", addItem.quantity);
         formData.append("IsAvailable", addItem.isAvailable);
         formData.append("ImageFile", addItem.image);
-      
+
         try {
-          const response = await Server.post("/api/RewardItem", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            transformRequest: (formData) => formData,
-          });
-      
-          if (response.status === 200) {
-            fetchRewardItems();
-            setAddItem(null);
-            onClose();
-            if (response.data.message.startsWith("SUCCESS:")) {
-                let message = response.data.message.substring("SUCCESS: ".length);
-                ShowToast("success", "Success", message);
+            const response = await Server.post("/api/RewardItem", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                transformRequest: (formData) => formData,
+            });
+
+            if (response.status === 200) {
+                fetchRewardItems();
+                setAddItem(null);
+                onClose();
+                if (response.data.message.startsWith("SUCCESS:")) {
+                    let message = response.data.message.substring("SUCCESS: ".length);
+                    ShowToast("success", "Success", message);
+                }
             }
-          }
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                 if (error.response.data.error.startsWith("UERROR")) {
@@ -181,8 +185,8 @@ const InventoryManagement = () => {
                 ShowToast("error", "Error", "An unexpected error occurred");
             }
         }
-      };
-      
+    };
+
     if (isLoading) {
         return <Spinner />;
     }
@@ -207,77 +211,77 @@ const InventoryManagement = () => {
                             color={"black"}
                         />
                         <DialogRoot isOpen={isOpen} onClose={onClose}>
-                        <DialogTrigger asChild>
-                            <Button
-                                leftIcon={<MdAdd />} // Add icon
-                                bg={"#4DCBA4"}
-                                onClick={() => handleAddItem()}
-                                mt={5}
-                            >
-                                Add Reward
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
+                            <DialogTrigger asChild>
+                                <Button
+                                    leftIcon={<MdAdd />} // Add icon
+                                    bg={"#4DCBA4"}
+                                    onClick={() => handleAddItem()}
+                                    mt={5}
+                                >
+                                    Add Reward
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
                                 <DialogHeader>
                                     <DialogTitle>Add a new item for redemption</DialogTitle>
                                 </DialogHeader>
                                 <DialogBody pb="4">
                                     <Stack gap="4">
-                                        <Field label ="Reward Title">
+                                        <Field label="Reward Title">
                                             <Input value={addItem?.title || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                title: e.target.value
-                                            })
-                                            }
-                                            placeholder="Enter Reward Title"/>
+                                                onChange={(e) => setAddItem({
+                                                    ...addItem,
+                                                    title: e.target.value
+                                                })
+                                                }
+                                                placeholder="Enter Reward Title" />
                                         </Field>
-                                        <Field label ="Reward Description">
+                                        <Field label="Reward Description">
                                             <Input value={addItem?.description || ""}
-                                            onChange={(e) => setAddItem({
-                                                ...addItem,
-                                                description: e.target.value
-                                            })
-                                            }
-                                            placeholder="Enter Reward Description"/>
+                                                onChange={(e) => setAddItem({
+                                                    ...addItem,
+                                                    description: e.target.value
+                                                })
+                                                }
+                                                placeholder="Enter Reward Description" />
                                         </Field>
-                                        <Field label ="Required Points">
-                                            <Input 
+                                        <Field label="Required Points">
+                                            <Input
                                                 type="tel"
                                                 inputMode="numeric"
                                                 pattern="[0-9]*"
                                                 value={addItem?.points || ""}
                                                 onChange={(e) => {
                                                     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
-                                                    setAddItem({...addItem,points: sanitizedValue})
+                                                    setAddItem({ ...addItem, points: sanitizedValue })
                                                 }
                                                 }
-                                            placeholder="Enter Required Points"/>
+                                                placeholder="Enter Required Points" />
                                         </Field>
-                                        <Field label ="Quantity">
-                                            <Input 
+                                        <Field label="Quantity">
+                                            <Input
                                                 type="tel"
                                                 inputMode="numeric"
                                                 pattern="[0-9]*"
                                                 value={addItem?.quantity || ""}
                                                 onChange={(e) => {
                                                     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
-                                                    setAddItem({...addItem, quantity: sanitizedValue});
+                                                    setAddItem({ ...addItem, quantity: sanitizedValue });
                                                 }
                                                 }
-                                            placeholder="Enter Quantity"/>
+                                                placeholder="Enter Quantity" />
                                         </Field>
-                                        <Field label ="Is Available">
-                                        <Checkbox
-                                            isChecked={addItem?.isAvailable || false}
-                                            onChange={(e) =>
-                                                setAddItem({
-                                                ...addItem,
-                                                isAvailable: e.target.checked,
-                                                })
-                                            }
+                                        <Field label="Is Available">
+                                            <Checkbox
+                                                isChecked={addItem?.isAvailable || false}
+                                                onChange={(e) =>
+                                                    setAddItem({
+                                                        ...addItem,
+                                                        isAvailable: e.target.checked,
+                                                    })
+                                                }
                                             >
-                                            Is Available
+                                                Is Available
                                             </Checkbox>
                                         </Field>
                                         <Field label="Item Image">
@@ -298,12 +302,12 @@ const InventoryManagement = () => {
                                     </DialogTrigger>
                                     <Button
                                         bg={"#4DCBA4"}
-										loading={isLoading}
-										disabled={isLoading || !addItem?.title?.trim() || !addItem?.description?.trim() || !addItem?.points?.trim() || !addItem?.quantity?.trim() || !addItem?.image}
+                                        loading={isLoading}
+                                        disabled={isLoading || !addItem?.title?.trim() || !addItem?.description?.trim() || !addItem?.points?.trim() || !addItem?.quantity?.trim() || !addItem?.image}
                                         onClick={async () => {
-											setIsLoading(true);
+                                            setIsLoading(true);
                                             submitRewardItem(addItem, fetchRewardItems, setAddItem, onClose, ShowToast, setErrorMessage);
-                                            }}
+                                        }}
                                     >{isLoading ? "Adding..." : "Submit"} </Button>
                                 </DialogFooter>
                             </DialogContent>
@@ -343,7 +347,7 @@ const InventoryManagement = () => {
                                                 justifyContent="center"
                                                 mr="2"
                                             >
-                                               <RewardItemImage rewardId={item.rewardID} />
+                                                <RewardItemImage rewardId={item.rewardID} />
                                             </Box>
                                             {editingItem?.rewardID === item.rewardID ? (
                                                 <Input
@@ -388,7 +392,7 @@ const InventoryManagement = () => {
                                                         ...editingItem,
                                                         requiredPoints: parseInt(sanitizedValue),
                                                     })
-                                                    }
+                                                }
                                                 }
                                             />
                                         ) : (
@@ -417,9 +421,17 @@ const InventoryManagement = () => {
                                     </Table.Cell>
                                     <Table.Cell>
                                         {editingItem?.rewardID === item.rewardID ? (
-                                            <Button bg={"#4DCBA4"} onClick={handleSave}>
-                                                Save
-                                            </Button>
+                                            <HStack spacing={2}>
+                                                <Button bg={"#4DCBA4"} onClick={handleSave}>
+                                                    Save
+                                                </Button>
+                                                <Button
+                                                    variant="outline"
+                                                    onClick={handleCancel} // Call handleCancel to clear the edit
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </HStack>
                                         ) : (
                                             <HStack spacing={2}>
                                                 <Button
@@ -430,7 +442,7 @@ const InventoryManagement = () => {
                                                     <MdEdit size={20} />
                                                 </Button>
                                                 <Button
-                                                    
+
                                                     variant="link"
                                                     color={item.isAvailable ? "red.500" : "green.500"}
                                                     onClick={() => handleToggleAvailability(item.rewardID)}

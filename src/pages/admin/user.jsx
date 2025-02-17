@@ -74,6 +74,10 @@ const UserManagement = () => {
         setEditingUser(user); // Set the user to be edited
     };
 
+    const handleCancel = () => {
+        setEditingUser(null); // Clear the user being edited
+    };
+
     const openAddTeacherAccount = () => {
         onOpen();
     };
@@ -463,12 +467,6 @@ const UserManagement = () => {
                                                         setEditingUser({ ...editingUser, contactNumber: sanitizedValue });
                                                     }
                                                 }}
-                                                onBlur={(e) => {
-                                                    if (e.target.value.length !== 8) {
-                                                        ShowToast("error", "Error", "Contact number must be exactly 8 digits");
-                                                        // Optionally highlight the field or show an error state without clearing
-                                                    }
-                                                }}
                                                 maxLength={8}
                                                 placeholder="Enter 8-digit number"
                                             />
@@ -482,9 +480,17 @@ const UserManagement = () => {
                                     </Table.Cell>
                                     <Table.Cell>
                                         {editingUser?.id === user.id ? (
-                                            <Button bg={"#4DCBA4"} onClick={handleSave}>
-                                                Save
-                                            </Button>
+                                            <HStack spacing={2}>
+                                                <Button bg={"#4DCBA4"} onClick={handleSave}>
+                                                    Save
+                                                </Button>
+                                                <Button
+                                                    variant="outline"
+                                                    onClick={handleCancel} // Call handleCancel to clear the edit
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </HStack>
                                         ) : (
                                             <HStack spacing={2}>
                                                 <Button
