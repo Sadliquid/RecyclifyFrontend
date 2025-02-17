@@ -382,18 +382,16 @@ const InventoryManagement = () => {
                                     <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
-                                                type="tel"
-                                                inputMode="numeric"
-                                                pattern="[0-9]*"
+                                                type="number"
+                                                min="0"
                                                 value={editingItem.requiredPoints}
                                                 onChange={(e) => {
-                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        requiredPoints: parseInt(sanitizedValue),
-                                                    })
-                                                }
-                                                }
+                                                        requiredPoints: sanitizedValue === "" ? "" : parseInt(sanitizedValue, 10),
+                                                    });
+                                                }}
                                             />
                                         ) : (
                                             item.requiredPoints
@@ -402,23 +400,22 @@ const InventoryManagement = () => {
                                     <Table.Cell color={item.isAvailable ? "black" : "gray.500"} opacity={item.isAvailable ? 1 : 0.5}>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <Input
-                                                type="tel"
-                                                inputMode="numeric"
-                                                pattern="[0-9]*"
+                                                type="number"
+                                                min="0"
                                                 value={editingItem.rewardQuantity}
                                                 onChange={(e) => {
-                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+                                                    const sanitizedValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        rewardQuantity: parseInt(sanitizedValue),
-                                                    })
-                                                }
-                                                }
+                                                        rewardQuantity: sanitizedValue === "" ? "" : parseInt(sanitizedValue, 10),
+                                                    });
+                                                }}
                                             />
                                         ) : (
                                             item.rewardQuantity
                                         )}
                                     </Table.Cell>
+
                                     <Table.Cell>
                                         {editingItem?.rewardID === item.rewardID ? (
                                             <HStack spacing={2}>
