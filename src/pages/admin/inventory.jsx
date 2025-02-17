@@ -84,6 +84,17 @@ const InventoryManagement = () => {
 
     // Handle save button click (update item)
     const handleSave = async () => {
+        console.log(editingItem.rewardTitle)
+        if (
+            editingItem.rewardTitle === null || editingItem.rewardTitle.trim() === "" ||
+            editingItem.rewardDescription === null || editingItem.rewardDescription.trim() === "" ||
+            editingItem.requiredPoints === null || editingItem.requiredPoints === "" ||
+            editingItem.rewardQuantity === null || editingItem.rewardQuantity === ""
+        ) {
+            ShowToast("error", "Error", "All fields are required");
+            return;
+        }
+        
         try {
             const response = await Server.put(
                 `/api/RewardItem/${editingItem.rewardID}`,
@@ -91,12 +102,12 @@ const InventoryManagement = () => {
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            if (response.status >= 200 && response.status < 300) {
+            if (response.status === 200 ) {
                 setRewardItems(rewardItems.map(item =>
                     item.rewardID === response.data.data.rewardID ? response.data.data : item
                 ));
                 setEditingItem(null);
-
+                console.log(response.status);
                 if (response.data.message.startsWith("SUCCESS:")) {
                     let message = response.data.message.substring("SUCCESS: ".length);
                     ShowToast("success", "Success", message);
@@ -112,7 +123,7 @@ const InventoryManagement = () => {
                     ShowToast("error", "Error", error.response.data.error.substring("ERROR: ".length));
                 }
             } else {
-                ShowToast("An unexpected error occurred");
+                ShowToast("error", "Error", "An unexpected error occurred");
             }
         }
     };
