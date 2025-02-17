@@ -44,15 +44,6 @@ const UserManagement = () => {
             setIsLoading(false);
         }
     };
-
-    const validateRole = (value) => {
-        const validRoles = ["teacher", "student"];
-        if (!validRoles.includes(value.toLowerCase())) {
-            ShowToast("error", "Error", "User role not accepted")
-        } else {
-        }
-    };
-
     if (!loaded || isLoading) {
         return (
             <Box
