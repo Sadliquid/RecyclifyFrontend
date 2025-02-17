@@ -19,7 +19,7 @@ const EcoPilot = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!inputValue.trim()) {
-            ShowToast("Please enter a question", "error");
+            ShowToast("error","Error","Please enter a question");
             return;
         }
         setLoading(true);
@@ -32,7 +32,7 @@ const EcoPilot = () => {
             setResponse(result.data);
         } catch (error) {
             console.error("Error fetching response:", error);
-            ShowToast("An error occurred while fetching response", "error");
+            ShowToast("error","Error","An error occurred while fetching response");
         } finally {
             setLoading(false);
         }
