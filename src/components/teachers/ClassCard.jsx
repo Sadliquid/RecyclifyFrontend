@@ -17,7 +17,7 @@ function ClassCard({ classIndex, classItem, cardWidth, cardHeight, onCardClick, 
         className: '',
         classDescription: '',
     });
-    const [open, setOpen] = useState(false);
+    
     const [randomImage, setRandomImage] = useState("");
 
     useEffect(() => {
