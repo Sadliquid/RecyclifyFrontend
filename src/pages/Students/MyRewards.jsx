@@ -1,5 +1,6 @@
-// import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Box, Heading, Text, Image, Tabs } from '@chakra-ui/react';
+/* eslint-disable react/no-unescaped-entities */
+import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Box, Heading, Text, Image, Tabs, Button } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from "framer-motion";
@@ -140,33 +141,31 @@ function MyRewards() {
                                                 >
                                                     {reward.rewardDescription}
                                                 </Text>
-                                                {/* <Text fontWeight="bold" mb={4}>Required leafs: {reward.requiredPoints}</Text> */}
-                                                {/* <DialogRoot placement="center" motionPreset="slide-in-bottom">
+                                                <DialogRoot placement="center" motionPreset="slide-in-bottom" size="md">
                                                     <DialogTrigger asChild>
                                                         <Button color="white" variant="outline" backgroundColor="#4DCBA4" _hover={{ bg: "#41B594" }}>
-                                                            Redeem
+                                                            View QR Code
                                                         </Button>
                                                     </DialogTrigger>
                                                     <DialogContent>
                                                         <DialogHeader>
-                                                            <DialogTitle>Redeem reward</DialogTitle>
+                                                            <DialogTitle>Please present this QR Code to your School's Bookstore Staff</DialogTitle>
                                                         </DialogHeader>
-                                                        <DialogBody>
-                                                            <Text>Are you sure you want to redeem this reward?</Text>
+                                                        <DialogBody display="flex" justifyContent="center" alignItems="center">
+                                                            <Image src={reward.redemptionQRCode} alt="logo" loading="lazy" />
                                                         </DialogBody>
                                                         <DialogFooter>
                                                             <DialogActionTrigger asChild>
                                                                 <Box display="flex" gap={4}>
-                                                                    <Button variant="outline">Cancel</Button>
                                                                     <Button color="white" backgroundColor="#2D65FF">
-                                                                        Redeem
+                                                                        Done
                                                                     </Button>
                                                                 </Box>
                                                             </DialogActionTrigger>
                                                         </DialogFooter>
                                                         <DialogCloseTrigger />
                                                     </DialogContent>
-                                                </DialogRoot> */}
+                                                </DialogRoot>
                                             </Box>
                                         </Box>
                                     </motion.div>
