@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Box, Heading, Text, Image, Tabs, Button } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
@@ -149,7 +148,7 @@ function MyRewards() {
                                                     </DialogTrigger>
                                                     <DialogContent>
                                                         <DialogHeader>
-                                                            <DialogTitle>Please present this QR Code to your School's Bookstore Staff</DialogTitle>
+                                                            <DialogTitle>Redemption QR Code</DialogTitle>
                                                         </DialogHeader>
                                                         <DialogBody display="flex" justifyContent="center" alignItems="center">
                                                             <Image src={reward.redemptionQRCode} alt="logo" loading="lazy" />

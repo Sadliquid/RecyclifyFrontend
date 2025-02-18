@@ -215,7 +215,6 @@ function MyClass() {
                                             <Table.ColumnHeader>Total Points</Table.ColumnHeader>
                                             <Table.ColumnHeader>Redemptions</Table.ColumnHeader>
                                             <Table.ColumnHeader>Student Email</Table.ColumnHeader>
-                                            <Table.ColumnHeader>Parent Email</Table.ColumnHeader>
                                             
                                         </Table.Row>
                                     </Table.Header>
@@ -247,7 +246,6 @@ function MyClass() {
                                                 <Table.Cell color="black">{student.totalPoints}</Table.Cell>
                                                 <Table.Cell color="black">{student.redemptions ? student.redemptions : 0}</Table.Cell>
                                                 <Table.Cell color="black">{student.email ? student.email : "N/A"}</Table.Cell>
-                                                <Table.Cell color="black">{student.parentEmail ? student.parentEmail : "N/A"}</Table.Cell>
                                             </Table.Row>
                                         ))}
                                     </Table.Body>
