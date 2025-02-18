@@ -194,7 +194,7 @@ function AccountDetails({ userDetails, setUserDetails }) {
                 <Heading size="md">Name</Heading>
                 <HStack spacing={4} w="100%">
                     <VStack align="start" flex={1}>
-                        <Text>Username (Display Name)</Text>
+                        <Text>Username</Text>
                         <Input 
                             value={editedDetails.name} 
                             onChange={(e) => {
