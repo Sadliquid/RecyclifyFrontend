@@ -152,7 +152,7 @@ const TaskRow = ({ task, fetchTasks }) => {
                                 </Text>
                                 {" has uploaded "}
                                 <Text as="span" fontWeight="bold">
-                                    {task.imageUrls?.split(",").length || 0}
+                                    {image.length || 0}
                                 </Text>
                                 {" image for verification."}
                             </Text>
@@ -203,25 +203,32 @@ const TaskRow = ({ task, fetchTasks }) => {
                                 </Stack>
 
                                 {/* Uploaded Images Carousel */}
-                                <Text fontSize="md" mt={4} fontWeight="normal">
-                                    Image Uploaded by{" "}
-                                    <Text as="span" fontWeight="bold">
-                                        {task.student?.fName} {task.student?.lName}
-                                    </Text>{" "}
-                                    from {" "}
-                                    <Text as="span" fontWeight="bold">Class {task.class.className}</Text>:
-                                </Text>
-
-                                {image && (
+                                {image.length > 0 ? (
+                                    <>
+                                        <Text fontSize="md" mt={4} fontWeight="normal">
+                                            Image Uploaded by{" "}
+                                            <Text as="span" fontWeight="bold">
+                                                {task.student?.fName} {task.student?.lName}
+                                            </Text>{" "}
+                                            from {" "}
+                                            <Text as="span" fontWeight="bold">Class {task.class.className}</Text>:
+                                        </Text>
+                                        <Box position="relative" mt={2} p={3} borderRadius="lg" bg="blue.100">
+                                            <Image
+                                                src={image}
+                                                alt={`Uploaded by ${task.student.name}`}
+                                                borderRadius="md"
+                                                mx="auto"
+                                                boxSize="320px"
+                                                objectFit="cover"
+                                            />
+                                        </Box>
+                                    </>
+                                ) : (
                                     <Box position="relative" mt={2} p={3} borderRadius="lg" bg="blue.100">
-                                        <Image
-                                            src={image}
-                                            alt={`Uploaded by ${task.student.name}`}
-                                            borderRadius="md"
-                                            mx="auto"
-                                            boxSize="320px"
-                                            objectFit="cover"
-                                        />
+                                        <Text fontSize="lg" color="gray.500" textAlign="center" fontWeight="bold" my={10}>
+                                            No images uploaded for this task.
+                                        </Text>
                                     </Box>
                                 )}
 

@@ -552,12 +552,12 @@ function StudentDashboard({ classData, students }) {
                                                                     </DialogBody>
                                                                     <DialogFooter display="flex" gap={10} justifyContent="center">
                                                                         <DialogActionTrigger asChild>
-                                                                            <Button variant="subtle" color="black">
+                                                                            <Button variant="subtle" color="white" bg="#FF0000" >
                                                                                 Cancel
                                                                             </Button>
                                                                         </DialogActionTrigger>
                                                                         <DialogActionTrigger asChild>
-                                                                            <Button bg="#4DCBA4" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}>
+                                                                            <Button bg="#2D65FF" color="white" onClick={() => sendEmail(student)} disabled={selectedRecipients.length === 0}>
                                                                                 Send
                                                                             </Button>
                                                                         </DialogActionTrigger>

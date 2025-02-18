@@ -381,7 +381,7 @@ function Leaderboards() {
 											</DialogBody>
 											<DialogFooter display="flex" gap={10} justifyContent="center">
 												<DialogActionTrigger asChild>
-													<Button variant="outline" bg="#FF8080" color="white" >
+													<Button variant="outline" bg="#FF0000" color="white" >
 														Cancel
 													</Button>
 												</DialogActionTrigger>
