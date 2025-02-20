@@ -95,11 +95,12 @@ function ClassQuest({ classData }) {
         });
     };
 
-    const getLeastFrequentType = (stats) => {
-        if (!stats) return '';
-        const types = Object.entries(stats);
-        types.sort((a, b) => a[1] - b[1]);
-        return types[0][0];
+    const getLeastFrequentTypes = (stats) => {
+        if (!stats) return [];
+        const entries = Object.entries(stats);
+        if (!entries.length) return [];
+        const minValue = Math.min(...entries.map(([, count]) => count));
+        return entries.filter(([, count]) => count === minValue).map(([type]) => type);
     };
 
     const typeConfig = {
@@ -205,7 +206,7 @@ function ClassQuest({ classData }) {
                 </Box>
             </Tabs.Content>
 
-            <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
+            <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)} placement="center">
                 <DialogContent 
                     borderRadius="3xl" 
                     borderWidth={0}
@@ -261,13 +262,26 @@ function ClassQuest({ classData }) {
                                     ))}
                                 </Grid>
 
-                                {completedQuestStats && (
-                                    <Text textAlign="center" color="gray.600" mb={6}>
-                                        Your class completed the least <strong>{getLeastFrequentType(completedQuestStats)}</strong> quests.
-                                        We've generated new {getLeastFrequentType(completedQuestStats)}-focused quests to maintain balance
-                                        and align with your class's engagement patterns.
-                                    </Text>
-                                )}
+                                {completedQuestStats && (() => {
+                                    const leastFrequent = getLeastFrequentTypes(completedQuestStats);
+                                    let typeString = '';
+                                    
+                                    if (leastFrequent.length === 1) {
+                                        typeString = leastFrequent[0];
+                                    } else if (leastFrequent.length === 2) {
+                                        typeString = leastFrequent.join(' and ');
+                                    } else if (leastFrequent.length > 2) {
+                                        typeString = leastFrequent.slice(0, -1).join(', ') + ', and ' + leastFrequent.slice(-1)[0];
+                                    }
+
+                                    return (
+                                        <Text textAlign="center" color="gray.600" mb={6}>
+                                            Your class completed the least <strong>{typeString}</strong> quests. 
+                                            We've generated new quests focused on {typeString} to maintain balance
+                                            and align with your class's engagement patterns.
+                                        </Text>
+                                    );
+                                })()}
 
                                 <MotionButton
                                     w="full"
