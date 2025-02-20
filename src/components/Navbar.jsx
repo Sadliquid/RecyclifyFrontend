@@ -71,7 +71,7 @@ function Navbar({ onLogout }) {
                 }
             }
         } else {
-            console.log("Error", "An error occured while fetching user state");
+            console.error("An error occured while fetching user state");
         }
     }, [loaded, error, user]);
 

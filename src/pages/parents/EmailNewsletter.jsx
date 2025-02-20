@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Stack, Heading, Box, Text, Button } from "@chakra-ui/react"
 import { Switch } from "@/components/ui/switch"
-import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useState } from "react"
 import ShowToast from "../../Extensions/ShowToast"
@@ -31,12 +29,6 @@ const EmailNewsletter = () => {
             }
         }
     }
-
-    useEffect(() => {
-        if (!error && loaded && user && user.userRole == "parent") {
-            console.log("User logged in as parent with ID:", user.id);
-        }
-    }, [loaded]);
     
     return (
         <Box display="flex" justifyContent="center" width="100%" height="100%">

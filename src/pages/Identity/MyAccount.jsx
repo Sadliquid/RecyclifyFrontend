@@ -32,7 +32,7 @@ function MyAccount() {
             setUserDetails(response.data);
             setAccountInfo(response.data);
         } catch (err) {
-            console.log("Error fetching account info:", err);
+            console.error(err);
             if (err && err.response && err.response.status && err.response.status == 404) {
                 dispatch(logout()); 
                 localStorage.removeItem('jwt');
@@ -61,7 +61,7 @@ function MyAccount() {
     }
 
     if (error) {
-        console.log("ERROR: " + error)
+        console.error(error)
         ShowToast("error", "Error", error);
         setError(null);
     }

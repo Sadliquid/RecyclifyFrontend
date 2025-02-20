@@ -101,7 +101,7 @@ function InnerLoginForm() {
         } catch (error) {
             setIsLoading(false);
             ShowToast("error", "Invalid Login Credentials", "Please try again.");
-            console.log(error)
+            console.error(error)
         } finally {
             setIsLoading(false);
         }

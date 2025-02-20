@@ -89,7 +89,6 @@ function ClassEnrolment() {
     };
 
     const checkStudentEnrolment = async (studentID) => {
-        console.log("Sent studentID: ", studentID);
         if (!error && loaded && user) {
             try {
                 const response = await server.get(`/api/student/check-student-enrolment?studentID=${studentID}`);

@@ -20,7 +20,6 @@ function MyRewards() {
     };
 
     const fetchStudentRewards = async (studentID) => {
-        console.log("Fetching student rewards for student ID:", studentID);
         try {
             const response = await server.get(`/api/student/get-student-rewards?studentID=${studentID}`, {
                 headers: {
@@ -32,9 +31,6 @@ function MyRewards() {
                 const allRewards = response.data.data;
                 const receivedActiveRewards = allRewards.filter(reward => reward.redemptionStatus === "Pending");
                 const receivedClaimedRewards = allRewards.filter(reward => reward.redemptionStatus === "Claimed");
-                console.log("All rewards:", allRewards);
-                console.log("Received rewards:", receivedActiveRewards);
-                console.log("Claimed rewards:", receivedClaimedRewards);
                 setActiveRewards(receivedActiveRewards);
                 setClaimedRewards(receivedClaimedRewards);
             }

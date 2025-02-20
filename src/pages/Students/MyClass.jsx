@@ -23,7 +23,6 @@ function MyClass() {
     const navigate = useNavigate();
 
     const fetchStudents = async (studentID) => {
-        console.log("Fetching students...");
         try {
             const response = await server.get(`/api/student/get-class-students?studentID=${studentID}`);
             if (response.status === 200) {
@@ -46,11 +45,9 @@ function MyClass() {
     };
 
     const fetchStudentClassID = async (studentID) => {
-        console.log("Fetching classID for studentID: ", studentID);
         try {
             const response = await server.get(`/api/student/get-student-classID?studentID=${studentID}`);
             if (response.status === 200) {
-                console.log("ClassID: ", response.data.data);
                 setClassID(response.data.data);
             }
         } catch (error) {
@@ -67,7 +64,6 @@ function MyClass() {
     };
 
     const fetchClassQuests = async (classID) => {
-        console.log("Fetching class quests for classID: ", classID);
         try {
             const response = await server.get(`/api/student/get-class-quests?classID=${classID}`, {
                 headers: {
@@ -76,7 +72,6 @@ function MyClass() {
             });
 
             if (response.status == 200) {
-                console.log("Class Quests: ", response.data.data);
                 setClassQuests(response.data.data);
             }
         } catch (error) {

@@ -84,7 +84,6 @@ const InventoryManagement = () => {
 
     // Handle save button click (update item)
     const handleSave = async () => {
-        console.log(editingItem.rewardTitle)
         if (
             editingItem.rewardTitle === null || editingItem.rewardTitle.trim() === "" ||
             editingItem.rewardDescription === null || editingItem.rewardDescription.trim() === "" ||
@@ -107,7 +106,6 @@ const InventoryManagement = () => {
                     item.rewardID === response.data.data.rewardID ? response.data.data : item
                 ));
                 setEditingItem(null);
-                console.log(response.status);
                 if (response.data.message.startsWith("SUCCESS:")) {
                     let message = response.data.message.substring("SUCCESS: ".length);
                     ShowToast("success", "Success", message);

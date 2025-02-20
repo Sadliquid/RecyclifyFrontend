@@ -35,7 +35,6 @@ const authSlice = createSlice({
 export const { changeAuthToken, setUser, setLoading, setError, logout } = authSlice.actions;
 
 export const fetchUser = () => async (dispatch) => {
-    console.log('Fetching user...');
     dispatch(setLoading(false));
     try {
         const response = await server.get('/api/Identity/getUserDetails', {
@@ -47,7 +46,7 @@ export const fetchUser = () => async (dispatch) => {
         dispatch(setUser(response.data));
         dispatch(setLoading(true));
     } catch (err) {
-        console.log('Error fetching user:', err);
+        console.error(err);
         dispatch(setError(err.message));
         // dispatch(setLoading(true));
     }
@@ -55,11 +54,9 @@ export const fetchUser = () => async (dispatch) => {
 
 export const reloadAuthToken = (authToken) => async (dispatch) => {
     if (localStorage.getItem('tokenRefreshed') == 'true') {
-        console.log("Token refreshed.");
         dispatch(changeAuthToken(localStorage.getItem('jwt') || null));
         localStorage.removeItem('tokenRefreshed');
     } else if (authToken && (localStorage.getItem('jwt') == undefined || localStorage.getItem('jwt') == null)) {
-        console.log("Token detected to be missing/expired; logging out from redux state.")
         dispatch(logout());
         return;
     }

@@ -36,7 +36,7 @@ function MsAuth() {
                 navigate("/auth/emailVerification")
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
             const rawError = error.response?.data?.error || "Something went wrong.";
             const errorMessage = rawError.startsWith("UERROR: ") ? rawError.substring(8) : rawError;
             ShowToast("error", "Verification Failed", errorMessage);

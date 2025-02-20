@@ -64,7 +64,6 @@ function Landing() {
                 params: { classId },
             });
             if (response.status === 200) {
-                console.log("Class deleted successfully.");
                 ShowToast("success", "Class deleted successfully.");
                 fetchClasses(user.id);
             }
@@ -89,7 +88,6 @@ function Landing() {
                 },
             });
             if (response.status === 200) {
-                console.log("Class updated successfully.");
                 ShowToast("success", "Class updated successfully.");
                 fetchClasses(user.id);
             }
@@ -114,8 +112,6 @@ function Landing() {
                 }
             });
             if (response.status === 200) {
-                // Reload the class list to include the newly created class
-                console.log("Class added successfully.");
                 ShowToast("success", "Class added successfully.");
                 fetchClasses(user.id);
             }

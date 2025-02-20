@@ -91,7 +91,7 @@ function InnerStudentForm({ goBack }) {
                 }
                 ShowToast("error", "Invalid Input.", errorMessage)
             } else {
-                console.log(err)
+                console.error(err)
                 ShowToast( "error", "Something went wrong.", "Please try again later.")
             }
         }

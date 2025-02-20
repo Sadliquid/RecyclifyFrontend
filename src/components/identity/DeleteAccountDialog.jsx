@@ -39,7 +39,7 @@ function DeleteAccountDialog({ isOpen, onClose }) {
                     ShowToast("error", "Incorrect Password", "Please try again.")
                 }
             } else {
-                console.log(err);
+                console.error(err);
                 ShowToast("error", "Something went wrong.", "Please try again later.");
             }
         }

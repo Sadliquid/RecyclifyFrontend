@@ -64,7 +64,6 @@ function ImageRecognition() {
                     }
                 })
                 .catch(error => {
-                    console.log(error.response.data.error);
                     if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
                         if (error.response.data.error.startsWith("UERROR")) {
                             reject(error.response.data.error.substring("UERROR: ".length));

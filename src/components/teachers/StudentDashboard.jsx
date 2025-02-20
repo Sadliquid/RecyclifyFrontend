@@ -207,7 +207,6 @@ function StudentDashboard({ classData, students }) {
             });
 
             if (response.status === 200) {
-                console.log('Student successfully updated.');
                 ShowToast("success", "Student successfully updated.");
                 await fetchStudents();
                 setOpen(false);
@@ -228,7 +227,6 @@ function StudentDashboard({ classData, students }) {
             const response = await server.delete(`/api/Teacher/delete-student/?studentID=${studentId}`);
 
             if (response.status === 200) {
-                console.log("Student successfully deleted.");
                 ShowToast("success", "Student successfully deleted.");
                 await fetchStudents();
             }
@@ -272,7 +270,6 @@ function StudentDashboard({ classData, students }) {
                 .post(`/api/Teacher/send-update-email?${queryParams}`)
                 .then((response) => {
                     if (response.status === 200) {
-                        console.log("Email sent successfully.");
                         setSelectedRecipients([]);
                         resolve();
                     } else {

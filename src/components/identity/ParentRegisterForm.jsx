@@ -100,8 +100,8 @@ function InnerParentForm({ goBack }) {
                 }
                 ShowToast("error", "Invalid Input.", errorMessage)
             } else {
-                console.log(err)
-                ShowToast( "error", "Something went wrong.", "Please try again later.")
+                console.error(err)
+                ShowToast("error", "Something went wrong.", "Please try again later.")
             }
         }
     }
