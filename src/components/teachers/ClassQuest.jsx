@@ -122,88 +122,78 @@ function ClassQuest({ classData }) {
     if (classQuests != null && classQuests != undefined && classData != null && classData != undefined) return (
         <>
             <Tabs.Content value='Class Quests'>
-                <Box w="100%" h="65dvh" p={4} bg="#9F9FF8" borderRadius="xl" boxShadow="lg">
-                    <Box w="100%" maxW="600px" h="100%" p={6} bg="white" borderRadius="xl" boxShadow="2xl" mx="auto">
-                        {/* Header with Refresh Button */}
-                        <Text fontSize="2xl" fontWeight="extrabold" color="black" flex={1} mb={6}>
-                            Class Quests
-                        </Text>
-
-                        {/* Quest Cards */}
-                        <Stack gap={4} overflowY="auto" h="calc(100% - 60px)" pt={1}>
-                            {classQuests.map((quest, index) => (
-                                <Box
-                                    key={index}
-                                    w="100%"
-                                    p={4}
-                                    bg={quest.completed === quest.totalAmountToComplete ? "#C6F6D5" : "#EDEEFC"}
-                                    borderRadius="xl"
-                                    transition="all 0.3s ease"
-                                    opacity={quest.completed === quest.totalAmountToComplete ? 0.7 : 1}
-                                    _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }}
-                                >
-                                    <Stack align="start" gap={2}>
-                                        {/* Quest Title and Points */}
-                                        <Flex w="100%" justify="space-between">
-                                            <Flex direction="row" align="center" gap={2}>
-                                                <Text fontSize="lg" fontWeight="bold" color="black">
-                                                    {quest.questTitle}
-                                                </Text>
-                                                <Badge variant="solid" bg="#AEC7ED" color="black" borderRadius="full" px={2} py={1}>
-                                                    {quest.questType}
-                                                </Badge>
-                                            </Flex>
-                                            <Badge variant="solid" bg="white" color="black" borderRadius="full" px={2} py={1}>
-                                                {quest.questPoints}
-
-                                                <Text as={PiCloverFill} boxSize={5} color="#2CD776" />
-                                            </Badge>
-                                        </Flex>
-
-                                        {/* Quest Description */}
-                                        <Text fontSize="sm" color="gray.600">
-                                            {quest.questDescription}
+                <Stack gap={4} overflowY="auto" h="calc(100% - 60px)" pt={1}>
+                    {classQuests.map((quest, index) => (
+                        <Box
+                            key={index}
+                            w="100%"
+                            p={4}
+                            bg={quest.completed === quest.totalAmountToComplete ? "#C6F6D5" : "#EDEEFC"}
+                            borderRadius="xl"
+                            transition="all 0.3s ease"
+                            opacity={quest.completed === quest.totalAmountToComplete ? 0.7 : 1}
+                            _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }}
+                        >
+                            <Stack gap={2}>
+                                {/* Quest Title and Points */}
+                                <Flex w="100%" justify="space-between">
+                                    <Flex direction="row" align="center" gap={2}>
+                                        <Text fontSize="lg" fontWeight="bold" color="black">
+                                            {quest.questTitle}
                                         </Text>
+                                        <Badge variant="solid" bg="#AEC7ED" color="black" borderRadius="full" px={2} py={1}>
+                                            {quest.questType}
+                                        </Badge>
+                                    </Flex>
+                                    
+                                    <Badge variant="solid" bg="white" color="black" borderRadius="full" px={2} py={1}>
+                                        {quest.questPoints}
+
+                                        <Text as={PiCloverFill} boxSize={5} color="#2CD776" />
+                                    </Badge>
+                                </Flex>
+
+                                {/* Quest Description */}
+                                <Text fontSize="sm" color="gray.600" textAlign={"left"} display="flex" alignItems="left" justifyContent={"left"}>
+                                    {quest.questDescription}
+                                </Text>
+                            </Stack>
+
+                            {/* Progress Bar */}
+                            <Box w="100%" mt={2} textAlign="left">
+                                {quest.amountCompleted === quest.totalAmountToComplete ? (
+                                    <Text fontSize="sm" color="black" fontWeight="bold">
+                                        ✅ Quest Completed!
+                                    </Text>
+                                ) : (
+                                    <Text fontSize="sm" color="black" fontWeight="bold">
+                                        {quest.amountCompleted} / {quest.totalAmountToComplete} Completed
+                                    </Text>
+                                )}
+                                <Progress.Root w="100%" value={quest.amountCompleted} max={quest.totalAmountToComplete} mt={2}>
+                                    <Stack direction="row" justify="space-between" align="center">
+                                        <Progress.Track flex="1">
+                                            {quest.amountCompleted === quest.totalAmountToComplete ? (
+                                                <Progress.Range bg="#2CD776" />
+                                            ) : (
+                                                <Progress.Range bg="#6A6AFF" />
+                                            )}
+                                        </Progress.Track>
+                                        <Progress.ValueText>{((quest.amountCompleted / quest.totalAmountToComplete) * 100).toFixed(1)}%</Progress.ValueText>
                                     </Stack>
+                                </Progress.Root>
+                            </Box>
+                        </Box>
+                    ))}
 
-                                    {/* Progress Bar */}
-                                    <Box w="100%" mt={2} textAlign="left">
-                                        {quest.amountCompleted === quest.totalAmountToComplete ? (
-                                            <Text fontSize="sm" color="black" fontWeight="bold">
-                                                ✅ Quest Completed!
-                                            </Text>
-                                        ) : (
-                                            <Text fontSize="sm" color="black" fontWeight="bold">
-                                                {quest.amountCompleted} / {quest.totalAmountToComplete} Completed
-                                            </Text>
-                                        )}
-                                        <Progress.Root w="100%" value={quest.amountCompleted} max={quest.totalAmountToComplete} mt={2}>
-                                            <Stack direction="row" justify="space-between" align="center">
-                                                <Progress.Track flex="1">
-                                                    {quest.amountCompleted === quest.totalAmountToComplete ? (
-                                                        <Progress.Range bg="#2CD776" />
-                                                    ) : (
-                                                        <Progress.Range bg="#6A6AFF" />
-                                                    )}
-                                                </Progress.Track>
-                                                <Progress.ValueText>{((quest.amountCompleted / quest.totalAmountToComplete) * 100).toFixed(1)}%</Progress.ValueText>
-                                            </Stack>
-                                        </Progress.Root>
-                                    </Box>
-                                </Box>
-                            ))}
-
-                            {/* Refresh Button */}
-                            <Button color="black" bg="#4DCBA4" borderRadius="xl" boxShadow="md" _hover={{ bg: '#45B492' }} onClick={() => handleRefreshQuests(classData.classID, user.id)}>
-                                <Stack direction="row" align="center" justify="center">
-                                    <FiRefreshCw color="white" fontWeight={"bold"} />
-                                    <Text color="white" fontWeight={"bold"}>Re-generate Quests</Text>
-                                </Stack>
-                            </Button>
+                    {/* Refresh Button */}
+                    <Button color="black" bg="#4DCBA4" borderRadius="xl" boxShadow="md" _hover={{ bg: '#45B492' }} onClick={() => handleRefreshQuests(classData.classID, user.id)}>
+                        <Stack direction="row" align="center" justify="center">
+                            <FiRefreshCw color="white" fontWeight={"bold"} />
+                            <Text color="white" fontWeight={"bold"}>Re-generate Quests</Text>
                         </Stack>
-
-                    </Box>
-                </Box>
+                    </Button>
+                </Stack>
             </Tabs.Content>
 
             <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)} placement="center">
