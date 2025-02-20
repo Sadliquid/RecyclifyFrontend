@@ -59,117 +59,120 @@ function ClaimReward() {
     }, [studentID, redemptionID]);
 
     return (
-        <MotionBox
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            minH="100vh"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            p={4}
-        >
+        <>
+            <Heading fontSize="30px" mt={10}>Claim Reward</Heading>
             <MotionBox
-                bg="rgba(255, 255, 255, 0.1)"
-                backdropFilter="blur(20px)"
-                borderRadius="3xl"
-                boxShadow="2xl"
-                p={8}
-                maxW="md"
-                w="full"
-                border="1px solid rgba(255, 255, 255, 0.2)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                minH="50vh"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                p={4}
             >
-                <Heading
-                    bgClip="text"
-                    fontSize="4xl"
-                    fontWeight="extrabold"
-                    mb={8}
-                    textAlign="center"
+                <MotionBox
+                    bg="rgba(255, 255, 255, 0.1)"
+                    backdropFilter="blur(20px)"
+                    borderRadius="3xl"
+                    boxShadow="2xl"
+                    p={8}
+                    maxW="md"
+                    w="full"
+                    border="1px solid rgba(255, 255, 255, 0.2)"
                 >
-                    {isSuccess ? 'Reward Unlocked!' : 'Claiming Reward'}
-                </Heading>
+                    <Heading
+                        bgClip="text"
+                        fontSize="4xl"
+                        fontWeight="extrabold"
+                        mb={8}
+                        textAlign="center"
+                    >
+                        {isSuccess ? 'Reward Unlocked!' : 'Claiming Reward'}
+                    </Heading>
 
-                {isLoading ? (
-                    <MotionBox
-                        animate={{ rotate: 360 }}
-                        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                        textAlign="center"
-                    >
-                        <Spinner
-                            thickness="4px"
-                            speed="0.65s"
-                            emptyColor="gray.200"
-                            color="purple.500"
-                            size="xl"
-                        />
-                        <Text mt={4} color="#39B58A" fontWeight="medium">
-                            Securing your reward...
-                        </Text>
-                    </MotionBox>
-                ) : isSuccess ? (
-                    <MotionBox
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        textAlign="center"
-                    >
+                    {isLoading ? (
                         <MotionBox
-                            animate={{ y: [-10, 10, -10] }}
-                            transition={{ duration: 3, repeat: Infinity }}
-                            display="inline-block"
-                            mb={6}
+                            animate={{ rotate: 360 }}
+                            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                            textAlign="center"
                         >
-                            <BsCheckCircleFill size="80px" color="#4ade80" />
+                            <Spinner
+                                thickness="4px"
+                                speed="0.65s"
+                                emptyColor="gray.200"
+                                color="purple.500"
+                                size="xl"
+                            />
+                            <Text mt={4} color="#39B58A" fontWeight="medium">
+                                Securing your reward...
+                            </Text>
                         </MotionBox>
-                        <Text
-                            fontSize="xl"
-                            color="#39B58A"
-                            fontWeight="semibold"
-                            mb={8}
-                        >
-                            {message}
-                        </Text>
-                    </MotionBox>
-                ) : (
-                    <MotionBox
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        textAlign="center"
-                    >
+                    ) : isSuccess ? (
                         <MotionBox
-                            animate={{ scale: [1, 1.1, 1] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                            display="inline-block"
-                            mb={6}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            textAlign="center"
                         >
-                            <PiWarningCircleFill size="80px" color="#f59e0b" />
+                            <MotionBox
+                                animate={{ y: [-10, 10, -10] }}
+                                transition={{ duration: 3, repeat: Infinity }}
+                                display="inline-block"
+                                mb={6}
+                            >
+                                <BsCheckCircleFill size="80px" color="#4ade80" />
+                            </MotionBox>
+                            <Text
+                                fontSize="xl"
+                                color="#39B58A"
+                                fontWeight="semibold"
+                                mb={8}
+                            >
+                                {message}
+                            </Text>
                         </MotionBox>
-                        <Text
-                            fontSize="xl"
-                            color="red"
-                            fontWeight="semibold"
-                            mb={8}
+                    ) : (
+                        <MotionBox
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            textAlign="center"
                         >
-                            {errorMessage}
-                        </Text>
-                        <MotionButton
-                            w="full"
-                            size="lg"
-                            colorScheme="purple"
-                            backgroundColor={"red"}
-                            _active={{ transform: 'scale(0.98)' }}
-                            onClick={() => window.location.reload()}
-                            rightIcon={<FiArrowRight />}
-                            borderRadius="xl"
-                            py={6}
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            Try Again
-                        </MotionButton>
-                    </MotionBox>
-                )}
+                            <MotionBox
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                display="inline-block"
+                                mb={6}
+                            >
+                                <PiWarningCircleFill size="80px" color="#f59e0b" />
+                            </MotionBox>
+                            <Text
+                                fontSize="xl"
+                                color="red"
+                                fontWeight="semibold"
+                                mb={8}
+                            >
+                                {errorMessage}
+                            </Text>
+                            <MotionButton
+                                w="full"
+                                size="lg"
+                                colorScheme="purple"
+                                backgroundColor={"red"}
+                                _active={{ transform: 'scale(0.98)' }}
+                                onClick={() => window.location.reload()}
+                                rightIcon={<FiArrowRight />}
+                                borderRadius="xl"
+                                py={6}
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                Try Again
+                            </MotionButton>
+                        </MotionBox>
+                    )}
+                </MotionBox>
             </MotionBox>
-        </MotionBox>
+        </>
     );
 }
 
