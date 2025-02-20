@@ -1,10 +1,15 @@
-import { Box, Heading, Text, Spinner, Card } from '@chakra-ui/react';
+import { Box, Heading, Text, Spinner, Button } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { BsCheckCircleFill } from 'react-icons/bs';
 import { PiWarningCircleFill } from 'react-icons/pi';
 import ShowToast from '../../Extensions/ShowToast';
 import server from "../../../networking";
+import { motion } from 'framer-motion';
+import { FiArrowRight } from 'react-icons/fi';
+
+const MotionBox = motion(Box);
+const MotionButton = motion(Button);
 
 function ClaimReward() {
     const [searchParams] = useSearchParams();
@@ -26,7 +31,7 @@ function ClaimReward() {
 
                 if (response.status === 200) {
                     setIsSuccess(true);
-                    setMessage(response.data.message || 'Reward redeemed successfully!');
+                    setMessage(response.data.message.substring("SUCCESS:".length) || 'Reward redeemed successfully!');
                 }
             } catch (error) {
                 if (error.response && error.response.data && error.response.data.error && typeof error.response.data.error === "string") {
@@ -54,34 +59,117 @@ function ClaimReward() {
     }, [studentID, redemptionID]);
 
     return (
-        <>
-            <Heading fontSize="30px" mt={10}>Claim Reward</Heading>
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="70vh">
-                <Box textAlign="center">
-                    <Box display="flex" justifyContent="center" alignItems="center">
-                        <Card.Root width="320px">
-                            <Card.Body gap="2" border="2px solid #4DCBA4" borderRadius="md" p={5}>
-                                {isLoading ? (
-                                    <Box display="flex" justifyContent="center" alignItems="center">
-                                        <Spinner size="xl" />
-                                    </Box>
-                                ) : isSuccess ? (
-                                    <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                                        <Text as={BsCheckCircleFill} boxSize={100} color="green.500" mb={5} />
-                                        <Text color="green.500" textAlign={"center"}>{message}</Text>
-                                    </Box>
-                                ) : (
-                                    <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                                        <Text as={PiWarningCircleFill} boxSize={100} color="orange.400" mb={5} />
-                                        <Text fontFamily={"Lilita One"} color="orange.400" textAlign={"center"}>{errorMessage}</Text>
-                                    </Box>
-                                )}
-                            </Card.Body>
-                        </Card.Root>
-                    </Box>
-                </Box>
-            </Box>
-        </>
+        <MotionBox
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            minH="100vh"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            p={4}
+        >
+            <MotionBox
+                bg="rgba(255, 255, 255, 0.1)"
+                backdropFilter="blur(20px)"
+                borderRadius="3xl"
+                boxShadow="2xl"
+                p={8}
+                maxW="md"
+                w="full"
+                border="1px solid rgba(255, 255, 255, 0.2)"
+            >
+                <Heading
+                    bgClip="text"
+                    fontSize="4xl"
+                    fontWeight="extrabold"
+                    mb={8}
+                    textAlign="center"
+                >
+                    {isSuccess ? 'Reward Unlocked!' : 'Claiming Reward'}
+                </Heading>
+
+                {isLoading ? (
+                    <MotionBox
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                        textAlign="center"
+                    >
+                        <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="gray.200"
+                            color="purple.500"
+                            size="xl"
+                        />
+                        <Text mt={4} color="#39B58A" fontWeight="medium">
+                            Securing your reward...
+                        </Text>
+                    </MotionBox>
+                ) : isSuccess ? (
+                    <MotionBox
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        textAlign="center"
+                    >
+                        <MotionBox
+                            animate={{ y: [-10, 10, -10] }}
+                            transition={{ duration: 3, repeat: Infinity }}
+                            display="inline-block"
+                            mb={6}
+                        >
+                            <BsCheckCircleFill size="80px" color="#4ade80" />
+                        </MotionBox>
+                        <Text
+                            fontSize="xl"
+                            color="#39B58A"
+                            fontWeight="semibold"
+                            mb={8}
+                        >
+                            {message}
+                        </Text>
+                    </MotionBox>
+                ) : (
+                    <MotionBox
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        textAlign="center"
+                    >
+                        <MotionBox
+                            animate={{ scale: [1, 1.1, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            display="inline-block"
+                            mb={6}
+                        >
+                            <PiWarningCircleFill size="80px" color="#f59e0b" />
+                        </MotionBox>
+                        <Text
+                            fontSize="xl"
+                            color="red"
+                            fontWeight="semibold"
+                            mb={8}
+                        >
+                            {errorMessage}
+                        </Text>
+                        <MotionButton
+                            w="full"
+                            size="lg"
+                            colorScheme="purple"
+                            backgroundColor={"red"}
+                            _active={{ transform: 'scale(0.98)' }}
+                            onClick={() => window.location.reload()}
+                            rightIcon={<FiArrowRight />}
+                            borderRadius="xl"
+                            py={6}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            Try Again
+                        </MotionButton>
+                    </MotionBox>
+                )}
+            </MotionBox>
+        </MotionBox>
     );
 }
 
