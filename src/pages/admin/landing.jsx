@@ -42,7 +42,7 @@ function Dashboard() {
 				labels,
 				datasets: [
 					{
-						label: "Recycling Progress (kg)",
+						label: "Points (clovers) gained",
 						data: points,
 						backgroundColor: "rgba(72, 187, 120, 0.6)",
 						borderColor: "rgb(72, 187, 120)",
