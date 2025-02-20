@@ -2,18 +2,21 @@ import { useState } from "react";
 import Server from "../../../networking";
 import { Box, Heading, List, ListItem, CardBody, Input, Button, Stack, Text, Flex, Icon, Spinner, CardRoot } from "@chakra-ui/react";
 import { FaRobot, FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import ShowToast from "../../Extensions/ShowToast";
 const EcoPilot = () => {
     const [inputValue, setInputValue] = useState("");
     const [response, setResponse] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const navigate = useNavigate();
+
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
 
     const handleSuggestionClick = (topic) => {
-        setInputValue(`${topic}? `);
+        setInputValue(`${topic}`);
     };
 
     const handleSubmit = async (event) => {
@@ -39,15 +42,15 @@ const EcoPilot = () => {
     };
 
     const suggestedTopics = [
-        "How does recycling work?",
-        "What does a student need to do to earn leafs?",
-        "Understanding leafs",
-        "Leaderboard system explained",
-        "Contact support team"
+        "What is Recyclify?",
+        "How do I know if an item is recyclable?",
+        "How can a Student earn points?",
+        "How to redeem points?",
+        "How do I submit a Contact Form?"
     ];
 
     return (
-        <Flex p={8} maxW="1400px" mx="auto" gap={8} direction={{ base: "column", md: "row" }} minH="80vh">
+        <Flex p={8} gap={8} direction={{ base: "column", md: "row" }} minH="80vh">
             {/* Left Sidebar */}
             <Box w={{ base: "100%", md: "30%" }} bg="teal.50" borderRadius="xl" p={6} boxShadow="md">
                 <Flex direction="column" alignItems="center" mb={8}>
@@ -57,24 +60,35 @@ const EcoPilot = () => {
 
                 <Heading as="h3" size="md" mb={4} color="teal.800">Quick Questions</Heading>
                 <List.Root spacing={3} style={{ listStyleType: "none" }}>
-                {suggestedTopics.map((topic, index) => (
-                    <ListItem
-                        key={index}
-                        bg="white"
-                        borderRadius="lg"
-                        p={4}
-                        m={2}
-                        cursor="pointer"
-                        _hover={{ bg: "teal.100", transform: "translateX(8px)" }}
-                        transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
-                        onClick={() => handleSuggestionClick(topic)}
-                        boxShadow="sm"
-                    >
-                        <Text fontSize="md" color="teal.800" fontWeight="500">{topic}</Text>
-                    </ListItem>
-                ))}
-            </List.Root>
-
+                    {suggestedTopics.map((topic, index) => (
+                        <ListItem
+                            key={index}
+                            bg="white"
+                            borderRadius="lg"
+                            p={4}
+                            m={2}
+                            cursor="pointer"
+                            _hover={{ bg: "teal.100", transform: "translateX(8px)" }}
+                            transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+                            onClick={() => handleSuggestionClick(topic)}
+                            boxShadow="sm"
+                        >
+                            <Text fontSize="md" color="teal.800" fontWeight="500">{topic}</Text>
+                        </ListItem>
+                    ))}
+                    <Text mt={5}>
+                        Still have queries? Submit a Contact Form{" "}
+                        <Text
+                            as="span"
+                            color="blue.500"
+                            textDecoration="underline"
+                            cursor="pointer"
+                            onClick={() => navigate("/contact")}
+                        >
+                            here
+                        </Text>
+                    </Text>
+                </List.Root>
             </Box>
 
             {/* Main Chat Area */}
@@ -84,7 +98,7 @@ const EcoPilot = () => {
                     <Flex align="center" justify="center" mb={8}>
                             <Icon as={FaRobot} boxSize={8} color="teal.600" mr={3} />
                             <Heading as="h2" size="xl" color="teal.800" textAlign="center">
-                                Ask EcoPilot
+                                EcoPilot
                             </Heading>
                         </Flex>
 
@@ -94,7 +108,7 @@ const EcoPilot = () => {
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                    placeholder="Ask me anything about sustainability, recycling, or your eco-points..."
+                                    placeholder="Ask me anything about Recyclify..."
                                     bg="gray.50"
                                     borderRadius="lg"
                                     size="lg"
@@ -108,22 +122,22 @@ const EcoPilot = () => {
                                     fontSize="lg"
                                 />
                                 
-                                <Flex justify="flex-end">
+                                <Flex justify="flex-end" mt={3}>
                                     <Button
+                                        width="100%"
                                         type="submit"
                                         bg={"#4DCBA4"}
                                         size="lg"
                                         px={10}
-                                        isLoading={loading}
                                         loadingText="Analyzing..."
                                         rightIcon={<FaArrowRight />}
-                                        isDisabled={loading || !inputValue.trim()}
+                                        disabled={loading || inputValue.trim() === ""}
                                         borderRadius="xl"
                                         fontWeight="bold"
                                         bgGradient="linear(to-r, teal.400, teal.600)"
                                         _hover={{ bgGradient: "linear(to-r, teal.500, teal.700)" }}
                                     >
-                                        Ask Now
+                                        {loading ? "Generating response..." : "Ask EcoPilot"}
                                     </Button>
                                 </Flex>
                             </Stack>

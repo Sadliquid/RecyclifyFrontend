@@ -4,7 +4,7 @@ import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFo
 import { Flex, Heading, Button, Image, Text, Box, VStack, DrawerActionTrigger } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { BsGift, BsMailbox, BsNewspaper, BsPeople, BsQuestionCircle } from "react-icons/bs";
+import { BsChatText, BsGift, BsMailbox, BsNewspaper, BsPeople, BsQuestionCircle } from "react-icons/bs";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { IoSparklesOutline } from "react-icons/io5";
 import { FcStatistics } from "react-icons/fc";
@@ -201,6 +201,13 @@ function Navbar({ onLogout }) {
                                     <Text ml={2}>My Class</Text>
                                 </Button>
                             </DrawerActionTrigger>
+
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/ecopilot")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Text as={BsChatText} fontSize="20px" color="#515F7C" />
+                                    <Text ml={2}>Chat with EcoPilot</Text>
+                                </Button>
+                            </DrawerActionTrigger>
                         </Box>
 
                         <Box textAlign="center" >
@@ -243,6 +250,13 @@ function Navbar({ onLogout }) {
                                         <MdOutlineLeaderboard fontSize={"20px"} />
                                     </Box>
                                     <Text ml={2.5}>Class Leaderboards</Text>
+                                </Button>
+                            </DrawerActionTrigger>
+
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/ecopilot")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Text as={BsChatText} fontSize="20px" color="#515F7C" />
+                                    <Text ml={2}>Chat with EcoPilot</Text>
                                 </Button>
                             </DrawerActionTrigger>
                         </Box>
@@ -294,16 +308,25 @@ function Navbar({ onLogout }) {
                                     <Text ml={2.5}>Manage Rewards</Text>
                                 </Button>
                             </DrawerActionTrigger>
+
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/eventsManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <LuClipboardList />
                                     <Text ml={2.5}>Create Events</Text>
                                 </Button>
                             </DrawerActionTrigger>
+
                             <DrawerActionTrigger asChild>
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/admin/contactManagement")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <TbMessageShare />
                                     <Text ml={2.5}>View Contact Messages</Text>
+                                </Button>
+                            </DrawerActionTrigger>
+
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/ecopilot")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Text as={BsChatText} fontSize="20px" color="#515F7C" />
+                                    <Text ml={2}>Chat with EcoPilot</Text>
                                 </Button>
                             </DrawerActionTrigger>
                         </Box>
@@ -353,6 +376,13 @@ function Navbar({ onLogout }) {
                                 <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/parents/faq")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
                                     <BsQuestionCircle ml={1} />
                                     <Text ml={2.5}>Frequently Asked Questions</Text>
+                                </Button>
+                            </DrawerActionTrigger>
+
+                            <DrawerActionTrigger asChild>
+                                <Button color="#515F7C" mb={2} justifyContent={"left"} colorScheme='white' onClick={() => navigate("/ecopilot")} _hover={{ bg: "#E4EBF8" }} borderRadius={"30px"}>
+                                    <Text as={BsChatText} fontSize="20px" color="#515F7C" />
+                                    <Text ml={2}>Chat with EcoPilot</Text>
                                 </Button>
                             </DrawerActionTrigger>
                         </Box>

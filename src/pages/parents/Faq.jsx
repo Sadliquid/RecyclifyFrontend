@@ -1,11 +1,8 @@
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "@/components/ui/accordion";
-import { Heading, Box, Button, Text, VStack } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Heading, Box } from "@chakra-ui/react";
 
 
 const Faq = () => {
-    const navigate = useNavigate();
-
     const questions = [
         { value: "1", title: "How are points calculated within the application?", text: "The points are calculated based on how students perform in each task. Some tasks are done by the student themselves while others are done by the class in a weekly basis." },
         { value: "2", title: "How do we get notified about our important events within the school?", text: "A newsletter will be sent to inform you about your child's accomplishments. Alternatively see the Events Log." },
@@ -25,12 +22,6 @@ const Faq = () => {
                     </AccordionItem>
                 ))}
             </AccordionRoot>
-            <VStack mt={8} spacing={4} align="center">
-                <Text fontSize="lg" fontWeight="medium">For further assistance, you can reach us here:</Text>
-                <Button bg={"#4DCBA4"} onClick={() => navigate("/contact")} width="200px">Go to Contact Page</Button>
-                <Text fontSize="lg" fontWeight="medium">Alternative you can ask our own chatbot EcoPilot for any queries!</Text>
-                <Button bg={"#4DCBA4"} onClick={() => navigate("/ecoPilot")} width="200px">Go to EcoPilot page</Button>
-            </VStack>
         </Box>
     );
 }
